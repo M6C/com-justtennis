@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="button_text_message">Message</string>
+    <string name="button_text_rotating">Rotating</string>
+    <string name="button_text_db_backup">DB Backup</string>
+    <string name="button_text_db_restore">DB Restore</string>
+    <string name="dialog_backup_title">DB Backup</string>
+    <string name="dialog_backup_message">Backup ?</string>
+    <string name="dialog_restore_title">DB Restore</string>
+    <string name="dialog_restore_message">Restore ?</string>
+    
+</resources>

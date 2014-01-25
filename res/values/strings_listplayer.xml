@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="listplayer_unknown_player_firstname">Unknown Player</string>
+    <string name="listplayer_unknown_player_lastname"></string>
+
+</resources>
