@@ -8,15 +8,12 @@ import java.util.GregorianCalendar;
 
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnFocusChangeListener;
-import android.view.Window;
 import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemClickListener;
 import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.Button;
 import android.widget.DatePicker;
@@ -30,6 +27,7 @@ import android.widget.TimePicker;
 
 import com.cameleon.common.android.adapter.BaseImageAdapter;
 import com.cameleon.common.android.adapter.BaseImageAdapter.ViewBinder;
+import com.cameleon.common.android.adapter.BaseViewAdapter;
 import com.cameleon.common.android.factory.FactoryDialog;
 import com.cameleon.common.android.factory.listener.OnClickViewListener;
 import com.justtennis.ApplicationConfig;
@@ -38,6 +36,7 @@ import com.justtennis.adapter.ListInviteAdapter;
 import com.justtennis.adapter.ListInviteAdapter.ADAPTER_INVITE_MODE;
 import com.justtennis.business.InviteBusiness;
 import com.justtennis.domain.Invite;
+import com.justtennis.domain.Invite.INVITE_TYPE;
 import com.justtennis.domain.Invite.STATUS;
 import com.justtennis.domain.Player;
 import com.justtennis.manager.ContactManager;
@@ -57,6 +56,10 @@ public class InviteActivity extends Activity {
 	public static final String EXTRA_PLAYER_ID = "PLAYER_ID";
 	private static final int RESULT_PLAYER = 1;
 
+	private final Integer[] drawableStatus = new Integer[] {R.drawable.check_green, R.drawable.check_red, R.drawable.check_yellow};
+//	private final Integer[] drawableType = new Integer[] {R.drawable.check_green, R.drawable.check_red, R.drawable.check_yellow};
+	private final Integer[] drawableType = new Integer[] {R.layout.element_invite_type_entrainement, R.layout.element_invite_type_match};
+
 	private InviteBusiness business;
 	private ListInviteAdapter adapter;
 
@@ -69,13 +72,12 @@ public class InviteActivity extends Activity {
 	private TextView edDate;
 	private TextView edTime;
 	private ImageView ivPhoto;
-//	private ImageView ivStatus;
 	private Spinner spStatus;
-	private View vTypeEntrainement;
-	private View vTypeMatch;
+	private Spinner spType;
 	private ListView list;
 	private Bundle savedInstanceState;
 	private BaseImageAdapter adapterStatus;
+	private BaseViewAdapter adapterType;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -97,8 +99,7 @@ public class InviteActivity extends Activity {
 		ivPhoto = (ImageView)findViewById(R.id.iv_photo);
 //		ivStatus = (ImageView)findViewById(R.id.iv_main_status);
 		spStatus = (Spinner)findViewById(R.id.sp_main_status);
-		vTypeEntrainement = findViewById(R.id.tv_type_entrainement);
-		vTypeMatch = findViewById(R.id.tv_type_match);
+		spType = (Spinner)findViewById(R.id.sp_main_type);
 		list = (ListView)findViewById(R.id.lvInvite);
 
 		business = new InviteBusiness(this, NotifierMessageLogger.getInstance());
@@ -106,6 +107,7 @@ public class InviteActivity extends Activity {
 		list.setAdapter(adapter);
 
 		initializeListStatus();
+		initializeListType();
 	}
 
 	@Override
@@ -208,62 +210,6 @@ public class InviteActivity extends Activity {
 		InviteActivity.this.startActivity(intent);
 		InviteActivity.this.finish();
 	}
-
-	public void onClickInviteType(View view) {
-		String[] listPhonenumber = new String[] {
-				getString(R.string.invite_type_text_entrainement),
-				getString(R.string.invite_type_text_match)
-		};
-		Dialog dialog = FactoryDialog.getInstance().buildListView(this, R.string.txt_invite_type, listPhonenumber, new OnItemClickListener() {
-			@Override
-			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
-				switch(position) {
-					case 0:
-						vTypeEntrainement.setVisibility(View.VISIBLE);
-						vTypeMatch.setVisibility(View.GONE);
-						business.setType(Invite.INVITE_TYPE.ENTRAINEMENT);
-						break;
-					case 1:
-					default:
-						vTypeEntrainement.setVisibility(View.GONE);
-						vTypeMatch.setVisibility(View.VISIBLE);
-						business.setType(Invite.INVITE_TYPE.MATCH);
-						break;
-				}
-			}
-		});
-		dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-		dialog.show();
-	}
-
-	public void onClickInviteStatus(View view) {
-		String[] listPhonenumber = new String[] {
-				getString(R.string.invite_type_text_entrainement),
-				getString(R.string.invite_type_text_match)
-		};
-		Dialog dialog = FactoryDialog.getInstance().buildListView(this, R.string.txt_invite_type, listPhonenumber, new OnItemClickListener() {
-			@Override
-			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
-				switch(position) {
-					case 0:
-						vTypeEntrainement.setVisibility(View.VISIBLE);
-						vTypeMatch.setVisibility(View.GONE);
-						business.setType(Invite.INVITE_TYPE.ENTRAINEMENT);
-						break;
-					case 1:
-					default:
-						vTypeEntrainement.setVisibility(View.GONE);
-						vTypeMatch.setVisibility(View.VISIBLE);
-						business.setType(Invite.INVITE_TYPE.MATCH);
-						break;
-				}
-			}
-		});
-		dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-		dialog.show();
-	}
 	
 	public void onClickInviteConfirmeYes(View view) {
 		business.confirmYes();
@@ -351,14 +297,12 @@ public class InviteActivity extends Activity {
 	}
 
 	private void initializeListStatus() {
-//		adapterStatus = new ListStatusAdapter(this);
-		final Integer[] drawable = new Integer[]{R.drawable.check_green, R.drawable.check_red, R.drawable.check_yellow};
-		adapterStatus = new BaseImageAdapter(this, R.layout.list_status_row, R.id.iv_row_status, drawable);
+		adapterStatus = new BaseImageAdapter(this, R.layout.list_status_row, R.id.iv_row_status, drawableStatus);
 		adapterStatus.setViewBinder(new ViewBinder() {
 			
 			@Override
 			public boolean setViewValue(int position, View view) {
-				view.setTag(drawable[position]);
+				view.setTag(drawableStatus[position]);
 				return true;
 			}
 		});
@@ -367,7 +311,32 @@ public class InviteActivity extends Activity {
 		spStatus.setOnItemSelectedListener(new OnItemSelectedListener() {
 			@Override
 			public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-				business.setStatus((STATUS)spStatus.getSelectedView().getTag());
+//				business.setStatus((STATUS)spStatus.getSelectedView().getTag());
+				business.setStatus(getStatus(position));
+			}
+
+			@Override
+			public void onNothingSelected(AdapterView<?> arg0) {
+			}
+		});
+	}
+
+	private void initializeListType() {
+		adapterType = new BaseViewAdapter(this, drawableType);
+		adapterType.setViewBinder(new BaseViewAdapter.ViewBinder() {
+			
+			@Override
+			public boolean setViewValue(int position, View view) {
+				view.setTag(getType(position));
+				return true;
+			}
+		});
+		spType.setAdapter(adapterType);
+
+		spType.setOnItemSelectedListener(new OnItemSelectedListener() {
+			@Override
+			public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+				business.setType((INVITE_TYPE) view.getTag());
 			}
 
 			@Override
@@ -409,22 +378,22 @@ public class InviteActivity extends Activity {
 //				break;
 //		}
 
-//		int position = adapterStatus.getStatusPosition(business.getInvite().getStatus());
-//		spStatus.setSelection(position);
+		spStatus.setSelection(getStatusPosition());
 	}
 
 	private void initializeDataType() {
-		switch(business.getInvite().getType()) {
-			case ENTRAINEMENT:
-				vTypeEntrainement.setVisibility(View.VISIBLE);
-				vTypeMatch.setVisibility(View.GONE);
-				break;
-			case MATCH:
-			default:
-				vTypeEntrainement.setVisibility(View.GONE);
-				vTypeMatch.setVisibility(View.VISIBLE);
-				break;
-		}
+//		switch(business.getInvite().getType()) {
+//			case ENTRAINEMENT:
+//				vTypeEntrainement.setVisibility(View.VISIBLE);
+//				vTypeMatch.setVisibility(View.GONE);
+//				break;
+//			case MATCH:
+//			default:
+//				vTypeEntrainement.setVisibility(View.GONE);
+//				vTypeMatch.setVisibility(View.VISIBLE);
+//				break;
+//		}
+		spType.setSelection(getTypePosition());
 	}
 
 	private void initializeDataMode() {
@@ -471,5 +440,47 @@ public class InviteActivity extends Activity {
 				}
 			}
 		});
+	}
+	
+	private int getStatusPosition() {
+		switch(business.getInvite().getStatus()) {
+			case ACCEPT:
+				return 0;
+			case REFUSE:
+				return 1;
+			default:
+				return 2;
+		}
+	}
+
+	private STATUS getStatus(Integer position) {
+		switch(position) {
+			case 0:
+				return STATUS.ACCEPT;
+			case 1:
+				return STATUS.REFUSE;
+			default:
+				return STATUS.UNKNOW;
+		}
+	}
+	
+	private int getTypePosition() {
+		switch(business.getInvite().getType()) {
+			case ENTRAINEMENT:
+				return 0;
+			case MATCH:
+			default:
+				return 1;
+		}
+	}
+
+	private INVITE_TYPE getType(Integer position) {
+		switch(position) {
+			case 0:
+				return Invite.INVITE_TYPE.ENTRAINEMENT;
+			case 1:
+			default:
+				return Invite.INVITE_TYPE.MATCH;
+		}
 	}
 }

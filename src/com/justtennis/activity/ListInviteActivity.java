@@ -47,11 +47,11 @@ public class ListInviteActivity extends Activity {
 		refresh();
 	}
 	
-	@Override
-	public void onBackPressed() {
-		onClickClose(null);
-		super.onBackPressed();
-	}
+//	@Override
+//	public void onBackPressed() {
+//		onClickClose(null);
+//		super.onBackPressed();
+//	}
 
 	public void refresh() {
 		adapter.notifyDataSetChanged();
@@ -59,9 +59,9 @@ public class ListInviteActivity extends Activity {
 
 	public void onClickClose(View view) {
 		finish();
-		Intent intent = null;
-		intent = new Intent(this, MainActivity.class);
-		startActivity(intent);
+//		Intent intent = null;
+//		intent = new Intent(this, MainActivity.class);
+//		startActivity(intent);
 	}
 
 	public void onClickDelete(View view) {

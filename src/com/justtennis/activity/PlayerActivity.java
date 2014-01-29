@@ -101,8 +101,8 @@ public class PlayerActivity extends Activity {
 
 	@Override
 	public void onBackPressed() {
-		super.onBackPressed();
 		finish();
+		super.onBackPressed();
 	}
 
 	private void initialize() {

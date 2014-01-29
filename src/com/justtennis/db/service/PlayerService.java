@@ -24,7 +24,7 @@ public class PlayerService extends GenericService<Player> {
 	}
 	
 	public boolean isUnknownPlayer(Player player) {
-		return ID_UNKNOWN_PLAYER==player.getId();
+		return player.getId()!=null && ID_UNKNOWN_PLAYER==player.getId();
 	}
 	
 	@Override
