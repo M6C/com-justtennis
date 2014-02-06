@@ -5,14 +5,17 @@ import java.util.TimeZone;
 import org.gdocument.gtracergps.launcher.log.Logger;
 
 import android.content.ContentResolver;
+import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.Context;
+import android.database.Cursor;
 import android.net.Uri;
 import android.provider.CalendarContract.Attendees;
 import android.provider.CalendarContract.Events;
 import android.provider.CalendarContract.Reminders;
 
 import com.justtennis.ApplicationConfig;
+import com.justtennis.domain.Invite.STATUS;
 
 public class GCalendarHelper {
 	
@@ -77,18 +80,22 @@ public class GCalendarHelper {
         if (hasAlarm) {
             values.put(Events.HAS_ALARM, true);
         }
-        switch (status) {
-			case CONFIRMED:
-		        values.put(Attendees.SELF_ATTENDEE_STATUS, Attendees.ATTENDEE_STATUS_ACCEPTED);
-				break;
-			case CANCELED:
-		        values.put(Attendees.SELF_ATTENDEE_STATUS, Attendees.ATTENDEE_STATUS_DECLINED);
-				break;
-			case UNKNOW:
-			default:
-		        values.put(Attendees.SELF_ATTENDEE_STATUS, Attendees.ATTENDEE_STATUS_INVITED);
-				break;
-		}
+//        switch (status) {
+//			case CONFIRMED:
+////		        values.put(Attendees.SELF_ATTENDEE_STATUS, Attendees.ATTENDEE_STATUS_ACCEPTED);
+//		        values.put(Attendees.STATUS, Attendees.STATUS_CONFIRMED);
+//				break;
+//			case CANCELED:
+////		        values.put(Attendees.SELF_ATTENDEE_STATUS, Attendees.ATTENDEE_STATUS_DECLINED);
+//		        values.put(Attendees.STATUS, Attendees.STATUS_CANCELED);
+//				break;
+//			case UNKNOW:
+//			default:
+////		        values.put(Attendees.SELF_ATTENDEE_STATUS, Attendees.ATTENDEE_STATUS_INVITED);
+//		        values.put(Attendees.STATUS, Attendees.STATUS_TENTATIVE);
+//				break;
+//		}
+        values.put(Attendees.SELF_ATTENDEE_STATUS, status.attentee);
 
         //Get current timezone
         values.put(Events.EVENT_TIMEZONE,TimeZone.getDefault().getID());
@@ -139,6 +146,99 @@ public class GCalendarHelper {
 		} catch(Exception ex) {
 			ex.printStackTrace();
 		}
+	}
+
+	@Deprecated
+	public int updateEventStatus(long eventId, EVENT_STATUS status) {
+		int iNumRowsUpdated = 0;
+		try {
+	        ContentResolver cr = context.getContentResolver();
+	        ContentValues values = new ContentValues();
+	
+	        // This information is sufficient for most entries 
+	        // tentative (0), confirmed (1) or canceled (2):
+	        values.put(Attendees.SELF_ATTENDEE_STATUS, status.attentee);
+	
+	        logMe("Timezone retrieved=>"+TimeZone.getDefault().getID());
+	        Uri uri = ContentUris.withAppendedId(Events.CONTENT_URI, eventId);
+	        logMe("Uri returned=>"+uri.toString());
+	        
+	        iNumRowsUpdated = cr.update(uri, values, null, null);
+	
+	        logMe("Updated " + iNumRowsUpdated + " calendar entry.");
+		} catch(Exception ex) {
+			ex.printStackTrace();
+		}
+
+        return iNumRowsUpdated;
+	}
+
+	public int recreateEventStatus(long eventId, EVENT_STATUS status) {
+		int iNumRowsUpdated = 0;
+		try {
+	        ContentResolver cr = context.getContentResolver();
+	        ContentValues values = new ContentValues();
+	
+	        Uri uri = ContentUris.withAppendedId(Events.CONTENT_URI, eventId);
+	        logMe("Uri returned=>"+uri.toString());
+	        
+	        Cursor cursor = cr.query(uri, null, null, null, null);
+	        if (cursor!=null) {
+	        	String[] columnNames = cursor.getColumnNames();
+	        	for(String name : columnNames) {
+	        		int index = cursor.getColumnIndex(name);
+	        		switch(cursor.getType(index)) {
+		        		case Cursor.FIELD_TYPE_BLOB:
+	        				values.put(name, cursor.getBlob(index));
+	        				break;
+		        		case Cursor.FIELD_TYPE_FLOAT:
+	        				values.put(name, cursor.getFloat(index));
+	        				break;
+		        		case Cursor.FIELD_TYPE_INTEGER:
+	        				values.put(name, cursor.getInt(index));
+	        				break;
+		        		case Cursor.FIELD_TYPE_STRING:
+	        				values.put(name, cursor.getString(index));
+	        				break;
+		        		case Cursor.FIELD_TYPE_NULL:
+	        			default:
+	        				values.putNull(name);
+	        		}
+	        	}
+	        }
+	        
+	        for(String name : values.keySet()) {
+	        	logMe("recreateEventStatus '" + name + "':" + values.get(name));
+	        }
+
+	        values.put(Attendees.SELF_ATTENDEE_STATUS, status.attentee);
+		} catch(Exception ex) {
+			ex.printStackTrace();
+		}
+
+        return iNumRowsUpdated;
+	}
+
+	public EVENT_STATUS toEventStatus(STATUS status) {
+		switch(status) {
+			case ACCEPT:
+				return EVENT_STATUS.CONFIRMED;
+			case REFUSE:
+				return EVENT_STATUS.CANCELED;
+			default:
+				return EVENT_STATUS.UNKNOW;
+		}
+	}
+
+	public int deleteCalendarEntry(long eventId) {
+		int iNumRowsDeleted = 0;
+
+        Uri uri = ContentUris.withAppendedId(Events.CONTENT_URI, eventId);
+		iNumRowsDeleted = context.getContentResolver().delete(uri, null, null);
+
+		logMe("Deleted " + iNumRowsDeleted + " calendar entry.");
+
+		return iNumRowsDeleted;
 	}
 
 //	public int updateEventStatus(int eventId, EVENT_STATUS status) {

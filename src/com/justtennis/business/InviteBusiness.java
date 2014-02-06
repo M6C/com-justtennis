@@ -38,8 +38,8 @@ public class InviteBusiness {
 	private InviteService inviteService;
 	private UserService userService;
 	private PlayerService playerService;
-	private User user;
-	private Player player;
+//	private User user;
+//	private Player player;
 	private Invite invite;
 	private List<Invite> list = new ArrayList<Invite>();
 	private MODE mode = MODE.INVITE_DEMANDE;
@@ -53,9 +53,8 @@ public class InviteBusiness {
 	}
 
 	public void initializeData(Intent intent) {
-		user = userService.find();
 		invite = new Invite();
-		player = null;
+		invite.setUser(userService.find());
 
 		if (intent.hasExtra(InviteActivity.EXTRA_MODE)) {
 			mode = (MODE) intent.getSerializableExtra(InviteActivity.EXTRA_MODE);
@@ -63,11 +62,10 @@ public class InviteBusiness {
 
 		if (intent.hasExtra(InviteActivity.EXTRA_INVITE)) {
 			invite = (Invite) intent.getSerializableExtra(PlayerActivity.EXTRA_INVITE);
-			player = invite.getPlayer();
 		}
 		if (intent.hasExtra(InviteActivity.EXTRA_PLAYER_ID)) {
 			long id = intent.getLongExtra(InviteActivity.EXTRA_PLAYER_ID, -1);
-			player = playerService.find(id);
+			invite.setPlayer(playerService.find(id));
 		}
 
 		if (invite.getDate()==null) {
@@ -85,7 +83,6 @@ public class InviteBusiness {
 	public void initializeData(Bundle savedInstanceState) {
 		mode = (MODE) savedInstanceState.getSerializable(InviteActivity.EXTRA_MODE);
 		invite = (Invite) savedInstanceState.getSerializable(PlayerActivity.EXTRA_INVITE);
-		player = invite.getPlayer();
 		initializeDataInvite();
 	}
 
@@ -100,20 +97,20 @@ public class InviteBusiness {
 
 	private void initializeDataInvite() {
 		list.clear();
-		if (player!=null) {
-			List<Invite> listInvite = inviteService.getByIdPlayer(player.getId());
-			for(Invite invite : listInvite) {
-				invite.setPlayer(playerService.find(invite.getPlayer().getId()));
+		if (getPlayer()!=null) {
+			List<Invite> listInvite = inviteService.getByIdPlayer(getPlayer().getId());
+			for(Invite inv : listInvite) {
+				inv.setPlayer(playerService.find(inv.getPlayer().getId()));
 			}
 			list.addAll(listInvite);
 		}
 	}
 
 	public String buildText() {
-		Date date = invite.getDate();
-		Invite invite = new Invite(user, player, date);
+//		Date date = invite.getDate();
+//		Invite invite = new Invite(user, player, date);
 
-		if (invite.getPlayer().getIdExternal()==null) {
+		if (getPlayer().getIdExternal()==null) {
 			MessageService messageService = new MessageService(context, notification);
 			return SmsParser.getInstance(context).toMessageCommon(messageService.getCommon(), invite);
 		}
@@ -123,12 +120,12 @@ public class InviteBusiness {
 	}
 
 	public boolean isUnknownPlayer() {
-		return playerService.isUnknownPlayer(player);
+		return playerService.isUnknownPlayer(getPlayer());
 	}
 	
 	public void send(String text) {
-		Date date = invite.getDate();
-		Invite invite = new Invite(user, player, date, getType());
+//		Date date = invite.getDate();
+//		Invite invite = new Invite(user, player, date, getType());
 		invite.setStatus(this.invite.getStatus());
 		if (this.invite!=null) {
 			invite.setId(this.invite.getId());
@@ -136,13 +133,14 @@ public class InviteBusiness {
 
 		inviteService.createOrUpdate(invite);
 
+		Player player = getPlayer();
 		String title = null;
 		if (getType()==INVITE_TYPE.MATCH) {
 			title = "Just Tennis Match vs " + player.getFirstName() + " " + player.getLastName();
 		} else {
 			title = "Just Tennis Entrainement vs " + player.getFirstName() + " " + player.getLastName();
 		}
-		
+
 		calendarAddEvent(invite, title, EVENT_STATUS.CONFIRMED);
 		
 		if (text!=null) {
@@ -154,12 +152,17 @@ public class InviteBusiness {
 			Toast.makeText(context, R.string.msg_no_message_to_send, Toast.LENGTH_LONG).show();
 		}
 	}
-	
+
 	public void modify() {
+		Invite inv = inviteService.find(invite.getId());
 		inviteService.createOrUpdate(invite);
 
 		// TODO Modify Event
-//		calendarAddEvent(invite, title, EVENT_STATUS.CONFIRMED);
+		if (inv != null && inv.getStatus() != invite.getStatus()) {
+			EVENT_STATUS status = GCalendarHelper.getInstance(context).toEventStatus(invite.getStatus());
+//			GCalendarHelper.getInstance(context).updateEventStatus(invite.getIdCalendar(), status);
+			GCalendarHelper.getInstance(context).recreateEventStatus(invite.getIdCalendar(), status);
+		}
 	}
 	
 	public void confirmYes() {
@@ -203,6 +206,8 @@ public class InviteBusiness {
 	private Invite doConfirm(STATUS status) {
 		this.invite.setStatus(status);
 
+		User user = userService.find();
+		Player player = getPlayer();
 		String title = "Just Tennis Match vs " + player.getFirstName() + " " + player.getLastName();
 		EVENT_STATUS eventStatus = toEventStatus(status);
 		calendarAddEvent(invite, title, eventStatus);
@@ -210,8 +215,8 @@ public class InviteBusiness {
 		inviteService.createOrUpdate(invite);
 
 		Invite invite = new Invite(user, this.invite.getUser(), this.invite.getDate(), status);
-		invite.getPlayer().setId(this.invite.getPlayer().getId());
-		invite.getPlayer().setIdExternal(this.invite.getPlayer().getIdExternal());
+		invite.getPlayer().setId(getPlayer().getId());
+		invite.getPlayer().setIdExternal(getPlayer().getIdExternal());
 		invite.setId(this.invite.getId());
 		invite.setIdExternal(this.invite.getIdExternal());
 		invite.setIdCalendar(this.invite.getIdCalendar());
@@ -225,7 +230,7 @@ public class InviteBusiness {
 			text += " [invite:" + invite.getId() + "|user:" + invite.getUser().getId() + "|player:" + invite.getPlayer().getId() + "|calendar:" + invite.getIdCalendar() + "]";
 		}
 		long idEvent = GCalendarHelper.getInstance(context).addEvent(
-			title, text, player.getAddress(),
+			title, text, invite.getPlayer().getAddress(),
 			date.getTime(), date.getTime() + Invite.PLAY_DURATION_DEFAULT,
 			false, true, GCalendarHelper.DEFAULT_CALENDAR_ID, 60,
 			status
@@ -252,11 +257,11 @@ public class InviteBusiness {
 	}
 
 	public Player getPlayer() {
-		return player;
+		return invite.getPlayer();
 	}
 
 	public void setPlayer(Player player) {
-		this.player = player;
+		this.invite.setPlayer(player);
 	}
 
 	public MODE getMode() {
@@ -264,6 +269,6 @@ public class InviteBusiness {
 	}
 
 	public void setPlayer(long id) {
-		player = playerService.find(id);
+		this.invite.setPlayer(playerService.find(id));
 	}
 }
