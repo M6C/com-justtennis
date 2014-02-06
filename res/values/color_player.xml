@@ -1,0 +1,4 @@
+<resources>
+    <color name="player_form_background_color">@color/form_background_color</color>
+    <color name="player_form_field_background_color">@color/form_field_background_color</color>
+</resources>

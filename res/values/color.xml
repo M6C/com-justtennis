@@ -1,5 +1,6 @@
 <resources>
 
+    <color name="blanc_transparent_4">#99FFFFFF</color>
     <color name="blanc_transparent_5">#BBFFFFFF</color>
     <color name="gris_1">#666666</color>
     <color name="gris_2">#EEEEEE</color>
@@ -8,6 +9,7 @@
     <color name="bleu_transparent_5">#BB0000CC</color>
 
     <color name="form_background_color">@color/blanc_transparent_5</color>
+    <color name="form_field_background_color">@color/blanc_transparent_4</color>
     <color name="list_background_color">@color/blanc_transparent_5</color>
     <color name="button_background_color">@color/bleu_transparent_5</color>
     <color name="button_text_color">@color/blanc_transparent_5</color>

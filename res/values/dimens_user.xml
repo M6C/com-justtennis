@@ -1,0 +1,13 @@
+<resources>
+
+    <dimen name="user_vertical_margin">@dimen/activity_vertical_margin</dimen>
+    <dimen name="user_horizontal_margin">@dimen/activity_horizontal_margin</dimen>
+    
+    <dimen name="user_text_size">16dp</dimen>
+    <dimen name="user_field_size">22dp</dimen>
+
+    <dimen name="user_layout_field_marging_bottom">10dp</dimen>
+    <dimen name="user_layout_field_padding">5dp</dimen>
+    <dimen name="user_field_margin_left">35dp</dimen>
+    
+</resources>
