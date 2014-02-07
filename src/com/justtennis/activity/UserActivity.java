@@ -13,18 +13,24 @@ import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.TextView;
 
 import com.cameleon.common.android.inotifier.INotifierMessage;
 import com.justtennis.R;
 import com.justtennis.business.UserBusiness;
 import com.justtennis.domain.Ranking;
 import com.justtennis.domain.User;
+import com.justtennis.listener.action.TextWatcherFieldEnableView;
 
 public class UserActivity extends Activity implements INotifierMessage {
 
 	private static final String TAG = UserActivity.class.getSimpleName();
 
 	private UserBusiness business;
+	private TextView tvFirstname;
+	private TextView tvLastname;
+	private TextView tvBirthday;
+	private TextView tvPhonenumber;
 	private EditText etFirstname;
 	private EditText etLastname;
 	private EditText etBirthday;
@@ -38,11 +44,17 @@ public class UserActivity extends Activity implements INotifierMessage {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.user);
 
+		tvFirstname = (TextView)findViewById(R.id.tv_firstname);
+		tvLastname = (TextView)findViewById(R.id.tv_lastname);
+		tvBirthday = (TextView)findViewById(R.id.tv_birthday);
+		tvPhonenumber = (TextView)findViewById(R.id.tv_phonenumber);
 		etFirstname = (EditText)findViewById(R.id.et_firstname);
 		etLastname = (EditText)findViewById(R.id.et_lastname);
 		etBirthday = (EditText)findViewById(R.id.et_birthday);
 		etPhonenumber = (EditText)findViewById(R.id.et_phonenumber);
 		spRanking = (Spinner)findViewById(R.id.sp_ranking);
+
+		initializeListener();
 
 		business = new UserBusiness(this, this);
 	}
@@ -114,6 +126,13 @@ public class UserActivity extends Activity implements INotifierMessage {
 		Intent intent = new Intent(getApplicationContext(), QRCodeActivity.class);
 		intent.putExtra(QRCodeActivity.EXTRA_QRCODE_DATA, qrcodeData);
 		startActivity(intent);
+	}
+
+	private void initializeListener() {
+		etFirstname.addTextChangedListener(new TextWatcherFieldEnableView(tvFirstname, View.GONE));
+		etLastname.addTextChangedListener(new TextWatcherFieldEnableView(tvLastname, View.GONE));
+		etBirthday.addTextChangedListener(new TextWatcherFieldEnableView(tvBirthday, View.GONE));
+		etPhonenumber.addTextChangedListener(new TextWatcherFieldEnableView(tvPhonenumber, View.GONE));
 	}
 
 	private void initializeRanking(Long id) {

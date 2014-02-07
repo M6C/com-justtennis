@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+>
+       <LinearLayout
+          android:id="@+id/ll_firstname"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:layout_marginBottom="@dimen/player_layout_field_marging_bottom"
+          android:background="@color/player_form_field_background_color"
+          android:orientation="vertical"
+          android:padding="@dimen/player_layout_field_padding" >
+
+          <TextView
+              android:id="@+id/tv_firstname"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:text="@string/txt_firstname"
+              android:textSize="@dimen/player_text_size"
+              android:textStyle="bold"
+              android:textColor="@android:color/secondary_text_light_nodisable"
+              android:visibility="gone" />
+
+          <EditText
+              android:id="@+id/et_firstname"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:layout_marginLeft="@dimen/player_field_margin_left"
+              android:gravity="center_horizontal"
+              android:textSize="@dimen/player_field_size"
+              android:hint="@string/txt_firstname" />
+      </LinearLayout>
+
+      <LinearLayout
+          android:id="@+id/ll_lastname"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:layout_marginBottom="@dimen/player_layout_field_marging_bottom"
+          android:background="@color/player_form_field_background_color"
+          android:orientation="vertical"
+          android:padding="@dimen/player_layout_field_padding" >
+
+          <TextView
+              android:id="@+id/tv_lastname"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:text="@string/txt_lastname"
+              android:textSize="@dimen/player_text_size"
+              android:textStyle="bold"
+              android:textColor="@android:color/secondary_text_light_nodisable"
+              android:visibility="gone" />
+
+          <EditText
+              android:id="@+id/et_lastname"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:layout_marginLeft="@dimen/player_field_margin_left"
+              android:gravity="center_horizontal"
+              android:textSize="@dimen/player_field_size"
+              android:hint="@string/txt_lastname" />
+      </LinearLayout>
+
+      <LinearLayout
+          android:id="@+id/ll_birthday"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:layout_marginBottom="@dimen/player_layout_field_marging_bottom"
+          android:background="@color/player_form_field_background_color"
+          android:orientation="vertical"
+          android:padding="@dimen/player_layout_field_padding" >
+
+          <TextView
+              android:id="@+id/tv_birthday"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:text="@string/txt_birthday"
+              android:textSize="@dimen/player_text_size"
+              android:textStyle="bold"
+              android:textColor="@android:color/secondary_text_light_nodisable"
+              android:visibility="gone" />
+
+          <EditText
+              android:id="@+id/et_birthday"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:layout_marginLeft="@dimen/player_field_margin_left"
+              android:gravity="center_horizontal"
+              android:textSize="@dimen/player_field_size"
+              android:hint="@string/txt_birthday" />
+          </LinearLayout>
+
+      <LinearLayout
+          android:id="@+id/ll_phonenumber"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:layout_marginBottom="@dimen/player_layout_field_marging_bottom"
+          android:background="@color/player_form_field_background_color"
+          android:orientation="vertical"
+          android:padding="@dimen/player_layout_field_padding" >
+
+          <TextView
+              android:id="@+id/tv_phonenumber"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:text="@string/txt_phonenumber"
+              android:textSize="@dimen/player_text_size"
+              android:textStyle="bold"
+              android:textColor="@android:color/secondary_text_light_nodisable"
+              android:visibility="gone" />
+
+          <EditText
+              android:id="@+id/et_phonenumber"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:layout_marginLeft="@dimen/player_field_margin_left"
+              android:gravity="center_horizontal"
+              android:textSize="@dimen/player_field_size"
+              android:hint="@string/txt_phonenumber" />
+      </LinearLayout>
+
+      <LinearLayout
+          android:id="@+id/ll_ranking"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:layout_marginBottom="@dimen/player_layout_field_marging_bottom"
+          android:background="@color/player_form_field_background_color"
+          android:orientation="vertical"
+          android:padding="@dimen/player_layout_field_padding" >
+
+          <TextView
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:text="@string/txt_ranking"
+              android:textSize="@dimen/player_text_size"
+              android:textColor="@android:color/secondary_text_light_nodisable"
+              android:textStyle="bold" />
+
+          <Spinner
+              android:id="@+id/sp_ranking"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:layout_marginLeft="@dimen/player_field_margin_left"
+              android:gravity="center_horizontal"
+              android:textSize="@dimen/player_field_size" />
+      </LinearLayout>
+</LinearLayout>

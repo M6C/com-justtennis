@@ -19,6 +19,7 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.Spinner;
+import android.widget.TextView;
 
 import com.cameleon.common.android.factory.FactoryDialog;
 import com.justtennis.R;
@@ -27,6 +28,7 @@ import com.justtennis.adapter.ListInviteAdapter.ADAPTER_INVITE_MODE;
 import com.justtennis.business.PlayerBusiness;
 import com.justtennis.domain.Player;
 import com.justtennis.domain.Ranking;
+import com.justtennis.listener.action.TextWatcherFieldEnableView;
 import com.justtennis.listener.ok.OnClickPlayerCreateListenerOk;
 import com.justtennis.notifier.NotifierMessageLogger;
 import com.justtennis.parser.PlayerParser;
@@ -50,6 +52,10 @@ public class PlayerActivity extends Activity {
 	private PlayerBusiness business;
 	private ListInviteAdapter adapter;
 
+	private TextView tvFirstname;
+	private TextView tvLastname;
+	private TextView tvBirthday;
+	private TextView tvPhonenumber;
 	private EditText etFirstname;
 	private EditText etLastname;
 	private EditText etBirthday;
@@ -71,6 +77,10 @@ public class PlayerActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.player);
 
+		tvFirstname = (TextView)findViewById(R.id.tv_firstname);
+		tvLastname = (TextView)findViewById(R.id.tv_lastname);
+		tvBirthday = (TextView)findViewById(R.id.tv_birthday);
+		tvPhonenumber = (TextView)findViewById(R.id.tv_phonenumber);
 		etFirstname = (EditText)findViewById(R.id.et_firstname);
 		etLastname = (EditText)findViewById(R.id.et_lastname);
 		etBirthday = (EditText)findViewById(R.id.et_birthday);
@@ -86,6 +96,8 @@ public class PlayerActivity extends Activity {
 		llAddDemande = (LinearLayout)findViewById(R.id.ll_add_demande);
 		list = (ListView)findViewById(R.id.lv_invite);
 
+		initializeListener();
+		
 		business = new PlayerBusiness(this, NotifierMessageLogger.getInstance());
 		adapter = new ListInviteAdapter(this, business.getList(), ADAPTER_INVITE_MODE.READ);
 		list.setAdapter(adapter);
@@ -103,41 +115,6 @@ public class PlayerActivity extends Activity {
 	public void onBackPressed() {
 		finish();
 		super.onBackPressed();
-	}
-
-	private void initialize() {
-		Intent intent = getIntent();
-		business.initialize(intent);
-
-		Player player = business.getPlayer();
-		MODE mode = business.getMode();
-
-		switch (mode) {
-			case CREATE:
-				llCreate.setVisibility(View.VISIBLE);
-				llModify.setVisibility(View.GONE);
-				llAddDemande.setVisibility(View.GONE);
-				llInvite.setVisibility(View.GONE);
-				break;
-			case MODIFY:
-				llCreate.setVisibility(View.GONE);
-				llModify.setVisibility(View.VISIBLE);
-				llAddDemande.setVisibility(View.GONE);
-				llInvite.setVisibility(View.VISIBLE);
-				break;
-			case DEMANDE_ADD:
-				llCreate.setVisibility(View.GONE);
-				llModify.setVisibility(View.GONE);
-				llAddDemande.setVisibility(View.VISIBLE);
-				llInvite.setVisibility(View.VISIBLE);
-				
-				player = business.getInvite().getUser();
-				break;
-		}
-
-		if (player!=null) {
-			initializeView(player);
-		}
 	}
 
 	@Override
@@ -263,6 +240,48 @@ public class PlayerActivity extends Activity {
 		player.setLastName(etLastname.getText().toString());
 		player.setBirthday(etBirthday.getText().toString());
 		player.setPhonenumber(etPhonenumber.getText().toString());
+	}
+
+	private void initialize() {
+		Intent intent = getIntent();
+		business.initialize(intent);
+
+		Player player = business.getPlayer();
+		MODE mode = business.getMode();
+
+		switch (mode) {
+			case CREATE:
+				llCreate.setVisibility(View.VISIBLE);
+				llModify.setVisibility(View.GONE);
+				llAddDemande.setVisibility(View.GONE);
+				llInvite.setVisibility(View.GONE);
+				break;
+			case MODIFY:
+				llCreate.setVisibility(View.GONE);
+				llModify.setVisibility(View.VISIBLE);
+				llAddDemande.setVisibility(View.GONE);
+				llInvite.setVisibility(View.VISIBLE);
+				break;
+			case DEMANDE_ADD:
+				llCreate.setVisibility(View.GONE);
+				llModify.setVisibility(View.GONE);
+				llAddDemande.setVisibility(View.VISIBLE);
+				llInvite.setVisibility(View.VISIBLE);
+				
+				player = business.getInvite().getUser();
+				break;
+		}
+
+		if (player!=null) {
+			initializeView(player);
+		}
+	}
+
+	private void initializeListener() {
+		etFirstname.addTextChangedListener(new TextWatcherFieldEnableView(tvFirstname, View.GONE));
+		etLastname.addTextChangedListener(new TextWatcherFieldEnableView(tvLastname, View.GONE));
+		etBirthday.addTextChangedListener(new TextWatcherFieldEnableView(tvBirthday, View.GONE));
+		etPhonenumber.addTextChangedListener(new TextWatcherFieldEnableView(tvPhonenumber, View.GONE));
 	}
 
 	private void initializeView(Player player) {
