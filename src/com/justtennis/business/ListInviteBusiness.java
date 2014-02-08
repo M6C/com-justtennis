@@ -36,8 +36,12 @@ public class ListInviteBusiness {
 		inviteService = new InviteService(context, notificationMessage);
 	}
 
-	public void onResume() {
+	public void onCreate() {
 		refreshData();
+	}
+	
+	public void onResume() {
+		refreshInvite();
 	}
 
 	public List<Invite> getList() {
@@ -52,11 +56,16 @@ public class ListInviteBusiness {
 		Logger.logMe(TAG, "Delete Button !!!");
 		inviteService.delete(invite);
 
-		refreshData();
+		refreshInvite();
 		context.refresh();
 	}
 
 	private void refreshData() {
+		refreshInvite();
+		refreshPlayer();
+	}
+
+	private void refreshInvite() {
 		List<Invite> listInvite = sortInvite(inviteService.getList());
 
 		for (Invite invite : listInvite) {
@@ -65,8 +74,11 @@ public class ListInviteBusiness {
 
 		list.clear();
 		list.addAll(listInvite);
+	}
 
+	private void refreshPlayer() {
 		listPlayer.clear();
+		listPlayer.add(playerService.getEmptyPlayer());
 		listPlayer.add(playerService.getUnknownPlayer());
 		listPlayer.addAll(sortPlayer(playerService.getList()));
 
@@ -87,6 +99,14 @@ public class ListInviteBusiness {
 		Player[] arrayPlayer = listPlayer.toArray(new Player[0]);
 		Arrays.sort(arrayPlayer, new PlayerComparatorByName(true));
 		return Arrays.asList(arrayPlayer);
+	}
+
+	public Player getPlayerNotEmpty(int position) {
+		Player player = listPlayer.get(position);
+		if (playerService.isEmptyPlayer(player)) {
+			player = null;
+		}
+		return player;
 	}
 
 	public List<Player> getListPlayer() {

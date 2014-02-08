@@ -17,7 +17,6 @@ import android.widget.TextView;
 import com.justtennis.ApplicationConfig;
 import com.justtennis.R;
 import com.justtennis.domain.Invite;
-import com.justtennis.domain.Person;
 import com.justtennis.filter.ListInviteByPlayerFilter;
 
 public class ListInviteAdapter extends ArrayAdapter<Invite> {

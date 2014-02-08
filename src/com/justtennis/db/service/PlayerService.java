@@ -1,7 +1,5 @@
 package com.justtennis.db.service;
 
-import java.util.List;
-
 import android.content.Context;
 
 import com.cameleon.common.android.inotifier.INotifierMessage;
@@ -11,12 +9,13 @@ import com.justtennis.domain.Player;
 
 public class PlayerService extends GenericService<Player> {
 
+	private static final long ID_EMPTY_PLAYER = -2l;
 	private static final long ID_UNKNOWN_PLAYER = -1l;
 
 	public PlayerService(Context context, INotifierMessage notificationMessage) {
 		super(context, new DBPlayerDataSource(context, notificationMessage), notificationMessage);
 	}
-	
+
 	public Player getUnknownPlayer() {
 		Player ret = new Player();
 		ret.setId(ID_UNKNOWN_PLAYER);
@@ -24,9 +23,19 @@ public class PlayerService extends GenericService<Player> {
 		ret.setLastName(context.getString(R.string.listplayer_unknown_player_lastname));
 		return ret;
 	}
+	
+	public Player getEmptyPlayer() {
+		Player ret = new Player();
+		ret.setId(ID_EMPTY_PLAYER);
+		return ret;
+	}
 
 	public boolean isUnknownPlayer(Player player) {
 		return player.getId()!=null && ID_UNKNOWN_PLAYER==player.getId();
+	}
+	
+	public boolean isEmptyPlayer(Player player) {
+		return player.getId()!=null && ID_EMPTY_PLAYER==player.getId();
 	}
 	
 	@Override
