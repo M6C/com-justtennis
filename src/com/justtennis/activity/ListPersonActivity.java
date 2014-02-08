@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.widget.EditText;
-import android.widget.Filter;
 import android.widget.ListView;
 
 import com.justtennis.R;
@@ -16,6 +15,7 @@ import com.justtennis.notifier.NotifierMessageLogger;
 
 public class ListPersonActivity extends Activity {
 
+	@SuppressWarnings("unused")
 	private static final String TAG = ListPersonActivity.class.getSimpleName();
 	public static final String EXTRA_PLAYER = "PLAYER";
 
@@ -26,8 +26,6 @@ public class ListPersonActivity extends Activity {
 
 	private EditText etFilter;
 	
-	private Filter filter = null;
-
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);

@@ -11,6 +11,19 @@
     android:orientation="vertical"
     tools:context=".ListPlayerActivity"
 >
+
+    <LinearLayout
+        android:id="@+id/ll_filter_player"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+	    android:background="@color/list_background_color"
+    >
+        <Spinner
+            android:id="@+id/sp_filter_player"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+     	/>
+    </LinearLayout>
 	<ListView
 		android:id="@+id/list"
 		android:layout_width="match_parent"

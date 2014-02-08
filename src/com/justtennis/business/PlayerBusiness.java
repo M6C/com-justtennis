@@ -1,7 +1,6 @@
 package com.justtennis.business;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.SortedSet;
@@ -13,7 +12,6 @@ import android.content.Intent;
 import com.cameleon.common.android.inotifier.INotifierMessage;
 import com.justtennis.activity.PlayerActivity;
 import com.justtennis.activity.PlayerActivity.MODE;
-import com.justtennis.db.service.InviteService;
 import com.justtennis.db.service.PlayerService;
 import com.justtennis.db.service.RankingService;
 import com.justtennis.db.service.UserService;
@@ -21,7 +19,6 @@ import com.justtennis.domain.Invite;
 import com.justtennis.domain.Player;
 import com.justtennis.domain.Ranking;
 import com.justtennis.domain.User;
-import com.justtennis.domain.comparator.InviteComparatorByDate;
 import com.justtennis.domain.comparator.RankingComparatorByOrder;
 import com.justtennis.manager.SmsManager;
 import com.justtennis.notifier.NotifierMessageLogger;
@@ -32,7 +29,7 @@ public class PlayerBusiness {
 
 	private Context context;
 	private UserService userService;
-	private InviteService inviteService;
+//	private InviteService inviteService;
 	private PlayerService playerService;
 	private PlayerParser playerParser;
 	private User user;
@@ -45,7 +42,7 @@ public class PlayerBusiness {
 
 	public PlayerBusiness(Context context, INotifierMessage notificationMessage) {
 		this.context = context;
-		inviteService = new InviteService(context, notificationMessage);
+//		inviteService = new InviteService(context, notificationMessage);
 		userService = new UserService(context, notificationMessage);
 		playerService = new PlayerService(context, notificationMessage);
 		playerParser = PlayerParser.getInstance();
@@ -96,7 +93,7 @@ public class PlayerBusiness {
 			listTxtRankings[i++] = ranking.getRanking();
 		}
 		
-		initializeDataInvite();
+//		initializeDataInvite();
 	}
 
 	public long getPlayerCount() {
@@ -188,22 +185,22 @@ public class PlayerBusiness {
 		return listRanking;
 	}
 
-	private void initializeDataInvite() {
-		list.clear();
-		if (player!=null) {
-			List<Invite> listInvite = sortInvite(inviteService.getByIdPlayer(player.getId()));
-			for(Invite invite : listInvite) {
-				invite.setPlayer(playerService.find(invite.getPlayer().getId()));
-			}
-			list.addAll(listInvite);
-		}
-	}
+//	private void initializeDataInvite() {
+//		list.clear();
+//		if (player!=null) {
+//			List<Invite> listInvite = sortInvite(inviteService.getByIdPlayer(player.getId()));
+//			for(Invite invite : listInvite) {
+//				invite.setPlayer(playerService.find(invite.getPlayer().getId()));
+//			}
+//			list.addAll(listInvite);
+//		}
+//	}
 
-	private List<Invite> sortInvite(List<Invite> listInvite) {
-		Invite[] arrayInvite = listInvite.toArray(new Invite[0]);
-		Arrays.sort(arrayInvite, new InviteComparatorByDate(true));
-		return Arrays.asList(arrayInvite);
-	}
+//	private List<Invite> sortInvite(List<Invite> listInvite) {
+//		Invite[] arrayInvite = listInvite.toArray(new Invite[0]);
+//		Arrays.sort(arrayInvite, new InviteComparatorByDate(true));
+//		return Arrays.asList(arrayInvite);
+//	}
 
 	private Player findPlayer(long id) {
 		return playerService.find(id);

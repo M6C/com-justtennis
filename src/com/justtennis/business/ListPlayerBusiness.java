@@ -77,10 +77,7 @@ public class ListPlayerBusiness {
 
 	private void refreshData() {
 		list.clear();
-//		if (mode == MODE.INVITE ||
-//			mode == MODE.FOR_RESULT) {
-			addUnknownPlayer();
-//		}
+		list.add(playerService.getUnknownPlayer());
 		list.addAll(playerService.getList());
 		
 //		for(Player player : list) {
@@ -98,9 +95,5 @@ public class ListPlayerBusiness {
 
 	public boolean isUnknownPlayer(Player player) {
 		return playerService.isUnknownPlayer(player);
-	}
-
-	private void addUnknownPlayer() {
-		list.add(playerService.getUnknownPlayer());
 	}
 }

@@ -17,14 +17,11 @@ import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.LinearLayout;
-import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.cameleon.common.android.factory.FactoryDialog;
 import com.justtennis.R;
-import com.justtennis.adapter.ListInviteAdapter;
-import com.justtennis.adapter.ListInviteAdapter.ADAPTER_INVITE_MODE;
 import com.justtennis.business.PlayerBusiness;
 import com.justtennis.domain.Player;
 import com.justtennis.domain.Ranking;
@@ -50,7 +47,7 @@ public class PlayerActivity extends Activity {
 	public static final String EXTRA_MODE = "MODE";
 
 	private PlayerBusiness business;
-	private ListInviteAdapter adapter;
+//	private ListInviteAdapter adapter;
 
 	private TextView tvFirstname;
 	private TextView tvLastname;
@@ -61,12 +58,12 @@ public class PlayerActivity extends Activity {
 	private EditText etBirthday;
 	private EditText etPhonenumber;
 	private Spinner spRanking;
-	private ListView list;
+//	private ListView list;
 	private LinearLayout llLastname;
 	private LinearLayout llBirthday;
 	private LinearLayout llPhonenumber;
 	private LinearLayout llRanking;
-	private LinearLayout llInvite;
+//	private LinearLayout llInvite;
 	private LinearLayout llCreate;
 	private LinearLayout llModify;
 	private LinearLayout llAddDemande;
@@ -90,17 +87,17 @@ public class PlayerActivity extends Activity {
 		llBirthday = (LinearLayout)findViewById(R.id.ll_birthday);
 		llPhonenumber = (LinearLayout)findViewById(R.id.ll_phonenumber);
 		llRanking = (LinearLayout)findViewById(R.id.ll_ranking);
-		llInvite = (LinearLayout)findViewById(R.id.ll_invite);
+//		llInvite = (LinearLayout)findViewById(R.id.ll_invite);
 		llCreate = (LinearLayout)findViewById(R.id.ll_create);
 		llModify = (LinearLayout)findViewById(R.id.ll_modify);
 		llAddDemande = (LinearLayout)findViewById(R.id.ll_add_demande);
-		list = (ListView)findViewById(R.id.lv_invite);
+//		list = (ListView)findViewById(R.id.lv_invite);
 
 		initializeListener();
 		
 		business = new PlayerBusiness(this, NotifierMessageLogger.getInstance());
-		adapter = new ListInviteAdapter(this, business.getList(), ADAPTER_INVITE_MODE.READ);
-		list.setAdapter(adapter);
+//		adapter = new ListInviteAdapter(this, business.getList(), ADAPTER_INVITE_MODE.READ);
+//		list.setAdapter(adapter);
 
 	}
 
@@ -254,19 +251,19 @@ public class PlayerActivity extends Activity {
 				llCreate.setVisibility(View.VISIBLE);
 				llModify.setVisibility(View.GONE);
 				llAddDemande.setVisibility(View.GONE);
-				llInvite.setVisibility(View.GONE);
+//				llInvite.setVisibility(View.GONE);
 				break;
 			case MODIFY:
 				llCreate.setVisibility(View.GONE);
 				llModify.setVisibility(View.VISIBLE);
 				llAddDemande.setVisibility(View.GONE);
-				llInvite.setVisibility(View.VISIBLE);
+//				llInvite.setVisibility(View.VISIBLE);
 				break;
 			case DEMANDE_ADD:
 				llCreate.setVisibility(View.GONE);
 				llModify.setVisibility(View.GONE);
 				llAddDemande.setVisibility(View.VISIBLE);
-				llInvite.setVisibility(View.VISIBLE);
+//				llInvite.setVisibility(View.VISIBLE);
 				
 				player = business.getInvite().getUser();
 				break;

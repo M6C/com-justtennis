@@ -2,9 +2,6 @@ package com.justtennis.adapter;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
-
-import org.gdocument.gtracergps.launcher.log.Logger;
 
 import android.graphics.Bitmap;
 import android.view.LayoutInflater;
@@ -20,10 +17,12 @@ import com.justtennis.R;
 import com.justtennis.activity.ListPersonActivity;
 import com.justtennis.domain.Contact;
 import com.justtennis.domain.Person;
+import com.justtennis.filter.ListPersonFilter;
 import com.justtennis.manager.ContactManager;
 
 public class ListPersonAdapter extends ArrayAdapter<Person> {
 
+	@SuppressWarnings("unused")
 	private static final String TAG = ListPersonAdapter.class.getSimpleName();
 
 	private List<Person> value;
@@ -37,45 +36,15 @@ public class ListPersonAdapter extends ArrayAdapter<Person> {
 
 		this.activity = activity;
 		this.valueOld = new ArrayList<Person>(list);
-		this.value = list;
-		
-		filter = new Filter() {
+		this.filter = new ListPersonFilter(new ListPersonFilter.IValueNotifier() {
 
 			@Override
-			protected FilterResults performFiltering(CharSequence constraint) {
-				FilterResults ret = new FilterResults();
-				if (constraint!=null) {
-					String txt = constraint.toString().toUpperCase(Locale.FRANCE);
-					List<Person> result = new ArrayList<Person>();
-					for(Person person : valueOld) {
-						boolean chk = false;
-						if (person.getFirstName()!=null) {
-							chk = person.getFirstName().toUpperCase(Locale.FRANCE).contains(txt);
-						}
-						if (!chk && person.getLastName()!=null) {
-							chk = person.getLastName().toUpperCase(Locale.FRANCE).contains(txt);
-						}
-						if (chk) {
-							result.add(person);
-						}
-					}
-					ret.values = result;
-					ret.count = result.size();
-				} else {
-					ret.values = valueOld;
-					ret.count = valueOld.size();
-				}
-				return ret;
-			}
-
-			@Override
-			protected void publishResults(CharSequence constraint, FilterResults results) {
-				value.clear();
-				value.addAll((List<Person>) results.values);
+			public void setValue(List<Person> value) {
+				ListPersonAdapter.this.value.clear();
+				ListPersonAdapter.this.value.addAll(value);
 				notifyDataSetChanged();
 			}
-			
-		};
+		}, valueOld);
 	}
 
 	@Override

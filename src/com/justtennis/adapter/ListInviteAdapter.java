@@ -1,6 +1,7 @@
 package com.justtennis.adapter;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.List;
 
 import android.annotation.SuppressLint;
@@ -9,12 +10,15 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.Filter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.justtennis.ApplicationConfig;
 import com.justtennis.R;
 import com.justtennis.domain.Invite;
+import com.justtennis.domain.Person;
+import com.justtennis.filter.ListInviteByPlayerFilter;
 
 public class ListInviteAdapter extends ArrayAdapter<Invite> {
 
@@ -23,10 +27,12 @@ public class ListInviteAdapter extends ArrayAdapter<Invite> {
 	}
 
 	private List<Invite> value;
+	private ArrayList<Invite> valueOld;
 	private Activity activity;
 	@SuppressLint("SimpleDateFormat")
 	private final static SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm");
 	private ADAPTER_INVITE_MODE mode;
+	private Filter filter = null;
 
 	public ListInviteAdapter(Activity activity, List<Invite> value) {
 		this(activity, value, ADAPTER_INVITE_MODE.MODIFY);
@@ -38,6 +44,29 @@ public class ListInviteAdapter extends ArrayAdapter<Invite> {
 		this.activity = activity;
 		this.value = value;
 		this.mode = mode;
+		this.valueOld = new ArrayList<Invite>(value);
+		
+		this.filter = new ListInviteByPlayerFilter(new ListInviteByPlayerFilter.IValueNotifier() {
+			@Override
+			public void setValue(List<Invite> value) {
+				ListInviteAdapter.this.value.clear();
+				ListInviteAdapter.this.value.addAll(value);
+				notifyDataSetChanged();
+			}
+		}, valueOld);
+	}
+
+	@Override
+	public Filter getFilter() {
+		if (filter!=null) {
+			return filter;
+		} else {
+			return super.getFilter();
+		}
+	}
+	
+	public void setFilter(Filter filter) {
+		this.filter = filter;
 	}
 
 	public static class ViewHolder {
@@ -124,5 +153,8 @@ public class ListInviteAdapter extends ArrayAdapter<Invite> {
 	 */
 	public void setValue(List<Invite> value) {
 		this.value = value;
+
+		valueOld.clear();
+		valueOld.addAll(this.value);
 	}
 }

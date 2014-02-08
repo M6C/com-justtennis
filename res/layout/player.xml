@@ -41,7 +41,7 @@
 		</LinearLayout>
 	</LinearLayout>
 	</ScrollView>
-
+<!-- 
 	<LinearLayout
 		android:id="@+id/ll_invite"
 	    android:layout_width="match_parent"
@@ -57,7 +57,7 @@
 		    android:layout_height="match_parent"
 		/>
 	</LinearLayout>
-
+ -->
 	<LinearLayout
 	    android:id="@+id/ll_create"
 	    android:layout_width="match_parent"
