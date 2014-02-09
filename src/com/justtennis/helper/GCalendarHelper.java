@@ -22,7 +22,7 @@ public class GCalendarHelper {
 	private static final String TAG = GCalendarHelper.class.getSimpleName();
 	
 	public enum EVENT_STATUS {
-		UNKNOW(0, Attendees.ATTENDEE_STATUS_INVITED),
+		UNKNOW(0, Attendees.ATTENDEE_STATUS_TENTATIVE),
 	    CONFIRMED(1, Attendees.ATTENDEE_STATUS_ACCEPTED),
 	    CANCELED(2, Attendees.ATTENDEE_STATUS_DECLINED);
 
@@ -35,6 +35,7 @@ public class GCalendarHelper {
 	}
 	
 	public static final int DEFAULT_CALENDAR_ID = 1;
+	public static final int EVENT_ID_NO_CREATED = -1;
 
 	private static GCalendarHelper instance;
 	private Context context;
@@ -53,17 +54,16 @@ public class GCalendarHelper {
 		return instance;
 	}
 
-	@SuppressWarnings("unused")
 	public long addEvent(String title,String description,String location,long startTime,long endTime, boolean allDay, boolean hasAlarm, int calendarId,int selectedReminderValue, EVENT_STATUS status) {
 		
 		if (!ApplicationConfig.CALENDAR_ADD_EVENT)
-			return -1;
+			return EVENT_ID_NO_CREATED;
 		
 		if (!ApplicationConfig.CALENDAR_ADD_EVENT_CONFIRMED && (EVENT_STATUS.CONFIRMED == status))
-			return -1;
+			return EVENT_ID_NO_CREATED;
 		
 		if (!ApplicationConfig.CALENDAR_ADD_EVENT_CANCELED && (EVENT_STATUS.CANCELED == status))
-			return -1;
+			return EVENT_ID_NO_CREATED;
 
         ContentResolver cr = context.getContentResolver();
         ContentValues values = new ContentValues();
@@ -80,21 +80,6 @@ public class GCalendarHelper {
         if (hasAlarm) {
             values.put(Events.HAS_ALARM, true);
         }
-//        switch (status) {
-//			case CONFIRMED:
-////		        values.put(Attendees.SELF_ATTENDEE_STATUS, Attendees.ATTENDEE_STATUS_ACCEPTED);
-//		        values.put(Attendees.STATUS, Attendees.STATUS_CONFIRMED);
-//				break;
-//			case CANCELED:
-////		        values.put(Attendees.SELF_ATTENDEE_STATUS, Attendees.ATTENDEE_STATUS_DECLINED);
-//		        values.put(Attendees.STATUS, Attendees.STATUS_CANCELED);
-//				break;
-//			case UNKNOW:
-//			default:
-////		        values.put(Attendees.SELF_ATTENDEE_STATUS, Attendees.ATTENDEE_STATUS_INVITED);
-//		        values.put(Attendees.STATUS, Attendees.STATUS_TENTATIVE);
-//				break;
-//		}
         values.put(Attendees.SELF_ATTENDEE_STATUS, status.attentee);
 
         //Get current timezone

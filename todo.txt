@@ -11,8 +11,6 @@ Ecran Player
  - Pouvoir importer une selection multiple de contacts google
 
 Invite
- - Modifier l'event GCalendar quand on modifi une invite
- - Supprimer l'invite GCalendar quand on supprime une invite
 
 List Person
 
@@ -24,6 +22,8 @@ Saisie de Message
 ********************* DONE *****************************
 
 Invite
+[20140209] - Modifier l'event GCalendar quand on modifi une invite
+[20140209] - Supprimer l'invite GCalendar quand on supprime une invite
 [20140122] - Pouvoir modifier la coche qui indique si la réponse et ok (vert) ou non (rouge)
 [20131226] - Pouvoir modifier le joueur
 [20131224] - Donner la possibilité de ne pas envoyer demande de confirmation pour les joueurs qui n'ont pas l'appli. Mais créé quant même l'évènement GCalendar.
@@ -34,23 +34,31 @@ Invite
 [20131221] - Gerer l'affichage du type d'invite dans la liste
 
 List Invite
+[20140208] - Ajouter une filtre tous, pour filtrer les invites
+[20140208] - Filtrer les invites par Player
 [20140110] - Trier les invites par date descendante
 [20131225] - Pouvoir modifier une invite
 [20131221] - Gerer l'affichage du type d'invite
 
+Ecran Player & User
+[20140207] - TextWatcher sur les EditText qui rend visible les TextView si non vide.
+[20140207] - Mise en commun des champs de saisie avec le User
+
 Ecran Player
+[20140206] - Revu du design
 [20140110] - Trier les invites par date descendante
 [20140109] - Afficher la liste des invites en mode modification
 [20140108] - Ajout du classement
 [20131229] - Passer par un startActivityForResult pour importer un contact google (comme le scan QrCode)
 [20131228] - Recuperer les infos 'Prenom' et 'Nom' découpé
 
+Ecran Utilisateur
+[20140206] - Revu du design
+[20140105] - Ajout du classement
+
 Ecran Accueil
 [20140109] - Ajouter un menu pour sauvegarder la base 
 [20140109] - Ajouter un menu pour restorer la base 
-
-Ecran Utilisateur
-[20140105] - Ajout du classement
 
 Saisie de Message
 [20131229] - Pouvoir inserer le champ à la position courante du curseur

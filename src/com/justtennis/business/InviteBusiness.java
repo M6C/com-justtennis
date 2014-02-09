@@ -38,6 +38,7 @@ public class InviteBusiness {
 	private InviteService inviteService;
 	private UserService userService;
 	private PlayerService playerService;
+	private GCalendarHelper gCalendarHelper;
 //	private User user;
 //	private Player player;
 	private Invite invite;
@@ -50,6 +51,7 @@ public class InviteBusiness {
 		inviteService = new InviteService(context, notificationMessage);
 		playerService = new PlayerService(context, notificationMessage);
 		userService = new UserService(context, notificationMessage);
+		gCalendarHelper = GCalendarHelper.getInstance(context);
 	}
 
 	public void initializeData(Intent intent) {
@@ -134,14 +136,7 @@ public class InviteBusiness {
 		inviteService.createOrUpdate(invite);
 
 		Player player = getPlayer();
-		String title = null;
-		if (getType()==INVITE_TYPE.MATCH) {
-			title = "Just Tennis Match vs " + player.getFirstName() + " " + player.getLastName();
-		} else {
-			title = "Just Tennis Entrainement vs " + player.getFirstName() + " " + player.getLastName();
-		}
-
-		calendarAddEvent(invite, title, EVENT_STATUS.CONFIRMED);
+		calendarAddEvent(invite, EVENT_STATUS.CONFIRMED);
 		
 		if (text!=null) {
 			if (player.getPhonenumber()!=null && !player.getPhonenumber().equals("")) {
@@ -157,11 +152,14 @@ public class InviteBusiness {
 		Invite inv = inviteService.find(invite.getId());
 		inviteService.createOrUpdate(invite);
 
-		// TODO Modify Event
-		if (inv != null && inv.getStatus() != invite.getStatus()) {
-			EVENT_STATUS status = GCalendarHelper.getInstance(context).toEventStatus(invite.getStatus());
-//			GCalendarHelper.getInstance(context).updateEventStatus(invite.getIdCalendar(), status);
-			GCalendarHelper.getInstance(context).recreateEventStatus(invite.getIdCalendar(), status);
+		if (inv != null && inv.getIdCalendar() != null && 
+			inv.getIdCalendar() != GCalendarHelper.EVENT_ID_NO_CREATED && 
+			inv.getStatus() != invite.getStatus()) {
+			EVENT_STATUS status = gCalendarHelper.toEventStatus(invite.getStatus());
+//			gCalendarHelper.updateEventStatus(invite.getIdCalendar(), status);
+//			gCalendarHelper.recreateEventStatus(invite.getIdCalendar(), status);
+			calendarAddEvent(invite, status);
+			gCalendarHelper.deleteCalendarEntry(inv.getIdCalendar());
 		}
 	}
 	
@@ -207,10 +205,8 @@ public class InviteBusiness {
 		this.invite.setStatus(status);
 
 		User user = userService.find();
-		Player player = getPlayer();
-		String title = "Just Tennis Match vs " + player.getFirstName() + " " + player.getLastName();
 		EVENT_STATUS eventStatus = toEventStatus(status);
-		calendarAddEvent(invite, title, eventStatus);
+		calendarAddEvent(invite, eventStatus);
 
 		inviteService.createOrUpdate(invite);
 
@@ -223,23 +219,32 @@ public class InviteBusiness {
 		return invite;
 	}
 
-	private void calendarAddEvent(Invite invite, String title, EVENT_STATUS status) {
+	private void calendarAddEvent(Invite invite, EVENT_STATUS status) {
 		Date date = invite.getDate();
+		Player player = invite.getPlayer();
 		String text = "";
 		if (ApplicationConfig.SHOW_ID) {
 			text += " [invite:" + invite.getId() + "|user:" + invite.getUser().getId() + "|player:" + invite.getPlayer().getId() + "|calendar:" + invite.getIdCalendar() + "]";
 		}
-		long idEvent = GCalendarHelper.getInstance(context).addEvent(
+		String title = null;
+		if (getType()==INVITE_TYPE.MATCH) {
+			title = "Just Tennis Match vs " + player.getFirstName() + " " + player.getLastName();
+		} else {
+			title = "Just Tennis Entrainement vs " + player.getFirstName() + " " + player.getLastName();
+		}
+
+		boolean hasAlarm = (status != EVENT_STATUS.CANCELED);
+		long idEvent = gCalendarHelper.addEvent(
 			title, text, invite.getPlayer().getAddress(),
 			date.getTime(), date.getTime() + Invite.PLAY_DURATION_DEFAULT,
-			false, true, GCalendarHelper.DEFAULT_CALENDAR_ID, 60,
+			false, hasAlarm, GCalendarHelper.DEFAULT_CALENDAR_ID, 60,
 			status
 		);
 
 		invite.setIdCalendar(idEvent);
 		inviteService.createOrUpdate(invite);
 	}
-	
+
 	private EVENT_STATUS toEventStatus(STATUS status) {
 		switch(status) {
 			case ACCEPT:
