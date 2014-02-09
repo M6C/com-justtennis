@@ -16,6 +16,7 @@ import com.justtennis.domain.Invite;
 import com.justtennis.domain.Player;
 import com.justtennis.domain.comparator.InviteComparatorByDate;
 import com.justtennis.domain.comparator.PlayerComparatorByName;
+import com.justtennis.helper.GCalendarHelper;
 
 public class ListInviteBusiness {
 
@@ -26,6 +27,8 @@ public class ListInviteBusiness {
 	private InviteService inviteService;
 	private PlayerService playerService;
 
+	private GCalendarHelper calendarHelper;
+
 	private List<Invite> list = new ArrayList<Invite>();
 	private List<Player> listPlayer = new ArrayList<Player>();
 	private String[] listPlayerName;
@@ -34,6 +37,7 @@ public class ListInviteBusiness {
 		this.context = context;
 		playerService = new PlayerService(context, notificationMessage);
 		inviteService = new InviteService(context, notificationMessage);
+		calendarHelper = GCalendarHelper.getInstance(context);
 	}
 
 	public void onCreate() {
@@ -55,6 +59,9 @@ public class ListInviteBusiness {
 	public void delete(Invite invite) {
 		Logger.logMe(TAG, "Delete Button !!!");
 		inviteService.delete(invite);
+		if (invite.getIdCalendar() != null) {
+			calendarHelper.deleteCalendarEntry(invite.getIdCalendar());
+		}
 
 		refreshInvite();
 		context.refresh();

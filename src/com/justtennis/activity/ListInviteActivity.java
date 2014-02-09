@@ -3,10 +3,12 @@ package com.justtennis.activity;
 import android.app.Activity;
 import android.os.Bundle;
 import android.view.View;
+import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
 import android.widget.Filter;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.Spinner;
 
@@ -26,8 +28,9 @@ public class ListInviteActivity extends Activity {
 	private static final String TAG = ListInviteActivity.class.getSimpleName();
 
 	private ListInviteBusiness business;
-	
+
 	private ListView list;
+	private LinearLayout llFilterPlayer;
 	private Spinner spFilterPlayer;
 	private ListInviteAdapter adapter;
 	private Filter filter;
@@ -37,13 +40,18 @@ public class ListInviteActivity extends Activity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+
+//		requestWindowFeature(Window.FEATURE_CUSTOM_TITLE);
 		setContentView(R.layout.list_invite);
+//		getWindow().setFeatureInt(Window.FEATURE_CUSTOM_TITLE, R.layout.list_invite_title);
+
+		list = (ListView)findViewById(R.id.list);
+		llFilterPlayer = (LinearLayout)findViewById(R.id.ll_filter_player);
 
 		business = new ListInviteBusiness(this, NotifierMessageLogger.getInstance());
 		adapter = new ListInviteAdapter(this, business.getList());
 		filter = adapter.getFilter();
 
-		list = (ListView)findViewById(R.id.list);
 		list.setOnItemClickListener(new OnItemClickListInvite(this));
 		list.setAdapter(adapter);
 
@@ -68,6 +76,16 @@ public class ListInviteActivity extends Activity {
 
 	public void onClickClose(View view) {
 		finish();
+	}
+	
+	public void onClickButtonFilter(View view) {
+		if (llFilterPlayer.getVisibility() == View.GONE) {
+			llFilterPlayer.setVisibility(View.VISIBLE);
+		} else {
+			llFilterPlayer.setVisibility(View.GONE);
+			filterValue = null;
+			filter.filter(filterValue);
+		}
 	}
 
 	public void onClickDelete(View view) {
