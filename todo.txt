@@ -11,6 +11,8 @@ Ecran Player
  - Pouvoir importer une selection multiple de contacts google
 
 Invite
+ - Revoir le design
+ - Pouvoir saisir une Score
 
 List Person
 
