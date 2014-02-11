@@ -116,7 +116,7 @@ public class ListPlayerActivity extends Activity {
 		intent.putExtra(InviteActivity.EXTRA_PLAYER_ID, player.getId());
 		startActivity(intent);
 		
-		finish();
+//		finish();
 	}
 
 	public void onClickSend(View view) {

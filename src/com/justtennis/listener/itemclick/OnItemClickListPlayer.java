@@ -25,6 +25,6 @@ public class OnItemClickListPlayer implements OnItemClickListener {
 		intent.putExtra(PlayerActivity.EXTRA_PLAYER_ID, ((Long)view.getTag()));
 		context.startActivity(intent);
 		
-		context.finish();
+//		context.finish();
     }
 }

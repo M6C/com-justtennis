@@ -279,14 +279,14 @@ public class InviteActivity extends Activity {
 	
 	public void onClickCancel(View view) {
 		finish();
-		Intent intent = null;
-		if (business.getMode()==MODE.INVITE_DEMANDE) {
-			intent = new Intent(this, ListPlayerActivity.class);
-		} else {
-			intent = new Intent(this, ListInviteActivity.class);
-		}
-		intent.putExtra(ListPlayerActivity.EXTRA_MODE, ListPlayerActivity.MODE.INVITE);
-		startActivity(intent);
+//		Intent intent = null;
+//		if (business.getMode()==MODE.INVITE_DEMANDE) {
+//			intent = new Intent(this, ListPlayerActivity.class);
+//		} else {
+//			intent = new Intent(this, ListInviteActivity.class);
+//		}
+//		intent.putExtra(ListPlayerActivity.EXTRA_MODE, ListPlayerActivity.MODE.INVITE);
+//		startActivity(intent);
 	}
 	
 	public void onClickPlayer(View view) {
