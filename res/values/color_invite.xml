@@ -1,0 +1,6 @@
+<resources>
+
+    <color name="invite_score_field_background_color_1">@color/bleu_transparent_5</color>
+    <color name="invite_score_field_background_color_2">@color/blanc_transparent_5</color>
+
+</resources>

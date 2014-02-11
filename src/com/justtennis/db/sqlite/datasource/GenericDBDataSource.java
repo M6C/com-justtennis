@@ -81,11 +81,16 @@ public abstract class GenericDBDataSource<POJO extends GenericDBPojo<Long>> {
 	}
 
 	public void delete(POJO pojo) {
-		Date dateStart = new Date();
 		String id = pojo.getId().toString();
 		logMe("Localisation deleted with id: " + id);
-		db.delete(dbHelper.getTableName(), GenericDBHelper.COLUMN_ID + " = " + id, null);
-		logMe("pojo.id:" + pojo.getId(), dateStart);
+		delete(GenericDBHelper.COLUMN_ID + " = " + id);
+	}
+
+	public void delete(String sqlWhere) {
+		Date dateStart = new Date();
+		logMe("Localisation deleted where: " + sqlWhere);
+		db.delete(dbHelper.getTableName(), sqlWhere, null);
+		logMe("pojo.where:" + sqlWhere, dateStart);
 	}
 
 	public POJO getById(long id) {

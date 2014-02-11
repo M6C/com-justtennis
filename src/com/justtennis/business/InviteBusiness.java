@@ -9,6 +9,7 @@ import java.util.List;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.Toast;
 
 import com.cameleon.common.android.inotifier.INotifierMessage;
@@ -20,11 +21,13 @@ import com.justtennis.activity.PlayerActivity;
 import com.justtennis.db.service.InviteService;
 import com.justtennis.db.service.MessageService;
 import com.justtennis.db.service.PlayerService;
+import com.justtennis.db.service.ScoreSetService;
 import com.justtennis.db.service.UserService;
 import com.justtennis.domain.Invite;
 import com.justtennis.domain.Invite.INVITE_TYPE;
 import com.justtennis.domain.Invite.STATUS;
 import com.justtennis.domain.Player;
+import com.justtennis.domain.ScoreSet;
 import com.justtennis.domain.User;
 import com.justtennis.helper.GCalendarHelper;
 import com.justtennis.helper.GCalendarHelper.EVENT_STATUS;
@@ -33,17 +36,21 @@ import com.justtennis.parser.SmsParser;
 
 public class InviteBusiness {
 
+	private static final String TAG = InviteBusiness.class.getSimpleName();
+
 	private Context context;
 	private INotifierMessage notification;
 	private InviteService inviteService;
 	private UserService userService;
 	private PlayerService playerService;
+	private ScoreSetService scoreSetService;
 	private GCalendarHelper gCalendarHelper;
 //	private User user;
 //	private Player player;
 	private Invite invite;
 	private List<Invite> list = new ArrayList<Invite>();
 	private MODE mode = MODE.INVITE_DEMANDE;
+	private String[][] scores;
 
 	public InviteBusiness(Context context, INotifierMessage notificationMessage) {
 		this.context = context;
@@ -51,6 +58,7 @@ public class InviteBusiness {
 		inviteService = new InviteService(context, notificationMessage);
 		playerService = new PlayerService(context, notificationMessage);
 		userService = new UserService(context, notificationMessage);
+		scoreSetService = new ScoreSetService(context, notificationMessage);
 		gCalendarHelper = GCalendarHelper.getInstance(context);
 	}
 
@@ -64,6 +72,7 @@ public class InviteBusiness {
 
 		if (intent.hasExtra(InviteActivity.EXTRA_INVITE)) {
 			invite = (Invite) intent.getSerializableExtra(PlayerActivity.EXTRA_INVITE);
+			initializeScores();
 		}
 		if (intent.hasExtra(InviteActivity.EXTRA_PLAYER_ID)) {
 			long id = intent.getLongExtra(InviteActivity.EXTRA_PLAYER_ID, -1);
@@ -108,6 +117,10 @@ public class InviteBusiness {
 		}
 	}
 
+	private void initializeScores() {
+		scores = scoreSetService.getTableByIdInvite(getInvite().getId());
+	}
+
 	public String buildText() {
 //		Date date = invite.getDate();
 //		Invite invite = new Invite(user, player, date);
@@ -135,6 +148,8 @@ public class InviteBusiness {
 
 		inviteService.createOrUpdate(invite);
 
+		saveScoreSet();
+
 		Player player = getPlayer();
 		calendarAddEvent(invite, EVENT_STATUS.CONFIRMED);
 		
@@ -151,6 +166,8 @@ public class InviteBusiness {
 	public void modify() {
 		Invite inv = inviteService.find(invite.getId());
 		inviteService.createOrUpdate(invite);
+		
+		saveScoreSet();
 
 		if (inv != null && inv.getIdCalendar() != null && 
 			inv.getIdCalendar() != GCalendarHelper.EVENT_ID_NO_CREATED && 
@@ -199,6 +216,34 @@ public class InviteBusiness {
 
 	public void setType(INVITE_TYPE type) {
 		invite.setType(type);
+	}
+
+	public void setStatus(STATUS status) {
+		invite.setStatus(status);
+	}
+
+	public Player getPlayer() {
+		return invite.getPlayer();
+	}
+
+	public void setPlayer(Player player) {
+		this.invite.setPlayer(player);
+	}
+
+	public MODE getMode() {
+		return mode;
+	}
+
+	public void setPlayer(long id) {
+		this.invite.setPlayer(playerService.find(id));
+	}
+
+	public String[][] getScores() {
+		return scores;
+	}
+
+	public void setScores(String[][] scores) {
+		this.scores = scores;
 	}
 
 	private Invite doConfirm(STATUS status) {
@@ -257,23 +302,44 @@ public class InviteBusiness {
 		}
 	}
 
-	public void setStatus(STATUS status) {
-		invite.setStatus(status);
+	private boolean checkScoreSet(String score1, String score2, boolean last) {
+		boolean ret = false;
+		if (score1 != null && score2 != null &&
+			!"".equals(score1) && !"".equals(score2)) {
+			try {
+				int num1 = Integer.parseInt(score1);
+				int num2 = Integer.parseInt(score2);
+
+				if (last || (num1 <= 7 && num2 <= 7)) {
+					ret = true;
+				}
+			} catch (NumberFormatException ex) {
+				Log.e(TAG, "Number Format Exception", ex);
+			}
+			
+		}
+		return ret;
+	}
+	
+	private void addScoreSet(Integer order, String score1, String score2, boolean last) {
+		if (checkScoreSet(score1, score2, last)) {
+			ScoreSet pojo = new ScoreSet();
+			pojo.setInvite(invite);
+			pojo.setOrder(order);
+			pojo.setValue1(Integer.parseInt(score1));
+			pojo.setValue2(Integer.parseInt(score2));
+			scoreSetService.createOrUpdate(pojo);
+		}
 	}
 
-	public Player getPlayer() {
-		return invite.getPlayer();
-	}
+	private void saveScoreSet() {
+		String[][] scores = getScores();
+		scoreSetService.deleteByIdInvite(invite.getId());
 
-	public void setPlayer(Player player) {
-		this.invite.setPlayer(player);
-	}
-
-	public MODE getMode() {
-		return mode;
-	}
-
-	public void setPlayer(long id) {
-		this.invite.setPlayer(playerService.find(id));
+		int len = scores.length;
+		for(int row = 1 ; row <= len ; row++) {
+			String[] col = scores[row-1];
+			addScoreSet(row, col[0], col[1], row==len);
+		}
 	}
 }

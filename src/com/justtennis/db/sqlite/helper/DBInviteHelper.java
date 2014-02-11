@@ -18,8 +18,8 @@ public class DBInviteHelper extends GenericDBHelper {
 	public static final String COLUMN_ID_EXTERNAL = "ID_EXTERNAL";
 	public static final String COLUMN_ID_CALENDAR = "ID_CALENDAR";
 
-	private static final String DATABASE_NAME = "Invite.db";
-	private static final int DATABASE_VERSION = 7;
+	public static final String DATABASE_NAME = "Invite.db";
+	public static final int DATABASE_VERSION = 7;
 
 	// Database creation sql statement
 	private static final String DATABASE_CREATE = "CREATE TABLE " + TABLE_NAME + "(" + 

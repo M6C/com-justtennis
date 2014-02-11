@@ -12,7 +12,6 @@ Ecran Player
 
 Invite
  - Revoir le design
- - Pouvoir saisir une Score
 
 List Person
 
@@ -24,6 +23,7 @@ Saisie de Message
 ********************* DONE *****************************
 
 Invite
+[20140211] - Pouvoir saisir une Score
 [20140209] - Modifier l'event GCalendar quand on modifi une invite
 [20140209] - Supprimer l'invite GCalendar quand on supprime une invite
 [20140122] - Pouvoir modifier la coche qui indique si la réponse et ok (vert) ou non (rouge)
