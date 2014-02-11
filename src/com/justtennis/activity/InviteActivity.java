@@ -37,6 +37,7 @@ import com.justtennis.domain.Invite.INVITE_TYPE;
 import com.justtennis.domain.Invite.STATUS;
 import com.justtennis.domain.Player;
 import com.justtennis.domain.Ranking;
+import com.justtennis.listener.action.TextWatcherFieldScoreSetBold;
 import com.justtennis.manager.ContactManager;
 import com.justtennis.notifier.NotifierMessageLogger;
 
@@ -113,6 +114,17 @@ public class InviteActivity extends Activity {
 		etScore24 = ((EditText)findViewById(R.id.et_score2_4));
 		etScore15 = ((EditText)findViewById(R.id.et_score1_5));
 		etScore25 = ((EditText)findViewById(R.id.et_score2_5));
+
+		etScore11.addTextChangedListener(new TextWatcherFieldScoreSetBold(etScore11, etScore21));
+		etScore21.addTextChangedListener(new TextWatcherFieldScoreSetBold(etScore21, etScore11));
+		etScore12.addTextChangedListener(new TextWatcherFieldScoreSetBold(etScore12, etScore22));
+		etScore22.addTextChangedListener(new TextWatcherFieldScoreSetBold(etScore22, etScore12));
+		etScore13.addTextChangedListener(new TextWatcherFieldScoreSetBold(etScore13, etScore23));
+		etScore23.addTextChangedListener(new TextWatcherFieldScoreSetBold(etScore23, etScore13));
+		etScore14.addTextChangedListener(new TextWatcherFieldScoreSetBold(etScore14, etScore24));
+		etScore24.addTextChangedListener(new TextWatcherFieldScoreSetBold(etScore24, etScore14));
+		etScore15.addTextChangedListener(new TextWatcherFieldScoreSetBold(etScore15, etScore25));
+		etScore25.addTextChangedListener(new TextWatcherFieldScoreSetBold(etScore25, etScore15));
 
 		business = new InviteBusiness(this, NotifierMessageLogger.getInstance());
 

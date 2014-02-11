@@ -6,6 +6,7 @@ import android.view.View;
 
 public class TextWatcherFieldEnableView implements TextWatcher {
 
+	@SuppressWarnings("unused")
 	private static final String TAG = TextWatcherFieldEnableView.class.getSimpleName();
 
 	private View view;
