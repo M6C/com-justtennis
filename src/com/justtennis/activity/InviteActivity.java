@@ -61,7 +61,6 @@ public class InviteActivity extends Activity {
 	private final Integer[] drawableType = new Integer[] {R.layout.element_invite_type_entrainement, R.layout.element_invite_type_match};
 
 	private InviteBusiness business;
-	private ListInviteAdapter adapter;
 
 	private LinearLayout llInviteDemande;
 	private LinearLayout llInviteModify;
@@ -74,7 +73,6 @@ public class InviteActivity extends Activity {
 	private ImageView ivPhoto;
 	private Spinner spStatus;
 	private Spinner spType;
-	private ListView list;
 	private Bundle savedInstanceState;
 	private BaseImageAdapter adapterStatus;
 	private BaseViewAdapter adapterType;
@@ -112,7 +110,6 @@ public class InviteActivity extends Activity {
 //		ivStatus = (ImageView)findViewById(R.id.iv_main_status);
 		spStatus = (Spinner)findViewById(R.id.sp_main_status);
 		spType = (Spinner)findViewById(R.id.sp_main_type);
-		list = (ListView)findViewById(R.id.lvInvite);
 
 		etScore11 = ((EditText)findViewById(R.id.et_score1_1));
 		etScore21 = ((EditText)findViewById(R.id.et_score2_1));
@@ -126,8 +123,6 @@ public class InviteActivity extends Activity {
 		etScore25 = ((EditText)findViewById(R.id.et_score2_5));
 
 		business = new InviteBusiness(this, NotifierMessageLogger.getInstance());
-		adapter = new ListInviteAdapter(this, business.getList(), ADAPTER_INVITE_MODE.READ);
-		list.setAdapter(adapter);
 
 		initializeListStatus();
 		initializeListType();
@@ -319,8 +314,6 @@ public class InviteActivity extends Activity {
 		initializeDataDateTime();
 		initializeDataPlayer();
 		initializeDataScore();
-		
-		adapter.notifyDataSetChanged();
 	}
 
 	private void initializeListStatus() {

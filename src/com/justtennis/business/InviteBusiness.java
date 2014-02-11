@@ -1,10 +1,8 @@
 package com.justtennis.business;
 
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
-import java.util.List;
 
 import android.content.Context;
 import android.content.Intent;
@@ -47,7 +45,6 @@ public class InviteBusiness {
 	private GCalendarHelper gCalendarHelper;
 	private User user;
 	private Invite invite;
-	private List<Invite> list = new ArrayList<Invite>();
 	private MODE mode = MODE.INVITE_DEMANDE;
 	private String[][] scores;
 
@@ -89,34 +86,16 @@ public class InviteBusiness {
 			calendar.add(Calendar.HOUR_OF_DAY, 1);
 			invite.setDate(calendar.getTime());
 		}
-		
-		initializeDataInvite();
 	}
 
 	public void initializeData(Bundle savedInstanceState) {
 		mode = (MODE) savedInstanceState.getSerializable(InviteActivity.EXTRA_MODE);
 		invite = (Invite) savedInstanceState.getSerializable(PlayerActivity.EXTRA_INVITE);
-		initializeDataInvite();
 	}
 
 	public void onSaveInstanceState(Bundle outState) {
 		outState.putSerializable(InviteActivity.EXTRA_MODE, mode);
 		outState.putSerializable(InviteActivity.EXTRA_INVITE, invite);
-	}
-
-	public List<Invite> getList() {
-		return list;
-	}
-
-	private void initializeDataInvite() {
-		list.clear();
-		if (getPlayer()!=null) {
-			List<Invite> listInvite = inviteService.getByIdPlayer(getPlayer().getId());
-			for(Invite inv : listInvite) {
-				inv.setPlayer(playerService.find(inv.getPlayer().getId()));
-			}
-			list.addAll(listInvite);
-		}
 	}
 
 	private void initializeScores() {

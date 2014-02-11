@@ -132,12 +132,6 @@
 		    android:background="@color/list_background_color"
 		    android:orientation="vertical"
 		>
-			<ListView
-				android:id="@+id/lvInvite"
-				android:layout_width="match_parent"
-			    android:layout_height="match_parent"
-			    android:visibility="gone"
-			/>
         	<include layout="@layout/element_score"/>
 		</LinearLayout>
 	</LinearLayout>
