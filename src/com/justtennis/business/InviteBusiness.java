@@ -3,6 +3,9 @@ package com.justtennis.business;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.List;
+import java.util.SortedSet;
+import java.util.TreeSet;
 
 import android.content.Context;
 import android.content.Intent;
@@ -19,17 +22,21 @@ import com.justtennis.activity.PlayerActivity;
 import com.justtennis.db.service.InviteService;
 import com.justtennis.db.service.MessageService;
 import com.justtennis.db.service.PlayerService;
+import com.justtennis.db.service.RankingService;
 import com.justtennis.db.service.ScoreSetService;
 import com.justtennis.db.service.UserService;
 import com.justtennis.domain.Invite;
 import com.justtennis.domain.Invite.INVITE_TYPE;
 import com.justtennis.domain.Invite.STATUS;
+import com.justtennis.domain.comparator.RankingComparatorByOrder;
 import com.justtennis.domain.Player;
+import com.justtennis.domain.Ranking;
 import com.justtennis.domain.ScoreSet;
 import com.justtennis.domain.User;
 import com.justtennis.helper.GCalendarHelper;
 import com.justtennis.helper.GCalendarHelper.EVENT_STATUS;
 import com.justtennis.manager.SmsManager;
+import com.justtennis.notifier.NotifierMessageLogger;
 import com.justtennis.parser.SmsParser;
 
 public class InviteBusiness {
@@ -46,6 +53,8 @@ public class InviteBusiness {
 	private User user;
 	private Invite invite;
 	private MODE mode = MODE.INVITE_DEMANDE;
+	private List<Ranking> listRanking;
+	private String[] listTxtRankings;
 	private String[][] scores;
 
 
@@ -71,11 +80,15 @@ public class InviteBusiness {
 
 		if (intent.hasExtra(InviteActivity.EXTRA_INVITE)) {
 			invite = (Invite) intent.getSerializableExtra(PlayerActivity.EXTRA_INVITE);
+			if (getIdRanking()==null) {
+				setIdRanking(getPlayer().getIdRanking());
+			}
 			initializeScores();
 		}
 		if (intent.hasExtra(InviteActivity.EXTRA_PLAYER_ID)) {
 			long id = intent.getLongExtra(InviteActivity.EXTRA_PLAYER_ID, -1);
 			invite.setPlayer(playerService.find(id));
+			setIdRanking(getPlayer().getIdRanking());
 		}
 
 		if (invite.getDate()==null) {
@@ -86,11 +99,31 @@ public class InviteBusiness {
 			calendar.add(Calendar.HOUR_OF_DAY, 1);
 			invite.setDate(calendar.getTime());
 		}
+
+		initializeDataRanking();
 	}
 
 	public void initializeData(Bundle savedInstanceState) {
 		mode = (MODE) savedInstanceState.getSerializable(InviteActivity.EXTRA_MODE);
 		invite = (Invite) savedInstanceState.getSerializable(PlayerActivity.EXTRA_INVITE);
+
+		initializeDataRanking();
+	}
+
+	public void initializeDataRanking() {
+		SortedSet<Ranking> setRanking = new TreeSet<Ranking>(new RankingComparatorByOrder());
+
+		listRanking = new RankingService(context, NotifierMessageLogger.getInstance()).getList();
+		setRanking.addAll(listRanking);
+		
+		listRanking.clear();
+		listRanking.addAll(setRanking);
+
+		int i=0;
+		listTxtRankings = new String[setRanking.size()];
+		for(Ranking ranking : setRanking) {
+			listTxtRankings[i++] = ranking.getRanking();
+		}
 	}
 
 	public void onSaveInstanceState(Bundle outState) {
@@ -116,7 +149,7 @@ public class InviteBusiness {
 	}
 
 	public boolean isUnknownPlayer() {
-		return playerService.isUnknownPlayer(getPlayer());
+		return getPlayer() != null && playerService.isUnknownPlayer(getPlayer());
 	}
 	
 	public void send(String text) {
@@ -186,6 +219,14 @@ public class InviteBusiness {
 	public Date getDate() {
 		return invite.getDate();
 	}
+	
+	public void setIdRanking(Long idRanking) {
+		invite.setIdRanking(idRanking);
+	}
+	
+	public Long getIdRanking() {
+		return invite.getIdRanking();
+	}
 
 	public Invite getInvite() {
 		return invite;
@@ -229,6 +270,22 @@ public class InviteBusiness {
 
 	public void setScores(String[][] scores) {
 		this.scores = scores;
+	}
+
+	public List<Ranking> getListRanking() {
+		return listRanking;
+	}
+
+	public void setListRanking(List<Ranking> listRanking) {
+		this.listRanking = listRanking;
+	}
+
+	public String[] getListTxtRankings() {
+		return listTxtRankings;
+	}
+
+	public void setListTxtRankings(String[] listTxtRankings) {
+		this.listTxtRankings = listTxtRankings;
 	}
 
 	private Invite doConfirm(STATUS status) {

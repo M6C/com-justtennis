@@ -75,10 +75,10 @@ public class PlayerBusiness {
 			mode = (MODE) intent.getSerializableExtra(PlayerActivity.EXTRA_MODE);
 		}
 
-		initializeData();
+		initializeDataRanking();
 	}
 
-	public void initializeData() {
+	public void initializeDataRanking() {
 		SortedSet<Ranking> setRanking = new TreeSet<Ranking>(new RankingComparatorByOrder());
 
 		listRanking = new RankingService(context, NotifierMessageLogger.getInstance()).getList();
@@ -92,8 +92,6 @@ public class PlayerBusiness {
 		for(Ranking ranking : setRanking) {
 			listTxtRankings[i++] = ranking.getRanking();
 		}
-		
-//		initializeDataInvite();
 	}
 
 	public long getPlayerCount() {

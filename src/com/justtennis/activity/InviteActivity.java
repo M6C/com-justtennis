@@ -5,6 +5,7 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.List;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -15,6 +16,7 @@ import android.view.View;
 import android.view.View.OnFocusChangeListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
@@ -33,6 +35,7 @@ import com.justtennis.ApplicationConfig;
 import com.justtennis.R;
 import com.justtennis.business.InviteBusiness;
 import com.justtennis.domain.Invite;
+import com.justtennis.domain.Ranking;
 import com.justtennis.domain.Invite.INVITE_TYPE;
 import com.justtennis.domain.Invite.STATUS;
 import com.justtennis.domain.Player;
@@ -70,6 +73,7 @@ public class InviteActivity extends Activity {
 	private ImageView ivPhoto;
 	private Spinner spStatus;
 	private Spinner spType;
+	private Spinner spRanking;
 	private Bundle savedInstanceState;
 	private BaseImageAdapter adapterStatus;
 	private BaseViewAdapter adapterType;
@@ -107,6 +111,7 @@ public class InviteActivity extends Activity {
 //		ivStatus = (ImageView)findViewById(R.id.iv_main_status);
 		spStatus = (Spinner)findViewById(R.id.sp_main_status);
 		spType = (Spinner)findViewById(R.id.sp_main_type);
+		spRanking = (Spinner)findViewById(R.id.sp_main_ranking);
 
 		etScore11 = ((EditText)findViewById(R.id.et_score1_1));
 		etScore21 = ((EditText)findViewById(R.id.et_score2_1));
@@ -311,6 +316,7 @@ public class InviteActivity extends Activity {
 		initializeDataDateTime();
 		initializeDataPlayer();
 		initializeDataScore();
+		initializeRankingList();
 	}
 
 	private void initializeListStatus() {
@@ -383,34 +389,45 @@ public class InviteActivity extends Activity {
 	}
 
 	private void initializeDataStatus() {
-//		switch(business.getInvite().getStatus()) {
-//			case ACCEPT:
-//				ivStatus.setBackgroundResource(R.drawable.check_green);
-//				break;
-//			case REFUSE:
-//				ivStatus.setBackgroundResource(R.drawable.check_red);
-//				break;
-//			default:
-//				ivStatus.setBackgroundResource(R.drawable.check_yellow);
-//				break;
-//		}
-
 		spStatus.setSelection(getStatusPosition());
 	}
 
 	private void initializeDataType() {
-//		switch(business.getInvite().getType()) {
-//			case ENTRAINEMENT:
-//				vTypeEntrainement.setVisibility(View.VISIBLE);
-//				vTypeMatch.setVisibility(View.GONE);
-//				break;
-//			case MATCH:
-//			default:
-//				vTypeEntrainement.setVisibility(View.GONE);
-//				vTypeMatch.setVisibility(View.VISIBLE);
-//				break;
-//		}
 		spType.setSelection(getTypePosition());
+	}
+
+	private void initializeRankingList() {
+		spRanking.setVisibility(View.VISIBLE);
+		ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, business.getListTxtRankings());
+		dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+		spRanking.setAdapter(dataAdapter);
+
+		spRanking.setOnItemSelectedListener(new OnItemSelectedListener() {
+			@Override
+			public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+				Ranking ranking = business.getListRanking().get(position);
+				business.setIdRanking(ranking.getId());
+			}
+
+			@Override
+			public void onNothingSelected(AdapterView<?> arg0) {
+			}
+		});
+
+		initializeRanking(business.getIdRanking());
+	}
+
+	private void initializeRanking(Long id) {
+		int position = 0;
+		List<Ranking> listRanking = business.getListRanking();
+		for(Ranking ranking : listRanking) {
+			if (ranking.getId().equals(id)) {
+				spRanking.setSelection(position, true);
+				break;
+			} else {
+				position++;
+			}
+		}
 	}
 
 	private void initializeDataMode() {

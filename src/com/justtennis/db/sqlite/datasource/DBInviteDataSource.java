@@ -28,7 +28,8 @@ public class DBInviteDataSource extends GenericDBDataSource<Invite> {
 		DBInviteHelper.COLUMN_STATUS,
 		DBInviteHelper.COLUMN_TYPE,
 		DBInviteHelper.COLUMN_ID_EXTERNAL,
-		DBInviteHelper.COLUMN_ID_CALENDAR
+		DBInviteHelper.COLUMN_ID_CALENDAR,
+		DBInviteHelper.COLUMN_ID_RANKING
 	};
 
 	public DBInviteDataSource(Context context, INotifierMessage notificationMessage) {
@@ -58,6 +59,7 @@ public class DBInviteDataSource extends GenericDBDataSource<Invite> {
 		values.put(DBInviteHelper.COLUMN_TYPE, invite.getType().toString());
 		values.put(DBInviteHelper.COLUMN_ID_EXTERNAL, invite.getIdExternal());
 		values.put(DBInviteHelper.COLUMN_ID_CALENDAR, invite.getIdCalendar());
+		values.put(DBInviteHelper.COLUMN_ID_RANKING, invite.getIdRanking());
 	}
 
 	@Override
@@ -75,6 +77,7 @@ public class DBInviteDataSource extends GenericDBDataSource<Invite> {
 		invite.setType(type==null ? INVITE_TYPE.ENTRAINEMENT : INVITE_TYPE.valueOf(type));
 		invite.setIdExternal(DbTool.getInstance().toLong(cursor, col++));
 		invite.setIdCalendar(DbTool.getInstance().toLong(cursor, col++));
+		invite.setIdRanking(DbTool.getInstance().toLong(cursor, col++));
 		return invite;
 	}
 	

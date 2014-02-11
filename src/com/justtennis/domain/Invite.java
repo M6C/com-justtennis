@@ -27,6 +27,7 @@ public class Invite extends GenericDBPojo<Long> implements Serializable {
 	private Long idExternal;
 	private Long idCalendar;
 	private INVITE_TYPE type = INVITE_TYPE.ENTRAINEMENT;
+	private Long idRanking;
 
 	public Invite() {
 	}
@@ -97,5 +98,13 @@ public class Invite extends GenericDBPojo<Long> implements Serializable {
 	}
 	public void setType(INVITE_TYPE type) {
 		this.type = type;
+	}
+
+	public Long getIdRanking() {
+		return idRanking;
+	}
+
+	public void setIdRanking(Long idRanking) {
+		this.idRanking = idRanking;
 	}
 }

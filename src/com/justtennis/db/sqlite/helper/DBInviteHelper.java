@@ -17,9 +17,10 @@ public class DBInviteHelper extends GenericDBHelper {
 	public static final String COLUMN_TYPE = "TYPE";
 	public static final String COLUMN_ID_EXTERNAL = "ID_EXTERNAL";
 	public static final String COLUMN_ID_CALENDAR = "ID_CALENDAR";
+	public static final String COLUMN_ID_RANKING = "ID_RANKING";
 
 	public static final String DATABASE_NAME = "Invite.db";
-	public static final int DATABASE_VERSION = 7;
+	public static final int DATABASE_VERSION = 8;
 
 	// Database creation sql statement
 	private static final String DATABASE_CREATE = "CREATE TABLE " + TABLE_NAME + "(" + 
@@ -29,7 +30,8 @@ public class DBInviteHelper extends GenericDBHelper {
 		COLUMN_STATUS + " INTEGER NULL, " + 
 		COLUMN_TYPE + " INTEGER NULL, " + 
 		COLUMN_ID_EXTERNAL + " INTEGER NULL, " + 
-		COLUMN_ID_CALENDAR + " INTEGER NULL " + 
+		COLUMN_ID_CALENDAR + " INTEGER NULL, " + 
+		COLUMN_ID_RANKING + " INTEGER NULL " + 
 	");";
 
 	public DBInviteHelper(Context context, INotifierMessage notificationMessage) {
@@ -45,6 +47,8 @@ public class DBInviteHelper extends GenericDBHelper {
 			}
 			else if (oldVersion==6) {
 				addColumn(database, COLUMN_TYPE, "INTEGER NULL");
+			}else if (oldVersion==7) {
+				addColumn(database, COLUMN_ID_RANKING, "INTEGER NULL");
 			}
 		}
 		else {
