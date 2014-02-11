@@ -21,19 +21,16 @@
 	>
 		<LinearLayout
 		    android:layout_width="match_parent"
-		    android:layout_height="wrap_content"
+		    android:layout_height="90dp"
 		    android:orientation="horizontal"
 		    android:background="@color/form_background_color"
 		    android:onClick="onClickPlayer"
 		>
 			<ImageView
 			    android:id="@+id/iv_photo"
-			    android:layout_width="35dip"
-			    android:layout_height="35dip"
-			    android:layout_marginTop="30dp"
-			    android:layout_marginBottom="30dp"
-			    android:layout_marginLeft="30dp"
-			    android:layout_marginRight="30dp"
+			    android:layout_width="65dip"
+			    android:layout_height="65dip"
+			    android:layout_margin="2dp"
 			    android:src="@drawable/player_unknow_2"
 			    android:layout_gravity="center_vertical|center_horizontal"
 			/>
@@ -41,6 +38,7 @@
 			    android:layout_width="0dp"
 			    android:layout_height="wrap_content"
 			    android:layout_weight="1"
+			    android:layout_marginLeft="10dp"
 			    android:orientation="vertical"
 			>
 				<LinearLayout
@@ -82,13 +80,13 @@
 			>
 			    <Spinner
 			        android:id="@+id/sp_main_status"
-				    android:layout_width="wrap_content"
-				    android:layout_height="wrap_content"
+					android:layout_width="70dp"
+				    android:layout_height="45dp"
 			    />
 				<Spinner
 					android:id="@+id/sp_main_ranking"
-					android:layout_width="match_parent"
-					android:layout_height="wrap_content"
+					android:layout_width="70dp"
+				    android:layout_height="45dp"
 				/>
 			</LinearLayout>
 		</LinearLayout>
