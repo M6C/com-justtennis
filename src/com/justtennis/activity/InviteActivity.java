@@ -484,16 +484,26 @@ public class InviteActivity extends Activity {
 
 	private void initializeListener() {
 		edDate.setOnFocusChangeListener(new OnFocusChangeListener() {
+			private boolean first = true;
 			@Override
 			public void onFocusChange(View v, boolean hasFocus) {
+				if (first) {
+					first = false;
+					return;
+				}
 				if (hasFocus) {
 					onClickInviteDate(v);
 				}
 			}
 		});
 		edTime.setOnFocusChangeListener(new OnFocusChangeListener() {
+			private boolean first = true;
 			@Override
 			public void onFocusChange(View v, boolean hasFocus) {
+				if (first) {
+					first = false;
+					return;
+				}
 				if (hasFocus) {
 					onClickInviteTime(v);
 				}
