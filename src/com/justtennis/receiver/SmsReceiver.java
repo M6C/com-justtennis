@@ -16,6 +16,8 @@ import android.widget.Toast;
 import com.justtennis.ApplicationConfig;
 import com.justtennis.R;
 import com.justtennis.activity.InviteActivity;
+import com.justtennis.activity.InviteDemandeActivity;
+import com.justtennis.activity.InviteDemandeActivity.MODE;
 import com.justtennis.activity.MainActivity;
 import com.justtennis.activity.PlayerActivity;
 import com.justtennis.db.service.InviteService;
@@ -96,6 +98,7 @@ public class SmsReceiver extends BroadcastReceiver {
 		}
 	}
 
+	@SuppressWarnings("deprecation")
 	private void showNotification(MSG_TYPE msgType, String message) {
 		Log.i("SmsReceiver", "senderNum: " + phoneNumber + "; type:" + msgType + "; message: " + message);
 
@@ -147,8 +150,8 @@ public class SmsReceiver extends BroadcastReceiver {
 				
 				inviteService.createOrUpdate(invite2);
 	
-				intent = new Intent(context, InviteActivity.class);
-				intent.putExtra(InviteActivity.EXTRA_MODE, InviteActivity.MODE.INVITE_CONFIRM);
+				intent = new Intent(context, InviteDemandeActivity.class);
+				intent.putExtra(InviteActivity.EXTRA_MODE, MODE.INVITE_CONFIRM);
 				intent.putExtra(InviteActivity.EXTRA_INVITE, invite2);
 				break;
 			}

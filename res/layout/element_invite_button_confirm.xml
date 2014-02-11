@@ -1,0 +1,30 @@
+<LinearLayout
+   	xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/ll_invite_confirm"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:visibility="gone"
+    android:gravity="bottom"
+>
+    <Button
+        android:id="@+id/btn_invite_confirm_yes"
+	    android:layout_width="wrap_content"
+	    android:layout_height="wrap_content"
+	    android:layout_weight=".5"
+    	android:layout_marginRight="5dp"
+        android:background="@color/button_background_color"
+        android:textColor="@color/button_text_color"
+        android:text="@string/button_text_yes"
+        android:onClick="onClickInviteConfirmeYes"
+    />
+    <Button
+        android:id="@+id/btn_invite_confirm_no"
+	    android:layout_width="wrap_content"
+	    android:layout_height="wrap_content"
+	    android:layout_weight=".5"
+        android:background="@color/button_background_color"
+        android:textColor="@color/button_text_color"
+        android:text="@string/button_text_no"
+        android:onClick="onClickInviteConfirmeNo"
+    />
+</LinearLayout>

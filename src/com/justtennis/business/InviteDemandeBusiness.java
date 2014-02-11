@@ -17,7 +17,7 @@ import com.cameleon.common.android.inotifier.INotifierMessage;
 import com.justtennis.ApplicationConfig;
 import com.justtennis.R;
 import com.justtennis.activity.InviteActivity;
-import com.justtennis.activity.InviteActivity.MODE;
+import com.justtennis.activity.InviteDemandeActivity.MODE;
 import com.justtennis.activity.PlayerActivity;
 import com.justtennis.db.service.InviteService;
 import com.justtennis.db.service.MessageService;
@@ -28,20 +28,19 @@ import com.justtennis.db.service.UserService;
 import com.justtennis.domain.Invite;
 import com.justtennis.domain.Invite.INVITE_TYPE;
 import com.justtennis.domain.Invite.STATUS;
-import com.justtennis.domain.comparator.RankingComparatorByOrder;
 import com.justtennis.domain.Player;
 import com.justtennis.domain.Ranking;
-import com.justtennis.domain.ScoreSet;
 import com.justtennis.domain.User;
+import com.justtennis.domain.comparator.RankingComparatorByOrder;
 import com.justtennis.helper.GCalendarHelper;
 import com.justtennis.helper.GCalendarHelper.EVENT_STATUS;
 import com.justtennis.manager.SmsManager;
 import com.justtennis.notifier.NotifierMessageLogger;
 import com.justtennis.parser.SmsParser;
 
-public class InviteBusiness {
+public class InviteDemandeBusiness {
 
-	private static final String TAG = InviteBusiness.class.getSimpleName();
+	private static final String TAG = InviteDemandeBusiness.class.getSimpleName();
 
 	private Context context;
 	private INotifierMessage notification;
@@ -52,13 +51,13 @@ public class InviteBusiness {
 	private GCalendarHelper gCalendarHelper;
 	private User user;
 	private Invite invite;
-	private MODE mode = MODE.INVITE_MODIFY;
+	private MODE mode = MODE.INVITE_DEMANDE;
 	private List<Ranking> listRanking;
 	private String[] listTxtRankings;
 	private String[][] scores;
 
 
-	public InviteBusiness(Context context, INotifierMessage notificationMessage) {
+	public InviteDemandeBusiness(Context context, INotifierMessage notificationMessage) {
 		this.context = context;
 		this.notification = notificationMessage;
 		inviteService = new InviteService(context, notificationMessage);
@@ -162,8 +161,6 @@ public class InviteBusiness {
 
 		inviteService.createOrUpdate(invite);
 
-		saveScoreSet();
-
 		Player player = getPlayer();
 		calendarAddEvent(invite, EVENT_STATUS.CONFIRMED);
 		
@@ -174,23 +171,6 @@ public class InviteBusiness {
 		}
 		else {
 			Toast.makeText(context, R.string.msg_no_message_to_send, Toast.LENGTH_LONG).show();
-		}
-	}
-
-	public void modify() {
-		Invite inv = inviteService.find(invite.getId());
-		inviteService.createOrUpdate(invite);
-		
-		saveScoreSet();
-
-		if (inv != null && inv.getIdCalendar() != null && 
-			inv.getIdCalendar() != GCalendarHelper.EVENT_ID_NO_CREATED && 
-			inv.getStatus() != invite.getStatus()) {
-			EVENT_STATUS status = gCalendarHelper.toEventStatus(invite.getStatus());
-//			gCalendarHelper.updateEventStatus(invite.getIdCalendar(), status);
-//			gCalendarHelper.recreateEventStatus(invite.getIdCalendar(), status);
-			calendarAddEvent(invite, status);
-			gCalendarHelper.deleteCalendarEntry(inv.getIdCalendar());
 		}
 	}
 	
@@ -361,27 +341,5 @@ public class InviteBusiness {
 			
 		}
 		return ret;
-	}
-	
-	private void addScoreSet(Integer order, String score1, String score2, boolean last) {
-		if (checkScoreSet(score1, score2, last)) {
-			ScoreSet pojo = new ScoreSet();
-			pojo.setInvite(invite);
-			pojo.setOrder(order);
-			pojo.setValue1(Integer.parseInt(score1));
-			pojo.setValue2(Integer.parseInt(score2));
-			scoreSetService.createOrUpdate(pojo);
-		}
-	}
-
-	private void saveScoreSet() {
-		String[][] scores = getScores();
-		scoreSetService.deleteByIdInvite(invite.getId());
-
-		int len = scores.length;
-		for(int row = 1 ; row <= len ; row++) {
-			String[] col = scores[row-1];
-			addScoreSet(row, col[0], col[1], row==len);
-		}
 	}
 }

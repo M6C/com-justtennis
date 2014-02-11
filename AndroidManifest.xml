@@ -76,6 +76,9 @@
         <activity android:name=".activity.InviteActivity"
    		   android:screenOrientation="portrait"
          />
+        <activity android:name=".activity.InviteDemandeActivity"
+   		   android:screenOrientation="portrait"
+         />
         <activity android:name=".activity.RotatingButtons"
    		   android:screenOrientation="portrait"
          />
