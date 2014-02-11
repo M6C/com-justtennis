@@ -24,15 +24,28 @@
 	    android:layout_width="match_parent"
 	    android:layout_height="wrap_content"
 	    android:gravity="bottom"
+	    android:orientation="horizontal"
 	>
 	    <Button
 	        android:id="@+id/btn_player_add"
-		    android:layout_width="match_parent"
+		    android:layout_width="0dp"
 		    android:layout_height="wrap_content"
+		    android:layout_weight=".5"
+	    	android:layout_marginRight="5dp"
 	        android:background="@color/button_background_color"
 	        android:textColor="@color/button_text_color"
 	        android:text="@string/button_text_add"
 	        android:onClick="onClickAdd"
 	    />
-    </LinearLayout>
+	    <Button
+	        android:id="@+id/btn_player_close"
+		    android:layout_width="0dp"
+		    android:layout_height="wrap_content"
+		    android:layout_weight=".5"
+	        android:background="@color/button_background_color"
+	        android:textColor="@color/button_text_color"
+	        android:text="@string/button_text_close"
+	        android:onClick="onClickClose"
+	    />
+	</LinearLayout>
 </LinearLayout>

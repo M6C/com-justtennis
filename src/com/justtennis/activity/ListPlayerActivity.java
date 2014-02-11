@@ -37,6 +37,7 @@ public class ListPlayerActivity extends Activity {
 	private ListView list;
 	private ListPlayerAdapter adapter;
 	private Button btnAdd;
+	private Button btnClose;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -47,6 +48,7 @@ public class ListPlayerActivity extends Activity {
 		adapter = new ListPlayerAdapter(this, business.getList());
 
 		btnAdd = (Button)findViewById(R.id.btn_player_add);
+		btnClose = (Button)findViewById(R.id.btn_player_close);
 		list = (ListView)findViewById(R.id.list);
 		list.setAdapter(adapter);
 	}
@@ -61,14 +63,17 @@ public class ListPlayerActivity extends Activity {
 			case EDIT:
 				list.setOnItemClickListener(new OnItemClickListPlayer(this));
 				btnAdd.setVisibility(View.VISIBLE);
+				btnClose.setVisibility(View.VISIBLE);
 				break;
 			case INVITE:
 				list.setOnItemClickListener(new OnItemClickListPlayerInvite(this));
 				btnAdd.setVisibility(View.GONE);
+				btnClose.setVisibility(View.VISIBLE);
 				break;
 			case FOR_RESULT:
 				list.setOnItemClickListener(new OnItemClickListPlayerForResult(this));
 				btnAdd.setVisibility(View.GONE);
+				btnClose.setVisibility(View.VISIBLE);
 				break;
 		}
 	}
@@ -91,6 +96,10 @@ public class ListPlayerActivity extends Activity {
 	public void onClickAdd(View view) {
 		Intent intent = new Intent(getApplicationContext(), PlayerActivity.class);
 		startActivity(intent);
+	}
+
+	public void onClickClose(View view) {
+		finish();
 	}
 
 	public void onClickDelete(View view) {

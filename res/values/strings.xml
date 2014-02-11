@@ -14,6 +14,7 @@
     <string name="button_text_import">Import</string>
     <string name="button_text_modify">Modify</string>
     <string name="button_text_send">Send</string>
+    <string name="button_text_invite">Invite</string>
     <string name="button_text_cancel">Cancel</string>
     <string name="txt_message">Message</string>
     <string name="txt_invite_type">Type</string>

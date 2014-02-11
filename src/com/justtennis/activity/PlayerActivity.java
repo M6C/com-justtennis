@@ -10,7 +10,6 @@ import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
-import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.AdapterView.OnItemSelectedListener;
@@ -197,7 +196,7 @@ public class PlayerActivity extends Activity {
 				}
 			}
 		});
-		dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+//		dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
 		dialog.show();
 	}
 	

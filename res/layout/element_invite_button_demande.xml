@@ -13,7 +13,7 @@
     	android:layout_marginRight="5dp"
         android:background="@color/button_background_color"
         android:textColor="@color/button_text_color"
-        android:text="@string/button_text_send"
+        android:text="@string/button_text_invite"
         android:onClick="onClickOk"
     />
     <Button
