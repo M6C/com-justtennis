@@ -17,14 +17,8 @@ public class OnItemClickListPlayer implements OnItemClickListener {
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-//		Player player = ((ListPlayerAdapter.ViewHolder)view.getTag()).player;
-//		Intent intent = new Intent(context, PlayerActivity.class);
-//		intent.putExtra(PlayerActivity.EXTRA_PLAYER_ID, player.getId());
-//		context.startActivity(intent);
 		Intent intent = new Intent(context, PlayerActivity.class);
 		intent.putExtra(PlayerActivity.EXTRA_PLAYER_ID, ((Long)view.getTag()));
 		context.startActivity(intent);
-		
-//		context.finish();
     }
 }
