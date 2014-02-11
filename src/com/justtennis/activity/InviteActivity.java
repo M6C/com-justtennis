@@ -451,6 +451,7 @@ public class InviteActivity extends Activity {
 	}
 
 	private void initializeDataScore() {
+
 		String[][] scores = business.getScores();
 		if (scores!=null) {
 			int len = scores.length;

@@ -55,4 +55,9 @@
     <string name="fr_msg_invite_date_relative_today">aujourd\'hui</string>
     <string name="fr_msg_invite_date_relative_tomorrow">demain</string>
 
+    <!-- Score -->
+    <string name="txt_score">SCORE</string>
+    <string name="txt_score_local">%1$s</string>
+    <string name="txt_score_visiteur">%1$s</string>
+    
 </resources>

@@ -45,12 +45,12 @@ public class InviteBusiness {
 	private PlayerService playerService;
 	private ScoreSetService scoreSetService;
 	private GCalendarHelper gCalendarHelper;
-//	private User user;
-//	private Player player;
+	private User user;
 	private Invite invite;
 	private List<Invite> list = new ArrayList<Invite>();
 	private MODE mode = MODE.INVITE_DEMANDE;
 	private String[][] scores;
+
 
 	public InviteBusiness(Context context, INotifierMessage notificationMessage) {
 		this.context = context;
@@ -63,8 +63,10 @@ public class InviteBusiness {
 	}
 
 	public void initializeData(Intent intent) {
+		user = userService.find();
+
 		invite = new Invite();
-		invite.setUser(userService.find());
+		invite.setUser(getUser());
 
 		if (intent.hasExtra(InviteActivity.EXTRA_MODE)) {
 			mode = (MODE) intent.getSerializableExtra(InviteActivity.EXTRA_MODE);
@@ -192,6 +194,10 @@ public class InviteBusiness {
 
 		String message = SmsParser.getInstance(context).toMessageInviteConfirmNo(invite);
 		SmsManager.getInstance().send(context, this.invite.getUser().getPhonenumber(), message);
+	}
+
+	public User getUser() {
+		return user;
 	}
 
 	public void setDate(Date date) {
