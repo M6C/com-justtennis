@@ -71,7 +71,8 @@ public class MainActivity extends Activity implements INotifierMessage {
 				String qrcodeData = data.getStringExtra("SCAN_RESULT");
 				String format = data.getStringExtra("SCAN_RESULT_FORMAT");
 				// Handle successful scan
-				Logger.logMe(TAG, qrcodeData);
+				Logger.logMe(TAG, "qrcodeData:"+qrcodeData);
+				Logger.logMe(TAG, "format:"+format);
 			} else if (resultCode == RESULT_CANCELED) {
 				// Handle cancel
 			}
@@ -127,6 +128,11 @@ public class MainActivity extends Activity implements INotifierMessage {
 	
 	public void onClickListInvite(View view) {
 		Intent intent = new Intent(getApplicationContext(), ListInviteActivity.class);
+		startActivity(intent);
+	}
+	
+	public void onClickPieChart(View view) {
+		Intent intent = new Intent(getApplicationContext(), PieChartActivity.class);
 		startActivity(intent);
 	}
 	

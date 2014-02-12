@@ -2,6 +2,7 @@ package com.justtennis.db.sqlite.datasource;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 
 import org.gdocument.gtracergps.launcher.log.Logger;
@@ -15,6 +16,7 @@ import com.cameleon.common.android.inotifier.INotifierMessage;
 import com.justtennis.db.sqlite.helper.DBPlayerHelper;
 import com.justtennis.db.sqlite.helper.GenericDBHelper;
 import com.justtennis.domain.GenericDBPojo;
+import com.justtennis.tool.DbTool;
 
 public abstract class GenericDBDataSource<POJO extends GenericDBPojo<Long>> {
 
@@ -172,6 +174,29 @@ public abstract class GenericDBDataSource<POJO extends GenericDBPojo<Long>> {
 		cursor.close();
 
 		logMe("query(where:" + sqlWhere + ")", dateStart);
+		return ret;
+	}
+
+	protected List<HashMap<String, Object>> rawQuery(String sql) {
+		Date dateStart = new Date();
+		List<HashMap<String, Object>> ret = new ArrayList<HashMap<String, Object>>();
+
+		Cursor cursor = db.rawQuery(sql, null);
+		String[] columnName = cursor.getColumnNames();
+		cursor.moveToFirst();
+		while (!cursor.isAfterLast()) {
+			HashMap<String, Object> row = new HashMap<String, Object>();
+			for(int i = 0 ; i < columnName.length ; i++) {
+				String name = columnName[i];
+				row.put(name, DbTool.getInstance().toOnject(cursor, i));
+			}
+			ret.add(row);
+			cursor.moveToNext();
+		}
+		// Make sure to close the cursor
+		cursor.close();
+
+		logMe("query(sql:" + sql + ")", dateStart);
 		return ret;
 	}
 

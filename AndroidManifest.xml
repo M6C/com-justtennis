@@ -82,6 +82,9 @@
         <activity android:name=".activity.RotatingButtons"
    		   android:screenOrientation="portrait"
          />
+        <activity android:name=".activity.PieChartActivity"
+   		   android:screenOrientation="portrait"
+         />
 
 	   <receiver android:name=".receiver.SmsReceiver">
 	      <intent-filter android:priority="999">

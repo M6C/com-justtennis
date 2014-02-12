@@ -1,5 +1,6 @@
 package com.justtennis.db.service;
 
+import java.util.HashMap;
 import java.util.List;
 
 import android.content.Context;
@@ -13,7 +14,7 @@ public class InviteService extends GenericService<Invite> {
 	public InviteService(Context context, INotifierMessage notificationMessage) {
 		super(context, new DBInviteDataSource(context, notificationMessage), notificationMessage);
 	}
-	
+
 	public List<Invite> getByIdPlayer(long idPlayer) {
     	try {
     		dbDataSource.open();
@@ -22,5 +23,25 @@ public class InviteService extends GenericService<Invite> {
     	finally {
     		dbDataSource.close();
     	}
+	}
+
+	public List<HashMap<String,Object>> countGroupByRanking() {
+    	try {
+    		dbDataSource.open();
+    		return ((DBInviteDataSource)dbDataSource).countGroupByRanking();
+    	}
+    	finally {
+    		dbDataSource.close();
+    	}
+	}
+	
+	public List<HashMap<String,Object>> countByTypeGroupByRanking(Invite.INVITE_TYPE type) {
+		try {
+			dbDataSource.open();
+			return ((DBInviteDataSource)dbDataSource).countByTypeGroupByRanking(type);
+		}
+		finally {
+			dbDataSource.close();
+		}
 	}
 }

@@ -31,4 +31,21 @@ public class DbTool {
 		}
 		return Integer.valueOf(cursor.getString(i));
 	}
+
+	public Object toOnject(Cursor cursor, int i) {
+		if (!cursor.isNull(i)) {
+			int type = cursor.getType(i);
+			switch(type) {
+				case Cursor.FIELD_TYPE_BLOB:
+					return cursor.getBlob(i);
+				case Cursor.FIELD_TYPE_FLOAT:
+					return cursor.getFloat(i);
+				case Cursor.FIELD_TYPE_INTEGER:
+					return cursor.getInt(i);
+				case Cursor.FIELD_TYPE_STRING:
+					return cursor.getString(i);
+			}
+		}
+		return null;
+	}
 }
