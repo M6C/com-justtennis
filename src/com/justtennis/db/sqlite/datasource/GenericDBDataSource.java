@@ -13,6 +13,7 @@ import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 
 import com.cameleon.common.android.inotifier.INotifierMessage;
+import com.justtennis.db.sqlite.helper.DBInviteHelper;
 import com.justtennis.db.sqlite.helper.DBPlayerHelper;
 import com.justtennis.db.sqlite.helper.GenericDBHelper;
 import com.justtennis.domain.GenericDBPojo;
@@ -110,12 +111,14 @@ public abstract class GenericDBDataSource<POJO extends GenericDBPojo<Long>> {
 		return ret;
 	}
 
-	public List<POJO> getAll() {
+	public List<POJO> getInId(String[] id) {
 		Date dateStart = new Date();
 		List<POJO> pojos = new ArrayList<POJO>();
 
+		String sqlWhere = buildInQuery(DBInviteHelper.COLUMN_ID, id.length);
+
 		Cursor cursor = db.query(dbHelper.getTableName(),
-				getAllColumns(), null, null, null, null, null);
+				getAllColumns(), sqlWhere, id, null, null, null);
 
 		cursor.moveToFirst();
 		while (!cursor.isAfterLast()) {
@@ -126,6 +129,26 @@ public abstract class GenericDBDataSource<POJO extends GenericDBPojo<Long>> {
 		// Make sure to close the cursor
 		cursor.close();
 
+		logMe("getAll()", dateStart);
+		return pojos;
+	}
+	
+	public List<POJO> getAll() {
+		Date dateStart = new Date();
+		List<POJO> pojos = new ArrayList<POJO>();
+		
+		Cursor cursor = db.query(dbHelper.getTableName(),
+				getAllColumns(), null, null, null, null, null);
+		
+		cursor.moveToFirst();
+		while (!cursor.isAfterLast()) {
+			POJO pojo = cursorToPojo(cursor);
+			pojos.add(pojo);
+			cursor.moveToNext();
+		}
+		// Make sure to close the cursor
+		cursor.close();
+		
 		logMe("getAll()", dateStart);
 		return pojos;
 	}
@@ -158,13 +181,35 @@ public abstract class GenericDBDataSource<POJO extends GenericDBPojo<Long>> {
 	    }
 	}
 
+	public static String buildInQuery(String columnName, int size) {
+		if (size<=0)
+			return null;
+
+		String ret = columnName + " IN (";
+		boolean first = true;
+		for(int i=0 ; i<size ; i++) {
+			if (!first) {
+				ret += ",";
+			}
+			ret += "?";
+			first = false;
+		}
+		ret += ")";
+
+		return ret;
+	}
+
 	protected List<POJO> query(String sqlWhere) {
+		return query(sqlWhere, null);
+	}
+	
+	protected List<POJO> query(String sqlWhere, String[] params) {
 		Date dateStart = new Date();
 		List<POJO> ret = new ArrayList<POJO>();
-
+		
 		Cursor cursor = db.query(dbHelper.getTableName(), getAllColumns(), 
-				sqlWhere, null, null, null, null);
-
+				sqlWhere, params, null, null, null);
+		
 		cursor.moveToFirst();
 		while (!cursor.isAfterLast()) {
 			ret.add(cursorToPojo(cursor));
@@ -172,8 +217,8 @@ public abstract class GenericDBDataSource<POJO extends GenericDBPojo<Long>> {
 		}
 		// Make sure to close the cursor
 		cursor.close();
-
-		logMe("query(where:" + sqlWhere + ")", dateStart);
+		
+		logMe("query(where:" + sqlWhere + ", params:" + params + ")", dateStart);
 		return ret;
 	}
 

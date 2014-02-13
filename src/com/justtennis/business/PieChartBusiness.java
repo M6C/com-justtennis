@@ -1,6 +1,7 @@
 package com.justtennis.business;
 
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 
 import android.content.Context;
@@ -8,6 +9,7 @@ import android.content.Context;
 import com.cameleon.common.android.inotifier.INotifierMessage;
 import com.justtennis.db.service.InviteService;
 import com.justtennis.db.service.RankingService;
+import com.justtennis.db.sqlite.helper.DBInviteHelper;
 import com.justtennis.domain.Invite.INVITE_TYPE;
 import com.justtennis.domain.Ranking;
 
@@ -25,12 +27,16 @@ public class PieChartBusiness {
 	}
 
 	public HashMap<String, Double> getDataByRanking() {
-		HashMap<String, Double> ret = new HashMap<String, Double>();
-		List<HashMap<String,Object>> data = inviteService.countGroupByRanking();
+		HashMap<String, Double> ret = new LinkedHashMap<String, Double>();
+		HashMap<String, Double> data = inviteService.countGroupByRanking();
 		if (data!=null) {
-			for(HashMap<String,Object> row : data) {
-				Ranking ranking = rankingService.find(Long.parseLong(row.get("ID_RANKING").toString()));
-				ret.put(ranking.getRanking(), Double.parseDouble(row.get("NB").toString()));
+			String[] listIdRanking = data.keySet().toArray(new String[0]);
+
+			List<Ranking> listRanking = rankingService.getList(listIdRanking);
+			rankingService.order(listRanking);
+
+			for(Ranking ranking : listRanking) {
+				ret.put(ranking.getRanking(), data.get(ranking.getId().toString()));
 			}
 		}
 		return ret ;
@@ -41,7 +47,7 @@ public class PieChartBusiness {
 		List<HashMap<String,Object>> data = inviteService.countByTypeGroupByRanking(type);
 		if (data!=null) {
 			for(HashMap<String,Object> row : data) {
-				Ranking ranking = rankingService.find(Long.parseLong(row.get("ID_RANKING").toString()));
+				Ranking ranking = rankingService.find(Long.parseLong(row.get(DBInviteHelper.COLUMN_ID_RANKING).toString()));
 				ret.put(ranking.getRanking(), Double.parseDouble(row.get("NB").toString()));
 			}
 		}

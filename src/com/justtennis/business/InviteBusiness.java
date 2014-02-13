@@ -4,8 +4,6 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
-import java.util.SortedSet;
-import java.util.TreeSet;
 
 import android.content.Context;
 import android.content.Intent;
@@ -28,7 +26,6 @@ import com.justtennis.db.service.UserService;
 import com.justtennis.domain.Invite;
 import com.justtennis.domain.Invite.INVITE_TYPE;
 import com.justtennis.domain.Invite.STATUS;
-import com.justtennis.domain.comparator.RankingComparatorByOrder;
 import com.justtennis.domain.Player;
 import com.justtennis.domain.Ranking;
 import com.justtennis.domain.ScoreSet;
@@ -36,7 +33,6 @@ import com.justtennis.domain.User;
 import com.justtennis.helper.GCalendarHelper;
 import com.justtennis.helper.GCalendarHelper.EVENT_STATUS;
 import com.justtennis.manager.SmsManager;
-import com.justtennis.notifier.NotifierMessageLogger;
 import com.justtennis.parser.SmsParser;
 
 public class InviteBusiness {
@@ -57,6 +53,8 @@ public class InviteBusiness {
 	private String[] listTxtRankings;
 	private String[][] scores;
 
+	private RankingService rankingService;
+
 
 	public InviteBusiness(Context context, INotifierMessage notificationMessage) {
 		this.context = context;
@@ -64,6 +62,7 @@ public class InviteBusiness {
 		inviteService = new InviteService(context, notificationMessage);
 		playerService = new PlayerService(context, notificationMessage);
 		userService = new UserService(context, notificationMessage);
+		rankingService = new RankingService(context, notificationMessage);
 		scoreSetService = new ScoreSetService(context, notificationMessage);
 		gCalendarHelper = GCalendarHelper.getInstance(context);
 	}
@@ -111,17 +110,13 @@ public class InviteBusiness {
 	}
 
 	public void initializeDataRanking() {
-		SortedSet<Ranking> setRanking = new TreeSet<Ranking>(new RankingComparatorByOrder());
 
-		listRanking = new RankingService(context, NotifierMessageLogger.getInstance()).getList();
-		setRanking.addAll(listRanking);
-		
-		listRanking.clear();
-		listRanking.addAll(setRanking);
+		listRanking = rankingService.getList();
+		rankingService.order(listRanking);
 
 		int i=0;
-		listTxtRankings = new String[setRanking.size()];
-		for(Ranking ranking : setRanking) {
+		listTxtRankings = new String[listRanking.size()];
+		for(Ranking ranking : listRanking) {
 			listTxtRankings[i++] = ranking.getRanking();
 		}
 	}

@@ -70,6 +70,16 @@ public class GenericService<POJO extends GenericDBPojo<Long>> {
     		dbDataSource.close();
     	}
 	}
+	
+	public List<POJO> getList(String[] id) {
+		try {
+			dbDataSource.open();
+			return dbDataSource.getInId(id);
+		}
+		finally {
+			dbDataSource.close();
+		}
+	}
 
 	public void delete(POJO pojo) {
     	try {

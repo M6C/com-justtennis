@@ -51,9 +51,15 @@ public class DBInviteDataSource extends GenericDBDataSource<Invite> {
 	 * Return Count Invite by Ranking
 	 * @return Count Invite by Ranking
 	 */
-	public List<HashMap<String,Object>> countGroupByRanking() {
+	public HashMap<String, Double> countGroupByRanking() {
+		HashMap<String, Double> ret = new HashMap<String, Double>();
 		String sql = "SELECT "+DBInviteHelper.COLUMN_ID_RANKING+" ID_RANKING, COUNT(1) NB FROM " + dbHelper.getTableName() + " GROUP BY " + DBInviteHelper.COLUMN_ID_RANKING;
-		return rawQuery(sql);
+		List<HashMap<String,Object>> data = rawQuery(sql);
+
+		for(HashMap<String,Object> row : data) {
+			ret.put(row.get("ID_RANKING").toString(), Double.parseDouble(row.get("NB").toString()));
+		}
+		return ret;
 	}
 	
 	/**
