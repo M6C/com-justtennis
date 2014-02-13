@@ -52,25 +52,19 @@ public class DBInviteDataSource extends GenericDBDataSource<Invite> {
 	 * @return Count Invite by Ranking
 	 */
 	public HashMap<String, Double> countGroupByRanking() {
-		HashMap<String, Double> ret = new HashMap<String, Double>();
 		String sql = "SELECT "+DBInviteHelper.COLUMN_ID_RANKING+" ID_RANKING, COUNT(1) NB FROM " + dbHelper.getTableName() + " GROUP BY " + DBInviteHelper.COLUMN_ID_RANKING;
-		List<HashMap<String,Object>> data = rawQuery(sql);
-
-		for(HashMap<String,Object> row : data) {
-			ret.put(row.get("ID_RANKING").toString(), Double.parseDouble(row.get("NB").toString()));
-		}
-		return ret;
+		return rawQuerCount(sql);
 	}
 	
 	/**
 	 * Return Count Invite by Ranking
 	 * @return Count Invite by Ranking
 	 */
-	public List<HashMap<String,Object>> countByTypeGroupByRanking(Invite.INVITE_TYPE type) {
+	public HashMap<String,Double> countByTypeGroupByRanking(Invite.INVITE_TYPE type) {
 		String sql = "SELECT "+DBInviteHelper.COLUMN_ID_RANKING+" ID_RANKING, COUNT(1) NB FROM " + dbHelper.getTableName() + 
 				" WHERE " + DBInviteHelper.COLUMN_TYPE + " = '" + type + "'" +
 				" GROUP BY " + DBInviteHelper.COLUMN_ID_RANKING;
-		return rawQuery(sql);
+		return rawQuerCount(sql);
 	}
 
 	@Override
@@ -111,5 +105,15 @@ public class DBInviteDataSource extends GenericDBDataSource<Invite> {
 	@Override
 	protected String getTag() {
 		return TAG;
+	}
+
+	private HashMap<String, Double> rawQuerCount(String sql) {
+		HashMap<String, Double> ret = new HashMap<String, Double>();
+		List<HashMap<String,Object>> data = rawQuery(sql);
+
+		for(HashMap<String,Object> row : data) {
+			ret.put(row.get("ID_RANKING").toString(), Double.parseDouble(row.get("NB").toString()));
+		}
+		return ret;
 	}
 }

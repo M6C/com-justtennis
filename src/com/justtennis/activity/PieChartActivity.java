@@ -38,10 +38,6 @@ public class PieChartActivity extends Activity {
 	private CategorySeries mSeries = new CategorySeries("");
 	/** The main renderer for the main dataset. */
 	private DefaultRenderer mRenderer = new DefaultRenderer();
-	/** Button for adding entered data to the current series. */
-	private Button mAdd;
-	/** Edit text field for entering the slice value. */
-	private EditText mValue;
 	/** The chart view that displays the data. */
 	private GraphicalView mChartView;
 	
@@ -55,30 +51,13 @@ public class PieChartActivity extends Activity {
 		setContentView(R.layout.pie_chart);
 		business = new PieChartBusiness(this, NotifierMessageLogger.getInstance());
 
-		mValue = (EditText) findViewById(R.id.xValue);
 		mRenderer.setZoomButtonsVisible(true);
 		mRenderer.setStartAngle(180);
-		mRenderer.setDisplayValues(true);
+		mRenderer.setDisplayValues(false);
+		mRenderer.setLabelsColor(Color.BLUE);
+		mRenderer.setLabelsTextSize(32);
+		mRenderer.setLegendTextSize(32);
 
-		mAdd = (Button) findViewById(R.id.add);
-		mAdd.setEnabled(true);
-		mValue.setEnabled(true);
-
-		mAdd.setOnClickListener(new View.OnClickListener() {
-			public void onClick(View v) {
-				double value = 0;
-				try {
-					value = Double.parseDouble(mValue.getText().toString());
-				} catch (NumberFormatException e) {
-					mValue.requestFocus();
-					return;
-				}
-				mValue.setText("");
-				mValue.requestFocus();
-				addValue("Series " + (mSeries.getItemCount() + 1), value);
-			}
-		});
-		
 		spTypeData = (Spinner) findViewById(R.id.sp_type_data);
 		initializeTypeData();
 	}

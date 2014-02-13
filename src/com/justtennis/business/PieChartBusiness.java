@@ -27,8 +27,17 @@ public class PieChartBusiness {
 	}
 
 	public HashMap<String, Double> getDataByRanking() {
-		HashMap<String, Double> ret = new LinkedHashMap<String, Double>();
 		HashMap<String, Double> data = inviteService.countGroupByRanking();
+		return sortDataByRanking(data);
+	}
+
+	public HashMap<String, Double> getDataByRanking(INVITE_TYPE type) {
+		HashMap<String,Double> data = inviteService.countByTypeGroupByRanking(type);
+		return sortDataByRanking(data);
+	}
+
+	private HashMap<String, Double> sortDataByRanking(HashMap<String, Double> data) {
+		HashMap<String, Double> ret = new LinkedHashMap<String, Double>();
 		if (data!=null) {
 			String[] listIdRanking = data.keySet().toArray(new String[0]);
 
@@ -37,18 +46,6 @@ public class PieChartBusiness {
 
 			for(Ranking ranking : listRanking) {
 				ret.put(ranking.getRanking(), data.get(ranking.getId().toString()));
-			}
-		}
-		return ret ;
-	}
-
-	public HashMap<String, Double> getDataByRanking(INVITE_TYPE type) {
-		HashMap<String, Double> ret = new HashMap<String, Double>();
-		List<HashMap<String,Object>> data = inviteService.countByTypeGroupByRanking(type);
-		if (data!=null) {
-			for(HashMap<String,Object> row : data) {
-				Ranking ranking = rankingService.find(Long.parseLong(row.get(DBInviteHelper.COLUMN_ID_RANKING).toString()));
-				ret.put(ranking.getRanking(), Double.parseDouble(row.get("NB").toString()));
 			}
 		}
 		return ret ;

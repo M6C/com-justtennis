@@ -35,7 +35,7 @@ public class InviteService extends GenericService<Invite> {
     	}
 	}
 	
-	public List<HashMap<String,Object>> countByTypeGroupByRanking(Invite.INVITE_TYPE type) {
+	public HashMap<String,Double> countByTypeGroupByRanking(Invite.INVITE_TYPE type) {
 		try {
 			dbDataSource.open();
 			return ((DBInviteDataSource)dbDataSource).countByTypeGroupByRanking(type);
