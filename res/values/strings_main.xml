@@ -3,7 +3,7 @@
 
     <string name="button_text_message">Message</string>
     <string name="button_text_rotating">Rotating</string>
-    <string name="button_text_pie_chart">Pie Chart</string>
+    <string name="button_text_statistic">Statistic</string>
     <string name="button_text_db_backup">DB Backup</string>
     <string name="button_text_db_restore">DB Restore</string>
     <string name="dialog_backup_title">DB Backup</string>

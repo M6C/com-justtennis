@@ -68,7 +68,7 @@
 		    <Button
 			    android:layout_width="wrap_content"
 			    android:layout_height="wrap_content"
-		        android:text="@string/button_text_pie_chart"
+		        android:text="@string/button_text_statistic"
 		        android:onClick="onClickPieChart"
 		    />
 		    <Button
@@ -76,18 +76,21 @@
 			    android:layout_height="wrap_content"
 		        android:text="@string/button_text_rotating"
 		        android:onClick="onClickRotating"
+		        android:visibility="gone"
 		    />
 		    <Button
 			    android:layout_width="wrap_content"
 			    android:layout_height="wrap_content"
 		        android:text="@string/button_text_message"
 		        android:onClick="onClickMessage"
+		        android:visibility="gone"
 		    />
 		    <Button
 			    android:layout_width="wrap_content"
 			    android:layout_height="wrap_content"
 		        android:text="@string/button_text_person"
 		        android:onClick="onClickListPerson"
+		        android:visibility="gone"
 		    />
 		    <Button
 			    android:layout_width="wrap_content"
