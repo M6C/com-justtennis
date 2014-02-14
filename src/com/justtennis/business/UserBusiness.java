@@ -7,8 +7,10 @@ import java.util.TreeSet;
 import android.content.Context;
 
 import com.cameleon.common.android.inotifier.INotifierMessage;
+import com.justtennis.db.service.MessageService;
 import com.justtennis.db.service.RankingService;
 import com.justtennis.db.service.UserService;
+import com.justtennis.domain.Message;
 import com.justtennis.domain.Ranking;
 import com.justtennis.domain.User;
 import com.justtennis.domain.comparator.RankingComparatorByOrder;
@@ -18,14 +20,17 @@ import com.justtennis.parser.UserParser;
 public class UserBusiness {
 
 	private UserService userService;
+	private MessageService messageService;
 	private UserParser userParser;
 	private Context context;
 	private String[] listTxtRankings;
 	private List<Ranking> listRanking;
+	private Message message;
 
 	public UserBusiness(Context context, INotifierMessage notificationMessage) {
 		this.context = context;
 		userService = new UserService(context, notificationMessage);
+		messageService = new MessageService(context, notificationMessage);
 		userParser = UserParser.getInstance();
 	}
 
@@ -43,6 +48,11 @@ public class UserBusiness {
 		for(Ranking ranking : setRanking) {
 			listTxtRankings[i++] = ranking.getRanking();
 		}
+
+		message = messageService.getCommon();
+		if (message==null) {
+			message = new Message();
+		}
 	}
 
 	public long getUserCount() {
@@ -53,12 +63,21 @@ public class UserBusiness {
      * 
      * @param user
      */
-	public void submit(User user) {
+	public void submit(User user, String message) {
 		userService.createOrUpdate(user);
+
+		this.message.setMessage(message);
+
+		// Save in database
+		messageService.createOrUpdate(this.message);
 	}
 
 	public User findUser() {
 		return userService.find();
+	}
+	
+	public String getMessage() {
+		return message.getMessage();
 	}
 	
 	public String toQRCode(User user) {
