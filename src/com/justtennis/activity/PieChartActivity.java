@@ -17,15 +17,14 @@ import android.view.ViewGroup.LayoutParams;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
-import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.justtennis.R;
 import com.justtennis.business.PieChartBusiness;
-import com.justtennis.domain.Invite.INVITE_TYPE;
+import com.justtennis.business.PieChartBusiness.CHART_DATA_TYPE;
+import com.justtennis.business.PieChartBusiness.CHART_SCORE_RESULT;
 import com.justtennis.notifier.NotifierMessageLogger;
 
 //http://code.google.com/p/achartengine/source/browse/trunk/achartengine/
@@ -43,6 +42,7 @@ public class PieChartActivity extends Activity {
 	
 	private PieChartBusiness business;
 	private Spinner spTypeData;
+	private Spinner spScoreResultData;
 
 
 	@Override
@@ -59,7 +59,10 @@ public class PieChartActivity extends Activity {
 		mRenderer.setLegendTextSize(32);
 
 		spTypeData = (Spinner) findViewById(R.id.sp_type_data);
+		spScoreResultData = (Spinner) findViewById(R.id.sp_score_result_data);
+
 		initializeTypeData();
+		initializeScoreData();
 	}
 
 	@Override
@@ -122,11 +125,12 @@ public class PieChartActivity extends Activity {
 		mRenderer.addSeriesRenderer(renderer);
 		mChartView.repaint();
 	}
+
 	private void initializeTypeData() {
 		String[] typeData = new String[] {
-				"All By Ranking",
-				"Entrainement By Ranking",
-				"Match By Ranking"
+			getString(CHART_DATA_TYPE.ALL_BY_RANKING.stringId),
+			getString(CHART_DATA_TYPE.ENTRAINEMENT_BY_RANKING.stringId),
+			getString(CHART_DATA_TYPE.MATCH_BY_RANKING.stringId)
 		};
 		ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, typeData);
 		dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -140,23 +144,72 @@ public class PieChartActivity extends Activity {
 				HashMap<String, Double> data = null;
 				switch(position) {
 					case 0:
-						data = business.getDataByRanking();
+						data = business.getData(CHART_DATA_TYPE.ALL_BY_RANKING);
 						break;
 					case 1:
-						data = business.getDataByRanking(INVITE_TYPE.ENTRAINEMENT);
+						data = business.getData(CHART_DATA_TYPE.ENTRAINEMENT_BY_RANKING);
 						break;
 					case 2:
-						data = business.getDataByRanking(INVITE_TYPE.MATCH);
+						data = business.getData(CHART_DATA_TYPE.MATCH_BY_RANKING);
 						break;
 				}
 				
 				if (data != null) {
+					Double value = null;
 					for(String name : data.keySet()) {
-						addValue(name, data.get(name));
+						value = data.get(name);
+						if (value!=null) {
+							addValue(name, data.get(name));
+						}
 					}
 				}
 			}
 
+			@Override
+			public void onNothingSelected(AdapterView<?> arg0) {
+			}
+		});
+	}
+
+	private void initializeScoreData() {
+		String[] scoreResultData = new String[] {
+			getString(CHART_SCORE_RESULT.VICTORY.stringId),
+			getString(CHART_SCORE_RESULT.DEFEAT.stringId),
+			getString(CHART_SCORE_RESULT.UNFINISHED.stringId)
+		};
+		ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, scoreResultData);
+		dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+		spScoreResultData.setAdapter(dataAdapter);
+		
+		spScoreResultData.setOnItemSelectedListener(new OnItemSelectedListener() {
+			@Override
+			public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+				mSeries.clear();
+				mRenderer.removeAllRenderers();
+				HashMap<String, Double> data = null;
+				switch(position) {
+					case 0:
+						data = business.getData(CHART_SCORE_RESULT.VICTORY);
+						break;
+					case 1:
+						data = business.getData(CHART_SCORE_RESULT.DEFEAT);
+						break;
+					case 2:
+						data = business.getData(CHART_SCORE_RESULT.UNFINISHED);
+						break;
+				}
+				
+				if (data != null) {
+					Double value = null;
+					for(String name : data.keySet()) {
+						value = data.get(name);
+						if (value!=null) {
+							addValue(name, data.get(name));
+						}
+					}
+				}
+			}
+			
 			@Override
 			public void onNothingSelected(AdapterView<?> arg0) {
 			}

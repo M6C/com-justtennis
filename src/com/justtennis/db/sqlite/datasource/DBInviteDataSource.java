@@ -13,6 +13,7 @@ import com.cameleon.common.android.inotifier.INotifierMessage;
 import com.justtennis.db.sqlite.helper.DBInviteHelper;
 import com.justtennis.domain.Invite;
 import com.justtennis.domain.Invite.INVITE_TYPE;
+import com.justtennis.domain.Invite.SCORE_RESULT;
 import com.justtennis.domain.Invite.STATUS;
 import com.justtennis.domain.Player;
 import com.justtennis.tool.DbTool;
@@ -30,7 +31,8 @@ public class DBInviteDataSource extends GenericDBDataSource<Invite> {
 		DBInviteHelper.COLUMN_TYPE,
 		DBInviteHelper.COLUMN_ID_EXTERNAL,
 		DBInviteHelper.COLUMN_ID_CALENDAR,
-		DBInviteHelper.COLUMN_ID_RANKING
+		DBInviteHelper.COLUMN_ID_RANKING,
+		DBInviteHelper.COLUMN_SCORE_RESULT
 	};
 
 	public DBInviteDataSource(Context context, INotifierMessage notificationMessage) {
@@ -49,10 +51,16 @@ public class DBInviteDataSource extends GenericDBDataSource<Invite> {
 
 	/**
 	 * Return Count Invite by Ranking
+	 * @param scoreResult 
 	 * @return Count Invite by Ranking
 	 */
-	public HashMap<String, Double> countGroupByRanking() {
-		String sql = "SELECT "+DBInviteHelper.COLUMN_ID_RANKING+" ID_RANKING, COUNT(1) NB FROM " + dbHelper.getTableName() + " GROUP BY " + DBInviteHelper.COLUMN_ID_RANKING;
+	public HashMap<String, Double> countGroupByRanking(SCORE_RESULT scoreResult) {
+		String where = "";
+		if (scoreResult != null) {
+			where += " WHERE " + DBInviteHelper.COLUMN_SCORE_RESULT + " = '" + scoreResult + "'";
+		}
+
+		String sql = "SELECT "+DBInviteHelper.COLUMN_ID_RANKING+" ID_RANKING, COUNT(1) NB FROM " + dbHelper.getTableName() + where + " GROUP BY " + DBInviteHelper.COLUMN_ID_RANKING;
 		return rawQuerCount(sql);
 	}
 	
@@ -60,10 +68,26 @@ public class DBInviteDataSource extends GenericDBDataSource<Invite> {
 	 * Return Count Invite by Ranking
 	 * @return Count Invite by Ranking
 	 */
-	public HashMap<String,Double> countByTypeGroupByRanking(Invite.INVITE_TYPE type) {
+	public HashMap<String,Double> countByTypeGroupByRanking(Invite.INVITE_TYPE type, Invite.SCORE_RESULT scoreResult) {
+		int whereCnt = 0;
+		String where = " WHERE ";
+		if (type != null) {
+			if (whereCnt > 0) {
+				where += " AND ";
+			}
+			where += DBInviteHelper.COLUMN_TYPE + " = '" + type + "'";
+			whereCnt++;
+		}
+		if (scoreResult != null) {
+			if (whereCnt > 0) {
+				where += " AND ";
+			}
+			where += DBInviteHelper.COLUMN_SCORE_RESULT + " = '" + scoreResult + "'";
+			whereCnt++;
+		}
+
 		String sql = "SELECT "+DBInviteHelper.COLUMN_ID_RANKING+" ID_RANKING, COUNT(1) NB FROM " + dbHelper.getTableName() + 
-				" WHERE " + DBInviteHelper.COLUMN_TYPE + " = '" + type + "'" +
-				" GROUP BY " + DBInviteHelper.COLUMN_ID_RANKING;
+			where + " GROUP BY " + DBInviteHelper.COLUMN_ID_RANKING;
 		return rawQuerCount(sql);
 	}
 
@@ -81,6 +105,7 @@ public class DBInviteDataSource extends GenericDBDataSource<Invite> {
 		values.put(DBInviteHelper.COLUMN_ID_EXTERNAL, invite.getIdExternal());
 		values.put(DBInviteHelper.COLUMN_ID_CALENDAR, invite.getIdCalendar());
 		values.put(DBInviteHelper.COLUMN_ID_RANKING, invite.getIdRanking());
+		values.put(DBInviteHelper.COLUMN_SCORE_RESULT, invite.getScoreResult().toString());
 	}
 
 	@Override
@@ -93,12 +118,12 @@ public class DBInviteDataSource extends GenericDBDataSource<Invite> {
 		invite.setPlayer(player);
 		String date = cursor.getString(col++);
 		invite.setDate(date==null || "null".equals(date.toLowerCase(Locale.FRANCE)) ? null : new Date(Long.parseLong(date)));
-		invite.setStatus(STATUS.valueOf(cursor.getString(col++)));
-		String type = cursor.getString(col++);
-		invite.setType(type==null ? INVITE_TYPE.ENTRAINEMENT : INVITE_TYPE.valueOf(type));
+		invite.setStatus(STATUS.valueOf(DbTool.getInstance().toString(cursor, col++, STATUS.UNKNOW.toString())));
+		invite.setType(INVITE_TYPE.valueOf(DbTool.getInstance().toString(cursor, col++, INVITE_TYPE.ENTRAINEMENT.toString())));
 		invite.setIdExternal(DbTool.getInstance().toLong(cursor, col++));
 		invite.setIdCalendar(DbTool.getInstance().toLong(cursor, col++));
 		invite.setIdRanking(DbTool.getInstance().toLong(cursor, col++));
+		invite.setScoreResult(SCORE_RESULT.valueOf(DbTool.getInstance().toString(cursor, col++, SCORE_RESULT.UNFINISHED.toString())));
 		return invite;
 	}
 	

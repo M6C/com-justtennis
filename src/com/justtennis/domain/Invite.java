@@ -20,6 +20,9 @@ public class Invite extends GenericDBPojo<Long> implements Serializable {
 		MATCH
 	};
 
+	public enum SCORE_RESULT {
+		VICTORY, DEFEAT, UNFINISHED
+	}
 	private Player player;
 	private User user;
 	private Date date;
@@ -28,6 +31,7 @@ public class Invite extends GenericDBPojo<Long> implements Serializable {
 	private Long idCalendar;
 	private INVITE_TYPE type = INVITE_TYPE.ENTRAINEMENT;
 	private Long idRanking;
+	private SCORE_RESULT scoreResult = SCORE_RESULT.UNFINISHED;
 
 	public Invite() {
 	}
@@ -106,5 +110,13 @@ public class Invite extends GenericDBPojo<Long> implements Serializable {
 
 	public void setIdRanking(Long idRanking) {
 		this.idRanking = idRanking;
+	}
+
+	public SCORE_RESULT getScoreResult() {
+		return scoreResult;
+	}
+
+	public void setScoreResult(SCORE_RESULT scoreResult) {
+		this.scoreResult = scoreResult;
 	}
 }

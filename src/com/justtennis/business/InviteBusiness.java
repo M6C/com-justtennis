@@ -374,9 +374,39 @@ public class InviteBusiness {
 		scoreSetService.deleteByIdInvite(invite.getId());
 
 		int len = scores.length;
+		String[] colLast = null;
 		for(int row = 1 ; row <= len ; row++) {
 			String[] col = scores[row-1];
 			addScoreSet(row, col[0], col[1], row==len);
+			if (col[0]!=null && !col[0].equals("") &&
+				col[1]!=null && !col[1].equals("")) {
+				colLast = col;
+			}
 		}
+
+		Invite.SCORE_RESULT scoreResult = Invite.SCORE_RESULT.UNFINISHED;
+		if (colLast!=null && colLast.length==2) {
+			String col0 = colLast[0];
+			String col1 = colLast[1];
+			int iCol0 = 0;
+			int iCol1 = 0;
+			try {
+				iCol0 = (col0==null || col0.equals("")) ? 0 : Integer.parseInt(col0);
+			} catch(NumberFormatException ex) {
+			}
+			try {
+				iCol1 = (col1==null || col1.equals("")) ? 0 : Integer.parseInt(col1);
+			} catch(NumberFormatException ex) {
+			}
+			int[] iCol = new int[]{iCol0, iCol1}; 
+
+			if (iCol[0] > iCol[1]) {
+				scoreResult = Invite.SCORE_RESULT.VICTORY;
+			} else if (iCol[0] < iCol[1]) {
+				scoreResult = Invite.SCORE_RESULT.DEFEAT;
+			}
+		}
+		invite.setScoreResult(scoreResult);
+		inviteService.createOrUpdate(invite);
 	}
 }

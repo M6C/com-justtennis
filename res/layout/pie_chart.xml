@@ -14,11 +14,18 @@
     <LinearLayout
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:background="@color/form_background_color" >
+        android:background="@color/form_background_color"
+        android:orientation="horizontal">
 
         <Spinner
             android:id="@+id/sp_type_data"
-            android:layout_width="fill_parent"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"/>
+
+        <Spinner
+            android:id="@+id/sp_score_result_data"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
     </LinearLayout>
 

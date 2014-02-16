@@ -32,6 +32,17 @@ public class DbTool {
 		return Integer.valueOf(cursor.getString(i));
 	}
 
+	public String toString(Cursor cursor, int i) {
+		return toString(cursor, i, null);
+	}
+
+	public String toString(Cursor cursor, int i, String valueIfNull) {
+		if (cursor.isNull(i)) {
+			return valueIfNull;
+		}
+		return cursor.getString(i);
+	}
+
 	public Object toOnject(Cursor cursor, int i) {
 		if (!cursor.isNull(i)) {
 			int type = cursor.getType(i);
