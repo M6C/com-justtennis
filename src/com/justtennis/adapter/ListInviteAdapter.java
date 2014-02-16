@@ -7,6 +7,7 @@ import java.util.List;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -108,7 +109,7 @@ public class ListInviteAdapter extends ArrayAdapter<Invite> {
 		String textScore = buildTextScore(v);
 		if (textScore != null) {
 			tvScore.setVisibility(View.VISIBLE);
-			tvScore.setText(textScore);
+			tvScore.setText(Html.fromHtml(textScore));
 		} else  {
 			tvScore.setVisibility(View.GONE);
 		}
@@ -177,10 +178,12 @@ public class ListInviteAdapter extends ArrayAdapter<Invite> {
 		if (invite.getListScoreSet()!=null && invite.getListScoreSet().size() > 0) {
 			for(ScoreSet score : invite.getListScoreSet()) {
 				if (score.getValue1() > 0 || score.getValue2() > 0) {
+					String score1 = (score.getValue1() > score.getValue2() ? "<b>" + score.getValue1() + "</b>": score.getValue1().toString());
+					String score2 = (score.getValue2() > score.getValue1() ? "<b>" + score.getValue2() + "</b>": score.getValue2().toString());
 					if (ret == null) {
-						ret = score.getValue1() + "-" + score.getValue2();
+						ret = score1 + "-" + score2;
 					} else {
-						ret += " / " + score.getValue1() + "-" + score.getValue2();
+						ret += " / " + score1 + "-" + score2;
 					}
 				}
 			}

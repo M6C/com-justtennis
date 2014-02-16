@@ -37,6 +37,8 @@
 		    android:id="@+id/tv_date"
 		    android:layout_width="wrap_content"
 		    android:layout_height="wrap_content"
+		    android:layout_marginLeft="15dp"
+		    android:textColor="@color/gris_1"
 		    android:textSize="16sp"
 		/>
 
@@ -44,6 +46,8 @@
 		    android:id="@+id/tv_score"
 		    android:layout_width="wrap_content"
 		    android:layout_height="wrap_content"
+		    android:layout_marginLeft="15dp"
+		    android:textColor="@color/gris_1"
 		    android:textSize="16sp"
 		    android:visibility="gone"
 		/>
