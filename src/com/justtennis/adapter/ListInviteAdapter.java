@@ -176,7 +176,7 @@ public class ListInviteAdapter extends ArrayAdapter<Invite> {
 		String ret = null;
 		if (invite.getListScoreSet()!=null && invite.getListScoreSet().size() > 0) {
 			for(ScoreSet score : invite.getListScoreSet()) {
-				if (score.getValue1() > 0 && score.getValue2() > 0) {
+				if (score.getValue1() > 0 || score.getValue2() > 0) {
 					if (ret == null) {
 						ret = score.getValue1() + "-" + score.getValue2();
 					} else {
