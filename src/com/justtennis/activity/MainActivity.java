@@ -131,7 +131,7 @@ public class MainActivity extends Activity implements INotifierMessage {
 		startActivity(intent);
 	}
 	
-	public void onClickPieChart(View view) {
+	public void onClickListStatistic(View view) {
 		Intent intent = new Intent(getApplicationContext(), PieChartActivity.class);
 		startActivity(intent);
 	}
