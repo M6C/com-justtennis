@@ -128,9 +128,9 @@ public class PieChartActivity extends Activity {
 
 	private void initializeTypeData() {
 		String[] typeData = new String[] {
-			getString(CHART_DATA_TYPE.ALL_BY_RANKING.stringId),
-			getString(CHART_DATA_TYPE.ENTRAINEMENT_BY_RANKING.stringId),
-			getString(CHART_DATA_TYPE.MATCH_BY_RANKING.stringId)
+			getString(CHART_DATA_TYPE.ALL.stringId),
+			getString(CHART_DATA_TYPE.ENTRAINEMENT.stringId),
+			getString(CHART_DATA_TYPE.MATCH.stringId)
 		};
 		ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, typeData);
 		dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -144,13 +144,13 @@ public class PieChartActivity extends Activity {
 				HashMap<String, Double> data = null;
 				switch(position) {
 					case 0:
-						data = business.getData(CHART_DATA_TYPE.ALL_BY_RANKING);
+						data = business.getData(CHART_DATA_TYPE.ALL);
 						break;
 					case 1:
-						data = business.getData(CHART_DATA_TYPE.ENTRAINEMENT_BY_RANKING);
+						data = business.getData(CHART_DATA_TYPE.ENTRAINEMENT);
 						break;
 					case 2:
-						data = business.getData(CHART_DATA_TYPE.MATCH_BY_RANKING);
+						data = business.getData(CHART_DATA_TYPE.MATCH);
 						break;
 				}
 				
@@ -173,6 +173,7 @@ public class PieChartActivity extends Activity {
 
 	private void initializeScoreData() {
 		String[] scoreResultData = new String[] {
+			getString(CHART_SCORE_RESULT.ALL.stringId),
 			getString(CHART_SCORE_RESULT.VICTORY.stringId),
 			getString(CHART_SCORE_RESULT.DEFEAT.stringId),
 			getString(CHART_SCORE_RESULT.UNFINISHED.stringId)
@@ -189,12 +190,15 @@ public class PieChartActivity extends Activity {
 				HashMap<String, Double> data = null;
 				switch(position) {
 					case 0:
-						data = business.getData(CHART_SCORE_RESULT.VICTORY);
+						data = business.getData(CHART_SCORE_RESULT.ALL);
 						break;
 					case 1:
-						data = business.getData(CHART_SCORE_RESULT.DEFEAT);
+						data = business.getData(CHART_SCORE_RESULT.VICTORY);
 						break;
 					case 2:
+						data = business.getData(CHART_SCORE_RESULT.DEFEAT);
+						break;
+					case 3:
 						data = business.getData(CHART_SCORE_RESULT.UNFINISHED);
 						break;
 				}

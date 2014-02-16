@@ -21,9 +21,9 @@ public class PieChartBusiness {
 	private static final String TAG = PieChartBusiness.class.getSimpleName();
 
 	public enum CHART_DATA_TYPE {
-		ALL_BY_RANKING(null, R.string.chart_type_all_by_ranking), 
-		ENTRAINEMENT_BY_RANKING(INVITE_TYPE.ENTRAINEMENT, R.string.chart_type_entrainement_by_ranking),
-		MATCH_BY_RANKING(INVITE_TYPE.MATCH, R.string.chart_type_match_by_ranking);
+		ALL(null, R.string.chart_type_all), 
+		ENTRAINEMENT(INVITE_TYPE.ENTRAINEMENT, R.string.chart_type_entrainement),
+		MATCH(INVITE_TYPE.MATCH, R.string.chart_type_match);
 
 		public INVITE_TYPE type;
 		public int stringId;
@@ -35,6 +35,7 @@ public class PieChartBusiness {
 	}
 	
 	public enum CHART_SCORE_RESULT {
+		ALL(null, R.string.chart_result_score_all),
 		VICTORY(SCORE_RESULT.VICTORY, R.string.chart_result_score_victory),
 		DEFEAT(SCORE_RESULT.DEFEAT, R.string.chart_result_score_defeat),
 		UNFINISHED(SCORE_RESULT.UNFINISHED, R.string.chart_result_score_unfinish);
@@ -51,8 +52,8 @@ public class PieChartBusiness {
 	private InviteService inviteService;
 	private RankingService rankingService;
 
-	private CHART_DATA_TYPE chartDataType = CHART_DATA_TYPE.ALL_BY_RANKING;
-	private CHART_SCORE_RESULT chartScoreResult = CHART_SCORE_RESULT.VICTORY;
+	private CHART_DATA_TYPE chartDataType = CHART_DATA_TYPE.ALL;
+	private CHART_SCORE_RESULT chartScoreResult = CHART_SCORE_RESULT.ALL;
 
 	public PieChartBusiness(Context context, INotifierMessage notificationMessage) {
 		this.inviteService = new InviteService(context, notificationMessage);
@@ -61,25 +62,12 @@ public class PieChartBusiness {
 
 	public HashMap<String, Double> getData(CHART_DATA_TYPE chartDataType) {
 		this.chartDataType = chartDataType;
-
-		switch (chartDataType) {
-			case ALL_BY_RANKING:
-				return getDataByRanking(chartScoreResult.scoreResult);
-			default:
-			case ENTRAINEMENT_BY_RANKING:
-			case MATCH_BY_RANKING:
-				return getDataByRanking(chartDataType.type, chartScoreResult.scoreResult);
-		}
+		return getDataByRanking(chartDataType.type, chartScoreResult.scoreResult);
 	}
 	
 	public HashMap<String, Double> getData(CHART_SCORE_RESULT chartScoreResult) {
 		this.chartScoreResult = chartScoreResult;
 		return getData(chartDataType);
-	}
-
-	private HashMap<String, Double> getDataByRanking(Invite.SCORE_RESULT scoreResult) {
-		HashMap<String,Double> data = inviteService.countGroupByRanking(scoreResult);
-		return sortDataByRanking(data);
 	}
 	
 	private HashMap<String, Double> getDataByRanking(INVITE_TYPE type, Invite.SCORE_RESULT scoreResult) {

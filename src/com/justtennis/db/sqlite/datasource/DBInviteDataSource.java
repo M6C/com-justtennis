@@ -51,37 +51,18 @@ public class DBInviteDataSource extends GenericDBDataSource<Invite> {
 
 	/**
 	 * Return Count Invite by Ranking
-	 * @param scoreResult 
-	 * @return Count Invite by Ranking
-	 */
-	public HashMap<String, Double> countGroupByRanking(SCORE_RESULT scoreResult) {
-		String where = "";
-		if (scoreResult != null) {
-			where += " WHERE " + DBInviteHelper.COLUMN_SCORE_RESULT + " = '" + scoreResult + "'";
-		}
-
-		String sql = "SELECT "+DBInviteHelper.COLUMN_ID_RANKING+" ID_RANKING, COUNT(1) NB FROM " + dbHelper.getTableName() + where + " GROUP BY " + DBInviteHelper.COLUMN_ID_RANKING;
-		return rawQuerCount(sql);
-	}
-	
-	/**
-	 * Return Count Invite by Ranking
 	 * @return Count Invite by Ranking
 	 */
 	public HashMap<String,Double> countByTypeGroupByRanking(Invite.INVITE_TYPE type, Invite.SCORE_RESULT scoreResult) {
 		int whereCnt = 0;
-		String where = " WHERE ";
+		String where = "";
 		if (type != null) {
-			if (whereCnt > 0) {
-				where += " AND ";
-			}
+			where += (whereCnt == 0) ? " WHERE " : " AND ";
 			where += DBInviteHelper.COLUMN_TYPE + " = '" + type + "'";
 			whereCnt++;
 		}
 		if (scoreResult != null) {
-			if (whereCnt > 0) {
-				where += " AND ";
-			}
+			where += (whereCnt == 0) ? " WHERE " : " AND ";
 			where += DBInviteHelper.COLUMN_SCORE_RESULT + " = '" + scoreResult + "'";
 			whereCnt++;
 		}

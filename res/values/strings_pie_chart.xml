@@ -7,10 +7,11 @@
     <string name="add">Add</string>
     <string name="new_series">New series</string>
 
-	<string name="chart_type_all_by_ranking">All By Ranking</string>
-	<string name="chart_type_entrainement_by_ranking">Entrainement By Ranking</string>
-	<string name="chart_type_match_by_ranking">Match By Ranking</string>
+	<string name="chart_type_all">Select Type</string>
+	<string name="chart_type_entrainement">Entrainement</string>
+	<string name="chart_type_match">Match</string>
 
+	<string name="chart_result_score_all">Select Result</string>
 	<string name="chart_result_score_victory">Victory</string>
 	<string name="chart_result_score_defeat">Defeat</string>
 	<string name="chart_result_score_unfinish">Unfinish</string>
