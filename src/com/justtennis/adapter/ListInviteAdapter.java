@@ -1,5 +1,6 @@
 package com.justtennis.adapter;
 
+import java.net.Socket;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
@@ -17,6 +18,7 @@ import android.widget.TextView;
 import com.justtennis.ApplicationConfig;
 import com.justtennis.R;
 import com.justtennis.domain.Invite;
+import com.justtennis.domain.ScoreSet;
 import com.justtennis.filter.ListInviteByPlayerFilter;
 
 public class ListInviteAdapter extends ArrayAdapter<Invite> {
@@ -88,6 +90,7 @@ public class ListInviteAdapter extends ArrayAdapter<Invite> {
 
 		TextView tvPlayer = (TextView) rowView.findViewById(R.id.tv_player);
 		TextView tvDate = (TextView) rowView.findViewById(R.id.tv_date);
+		TextView tvScore = (TextView) rowView.findViewById(R.id.tv_score);
 		ImageView ivStatus = (ImageView) rowView.findViewById(R.id.iv_status);
 		ImageView imageDelete = (ImageView) rowView.findViewById(R.id.iv_delete);
 		View vTypeEntrainement = rowView.findViewById(R.id.tv_type_entrainement);
@@ -102,18 +105,32 @@ public class ListInviteAdapter extends ArrayAdapter<Invite> {
 			tvDate.setText(tvDate.getText() + " [" + v.getId() + "|" + v.getIdExternal() + "]");
 		}
 
-		int iRessource = R.drawable.check_yellow;
-		switch(v.getStatus()) {
-			case ACCEPT:
-				iRessource = R.drawable.check_green;
+		String textScore = buildTextScore(v);
+		if (textScore != null) {
+			tvScore.setVisibility(View.VISIBLE);
+			tvScore.setText(textScore);
+		} else  {
+			tvScore.setVisibility(View.GONE);
+		}
+//		int iRessource = R.drawable.check_yellow;
+//		switch(v.getStatus()) {
+//			case ACCEPT:
+//				iRessource = R.drawable.check_green;
+//				break;
+//			case REFUSE:
+//				iRessource = R.drawable.check_red;
+//				break;
+//			default:
+//		}
+//		ivStatus.setImageDrawable(activity.getResources().getDrawable(iRessource));
+		switch(v.getScoreResult()) {
+			case VICTORY:
 				break;
-			case REFUSE:
-				iRessource = R.drawable.check_red;
+			case DEFEAT:
 				break;
 			default:
 		}
-		ivStatus.setImageDrawable(activity.getResources().getDrawable(iRessource));
-
+		
 		switch(mode) {
 			case READ:
 				imageDelete.setVisibility(View.GONE);
@@ -153,5 +170,21 @@ public class ListInviteAdapter extends ArrayAdapter<Invite> {
 
 		valueOld.clear();
 		valueOld.addAll(this.value);
+	}
+	
+	private String buildTextScore(Invite invite) {
+		String ret = null;
+		if (invite.getListScoreSet()!=null && invite.getListScoreSet().size() > 0) {
+			for(ScoreSet score : invite.getListScoreSet()) {
+				if (score.getValue1() > 0 && score.getValue2() > 0) {
+					if (ret == null) {
+						ret = score.getValue1() + "-" + score.getValue2();
+					} else {
+						ret += " / " + score.getValue1() + "-" + score.getValue2();
+					}
+				}
+			}
+		}
+		return ret;
 	}
 }

@@ -2,6 +2,7 @@ package com.justtennis.domain;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
 public class Invite extends GenericDBPojo<Long> implements Serializable {
 	
@@ -32,6 +33,7 @@ public class Invite extends GenericDBPojo<Long> implements Serializable {
 	private INVITE_TYPE type = INVITE_TYPE.ENTRAINEMENT;
 	private Long idRanking;
 	private SCORE_RESULT scoreResult = SCORE_RESULT.UNFINISHED;
+	private List<ScoreSet> listScoreSet = null;
 
 	public Invite() {
 	}
@@ -118,5 +120,13 @@ public class Invite extends GenericDBPojo<Long> implements Serializable {
 
 	public void setScoreResult(SCORE_RESULT scoreResult) {
 		this.scoreResult = scoreResult;
+	}
+
+	public List<ScoreSet> getListScoreSet() {
+		return listScoreSet;
+	}
+
+	public void setListScoreSet(List<ScoreSet> listScoreSet) {
+		this.listScoreSet = listScoreSet;
 	}
 }

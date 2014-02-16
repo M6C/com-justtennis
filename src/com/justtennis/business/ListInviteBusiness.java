@@ -12,6 +12,7 @@ import com.cameleon.common.android.inotifier.INotifierMessage;
 import com.justtennis.activity.ListInviteActivity;
 import com.justtennis.db.service.InviteService;
 import com.justtennis.db.service.PlayerService;
+import com.justtennis.db.service.ScoreSetService;
 import com.justtennis.domain.Invite;
 import com.justtennis.domain.Player;
 import com.justtennis.domain.comparator.InviteComparatorByDate;
@@ -25,6 +26,7 @@ public class ListInviteBusiness {
 	private ListInviteActivity context;
 
 	private InviteService inviteService;
+	private ScoreSetService scoreService;
 	private PlayerService playerService;
 
 	private GCalendarHelper calendarHelper;
@@ -37,6 +39,7 @@ public class ListInviteBusiness {
 		this.context = context;
 		playerService = new PlayerService(context, notificationMessage);
 		inviteService = new InviteService(context, notificationMessage);
+		scoreService = new ScoreSetService(context, notificationMessage);
 		calendarHelper = GCalendarHelper.getInstance(context);
 	}
 
@@ -77,6 +80,7 @@ public class ListInviteBusiness {
 
 		for (Invite invite : listInvite) {
 			invite.setPlayer(playerService.find(invite.getPlayer().getId()));
+			invite.setListScoreSet(scoreService.getByIdInvite(invite.getId()));
 		}
 
 		list.clear();
