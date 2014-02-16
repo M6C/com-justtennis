@@ -172,9 +172,7 @@ public class InviteActivity extends Activity {
 
 		business.modify();
 		
-		Intent intent = new Intent(InviteActivity.this, ListInviteActivity.class);
-		InviteActivity.this.startActivity(intent);
-		InviteActivity.this.finish();
+		finish();
 	}
 	
 	public void onClickInviteDate(final View view) {
