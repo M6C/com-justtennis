@@ -83,10 +83,8 @@ public class ListInviteAdapter extends ArrayAdapter<Invite> {
 		if (rowView == null) {
 			LayoutInflater inflater = activity.getLayoutInflater();
 			rowView = inflater.inflate(R.layout.list_invite_row, null);
-
-//			rowView.setTag(v.getPlayer()==null ? null : v.getPlayer().getId());
-			rowView.setTag(v);
 		}
+		rowView.setTag(v);
 
 		TextView tvPlayer = (TextView) rowView.findViewById(R.id.tv_player);
 		TextView tvDate = (TextView) rowView.findViewById(R.id.tv_date);
