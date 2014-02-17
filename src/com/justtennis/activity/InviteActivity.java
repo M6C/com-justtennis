@@ -92,7 +92,7 @@ public class InviteActivity extends Activity {
 			this.savedInstanceState = savedInstanceState;
 		}
 
-		setContentView(R.layout.invite);
+		setContentView(R.layout.invite2);
 
 		llInviteModify = (LinearLayout)findViewById(R.id.ll_invite_modify);
 		tvFirstname = (TextView)findViewById(R.id.tv_firstname);

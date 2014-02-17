@@ -142,6 +142,7 @@
 	    	android:layout_marginBottom="5dp"
 		    android:background="@color/list_background_color"
 		    android:orientation="vertical"
+		    android:layout_margin="10dp"
 		>
         	<include layout="@layout/element_score"/>
 		</LinearLayout>
