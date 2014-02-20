@@ -68,6 +68,8 @@ public class InviteDemandeBusiness {
 	}
 
 	public void initializeData(Intent intent) {
+		initializeDataRanking();
+
 		user = userService.find();
 
 		invite = new Invite();
@@ -87,7 +89,11 @@ public class InviteDemandeBusiness {
 		if (intent.hasExtra(InviteActivity.EXTRA_PLAYER_ID)) {
 			long id = intent.getLongExtra(InviteActivity.EXTRA_PLAYER_ID, -1);
 			invite.setPlayer(playerService.find(id));
-			setIdRanking(getPlayer().getIdRanking());
+			if (isUnknownPlayer()) {
+				setIdRanking(getListRanking().get(0).getId());
+			} else {
+				setIdRanking(getPlayer().getIdRanking());
+			}
 		}
 
 		if (invite.getDate()==null) {
@@ -98,8 +104,6 @@ public class InviteDemandeBusiness {
 			calendar.add(Calendar.HOUR_OF_DAY, 1);
 			invite.setDate(calendar.getTime());
 		}
-
-		initializeDataRanking();
 	}
 
 	public void initializeData(Bundle savedInstanceState) {

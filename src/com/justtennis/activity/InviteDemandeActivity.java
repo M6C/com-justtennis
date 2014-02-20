@@ -272,12 +272,17 @@ public class InviteDemandeActivity extends Activity {
 			if (player.getIdGoogle()!=null && player.getIdGoogle().longValue()>0l) {
 				ivPhoto.setImageBitmap(ContactManager.getInstance().getPhoto(this, player.getIdGoogle()));
 			}
-			
-			Long idRanking = player.getIdRanking();
-			List<Ranking> listRanking = business.getListRanking();
-			for(Ranking ranking : listRanking) {
-				if (ranking.getId().equals(idRanking)) {
-					tvRanking.setText(getString(R.string.txt_ranking_value, ranking.getRanking()));
+
+			if (business.isUnknownPlayer()) {
+				List<Ranking> listRanking = business.getListRanking();
+				tvRanking.setText(getString(R.string.txt_ranking_value, listRanking.get(0).getRanking()));
+			} else {
+				Long idRanking = player.getIdRanking();
+				List<Ranking> listRanking = business.getListRanking();
+				for(Ranking ranking : listRanking) {
+					if (ranking.getId().equals(idRanking)) {
+						tvRanking.setText(getString(R.string.txt_ranking_value, ranking.getRanking()));
+					}
 				}
 			}
 		}
