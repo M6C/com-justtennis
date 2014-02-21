@@ -87,12 +87,14 @@ public class InviteDemandeBusiness {
 			initializeScores();
 		}
 		if (intent.hasExtra(InviteActivity.EXTRA_PLAYER_ID)) {
-			long id = intent.getLongExtra(InviteActivity.EXTRA_PLAYER_ID, -1);
-			invite.setPlayer(playerService.find(id));
-			if (isUnknownPlayer()) {
-				setIdRanking(getListRanking().get(0).getId());
-			} else {
-				setIdRanking(getPlayer().getIdRanking());
+			long id = intent.getLongExtra(InviteActivity.EXTRA_PLAYER_ID, PlayerService.ID_EMPTY_PLAYER);
+			if (id != PlayerService.ID_EMPTY_PLAYER) {
+				invite.setPlayer(playerService.find(id));
+				if (isUnknownPlayer()) {
+					setIdRanking(getListRanking().get(0).getId());
+				} else {
+					setIdRanking(getPlayer().getIdRanking());
+				}
 			}
 		}
 

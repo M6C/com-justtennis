@@ -32,6 +32,7 @@ import com.cameleon.common.android.factory.listener.OnClickViewListener;
 import com.justtennis.ApplicationConfig;
 import com.justtennis.R;
 import com.justtennis.business.InviteBusiness;
+import com.justtennis.db.service.PlayerService;
 import com.justtennis.domain.Invite;
 import com.justtennis.domain.Invite.INVITE_TYPE;
 import com.justtennis.domain.Invite.STATUS;
@@ -59,6 +60,7 @@ public class InviteActivity extends Activity {
 	private final Integer[] drawableType = new Integer[] {R.layout.element_invite_type_entrainement, R.layout.element_invite_type_match};
 
 	private InviteBusiness business;
+	private Long idPlayerForResult = null;
 
 	private LinearLayout llInviteModify;
 	private TextView tvFirstname;
@@ -150,8 +152,10 @@ public class InviteActivity extends Activity {
 		switch (requestCode) {
 			case RESULT_PLAYER:
 				if (data!=null) {
-					long id = data.getLongExtra(ListPlayerActivity.EXTRA_PLAYER_ID, -1);
-					business.setPlayer(id);
+					long id = data.getLongExtra(ListPlayerActivity.EXTRA_PLAYER_ID, PlayerService.ID_EMPTY_PLAYER);
+					if (id != PlayerService.ID_EMPTY_PLAYER) {
+						idPlayerForResult = Long.valueOf(id);
+					}
 				}
 				break;
 	
@@ -233,6 +237,11 @@ public class InviteActivity extends Activity {
 			business.initializeData(intent);
 		}
 
+		if (idPlayerForResult != null) {
+			business.setPlayer(idPlayerForResult);
+			idPlayerForResult = null;
+		}
+
 		initializeDataMode();
 		initializeDataType();
 		initializeDataStatus();
@@ -281,7 +290,9 @@ public class InviteActivity extends Activity {
 		spType.setOnItemSelectedListener(new OnItemSelectedListener() {
 			@Override
 			public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-				business.setType((INVITE_TYPE) view.getTag());
+				if (view != null) {
+					business.setType((INVITE_TYPE) view.getTag());
+				}
 			}
 
 			@Override

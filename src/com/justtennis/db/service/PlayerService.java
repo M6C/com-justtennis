@@ -9,7 +9,7 @@ import com.justtennis.domain.Player;
 
 public class PlayerService extends GenericService<Player> {
 
-	private static final long ID_EMPTY_PLAYER = -2l;
+	public static final long ID_EMPTY_PLAYER = -2l;
 	private static final long ID_UNKNOWN_PLAYER = -1l;
 
 	public PlayerService(Context context, INotifierMessage notificationMessage) {

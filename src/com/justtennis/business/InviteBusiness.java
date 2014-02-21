@@ -85,9 +85,11 @@ public class InviteBusiness {
 			initializeScores();
 		}
 		if (intent.hasExtra(InviteActivity.EXTRA_PLAYER_ID)) {
-			long id = intent.getLongExtra(InviteActivity.EXTRA_PLAYER_ID, -1);
-			invite.setPlayer(playerService.find(id));
-			setIdRanking(getPlayer().getIdRanking());
+			long id = intent.getLongExtra(InviteActivity.EXTRA_PLAYER_ID, PlayerService.ID_EMPTY_PLAYER);
+			if (id != PlayerService.ID_EMPTY_PLAYER) {
+				invite.setPlayer(playerService.find(id));
+				setIdRanking(getPlayer().getIdRanking());
+			}
 		}
 
 		if (invite.getDate()==null) {

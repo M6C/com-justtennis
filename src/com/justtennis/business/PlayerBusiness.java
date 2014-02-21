@@ -54,8 +54,8 @@ public class PlayerBusiness {
 		invite = null;
 
 		if (intent.hasExtra(PlayerActivity.EXTRA_PLAYER_ID)) {
-			long playerId = intent.getLongExtra(PlayerActivity.EXTRA_PLAYER_ID, -1000);
-			if (playerId!=-1000) {
+			long playerId = intent.getLongExtra(PlayerActivity.EXTRA_PLAYER_ID, PlayerService.ID_EMPTY_PLAYER);
+			if (playerId != PlayerService.ID_EMPTY_PLAYER) {
 				player = findPlayer(playerId);
 			}
 		}

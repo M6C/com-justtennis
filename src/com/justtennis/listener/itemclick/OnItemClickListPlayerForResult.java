@@ -6,7 +6,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 
-import com.justtennis.activity.InviteActivity;
+import com.justtennis.activity.ListPlayerActivity;
 
 public class OnItemClickListPlayerForResult implements OnItemClickListener {
 	private Activity context;
@@ -18,7 +18,7 @@ public class OnItemClickListPlayerForResult implements OnItemClickListener {
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 		Intent intent = new Intent();
-		intent.putExtra(InviteActivity.EXTRA_PLAYER_ID, ((Long)view.getTag()));
+		intent.putExtra(ListPlayerActivity.EXTRA_PLAYER_ID, ((Long)view.getTag()));
 		context.setResult(Activity.RESULT_OK, intent);
 		context.finish();
     }
