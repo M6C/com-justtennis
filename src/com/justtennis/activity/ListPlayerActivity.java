@@ -11,6 +11,7 @@ import com.cameleon.common.android.factory.FactoryDialog;
 import com.justtennis.R;
 import com.justtennis.adapter.ListPlayerAdapter;
 import com.justtennis.business.ListPlayerBusiness;
+import com.justtennis.db.service.PlayerService;
 import com.justtennis.domain.Player;
 import com.justtennis.listener.itemclick.OnItemClickListPlayer;
 import com.justtennis.listener.itemclick.OnItemClickListPlayerForResult;
@@ -25,6 +26,7 @@ public class ListPlayerActivity extends Activity {
 	private static final String TAG = ListPlayerActivity.class.getSimpleName();
 	public static final String EXTRA_MODE = "MODE";
 	public static final String EXTRA_PLAYER_ID = "EXTRA_PLAYER_ID";
+	private static final int RESULT_PLAYER = 1;
 
 	public enum MODE {
 		EDIT,
@@ -72,12 +74,33 @@ public class ListPlayerActivity extends Activity {
 				break;
 			case FOR_RESULT:
 				list.setOnItemClickListener(new OnItemClickListPlayerForResult(this));
-				btnAdd.setVisibility(View.GONE);
+				btnAdd.setVisibility(View.VISIBLE);
 				btnClose.setVisibility(View.VISIBLE);
 				break;
 		}
 	}
+
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		switch (requestCode) {
+			case RESULT_PLAYER:
+				if (data!=null) {
+					Intent intent = new Intent();
+					long id = data.getLongExtra(PlayerActivity.EXTRA_PLAYER_ID, PlayerService.ID_EMPTY_PLAYER);
+					if (id != PlayerService.ID_EMPTY_PLAYER) {
+						intent.putExtra(ListPlayerActivity.EXTRA_PLAYER_ID, id);
+					}
+					setResult(Activity.RESULT_OK, intent);
+					finish();
+				}
+				break;
 	
+			default:
+				super.onActivityResult(requestCode, resultCode, data);
+				break;
+		}
+	}
+
 	@Override
 	public void onBackPressed() {
 		finish();
@@ -95,7 +118,12 @@ public class ListPlayerActivity extends Activity {
 
 	public void onClickAdd(View view) {
 		Intent intent = new Intent(getApplicationContext(), PlayerActivity.class);
-		startActivity(intent);
+		if (business.getMode() == MODE.FOR_RESULT) {
+			intent.putExtra(PlayerActivity.EXTRA_MODE, PlayerActivity.MODE.FOR_RESULT);
+			startActivityForResult(intent, RESULT_PLAYER);
+		} else {
+			startActivity(intent);
+		}
 	}
 
 	public void onClickClose(View view) {

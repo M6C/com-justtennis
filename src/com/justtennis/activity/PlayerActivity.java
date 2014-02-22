@@ -1,6 +1,7 @@
 
 package com.justtennis.activity;
 
+import java.util.Date;
 import java.util.List;
 
 import org.gdocument.gtracergps.launcher.log.Logger;
@@ -22,19 +23,24 @@ import android.widget.TextView;
 import com.cameleon.common.android.factory.FactoryDialog;
 import com.justtennis.R;
 import com.justtennis.business.PlayerBusiness;
+import com.justtennis.db.service.UserService;
+import com.justtennis.domain.Invite;
 import com.justtennis.domain.Player;
 import com.justtennis.domain.Ranking;
 import com.justtennis.listener.action.TextWatcherFieldEnableView;
 import com.justtennis.listener.ok.OnClickPlayerCreateListenerOk;
+import com.justtennis.manager.SmsManager;
 import com.justtennis.notifier.NotifierMessageLogger;
 import com.justtennis.parser.PlayerParser;
+import com.justtennis.parser.SmsParser;
 
 public class PlayerActivity extends Activity {
 
 	public enum MODE {
 		CREATE,
 		MODIFY,
-		DEMANDE_ADD
+		DEMANDE_ADD,
+		FOR_RESULT
 	};
 
 	private static final String TAG = PlayerActivity.class.getSimpleName();
@@ -148,16 +154,27 @@ public class PlayerActivity extends Activity {
 	public void onClickCreate(View view) {
 		buildPlayer();
 
-		if (fromQrCode) {
-			business.create(true);
-			finish();
-		}
-		else {
-			OnClickPlayerCreateListenerOk listener = new OnClickPlayerCreateListenerOk(this, business);
-			FactoryDialog.getInstance()
-				.buildYesNoDialog(this, listener, R.string.dialog_player_create_confirmation_title, R.string.dialog_player_create_confirmation_message)
-				.show();
-		}
+		MODE mode = business.getMode();
+		switch (mode) {
+			case FOR_RESULT:
+				business.create(false);
+				Intent intent = new Intent();
+				intent.putExtra(EXTRA_PLAYER_ID, business.getPlayer().getId());
+				setResult(0, intent);
+				finish();
+				break;
+			default:
+				if (fromQrCode) {
+					business.create(true);
+					finish();
+				}
+				else {
+					OnClickPlayerCreateListenerOk listener = new OnClickPlayerCreateListenerOk(this, business);
+					FactoryDialog.getInstance()
+						.buildYesNoDialog(this, listener, R.string.dialog_player_create_confirmation_title, R.string.dialog_player_create_confirmation_message)
+						.show();
+				}
+			}
 	}
 	
 	public void onClickModify(View view) {
@@ -246,23 +263,21 @@ public class PlayerActivity extends Activity {
 		MODE mode = business.getMode();
 
 		switch (mode) {
+			case FOR_RESULT:
 			case CREATE:
 				llCreate.setVisibility(View.VISIBLE);
 				llModify.setVisibility(View.GONE);
 				llAddDemande.setVisibility(View.GONE);
-//				llInvite.setVisibility(View.GONE);
 				break;
 			case MODIFY:
 				llCreate.setVisibility(View.GONE);
 				llModify.setVisibility(View.VISIBLE);
 				llAddDemande.setVisibility(View.GONE);
-//				llInvite.setVisibility(View.VISIBLE);
 				break;
 			case DEMANDE_ADD:
 				llCreate.setVisibility(View.GONE);
 				llModify.setVisibility(View.GONE);
 				llAddDemande.setVisibility(View.VISIBLE);
-//				llInvite.setVisibility(View.VISIBLE);
 				
 				player = business.getInvite().getUser();
 				break;

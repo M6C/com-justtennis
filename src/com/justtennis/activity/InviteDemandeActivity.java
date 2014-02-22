@@ -31,6 +31,7 @@ import com.cameleon.common.android.factory.listener.OnClickViewListener;
 import com.justtennis.ApplicationConfig;
 import com.justtennis.R;
 import com.justtennis.business.InviteDemandeBusiness;
+import com.justtennis.db.service.PlayerService;
 import com.justtennis.domain.Invite;
 import com.justtennis.domain.Invite.INVITE_TYPE;
 import com.justtennis.domain.Player;
@@ -50,6 +51,7 @@ public class InviteDemandeActivity extends Activity {
 	public static final String EXTRA_MODE = "MODE";
 	public static final String EXTRA_INVITE = "INVITE";
 	public static final String EXTRA_PLAYER_ID = "PLAYER_ID";
+	private static final int RESULT_PLAYER = 1;
 
 	private final Integer[] drawableType = new Integer[] {R.layout.element_invite_type_entrainement, R.layout.element_invite_type_match};
 
@@ -69,6 +71,7 @@ public class InviteDemandeActivity extends Activity {
 	private Spinner spRanking;
 	private TextView tvRanking;
 	private TextView tvStatus;
+	private Long idPlayerForResult = null;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -108,6 +111,24 @@ public class InviteDemandeActivity extends Activity {
 		super.onResume();
 		initializeData();
 		initializeListener();
+	}
+
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		switch (requestCode) {
+			case RESULT_PLAYER:
+				if (data!=null) {
+					long id = data.getLongExtra(PlayerActivity.EXTRA_PLAYER_ID, PlayerService.ID_EMPTY_PLAYER);
+					if (id != PlayerService.ID_EMPTY_PLAYER) {
+						idPlayerForResult  = Long.valueOf(id);
+					}
+				}
+				break;
+	
+			default:
+				super.onActivityResult(requestCode, resultCode, data);
+				break;
+		}
 	}
 
 	@Override
@@ -224,6 +245,16 @@ public class InviteDemandeActivity extends Activity {
 	public void onClickCancel(View view) {
 		finish();
 	}
+	
+	public void onClickPlayer(View view) {
+		if (business.isUnknownPlayer()) {
+//			Intent intent = new Intent(this, ListPlayerActivity.class);
+//			intent.putExtra(ListPlayerActivity.EXTRA_MODE, ListPlayerActivity.MODE.FOR_RESULT);
+			Intent intent = new Intent(this, PlayerActivity.class);
+			intent.putExtra(PlayerActivity.EXTRA_MODE, PlayerActivity.MODE.FOR_RESULT);
+			startActivityForResult(intent, RESULT_PLAYER);
+		}
+	}
 
 	private void initializeData() {
 		Intent intent = getIntent();
@@ -233,6 +264,12 @@ public class InviteDemandeActivity extends Activity {
 		}
 		else {
 			business.initializeData(intent);
+		}
+
+		if (idPlayerForResult != null) {
+			business.setPlayer(idPlayerForResult);
+			business.setIdRanking(business.getPlayer().getIdRanking());
+			idPlayerForResult = null;
 		}
 
 		initializeDataMode();
@@ -259,7 +296,9 @@ public class InviteDemandeActivity extends Activity {
 		spType.setOnItemSelectedListener(new OnItemSelectedListener() {
 			@Override
 			public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-				business.setType((INVITE_TYPE) view.getTag());
+				if (view != null) {
+					business.setType((INVITE_TYPE) view.getTag());
+				}
 			}
 
 			@Override

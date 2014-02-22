@@ -20,6 +20,7 @@
 	    android:layout_marginLeft="10dp"
 	    android:orientation="vertical"
         android:gravity="center_vertical"
+	    android:onClick="onClickPlayer"
 	>
 		<LinearLayout
 		    android:layout_width="match_parent"
