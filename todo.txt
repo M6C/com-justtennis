@@ -22,7 +22,18 @@ Saisie de Message
 
 ********************* DONE *****************************
 
+Invite Demande
+[20140222] - Possibilité de saisir le classement
+[20140211] - Creation d'une nouvelle activity pour faire seulement des invites
+
 Invite
+[20140221] - Fix - NPE lors du changement du Player
+[20140220] - Fix - UnkownPlayer sans classement
+[20140217] - Revu du Design
+[20140216] - Fix Modifier
+[20140216] - Fix Adapter
+[20140216] - Ajout de la notion de victoire, defaite ou indefini
+[20140212] - Ajout d'un TextWatcher sur les champs du score pour mettre en Bold les champs avec une valeur superieur à la valeur de l'autre champ du même set
 [20140211] - Pouvoir saisir une Score
 [20140209] - Modifier l'event GCalendar quand on modifi une invite
 [20140209] - Supprimer l'invite GCalendar quand on supprime une invite
@@ -35,12 +46,36 @@ Invite
 [20131221] - Sauvegarder le type d'invite en base
 [20131221] - Gerer l'affichage du type d'invite dans la liste
 
+List Player
+[20140216] - Sort Player List
+[20140212] - Ajout d'un bouton Close
+
 List Invite
+[20140216] - Revu du Design
+[20140216] - Fixe Affichage du score
+[20140216] - Affichage du score
 [20140208] - Ajouter une filtre tous, pour filtrer les invites
 [20140208] - Filtrer les invites par Player
 [20140110] - Trier les invites par date descendante
 [20131225] - Pouvoir modifier une invite
 [20131221] - Gerer l'affichage du type d'invite
+
+Ecran Accueil
+[20140216] - Ajout Menu Statistique
+[20140214] - Clean le menu overflow
+[20140109] - Ajouter un menu pour sauvegarder la base 
+[20140109] - Ajouter un menu pour restorer la base 
+
+Ecran Utilisateur
+[20140214] - Integration de la gestion du Message dans l'écran User
+[20140206] - Revu du design
+[20140105] - Ajout du classement
+
+Statistique
+[20140216] - Refactor
+[20140213] - Revu du Design
+[20140213] - Invite by Ranking ordred
+[20140212] - Ajout Activity Chart
 
 Ecran Player & User
 [20140207] - TextWatcher sur les EditText qui rend visible les TextView si non vide.
@@ -53,14 +88,6 @@ Ecran Player
 [20140108] - Ajout du classement
 [20131229] - Passer par un startActivityForResult pour importer un contact google (comme le scan QrCode)
 [20131228] - Recuperer les infos 'Prenom' et 'Nom' découpé
-
-Ecran Utilisateur
-[20140206] - Revu du design
-[20140105] - Ajout du classement
-
-Ecran Accueil
-[20140109] - Ajouter un menu pour sauvegarder la base 
-[20140109] - Ajouter un menu pour restorer la base 
 
 Saisie de Message
 [20131229] - Pouvoir inserer le champ à la position courante du curseur
