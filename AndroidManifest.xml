@@ -52,6 +52,7 @@
 		</activity>
 
         <activity android:name=".activity.UserActivity"
+   		   android:windowSoftInputMode="stateHidden"
    		   android:screenOrientation="portrait"
          />
         <activity android:name=".activity.ListPlayerActivity"
@@ -74,6 +75,7 @@
    		   android:screenOrientation="portrait"
          />
         <activity android:name=".activity.InviteActivity"
+   		   android:windowSoftInputMode="stateHidden"
    		   android:screenOrientation="portrait"
          />
         <activity android:name=".activity.InviteDemandeActivity"
