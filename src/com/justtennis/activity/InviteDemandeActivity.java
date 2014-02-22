@@ -16,6 +16,7 @@ import android.view.View;
 import android.view.View.OnFocusChangeListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
+import android.widget.ArrayAdapter;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -31,9 +32,9 @@ import com.justtennis.ApplicationConfig;
 import com.justtennis.R;
 import com.justtennis.business.InviteDemandeBusiness;
 import com.justtennis.domain.Invite;
-import com.justtennis.domain.Ranking;
 import com.justtennis.domain.Invite.INVITE_TYPE;
 import com.justtennis.domain.Player;
+import com.justtennis.domain.Ranking;
 import com.justtennis.manager.ContactManager;
 import com.justtennis.notifier.NotifierMessageLogger;
 
@@ -93,9 +94,9 @@ public class InviteDemandeActivity extends Activity {
 
 		findViewById(R.id.ll_status).setVisibility(View.GONE);
 		spStatus.setVisibility(View.GONE);
-		spRanking.setVisibility(View.GONE);
+		spRanking.setVisibility(View.VISIBLE);
 		tvStatus.setVisibility(View.GONE);
-		tvRanking.setVisibility(View.VISIBLE);
+		tvRanking.setVisibility(View.GONE);
 
 		business = new InviteDemandeBusiness(this, NotifierMessageLogger.getInstance());
 
@@ -238,6 +239,9 @@ public class InviteDemandeActivity extends Activity {
 		initializeDataType();
 		initializeDataDateTime();
 		initializeDataPlayer();
+//		initializeRankingText();
+		initializeRankingList();
+		initializeRanking();
 	}
 
 	private void initializeListType() {
@@ -264,6 +268,39 @@ public class InviteDemandeActivity extends Activity {
 		});
 	}
 
+	private void initializeRankingList() {
+		spRanking.setVisibility(View.VISIBLE);
+		ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, business.getListTxtRankings());
+		dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+		spRanking.setAdapter(dataAdapter);
+
+		spRanking.setOnItemSelectedListener(new OnItemSelectedListener() {
+			@Override
+			public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+				Ranking ranking = business.getListRanking().get(position);
+				business.setIdRanking(ranking.getId());
+			}
+
+			@Override
+			public void onNothingSelected(AdapterView<?> arg0) {
+			}
+		});
+	}
+
+	private void initializeRanking() {
+		Long id = business.getIdRanking();
+		int position = 0;
+		List<Ranking> listRanking = business.getListRanking();
+		for(Ranking ranking : listRanking) {
+			if (ranking.getId().equals(id)) {
+				spRanking.setSelection(position, true);
+				break;
+			} else {
+				position++;
+			}
+		}
+	}
+
 	private void initializeDataPlayer() {
 		Player player = business.getPlayer();
 		if (player!=null) {
@@ -272,17 +309,20 @@ public class InviteDemandeActivity extends Activity {
 			if (player.getIdGoogle()!=null && player.getIdGoogle().longValue()>0l) {
 				ivPhoto.setImageBitmap(ContactManager.getInstance().getPhoto(this, player.getIdGoogle()));
 			}
+		}
+	}
 
-			if (business.isUnknownPlayer()) {
-				List<Ranking> listRanking = business.getListRanking();
-				tvRanking.setText(getString(R.string.txt_ranking_value, listRanking.get(0).getRanking()));
-			} else {
-				Long idRanking = player.getIdRanking();
-				List<Ranking> listRanking = business.getListRanking();
-				for(Ranking ranking : listRanking) {
-					if (ranking.getId().equals(idRanking)) {
-						tvRanking.setText(getString(R.string.txt_ranking_value, ranking.getRanking()));
-					}
+	private void initializeRankingText() {
+		Player player = business.getPlayer();
+		if (business.isUnknownPlayer()) {
+			List<Ranking> listRanking = business.getListRanking();
+			tvRanking.setText(getString(R.string.txt_ranking_value, listRanking.get(0).getRanking()));
+		} else {
+			Long idRanking = player.getIdRanking();
+			List<Ranking> listRanking = business.getListRanking();
+			for(Ranking ranking : listRanking) {
+				if (ranking.getId().equals(idRanking)) {
+					tvRanking.setText(getString(R.string.txt_ranking_value, ranking.getRanking()));
 				}
 			}
 		}

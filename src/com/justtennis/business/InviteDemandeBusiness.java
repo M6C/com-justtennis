@@ -47,15 +47,12 @@ public class InviteDemandeBusiness {
 	private InviteService inviteService;
 	private UserService userService;
 	private PlayerService playerService;
-	private ScoreSetService scoreSetService;
 	private GCalendarHelper gCalendarHelper;
 	private User user;
 	private Invite invite;
 	private MODE mode = MODE.INVITE_DEMANDE;
 	private List<Ranking> listRanking;
 	private String[] listTxtRankings;
-	private String[][] scores;
-
 
 	public InviteDemandeBusiness(Context context, INotifierMessage notificationMessage) {
 		this.context = context;
@@ -63,7 +60,6 @@ public class InviteDemandeBusiness {
 		inviteService = new InviteService(context, notificationMessage);
 		playerService = new PlayerService(context, notificationMessage);
 		userService = new UserService(context, notificationMessage);
-		scoreSetService = new ScoreSetService(context, notificationMessage);
 		gCalendarHelper = GCalendarHelper.getInstance(context);
 	}
 
@@ -84,7 +80,6 @@ public class InviteDemandeBusiness {
 			if (getIdRanking()==null) {
 				setIdRanking(getPlayer().getIdRanking());
 			}
-			initializeScores();
 		}
 		if (intent.hasExtra(InviteActivity.EXTRA_PLAYER_ID)) {
 			long id = intent.getLongExtra(InviteActivity.EXTRA_PLAYER_ID, PlayerService.ID_EMPTY_PLAYER);
@@ -134,10 +129,6 @@ public class InviteDemandeBusiness {
 	public void onSaveInstanceState(Bundle outState) {
 		outState.putSerializable(InviteActivity.EXTRA_MODE, mode);
 		outState.putSerializable(InviteActivity.EXTRA_INVITE, invite);
-	}
-
-	private void initializeScores() {
-		scores = scoreSetService.getTableByIdInvite(getInvite().getId());
 	}
 
 	public String buildText() {
@@ -250,14 +241,6 @@ public class InviteDemandeBusiness {
 		this.invite.setPlayer(playerService.find(id));
 	}
 
-	public String[][] getScores() {
-		return scores;
-	}
-
-	public void setScores(String[][] scores) {
-		this.scores = scores;
-	}
-
 	public List<Ranking> getListRanking() {
 		return listRanking;
 	}
@@ -328,24 +311,5 @@ public class InviteDemandeBusiness {
 			default:
 				return EVENT_STATUS.UNKNOW;
 		}
-	}
-
-	private boolean checkScoreSet(String score1, String score2, boolean last) {
-		boolean ret = false;
-		if (score1 != null && score2 != null &&
-			!"".equals(score1) && !"".equals(score2)) {
-			try {
-				int num1 = Integer.parseInt(score1);
-				int num2 = Integer.parseInt(score2);
-
-				if (last || (num1 <= 7 && num2 <= 7)) {
-					ret = true;
-				}
-			} catch (NumberFormatException ex) {
-				Log.e(TAG, "Number Format Exception", ex);
-			}
-			
-		}
-		return ret;
 	}
 }

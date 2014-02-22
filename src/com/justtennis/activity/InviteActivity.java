@@ -249,6 +249,7 @@ public class InviteActivity extends Activity {
 		initializeDataPlayer();
 		initializeDataScore();
 		initializeRankingList();
+		initializeRanking();
 	}
 
 	private void initializeListStatus() {
@@ -346,11 +347,10 @@ public class InviteActivity extends Activity {
 			public void onNothingSelected(AdapterView<?> arg0) {
 			}
 		});
-
-		initializeRanking(business.getIdRanking());
 	}
 
-	private void initializeRanking(Long id) {
+	private void initializeRanking() {
+		Long id = business.getIdRanking();
 		int position = 0;
 		List<Ranking> listRanking = business.getListRanking();
 		for(Ranking ranking : listRanking) {
