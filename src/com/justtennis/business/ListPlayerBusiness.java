@@ -9,6 +9,7 @@ import org.gdocument.gtracergps.launcher.log.Logger;
 
 import android.content.Context;
 import android.content.Intent;
+import android.os.Bundle;
 
 import com.cameleon.common.android.inotifier.INotifierMessage;
 import com.justtennis.activity.ListPlayerActivity;
@@ -34,6 +35,7 @@ public class ListPlayerBusiness {
 	private List<Player> list = new ArrayList<Player>();
 	private ListPlayerActivity context;
 	private User user;
+	private Bundle extraIn = null;
 
 	private MODE mode;
 
@@ -43,6 +45,7 @@ public class ListPlayerBusiness {
 		userService = new UserService(context, NotifierMessageLogger.getInstance());
 		inviteService = new InviteService(context, NotifierMessageLogger.getInstance());
 		user = userService.find();
+		extraIn = context.getIntent().getExtras();
 	}
 
 	public void initialize() {
@@ -67,6 +70,10 @@ public class ListPlayerBusiness {
 
 	public MODE getMode() {
 		return mode;
+	}
+
+	public Bundle getExtraIn() {
+		return extraIn;
 	}
 
 	public void delete(Player player) {

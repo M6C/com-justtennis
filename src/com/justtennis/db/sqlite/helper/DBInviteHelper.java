@@ -44,13 +44,16 @@ public class DBInviteHelper extends GenericDBHelper {
 	public void onUpgrade(SQLiteDatabase database, int oldVersion, int newVersion) {
 		if (newVersion>oldVersion) {
 			logMe("UPGRADE DATABASE VERSION:" + oldVersion + " TO " + newVersion);
-			if (oldVersion==5) {
+			if (oldVersion <= 5) {
 				addColumn(database, COLUMN_ID_CALENDAR, "INTEGER NULL");
-			} else if (oldVersion==6) {
+			}
+			if (oldVersion <= 6) {
 				addColumn(database, COLUMN_TYPE, "INTEGER NULL");
-			} else if (oldVersion==7) {
+			}
+			if (oldVersion <= 7) {
 				addColumn(database, COLUMN_ID_RANKING, "INTEGER NULL");
-			} else if (oldVersion==8) {
+			}
+			if (oldVersion <= 8) {
 				addColumn(database, COLUMN_SCORE_RESULT, "INTEGER NULL");
 			}
 		}
@@ -72,11 +75,5 @@ public class DBInviteHelper extends GenericDBHelper {
 	@Override
 	public String getDatabaseCreate() {
 		return DATABASE_CREATE;
-	}
-
-	private void addColumn(SQLiteDatabase database, String column, String type) {
-		logMe("UPGRADE DATABASE TABLE " + TABLE_NAME + " ADD COLUMN:" + column + " BEFORE");
-		database.execSQL("ALTER TABLE " + TABLE_NAME + " ADD COLUMN " + column + " " + type);
-		logMe("UPGRADE DATABASE TABLE " + TABLE_NAME + " ADD COLUMN:" + column + " AFTER");
 	}
 }

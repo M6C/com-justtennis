@@ -6,6 +6,7 @@ import com.cameleon.common.android.inotifier.INotifierMessage;
 import com.justtennis.R;
 import com.justtennis.db.sqlite.datasource.DBPlayerDataSource;
 import com.justtennis.domain.Player;
+import com.justtennis.domain.Player.PLAYER_TYPE;
 
 public class PlayerService extends GenericService<Player> {
 
@@ -21,6 +22,7 @@ public class PlayerService extends GenericService<Player> {
 		ret.setId(ID_UNKNOWN_PLAYER);
 		ret.setFirstName(context.getString(R.string.listplayer_unknown_player_firstname));
 		ret.setLastName(context.getString(R.string.listplayer_unknown_player_lastname));
+		ret.setType(PLAYER_TYPE.MATCH);
 		return ret;
 	}
 	

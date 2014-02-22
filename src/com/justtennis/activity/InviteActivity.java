@@ -36,6 +36,7 @@ import com.justtennis.db.service.PlayerService;
 import com.justtennis.domain.Invite;
 import com.justtennis.domain.Invite.INVITE_TYPE;
 import com.justtennis.domain.Invite.STATUS;
+import com.justtennis.domain.Player.PLAYER_TYPE;
 import com.justtennis.domain.Player;
 import com.justtennis.domain.Ranking;
 import com.justtennis.listener.action.TextWatcherFieldScoreSetBold;
@@ -224,6 +225,17 @@ public class InviteActivity extends Activity {
 	public void onClickPlayer(View view) {
 		Intent intent = new Intent(this, ListPlayerActivity.class);
 		intent.putExtra(ListPlayerActivity.EXTRA_MODE, ListPlayerActivity.MODE.FOR_RESULT);
+		PLAYER_TYPE playerType = PLAYER_TYPE.ENTRAINEMENT;
+		switch(business.getType()) {
+			case ENTRAINEMENT:
+				playerType = PLAYER_TYPE.ENTRAINEMENT;
+				break;
+			case MATCH:
+				playerType = PLAYER_TYPE.MATCH;
+				break;
+		}
+		intent.putExtra(PlayerActivity.EXTRA_TYPE, playerType);
+		intent.putExtra(PlayerActivity.EXTRA_RANKING, business.getIdRanking());
 		startActivityForResult(intent, RESULT_PLAYER);
 	}
 

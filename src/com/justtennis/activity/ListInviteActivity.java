@@ -29,12 +29,12 @@ public class ListInviteActivity extends Activity {
 	private ListInviteBusiness business;
 
 	private ListView list;
+	private ListInviteAdapter adapter;
+
 	private LinearLayout llFilterPlayer;
 	private Spinner spFilterPlayer;
-	private ListInviteAdapter adapter;
 	private Filter filter;
-
-	private CharSequence filterValue = null;
+	private CharSequence filterPlayerValue = null;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -44,17 +44,17 @@ public class ListInviteActivity extends Activity {
 		setContentView(R.layout.list_invite);
 //		getWindow().setFeatureInt(Window.FEATURE_CUSTOM_TITLE, R.layout.list_invite_title);
 
-		list = (ListView)findViewById(R.id.list);
-		llFilterPlayer = (LinearLayout)findViewById(R.id.ll_filter_player);
-
 		business = new ListInviteBusiness(this, NotifierMessageLogger.getInstance());
 		adapter = new ListInviteAdapter(this, business.getList());
-		filter = adapter.getFilter();
 
+		filter = adapter.getFilter();
+		spFilterPlayer = (Spinner)findViewById(R.id.sp_filter_player);
+		llFilterPlayer = (LinearLayout)findViewById(R.id.ll_filter_player);
+		
+		list = (ListView)findViewById(R.id.list);
 		list.setOnItemClickListener(new OnItemClickListInvite(this));
 		list.setAdapter(adapter);
 
-		spFilterPlayer = (Spinner)findViewById(R.id.sp_filter_player);
 		
 		business.onCreate();
 		
@@ -70,20 +70,20 @@ public class ListInviteActivity extends Activity {
 
 	public void refresh() {
 		adapter.setValue(business.getList());
-		filter.filter(filterValue);
+		filter.filter(filterPlayerValue);
 	}
 
 	public void onClickClose(View view) {
 		finish();
 	}
-	
+
 	public void onClickButtonFilter(View view) {
 		if (llFilterPlayer.getVisibility() == View.GONE) {
 			llFilterPlayer.setVisibility(View.VISIBLE);
 		} else {
 			llFilterPlayer.setVisibility(View.GONE);
-			filterValue = null;
-			filter.filter(filterValue);
+			filterPlayerValue = null;
+			filter.filter(filterPlayerValue);
 		}
 	}
 
@@ -105,11 +105,11 @@ public class ListInviteActivity extends Activity {
 				if (filter!=null) {
 					Player player = business.getPlayerNotEmpty(position);
 					if (player != null) {
-						filterValue = player.getId().toString();
+						filterPlayerValue = player.getId().toString();
 					} else {
-						filterValue = null;
+						filterPlayerValue = null;
 					}
-					filter.filter(filterValue);
+					filter.filter(filterPlayerValue);
 				}
 			}
 

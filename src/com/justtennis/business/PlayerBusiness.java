@@ -17,6 +17,7 @@ import com.justtennis.db.service.RankingService;
 import com.justtennis.db.service.UserService;
 import com.justtennis.domain.Invite;
 import com.justtennis.domain.Player;
+import com.justtennis.domain.Player.PLAYER_TYPE;
 import com.justtennis.domain.Ranking;
 import com.justtennis.domain.User;
 import com.justtennis.domain.comparator.RankingComparatorByOrder;
@@ -74,7 +75,18 @@ public class PlayerBusiness {
 		if (intent.hasExtra(PlayerActivity.EXTRA_MODE)) {
 			mode = (MODE) intent.getSerializableExtra(PlayerActivity.EXTRA_MODE);
 		}
-
+		
+		if (intent.hasExtra(PlayerActivity.EXTRA_TYPE)) {
+			initializePlayer().setType((PLAYER_TYPE) intent.getSerializableExtra(PlayerActivity.EXTRA_TYPE));
+		}
+		
+		if (intent.hasExtra(PlayerActivity.EXTRA_RANKING)) {
+			long idRanking = intent.getLongExtra(PlayerActivity.EXTRA_RANKING, -1);
+			if (idRanking != -1)  {
+				initializePlayer().setIdRanking(idRanking);
+			}
+		}
+		
 		initializeDataRanking();
 	}
 

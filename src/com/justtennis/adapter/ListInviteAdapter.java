@@ -1,6 +1,5 @@
 package com.justtennis.adapter;
 
-import java.net.Socket;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;

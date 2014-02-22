@@ -22,6 +22,15 @@ Saisie de Message
 
 ********************* DONE *****************************
 
+Ecran Player
+[20140223] - Ajout la notion de type de Player
+[20140206] - Revu du design
+[20140110] - Trier les invites par date descendante
+[20140109] - Afficher la liste des invites en mode modification
+[20140108] - Ajout du classement
+[20131229] - Passer par un startActivityForResult pour importer un contact google (comme le scan QrCode)
+[20131228] - Recuperer les infos 'Prenom' et 'Nom' découpé
+
 List Player
 [20140222] - Empèche la suppression d'un joueur si il a au moins une invite
 [20140216] - Sort Player List
@@ -82,14 +91,6 @@ Statistique
 Ecran Player & User
 [20140207] - TextWatcher sur les EditText qui rend visible les TextView si non vide.
 [20140207] - Mise en commun des champs de saisie avec le User
-
-Ecran Player
-[20140206] - Revu du design
-[20140110] - Trier les invites par date descendante
-[20140109] - Afficher la liste des invites en mode modification
-[20140108] - Ajout du classement
-[20131229] - Passer par un startActivityForResult pour importer un contact google (comme le scan QrCode)
-[20131228] - Recuperer les infos 'Prenom' et 'Nom' découpé
 
 Saisie de Message
 [20131229] - Pouvoir inserer le champ à la position courante du curseur

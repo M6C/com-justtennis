@@ -1,11 +1,10 @@
 package com.justtennis.db.sqlite.helper;
 
-import java.io.IOException;
-
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 
 import com.cameleon.common.android.inotifier.INotifierMessage;
+import com.justtennis.domain.Player.PLAYER_TYPE;
 
 public class DBPlayerHelper extends GenericDBHelper {
 
@@ -24,9 +23,10 @@ public class DBPlayerHelper extends GenericDBHelper {
 	public static final String COLUMN_LOCALITY = "LOCALITY";
 	public static final String COLUMN_ID_EXTERNAL = "ID_EXTERNAL";
 	public static final String COLUMN_ID_GOOGLE = "ID_GOOGLE";
+	public static final String COLUMN_TYPE = "TYPE";
 
 	private static final String DATABASE_NAME = "Player.db";
-	private static final int DATABASE_VERSION = 6;
+	private static final int DATABASE_VERSION = 7;
 
 	// Database creation sql statement
 	private static final String DATABASE_CREATE = "CREATE TABLE " + TABLE_NAME + "(" + 
@@ -41,7 +41,8 @@ public class DBPlayerHelper extends GenericDBHelper {
 		COLUMN_POSTALCODE + " TEXT NULL, " + 
 		COLUMN_LOCALITY + " TEXT NULL, " + 
 		COLUMN_ID_EXTERNAL + " INTEGER NULL, " + 
-		COLUMN_ID_GOOGLE + " INTEGER NULL " + 
+		COLUMN_ID_GOOGLE + " INTEGER NULL, " + 
+		COLUMN_TYPE + " INTEGER NULL " + 
 	");";
 
 	public DBPlayerHelper(Context context, INotifierMessage notificationMessage) {
@@ -50,13 +51,12 @@ public class DBPlayerHelper extends GenericDBHelper {
 
 	@Override
 	public void onUpgrade(SQLiteDatabase database, int oldVersion, int newVersion) {
-		if (oldVersion==5 && newVersion>oldVersion) {
-			try {
-				super.backupDbToSdcard(oldVersion);
-				
-				database.execSQL("ALTER TABLE " + TABLE_NAME + " ADD COLUMN " + COLUMN_ID_GOOGLE + " INTEGER NULL ");
-			} catch (IOException e) {
-				e.printStackTrace();
+		if (newVersion>oldVersion) {
+			if (oldVersion <= 5) {
+				addColumn(database, COLUMN_ID_GOOGLE, " INTEGER NULL ");
+			}
+			if (oldVersion <= 6) {
+				addColumn(database, COLUMN_TYPE, " INTEGER NULL ", PLAYER_TYPE.ENTRAINEMENT.toString());
 			}
 		}
 		else {

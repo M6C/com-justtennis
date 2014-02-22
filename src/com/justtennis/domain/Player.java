@@ -7,11 +7,17 @@ public class Player extends Person {
 	
 	private static final long serialVersionUID = 1L;
 
+	public enum PLAYER_TYPE {
+		ENTRAINEMENT,
+		MATCH
+	};
+
 	private Long idClub;
 	private Long idRanking;
 	private Long idExternal;
 	private Long idGoogle;
 	private Bitmap photo;
+	private PLAYER_TYPE type = PLAYER_TYPE.ENTRAINEMENT;
 
 	public Long getIdClub() {
 		return idClub;
@@ -42,5 +48,11 @@ public class Player extends Person {
 	}
 	public void setPhoto(Bitmap photo) {
 		this.photo = photo;
+	}
+	public PLAYER_TYPE getType() {
+		return type;
+	}
+	public void setType(PLAYER_TYPE type) {
+		this.type = type;
 	}
 }

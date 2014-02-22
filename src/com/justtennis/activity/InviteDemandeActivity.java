@@ -34,6 +34,7 @@ import com.justtennis.business.InviteDemandeBusiness;
 import com.justtennis.db.service.PlayerService;
 import com.justtennis.domain.Invite;
 import com.justtennis.domain.Invite.INVITE_TYPE;
+import com.justtennis.domain.Player.PLAYER_TYPE;
 import com.justtennis.domain.Player;
 import com.justtennis.domain.Ranking;
 import com.justtennis.manager.ContactManager;
@@ -377,6 +378,15 @@ public class InviteDemandeActivity extends Activity {
 	}
 
 	private void initializeDataType() {
+		switch(business.getPlayer().getType()) {
+			default:
+			case ENTRAINEMENT:
+				business.setType(INVITE_TYPE.ENTRAINEMENT);
+				break;
+			case MATCH:
+				business.setType(INVITE_TYPE.MATCH);
+				break;
+		}
 		spType.setSelection(getTypePosition());
 	}
 

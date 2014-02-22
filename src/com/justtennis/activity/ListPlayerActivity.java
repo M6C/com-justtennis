@@ -4,8 +4,13 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.Button;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemSelectedListener;
+import android.widget.ArrayAdapter;
+import android.widget.Filter;
+import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.cameleon.common.android.factory.FactoryDialog;
@@ -14,6 +19,7 @@ import com.justtennis.adapter.ListPlayerAdapter;
 import com.justtennis.business.ListPlayerBusiness;
 import com.justtennis.db.service.PlayerService;
 import com.justtennis.domain.Player;
+import com.justtennis.domain.Player.PLAYER_TYPE;
 import com.justtennis.listener.itemclick.OnItemClickListPlayer;
 import com.justtennis.listener.itemclick.OnItemClickListPlayerForResult;
 import com.justtennis.listener.itemclick.OnItemClickListPlayerInvite;
@@ -28,6 +34,7 @@ public class ListPlayerActivity extends Activity {
 	public static final String EXTRA_MODE = "MODE";
 	public static final String EXTRA_PLAYER_ID = "EXTRA_PLAYER_ID";
 	private static final int RESULT_PLAYER = 1;
+	private static final int RESULT_PLAYER_FOR_INFO = 2;
 
 	public enum MODE {
 		EDIT,
@@ -39,8 +46,11 @@ public class ListPlayerActivity extends Activity {
 	
 	private ListView list;
 	private ListPlayerAdapter adapter;
-	private Button btnAdd;
-	private Button btnClose;
+
+	private LinearLayout llFilterType;
+	private Spinner spFilterType;
+	private Filter filter;
+	private PLAYER_TYPE filterTypeValue = null;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -49,11 +59,15 @@ public class ListPlayerActivity extends Activity {
 		
 		business = new ListPlayerBusiness(this, NotifierMessageLogger.getInstance());
 		adapter = new ListPlayerAdapter(this, business.getList());
+		
+		spFilterType = (Spinner)findViewById(R.id.sp_filter_type);
+		llFilterType = (LinearLayout)findViewById(R.id.ll_filter_type);
+		filter = adapter.getFilter();
 
-		btnAdd = (Button)findViewById(R.id.btn_player_add);
-		btnClose = (Button)findViewById(R.id.btn_player_close);
 		list = (ListView)findViewById(R.id.list);
 		list.setAdapter(adapter);
+
+		initializeTypeList();
 	}
 
 	@Override
@@ -65,18 +79,12 @@ public class ListPlayerActivity extends Activity {
 		switch (business.getMode()) {
 			case EDIT:
 				list.setOnItemClickListener(new OnItemClickListPlayer(this));
-				btnAdd.setVisibility(View.VISIBLE);
-				btnClose.setVisibility(View.VISIBLE);
 				break;
 			case INVITE:
 				list.setOnItemClickListener(new OnItemClickListPlayerInvite(this));
-				btnAdd.setVisibility(View.GONE);
-				btnClose.setVisibility(View.VISIBLE);
 				break;
 			case FOR_RESULT:
 				list.setOnItemClickListener(new OnItemClickListPlayerForResult(this));
-				btnAdd.setVisibility(View.VISIBLE);
-				btnClose.setVisibility(View.VISIBLE);
 				break;
 		}
 	}
@@ -95,7 +103,16 @@ public class ListPlayerActivity extends Activity {
 					finish();
 				}
 				break;
-	
+			case RESULT_PLAYER_FOR_INFO:
+				if (data!=null) {
+					long id = data.getLongExtra(InviteDemandeActivity.EXTRA_PLAYER_ID, PlayerService.ID_EMPTY_PLAYER);
+					if (id != PlayerService.ID_EMPTY_PLAYER) {
+						Intent intent = new Intent(this, InviteDemandeActivity.class);
+						intent.putExtra(InviteActivity.EXTRA_PLAYER_ID, id);
+						startActivity(intent);
+					}
+				}
+				break;
 			default:
 				super.onActivityResult(requestCode, resultCode, data);
 				break;
@@ -114,14 +131,22 @@ public class ListPlayerActivity extends Activity {
 	}
 
 	public void refresh() {
-		adapter.notifyDataSetChanged();
+//		adapter.notifyDataSetChanged();
+		adapter.setValue(business.getList());
+		filter.filter(filterTypeValue == null ? null : filterTypeValue.toString());
 	}
 
 	public void onClickAdd(View view) {
 		Intent intent = new Intent(getApplicationContext(), PlayerActivity.class);
+		if (business.getExtraIn() != null) {
+			intent.putExtras(business.getExtraIn());
+		}
 		if (business.getMode() == MODE.FOR_RESULT) {
 			intent.putExtra(PlayerActivity.EXTRA_MODE, PlayerActivity.MODE.FOR_RESULT);
 			startActivityForResult(intent, RESULT_PLAYER);
+		} else if (business.getMode() == MODE.INVITE) {
+			intent.putExtra(PlayerActivity.EXTRA_MODE, PlayerActivity.MODE.FOR_RESULT);
+			startActivityForResult(intent, RESULT_PLAYER_FOR_INFO);
 		} else {
 			startActivity(intent);
 		}
@@ -169,11 +194,52 @@ public class ListPlayerActivity extends Activity {
 			.show();
 	}
 
+	public void onClickButtonFilter(View view) {
+		if (llFilterType.getVisibility() == View.GONE) {
+			llFilterType.setVisibility(View.VISIBLE);
+		} else {
+			llFilterType.setVisibility(View.GONE);
+			filterTypeValue = null;
+			filter.filter(null);
+		}
+	}
+
 	public MODE getMode() {
 		return business.getMode();
 	}
 	
 	public ListPlayerBusiness getBusiness() {
 		return business;
+	}
+
+	private void initializeTypeList() {
+		String[] listTypeName = new String[]{"", PLAYER_TYPE.ENTRAINEMENT.toString(), PLAYER_TYPE.MATCH.toString()};
+		ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, listTypeName);
+		dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+		spFilterType.setAdapter(dataAdapter);
+		spFilterType.setOnItemSelectedListener(new OnItemSelectedListener() {
+			@Override
+			public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+				if (filter!=null) {
+					switch(position) {
+						case 0:
+						default:
+							filterTypeValue = null;
+							break;
+						case 1:
+							filterTypeValue = PLAYER_TYPE.ENTRAINEMENT;
+							break;
+						case 2:
+							filterTypeValue = PLAYER_TYPE.MATCH;
+							break;
+					}
+					filter.filter(filterTypeValue == null ? null : filterTypeValue.toString());
+				}
+			}
+
+			@Override
+			public void onNothingSelected(AdapterView<?> arg0) {
+			}
+		});
 	}
 }

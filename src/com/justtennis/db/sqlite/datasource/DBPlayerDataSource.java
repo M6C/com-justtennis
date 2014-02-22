@@ -7,6 +7,7 @@ import android.database.Cursor;
 import com.cameleon.common.android.inotifier.INotifierMessage;
 import com.justtennis.db.sqlite.helper.DBPlayerHelper;
 import com.justtennis.domain.Player;
+import com.justtennis.domain.Player.PLAYER_TYPE;
 import com.justtennis.tool.DbTool;
 
 public class DBPlayerDataSource extends GenericDBDataSource<Player> {
@@ -26,7 +27,8 @@ public class DBPlayerDataSource extends GenericDBDataSource<Player> {
 		DBPlayerHelper.COLUMN_POSTALCODE,
 		DBPlayerHelper.COLUMN_LOCALITY,
 		DBPlayerHelper.COLUMN_ID_EXTERNAL,
-		DBPlayerHelper.COLUMN_ID_GOOGLE
+		DBPlayerHelper.COLUMN_ID_GOOGLE,
+		DBPlayerHelper.COLUMN_TYPE
 	};
 
 	public DBPlayerDataSource(Context context, INotifierMessage notificationMessage) {
@@ -51,6 +53,7 @@ public class DBPlayerDataSource extends GenericDBDataSource<Player> {
 		values.put(DBPlayerHelper.COLUMN_LOCALITY, player.getLocality());
 		values.put(DBPlayerHelper.COLUMN_ID_EXTERNAL, player.getIdExternal());
 		values.put(DBPlayerHelper.COLUMN_ID_GOOGLE, player.getIdGoogle());
+		values.put(DBPlayerHelper.COLUMN_TYPE, player.getType().toString());
 	}
 
 	@Override
@@ -69,6 +72,7 @@ public class DBPlayerDataSource extends GenericDBDataSource<Player> {
 		player.setLocality(cursor.getString(col++));
 		player.setIdExternal(DbTool.getInstance().toLong(cursor, col++));
 		player.setIdGoogle(DbTool.getInstance().toLong(cursor, col++));
+		player.setType(PLAYER_TYPE.valueOf(DbTool.getInstance().toString(cursor, col++, PLAYER_TYPE.ENTRAINEMENT.toString())));
 		return player;
 	}
 	

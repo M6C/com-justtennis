@@ -1,7 +1,6 @@
 
 package com.justtennis.activity;
 
-import java.util.Date;
 import java.util.List;
 
 import org.gdocument.gtracergps.launcher.log.Logger;
@@ -20,19 +19,17 @@ import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import com.cameleon.common.android.adapter.BaseViewAdapter;
 import com.cameleon.common.android.factory.FactoryDialog;
 import com.justtennis.R;
 import com.justtennis.business.PlayerBusiness;
-import com.justtennis.db.service.UserService;
-import com.justtennis.domain.Invite;
 import com.justtennis.domain.Player;
+import com.justtennis.domain.Player.PLAYER_TYPE;
 import com.justtennis.domain.Ranking;
 import com.justtennis.listener.action.TextWatcherFieldEnableView;
 import com.justtennis.listener.ok.OnClickPlayerCreateListenerOk;
-import com.justtennis.manager.SmsManager;
 import com.justtennis.notifier.NotifierMessageLogger;
 import com.justtennis.parser.PlayerParser;
-import com.justtennis.parser.SmsParser;
 
 public class PlayerActivity extends Activity {
 
@@ -50,9 +47,12 @@ public class PlayerActivity extends Activity {
 	public static final String EXTRA_PLAYER_ID = "PLAYER_ID";
 	public static final String EXTRA_INVITE = "INVITE";
 	public static final String EXTRA_MODE = "MODE";
+	public static final String EXTRA_TYPE = "TYPE";
+	public static final String EXTRA_RANKING = "RANKING";
+
+	private final Integer[] drawableType = new Integer[] {R.layout.element_invite_type_entrainement, R.layout.element_invite_type_match};
 
 	private PlayerBusiness business;
-//	private ListInviteAdapter adapter;
 
 	private TextView tvFirstname;
 	private TextView tvLastname;
@@ -62,13 +62,14 @@ public class PlayerActivity extends Activity {
 	private EditText etLastname;
 	private EditText etBirthday;
 	private EditText etPhonenumber;
+	private BaseViewAdapter adapterType;
 	private Spinner spRanking;
-//	private ListView list;
+	private Spinner spType;
 	private LinearLayout llLastname;
 	private LinearLayout llBirthday;
 	private LinearLayout llPhonenumber;
 	private LinearLayout llRanking;
-//	private LinearLayout llInvite;
+	private LinearLayout llType;
 	private LinearLayout llCreate;
 	private LinearLayout llModify;
 	private LinearLayout llAddDemande;
@@ -88,29 +89,31 @@ public class PlayerActivity extends Activity {
 		etBirthday = (EditText)findViewById(R.id.et_birthday);
 		etPhonenumber = (EditText)findViewById(R.id.et_phonenumber);
 		spRanking = (Spinner)findViewById(R.id.sp_ranking);
+		spType = (Spinner)findViewById(R.id.sp_type);
 		llLastname = (LinearLayout)findViewById(R.id.ll_lastname);
 		llBirthday = (LinearLayout)findViewById(R.id.ll_birthday);
 		llPhonenumber = (LinearLayout)findViewById(R.id.ll_phonenumber);
 		llRanking = (LinearLayout)findViewById(R.id.ll_ranking);
-//		llInvite = (LinearLayout)findViewById(R.id.ll_invite);
+		llType = (LinearLayout)findViewById(R.id.ll_type);
 		llCreate = (LinearLayout)findViewById(R.id.ll_create);
 		llModify = (LinearLayout)findViewById(R.id.ll_modify);
 		llAddDemande = (LinearLayout)findViewById(R.id.ll_add_demande);
-//		list = (ListView)findViewById(R.id.lv_invite);
 
 		initializeListener();
 		
 		business = new PlayerBusiness(this, NotifierMessageLogger.getInstance());
-//		adapter = new ListInviteAdapter(this, business.getList(), ADAPTER_INVITE_MODE.READ);
-//		list.setAdapter(adapter);
-
 	}
 
 	@Override
 	protected void onResume() {
 		super.onResume();
 		initialize();
+
 		initializeRankingList();
+		initializeRanking();
+
+		initializeListType();
+		initializeType();
 	}
 
 	@Override
@@ -242,8 +245,6 @@ public class PlayerActivity extends Activity {
 	private void importGoogle() {
 		Intent intent = new Intent(getApplicationContext(), ListPersonActivity.class);
 		startActivityForResult(intent, RESULT_CODE_GOOGLE);
-//		startActivity(intent);
-//		finish();
 	}
 
 	private void buildPlayer() {
@@ -304,11 +305,39 @@ public class PlayerActivity extends Activity {
 		llBirthday.setVisibility(iVisibility);
 		llPhonenumber.setVisibility(iVisibility);
 		llRanking.setVisibility(iVisibility);
+		llType.setVisibility(iVisibility);
 
 		etFirstname.setText(player.getFirstName());
 		etLastname.setText(player.getLastName());
 		etBirthday.setText(player.getBirthday());
 		etPhonenumber.setText(player.getPhonenumber());
+	}
+
+	private void initializeListType() {
+		adapterType = new BaseViewAdapter(this, drawableType);
+		adapterType.setViewBinder(new BaseViewAdapter.ViewBinder() {
+			
+			@Override
+			public boolean setViewValue(int position, View view) {
+				view.setTag(getType(position));
+				return true;
+			}
+		});
+		spType.setAdapter(adapterType);
+
+		spType.setOnItemSelectedListener(new OnItemSelectedListener() {
+			@Override
+			public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+				if (view != null) {
+					Player player = business.initializePlayer();
+					player.setType((PLAYER_TYPE) view.getTag());
+				}
+			}
+
+			@Override
+			public void onNothingSelected(AdapterView<?> arg0) {
+			}
+		});
 	}
 
 	private void initializeRankingList() {
@@ -328,23 +357,50 @@ public class PlayerActivity extends Activity {
 			public void onNothingSelected(AdapterView<?> arg0) {
 			}
 		});
+	}
 
+	private void initializeRanking() {
 		Player player = business.getPlayer();
 		if (player!=null) {
-			initializeRanking(player.getIdRanking());
+			Long id = player.getIdRanking();
+			int position = 0;
+			List<Ranking> listRanking = business.getListRanking();
+			for(Ranking ranking : listRanking) {
+				if (ranking.getId().equals(id)) {
+					spRanking.setSelection(position, true);
+					break;
+				} else {
+					position++;
+				}
+			}
 		}
 	}
 
-	private void initializeRanking(Long id) {
-		int position = 0;
-		List<Ranking> listRanking = business.getListRanking();
-		for(Ranking ranking : listRanking) {
-			if (ranking.getId().equals(id)) {
-				spRanking.setSelection(position, true);
-				break;
-			} else {
-				position++;
+	private void initializeType() {
+		spType.setSelection(getTypePosition());
+	}
+
+	private int getTypePosition() {
+		if(business.getPlayer() != null) {
+			switch(business.getPlayer().getType()) {
+				case ENTRAINEMENT:
+					return 0;
+				case MATCH:
+				default:
+					return 1;
 			}
+		} else {
+			return 0;
+		}
+	}
+
+	private PLAYER_TYPE getType(Integer position) {
+		switch(position) {
+			case 0:
+				return PLAYER_TYPE.ENTRAINEMENT;
+			case 1:
+			default:
+				return PLAYER_TYPE.MATCH;
 		}
 	}
 }
