@@ -23,6 +23,7 @@ Saisie de Message
 ********************* DONE *****************************
 
 Invite Demande
+[20140222] - Possibilité de créé un nouveau Player si on a selectionné "Unknow Player"
 [20140222] - Possibilité de saisir le classement
 [20140211] - Creation d'une nouvelle activity pour faire seulement des invites
 
