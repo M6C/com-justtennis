@@ -13,6 +13,7 @@ import android.content.Intent;
 import com.cameleon.common.android.inotifier.INotifierMessage;
 import com.justtennis.activity.ListPlayerActivity;
 import com.justtennis.activity.ListPlayerActivity.MODE;
+import com.justtennis.db.service.InviteService;
 import com.justtennis.db.service.PlayerService;
 import com.justtennis.db.service.UserService;
 import com.justtennis.domain.Invite;
@@ -29,6 +30,7 @@ public class ListPlayerBusiness {
 
 	private PlayerService playerService;
 	private UserService userService;
+	private InviteService inviteService;
 	private List<Player> list = new ArrayList<Player>();
 	private ListPlayerActivity context;
 	private User user;
@@ -39,6 +41,7 @@ public class ListPlayerBusiness {
 		this.context = context;
 		playerService = new PlayerService(context, notificationMessage);
 		userService = new UserService(context, NotifierMessageLogger.getInstance());
+		inviteService = new InviteService(context, NotifierMessageLogger.getInstance());
 		user = userService.find();
 	}
 
@@ -82,6 +85,10 @@ public class ListPlayerBusiness {
 
 	public boolean isUnknownPlayer(Player player) {
 		return playerService.isUnknownPlayer(player);
+	}
+
+	public int getInviteCount(Player player) {
+		return inviteService.countByIdPlayer(player.getId());
 	}
 
 	private void refreshData() {

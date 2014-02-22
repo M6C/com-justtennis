@@ -25,12 +25,6 @@
     <string name="button_desctiption_player_unknow">Unknow</string>
     <string name="button_desctiption_play">Play</string>
     <string name="button_desctiption_send">Send</string>
-    <string name="dialog_player_delete_title">Delete player</string>
-    <string name="dialog_player_delete_message">Delete ?</string>
-    <string name="dialog_player_create_confirmation_title">Send confirmation</string>
-    <string name="dialog_player_create_confirmation_message">Ask add player confirmation ?</string>
-    <string name="dialog_player_send_title">Send player</string>
-    <string name="dialog_player_send_message">Send ?</string>
     <string name="dialog_exit_title">Confirm</string>
     <string name="dialog_exit_message">Exit ?</string>
     <string name="button_text_person">Person</string>

@@ -50,6 +50,22 @@ public class DBInviteDataSource extends GenericDBDataSource<Invite> {
 	}
 
 	/**
+	 * Return Count Invite by Id Player
+	 * @return Count Invite by Id Player
+	 */
+	public int countByIdPlayer(long idPlayer) {
+		String sql = "SELECT COUNT(1) NB FROM " + dbHelper.getTableName() + 
+			" WHERE " + DBInviteHelper.COLUMN_ID_PLAYER + " = " + idPlayer;
+		List<HashMap<String,Object>> result = rawQuery(sql);
+		
+		if (result==null || result.size() == 0 || !result.get(0).containsKey("NB")) {
+			return 0;
+		} else {
+			return Integer.valueOf(result.get(0).get("NB").toString());
+		}
+	}
+
+	/**
 	 * Return Count Invite by Ranking
 	 * @return Count Invite by Ranking
 	 */

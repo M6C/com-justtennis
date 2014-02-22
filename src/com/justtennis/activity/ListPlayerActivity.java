@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.cameleon.common.android.factory.FactoryDialog;
 import com.justtennis.R;
@@ -132,10 +133,14 @@ public class ListPlayerActivity extends Activity {
 
 	public void onClickDelete(View view) {
 		Player player = (Player)view.getTag();
-		OnClickPlayerDeleteListenerOk listener = new OnClickPlayerDeleteListenerOk(business, player);
-		FactoryDialog.getInstance()
-			.buildOkCancelDialog(business.getContext(), listener, R.string.dialog_player_delete_title, R.string.dialog_player_delete_message)
-			.show();
+		if (business.getInviteCount(player) > 0) {
+			Toast.makeText(this, R.string.dialog_player_error_delete_have_invite, Toast.LENGTH_LONG).show();
+		} else {
+			OnClickPlayerDeleteListenerOk listener = new OnClickPlayerDeleteListenerOk(business, player);
+			FactoryDialog.getInstance()
+				.buildOkCancelDialog(business.getContext(), listener, R.string.dialog_player_delete_title, R.string.dialog_player_delete_message)
+				.show();
+		}
 	}
 
 	public void onClickQRCode(View view) {

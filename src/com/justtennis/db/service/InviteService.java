@@ -24,7 +24,17 @@ public class InviteService extends GenericService<Invite> {
     		dbDataSource.close();
     	}
 	}
-	
+
+	public int countByIdPlayer(long idPlayer) {
+    	try {
+    		dbDataSource.open();
+    		return ((DBInviteDataSource)dbDataSource).countByIdPlayer(idPlayer);
+    	}
+    	finally {
+    		dbDataSource.close();
+    	}
+	}
+
 	public HashMap<String,Double> countByTypeGroupByRanking(Invite.INVITE_TYPE type, Invite.SCORE_RESULT scoreResult) {
 		try {
 			dbDataSource.open();
