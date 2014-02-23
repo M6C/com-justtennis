@@ -34,7 +34,6 @@ import com.justtennis.business.InviteDemandeBusiness;
 import com.justtennis.db.service.PlayerService;
 import com.justtennis.domain.Invite;
 import com.justtennis.domain.Invite.INVITE_TYPE;
-import com.justtennis.domain.Player.PLAYER_TYPE;
 import com.justtennis.domain.Player;
 import com.justtennis.domain.Ranking;
 import com.justtennis.manager.ContactManager;
@@ -145,9 +144,9 @@ public class InviteDemandeActivity extends Activity {
 	}
 
 	public void onClickOk(View view) {
-		
+		final boolean addCalendar = Calendar.getInstance().getTime().before(business.getDate());
 		if (business.isUnknownPlayer()) {
-			business.send(null);
+			business.send(null, addCalendar);
 
 			Intent intent = new Intent(InviteDemandeActivity.this, ListInviteActivity.class);
 			InviteDemandeActivity.this.startActivity(intent);
@@ -162,7 +161,7 @@ public class InviteDemandeActivity extends Activity {
 					@Override
 					public void onClick(DialogInterface dialog, View view, int which) {
 						TextView textView = (TextView)view;
-						business.send(textView.getText().toString());
+						business.send(textView.getText().toString(), addCalendar);
 		
 						dialog.dismiss();
 		
@@ -174,7 +173,7 @@ public class InviteDemandeActivity extends Activity {
 					
 					@Override
 					public void onClick(DialogInterface dialog, View view, int which) {
-						business.send(null);
+						business.send(null, addCalendar);
 		
 						dialog.dismiss();
 		
@@ -186,7 +185,7 @@ public class InviteDemandeActivity extends Activity {
 				dialog.show();
 			}
 			else {
-				business.send(text);
+				business.send(text, addCalendar);
 	
 				Intent intent = new Intent(InviteDemandeActivity.this, ListInviteActivity.class);
 				InviteDemandeActivity.this.startActivity(intent);

@@ -10,7 +10,6 @@ import java.util.TreeSet;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.widget.Toast;
 
 import com.cameleon.common.android.inotifier.INotifierMessage;
@@ -23,7 +22,6 @@ import com.justtennis.db.service.InviteService;
 import com.justtennis.db.service.MessageService;
 import com.justtennis.db.service.PlayerService;
 import com.justtennis.db.service.RankingService;
-import com.justtennis.db.service.ScoreSetService;
 import com.justtennis.db.service.UserService;
 import com.justtennis.domain.Invite;
 import com.justtennis.domain.Invite.INVITE_TYPE;
@@ -148,7 +146,7 @@ public class InviteDemandeBusiness {
 		return getPlayer() != null && playerService.isUnknownPlayer(getPlayer());
 	}
 	
-	public void send(String text) {
+	public void send(String text, boolean addCalendar) {
 //		Date date = invite.getDate();
 //		Invite invite = new Invite(user, player, date, getType());
 		invite.setStatus(this.invite.getStatus());
@@ -159,8 +157,10 @@ public class InviteDemandeBusiness {
 		inviteService.createOrUpdate(invite);
 
 		Player player = getPlayer();
-		calendarAddEvent(invite, EVENT_STATUS.CONFIRMED);
-		
+		if (addCalendar) {
+			calendarAddEvent(invite, EVENT_STATUS.CONFIRMED);
+		}
+
 		if (text!=null) {
 			if (player.getPhonenumber()!=null && !player.getPhonenumber().equals("")) {
 				SmsManager.getInstance().send(context, player.getPhonenumber(), text);

@@ -22,6 +22,12 @@ Saisie de Message
 
 ********************* DONE *****************************
 
+Invite Demande
+[20140223] - Ne créé pas d'évenement calendar pour les Invites passées
+[20140222] - Possibilité de créé un nouveau Player si on a selectionné "Unknow Player"
+[20140222] - Possibilité de saisir le classement
+[20140211] - Creation d'une nouvelle activity pour faire seulement des invites
+
 Statistique
 [20140223] - Ne prend en compte que les matchs passés
 [20140216] - Refactor
@@ -53,11 +59,6 @@ List Player
 [20140222] - Empèche la suppression d'un joueur si il a au moins une invite
 [20140216] - Sort Player List
 [20140212] - Ajout d'un bouton Close
-
-Invite Demande
-[20140222] - Possibilité de créé un nouveau Player si on a selectionné "Unknow Player"
-[20140222] - Possibilité de saisir le classement
-[20140211] - Creation d'une nouvelle activity pour faire seulement des invites
 
 Invite
 [20140221] - Fix - NPE lors du changement du Player
