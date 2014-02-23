@@ -1,5 +1,6 @@
 package com.justtennis.db.sqlite.datasource;
 
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -70,17 +71,13 @@ public class DBInviteDataSource extends GenericDBDataSource<Invite> {
 	 * @return Count Invite by Ranking
 	 */
 	public HashMap<String,Double> countByTypeGroupByRanking(Invite.INVITE_TYPE type, Invite.SCORE_RESULT scoreResult) {
-		int whereCnt = 0;
-		String where = "";
+		String where = " WHERE ";
+		where += DBInviteHelper.COLUMN_TIME + " < " + Calendar.getInstance().getTimeInMillis();
 		if (type != null) {
-			where += (whereCnt == 0) ? " WHERE " : " AND ";
-			where += DBInviteHelper.COLUMN_TYPE + " = '" + type + "'";
-			whereCnt++;
+			where += " AND " + DBInviteHelper.COLUMN_TYPE + " = '" + type + "'";
 		}
 		if (scoreResult != null) {
-			where += (whereCnt == 0) ? " WHERE " : " AND ";
-			where += DBInviteHelper.COLUMN_SCORE_RESULT + " = '" + scoreResult + "'";
-			whereCnt++;
+			where += " AND " + DBInviteHelper.COLUMN_SCORE_RESULT + " = '" + scoreResult + "'";
 		}
 
 		String sql = "SELECT "+DBInviteHelper.COLUMN_ID_RANKING+" ID_RANKING, COUNT(1) NB FROM " + dbHelper.getTableName() + 

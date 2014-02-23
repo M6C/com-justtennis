@@ -22,6 +22,13 @@ Saisie de Message
 
 ********************* DONE *****************************
 
+Statistique
+[20140223] - Ne prend en compte que les matchs passés
+[20140216] - Refactor
+[20140213] - Revu du Design
+[20140213] - Invite by Ranking ordred
+[20140212] - Ajout Activity Chart
+
 List Invite
 [20140223] - Possibilité de filtre les Invite par le type
 [20140216] - Revu du Design
@@ -82,12 +89,6 @@ Ecran Utilisateur
 [20140214] - Integration de la gestion du Message dans l'écran User
 [20140206] - Revu du design
 [20140105] - Ajout du classement
-
-Statistique
-[20140216] - Refactor
-[20140213] - Revu du Design
-[20140213] - Invite by Ranking ordred
-[20140212] - Ajout Activity Chart
 
 Ecran Player & User
 [20140207] - TextWatcher sur les EditText qui rend visible les TextView si non vide.
