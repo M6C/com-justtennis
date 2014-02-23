@@ -22,6 +22,27 @@ Saisie de Message
 
 ********************* DONE *****************************
 
+Invite
+[20140223] - Recréé l'évenement calendar de l'Invite quelque soit la donnée modifiée
+[20140221] - Fix - NPE lors du changement du Player
+[20140220] - Fix - UnkownPlayer sans classement
+[20140217] - Revu du Design
+[20140216] - Fix Modifier
+[20140216] - Fix Adapter
+[20140216] - Ajout de la notion de victoire, defaite ou indefini
+[20140212] - Ajout d'un TextWatcher sur les champs du score pour mettre en Bold les champs avec une valeur superieur à la valeur de l'autre champ du même set
+[20140211] - Pouvoir saisir une Score
+[20140209] - Modifier l'event GCalendar quand on modifi une invite
+[20140209] - Supprimer l'invite GCalendar quand on supprime une invite
+[20140122] - Pouvoir modifier la coche qui indique si la réponse et ok (vert) ou non (rouge)
+[20131226] - Pouvoir modifier le joueur
+[20131224] - Donner la possibilité de ne pas envoyer demande de confirmation pour les joueurs qui n'ont pas l'appli. Mais créé quant même l'évènement GCalendar.
+[20131224] - Ne pas selectionner d'adversaire pour les matchs
+[20131224] - Ne pas envoyer de sms pour les matchs ou entrainements sans adversaire
+[20131221] - Gerer une date relative pour aujourd'hui et demain
+[20131221] - Sauvegarder le type d'invite en base
+[20131221] - Gerer l'affichage du type d'invite dans la liste
+
 Invite Demande
 [20140223] - Ne créé pas d'évenement calendar pour les Invites passées
 [20140222] - Possibilité de créé un nouveau Player si on a selectionné "Unknow Player"
@@ -59,26 +80,6 @@ List Player
 [20140222] - Empèche la suppression d'un joueur si il a au moins une invite
 [20140216] - Sort Player List
 [20140212] - Ajout d'un bouton Close
-
-Invite
-[20140221] - Fix - NPE lors du changement du Player
-[20140220] - Fix - UnkownPlayer sans classement
-[20140217] - Revu du Design
-[20140216] - Fix Modifier
-[20140216] - Fix Adapter
-[20140216] - Ajout de la notion de victoire, defaite ou indefini
-[20140212] - Ajout d'un TextWatcher sur les champs du score pour mettre en Bold les champs avec une valeur superieur à la valeur de l'autre champ du même set
-[20140211] - Pouvoir saisir une Score
-[20140209] - Modifier l'event GCalendar quand on modifi une invite
-[20140209] - Supprimer l'invite GCalendar quand on supprime une invite
-[20140122] - Pouvoir modifier la coche qui indique si la réponse et ok (vert) ou non (rouge)
-[20131226] - Pouvoir modifier le joueur
-[20131224] - Donner la possibilité de ne pas envoyer demande de confirmation pour les joueurs qui n'ont pas l'appli. Mais créé quant même l'évènement GCalendar.
-[20131224] - Ne pas selectionner d'adversaire pour les matchs
-[20131224] - Ne pas envoyer de sms pour les matchs ou entrainements sans adversaire
-[20131221] - Gerer une date relative pour aujourd'hui et demain
-[20131221] - Sauvegarder le type d'invite en base
-[20131221] - Gerer l'affichage du type d'invite dans la liste
 
 Ecran Accueil
 [20140216] - Ajout Menu Statistique

@@ -181,8 +181,7 @@ public class InviteBusiness {
 		saveScoreSet();
 
 		if (inv != null && inv.getIdCalendar() != null && 
-			inv.getIdCalendar() != GCalendarHelper.EVENT_ID_NO_CREATED && 
-			inv.getStatus() != invite.getStatus()) {
+			inv.getIdCalendar() != GCalendarHelper.EVENT_ID_NO_CREATED) {
 			EVENT_STATUS status = gCalendarHelper.toEventStatus(invite.getStatus());
 //			gCalendarHelper.updateEventStatus(invite.getIdCalendar(), status);
 //			gCalendarHelper.recreateEventStatus(invite.getIdCalendar(), status);
