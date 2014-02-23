@@ -22,12 +22,7 @@ public class ListInviteByPlayerFilter extends Filter {
 	protected FilterResults performFiltering(CharSequence constraint) {
 		FilterResults ret = new FilterResults();
 		if (constraint!=null) {
-			List<Invite> result = new ArrayList<Invite>();
-			for(Invite person : valueOld) {
-				if (constraint.equals(person.getPlayer().getId().toString())) {
-					result.add(person);
-				}
-			}
+			List<Invite> result = filterData(constraint);
 			ret.values = result;
 			ret.count = result.size();
 		} else {
@@ -45,5 +40,29 @@ public class ListInviteByPlayerFilter extends Filter {
 	
 	public interface IValueNotifier {
 		public void setValue(List<Invite> value);
+	}
+
+	private List<Invite> filterData(CharSequence constraint) {
+		String filterValue = constraint.toString();
+		int filterLength = filterValue.length();
+		String idPlayer = null;
+		String type = null;
+		int idx = filterValue.indexOf(";");
+		if (idx > 0) {
+			idPlayer = filterValue.substring(0, idx);
+		}
+		if (idx < (filterLength - 1)) {
+			type = filterValue.substring(idx+1, filterLength);
+		}
+		List<Invite> result = new ArrayList<Invite>();
+		for(Invite person : valueOld) {
+			if (
+				(idPlayer == null || idPlayer.equals(person.getPlayer().getId().toString())) &&
+				(type == null || type.equals(person.getPlayer().getType().toString()))
+			) {
+				result.add(person);
+			}
+		}
+		return result;
 	}
 }

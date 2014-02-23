@@ -22,6 +22,17 @@ Saisie de Message
 
 ********************* DONE *****************************
 
+List Invite
+[20140223] - Possibilité de filtre les Invite par le type
+[20140216] - Revu du Design
+[20140216] - Fixe Affichage du score
+[20140216] - Affichage du score
+[20140208] - Ajouter une filtre tous, pour filtrer les invites
+[20140208] - Filtrer les invites par Player
+[20140110] - Trier les invites par date descendante
+[20131225] - Pouvoir modifier une invite
+[20131221] - Gerer l'affichage du type d'invite
+
 Ecran Player
 [20140223] - Ajout la notion de type de Player
 [20140206] - Revu du design
@@ -60,16 +71,6 @@ Invite
 [20131221] - Gerer une date relative pour aujourd'hui et demain
 [20131221] - Sauvegarder le type d'invite en base
 [20131221] - Gerer l'affichage du type d'invite dans la liste
-
-List Invite
-[20140216] - Revu du Design
-[20140216] - Fixe Affichage du score
-[20140216] - Affichage du score
-[20140208] - Ajouter une filtre tous, pour filtrer les invites
-[20140208] - Filtrer les invites par Player
-[20140110] - Trier les invites par date descendante
-[20131225] - Pouvoir modifier une invite
-[20131221] - Gerer l'affichage du type d'invite
 
 Ecran Accueil
 [20140216] - Ajout Menu Statistique

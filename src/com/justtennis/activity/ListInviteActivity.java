@@ -16,7 +16,9 @@ import com.justtennis.R;
 import com.justtennis.adapter.ListInviteAdapter;
 import com.justtennis.business.ListInviteBusiness;
 import com.justtennis.domain.Invite;
+import com.justtennis.domain.Invite.INVITE_TYPE;
 import com.justtennis.domain.Player;
+import com.justtennis.domain.Player.PLAYER_TYPE;
 import com.justtennis.listener.itemclick.OnItemClickListInvite;
 import com.justtennis.listener.ok.OnClickInviteDeleteListenerOk;
 import com.justtennis.notifier.NotifierMessageLogger;
@@ -33,8 +35,10 @@ public class ListInviteActivity extends Activity {
 
 	private LinearLayout llFilterPlayer;
 	private Spinner spFilterPlayer;
+	private Spinner spFilterType;
 	private Filter filter;
 	private CharSequence filterPlayerValue = null;
+	private INVITE_TYPE filterTypeValue;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -50,6 +54,7 @@ public class ListInviteActivity extends Activity {
 		filter = adapter.getFilter();
 		spFilterPlayer = (Spinner)findViewById(R.id.sp_filter_player);
 		llFilterPlayer = (LinearLayout)findViewById(R.id.ll_filter_player);
+		spFilterType = (Spinner)findViewById(R.id.sp_filter_type);
 		
 		list = (ListView)findViewById(R.id.list);
 		list.setOnItemClickListener(new OnItemClickListInvite(this));
@@ -59,6 +64,7 @@ public class ListInviteActivity extends Activity {
 		business.onCreate();
 		
 		initializePlayerList();
+		initializeTypeList();
 	}
 
 	@Override
@@ -109,7 +115,8 @@ public class ListInviteActivity extends Activity {
 					} else {
 						filterPlayerValue = null;
 					}
-					filter.filter(filterPlayerValue);
+
+					filter();
 				}
 			}
 
@@ -117,5 +124,50 @@ public class ListInviteActivity extends Activity {
 			public void onNothingSelected(AdapterView<?> arg0) {
 			}
 		});
+	}
+
+	private void initializeTypeList() {
+		String[] listTypeName = new String[]{"", INVITE_TYPE.ENTRAINEMENT.toString(), INVITE_TYPE.MATCH.toString()};
+		ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, listTypeName);
+		dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+		spFilterType.setAdapter(dataAdapter);
+		spFilterType.setOnItemSelectedListener(new OnItemSelectedListener() {
+
+			@Override
+			public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+				if (filter!=null) {
+					switch(position) {
+						case 0:
+						default:
+							filterTypeValue = null;
+							break;
+						case 1:
+							filterTypeValue = INVITE_TYPE.ENTRAINEMENT;
+							break;
+						case 2:
+							filterTypeValue = INVITE_TYPE.MATCH;
+							break;
+					}
+
+					filter();
+				}
+			}
+
+			@Override
+			public void onNothingSelected(AdapterView<?> arg0) {
+			}
+		});
+	}
+	
+	private void filter() {
+		String filterValue = "";
+		if (filterPlayerValue != null) {
+			filterValue += filterPlayerValue;
+		}
+		filterValue += ";";
+		if (filterTypeValue != null) {
+			filterValue += filterTypeValue.toString();
+		}
+		filter.filter(";".equals(filterValue) ? null : filterValue);
 	}
 }
