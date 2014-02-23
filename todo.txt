@@ -22,6 +22,13 @@ Saisie de Message
 
 ********************* DONE *****************************
 
+Ecran Accueil
+[20140223] - Ajout la possibilité de partager l'application
+[20140216] - Ajout Menu Statistique
+[20140214] - Clean le menu overflow
+[20140109] - Ajouter un menu pour sauvegarder la base 
+[20140109] - Ajouter un menu pour restorer la base 
+
 Invite
 [20140223] - Recréé l'évenement calendar de l'Invite quelque soit la donnée modifiée
 [20140221] - Fix - NPE lors du changement du Player
@@ -80,12 +87,6 @@ List Player
 [20140222] - Empèche la suppression d'un joueur si il a au moins une invite
 [20140216] - Sort Player List
 [20140212] - Ajout d'un bouton Close
-
-Ecran Accueil
-[20140216] - Ajout Menu Statistique
-[20140214] - Clean le menu overflow
-[20140109] - Ajouter un menu pour sauvegarder la base 
-[20140109] - Ajouter un menu pour restorer la base 
 
 Ecran Utilisateur
 [20140214] - Integration de la gestion du Message dans l'écran User

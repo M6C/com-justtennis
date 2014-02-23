@@ -1,16 +1,22 @@
 package com.justtennis.activity;
 
+import java.io.File;
+import java.io.IOException;
+import java.util.List;
+
 import org.gdocument.gtracergps.launcher.log.Logger;
 
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.View;
 
 import com.cameleon.common.android.factory.FactoryDialog;
 import com.cameleon.common.android.inotifier.INotifierMessage;
+import com.cameleon.common.tool.ApkTool;
 import com.justtennis.R;
 import com.justtennis.activity.ListPlayerActivity.MODE;
 import com.justtennis.business.MainBusiness;
@@ -130,15 +136,31 @@ public class MainActivity extends Activity implements INotifierMessage {
 		Intent intent = new Intent(getApplicationContext(), ListInviteActivity.class);
 		startActivity(intent);
 	}
-	
+
 	public void onClickListStatistic(View view) {
 		Intent intent = new Intent(getApplicationContext(), PieChartActivity.class);
 		startActivity(intent);
 	}
-	
+
 	public void onClickRotating(View view) {
 		Intent intent = new Intent(getApplicationContext(), RotatingButtons.class);
 		startActivity(intent);
+	}
+
+	public void onClickSendApk(View view) {
+		try {
+			List<File> listFile = ApkTool.getInstance(getApplicationContext()).backup(getPackageName(), getPackageName());
+			if (listFile!=null && listFile.size()>0) {
+				File file = listFile.get(0);
+		        Intent intent = new Intent();
+		        intent.setAction(Intent.ACTION_SEND);
+		        intent.setType("application/octet-stream");
+				intent.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(file));
+		        startActivity(intent);
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 	
 	public void onClickDBBackup(View view) {
