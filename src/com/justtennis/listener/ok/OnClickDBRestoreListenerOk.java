@@ -10,6 +10,7 @@ import com.justtennis.db.sqlite.helper.DBInviteHelper;
 import com.justtennis.db.sqlite.helper.DBMessageHelper;
 import com.justtennis.db.sqlite.helper.DBPlayerHelper;
 import com.justtennis.db.sqlite.helper.DBRankingHelper;
+import com.justtennis.db.sqlite.helper.DBScoreSetHelper;
 import com.justtennis.db.sqlite.helper.DBUserHelper;
 import com.justtennis.db.sqlite.helper.GenericDBHelper;
 import com.justtennis.notifier.NotifierMessageLogger;
@@ -30,6 +31,7 @@ public class OnClickDBRestoreListenerOk implements OnClickListener {
 					new DBMessageHelper(context, notifier),
 					new DBPlayerHelper(context, notifier),
 					new DBRankingHelper(context, notifier),
+					new DBScoreSetHelper(context, notifier),
 					new DBUserHelper(context, notifier)
 			};
 			

@@ -23,6 +23,7 @@ Saisie de Message
 ********************* DONE *****************************
 
 Ecran Accueil
+[20140226] - Backup & Restore. Ajout des DBHelper manquant
 [20140225] - Partage l'application sans faire de copie sur la sd
 [20140223] - Ajout la possibilité de partager l'application
 [20140216] - Ajout Menu Statistique
