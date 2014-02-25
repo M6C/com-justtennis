@@ -1,27 +1,23 @@
 package com.justtennis.activity;
 
-import java.io.File;
-import java.io.IOException;
-
 import org.gdocument.gtracergps.launcher.log.Logger;
 
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.View;
 
 import com.cameleon.common.android.factory.FactoryDialog;
 import com.cameleon.common.android.inotifier.INotifierMessage;
-import com.cameleon.common.tool.ApkTool;
 import com.justtennis.R;
 import com.justtennis.activity.ListPlayerActivity.MODE;
 import com.justtennis.business.MainBusiness;
 import com.justtennis.listener.ok.OnClickDBBackupListenerOk;
 import com.justtennis.listener.ok.OnClickDBRestoreListenerOk;
 import com.justtennis.listener.ok.OnClickExitListenerOk;
+import com.justtennis.listener.ok.OnClickSendApkListenerOk;
 
 public class MainActivity extends Activity implements INotifierMessage {
 
@@ -147,18 +143,10 @@ public class MainActivity extends Activity implements INotifierMessage {
 	}
 
 	public void onClickSendApk(View view) {
-		try {
-			String sourceDir = ApkTool.getInstance(getApplicationContext()).querySourceDir(getPackageName());
-			if (sourceDir != null) {
-				Intent intent = new Intent();
-				intent.setAction(Intent.ACTION_SEND);
-				intent.setType("application/octet-stream");
-				intent.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(new File(sourceDir)));
-				startActivity(intent);
-			}
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+		OnClickSendApkListenerOk listener = new OnClickSendApkListenerOk(this);
+		FactoryDialog.getInstance()
+			.buildOkCancelDialog(business.getContext(), listener, R.string.dialog_send_apk_title, R.string.dialog_send_apk_message)
+			.show();
 	}
 	
 	public void onClickDBBackup(View view) {
