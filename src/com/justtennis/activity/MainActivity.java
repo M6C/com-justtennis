@@ -2,7 +2,6 @@ package com.justtennis.activity;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.List;
 
 import org.gdocument.gtracergps.launcher.log.Logger;
 
@@ -149,14 +148,13 @@ public class MainActivity extends Activity implements INotifierMessage {
 
 	public void onClickSendApk(View view) {
 		try {
-			List<File> listFile = ApkTool.getInstance(getApplicationContext()).backup(getPackageName(), getPackageName());
-			if (listFile!=null && listFile.size()>0) {
-				File file = listFile.get(0);
-		        Intent intent = new Intent();
-		        intent.setAction(Intent.ACTION_SEND);
-		        intent.setType("application/octet-stream");
-				intent.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(file));
-		        startActivity(intent);
+			String sourceDir = ApkTool.getInstance(getApplicationContext()).querySourceDir(getPackageName());
+			if (sourceDir != null) {
+				Intent intent = new Intent();
+				intent.setAction(Intent.ACTION_SEND);
+				intent.setType("application/octet-stream");
+				intent.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(new File(sourceDir)));
+				startActivity(intent);
 			}
 		} catch (IOException e) {
 			e.printStackTrace();

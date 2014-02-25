@@ -23,6 +23,7 @@ Saisie de Message
 ********************* DONE *****************************
 
 Ecran Accueil
+[20140225] - Partage l'application sans faire de copie sur la sd
 [20140223] - Ajout la possibilité de partager l'application
 [20140216] - Ajout Menu Statistique
 [20140214] - Clean le menu overflow
