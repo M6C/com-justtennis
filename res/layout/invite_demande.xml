@@ -20,7 +20,7 @@
 	    android:gravity="top"
 	>
 		<include layout="@layout/element_invite_player"/>
-    	<include layout="@layout/element_invite_date"/>
+		<include layout="@layout/element_invite_date"/>
     </LinearLayout>
 
 	<include layout="@layout/element_invite_button_demande"/>

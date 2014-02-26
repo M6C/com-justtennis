@@ -22,17 +22,8 @@ Saisie de Message
 
 ********************* DONE *****************************
 
-Ecran Accueil
-[20140226] - Ajout d'une confirmation pour le partage de l'application
-[20140226] - Backup & Restore. Ajout des DBHelper manquant
-[20140225] - Partage l'application sans faire de copie sur la sd
-[20140223] - Ajout la possibilité de partager l'application
-[20140216] - Ajout Menu Statistique
-[20140214] - Clean le menu overflow
-[20140109] - Ajouter un menu pour sauvegarder la base 
-[20140109] - Ajouter un menu pour restorer la base 
-
 Invite
+[20140226] - Utilisation d'un switch pour le type d'invite
 [20140223] - Recréé l'évenement calendar de l'Invite quelque soit la donnée modifiée
 [20140221] - Fix - NPE lors du changement du Player
 [20140220] - Fix - UnkownPlayer sans classement
@@ -54,10 +45,21 @@ Invite
 [20131221] - Gerer l'affichage du type d'invite dans la liste
 
 Invite Demande
+[20140226] - Utilisation d'un switch pour le type d'invite
 [20140223] - Ne créé pas d'évenement calendar pour les Invites passées
 [20140222] - Possibilité de créé un nouveau Player si on a selectionné "Unknow Player"
 [20140222] - Possibilité de saisir le classement
 [20140211] - Creation d'une nouvelle activity pour faire seulement des invites
+
+Ecran Accueil
+[20140226] - Ajout d'une confirmation pour le partage de l'application
+[20140226] - Backup & Restore. Ajout des DBHelper manquant
+[20140225] - Partage l'application sans faire de copie sur la sd
+[20140223] - Ajout la possibilité de partager l'application
+[20140216] - Ajout Menu Statistique
+[20140214] - Clean le menu overflow
+[20140109] - Ajouter un menu pour sauvegarder la base 
+[20140109] - Ajouter un menu pour restorer la base 
 
 Statistique
 [20140223] - Ne prend en compte que les matchs passés

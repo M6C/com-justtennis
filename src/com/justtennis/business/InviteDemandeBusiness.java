@@ -85,9 +85,20 @@ public class InviteDemandeBusiness {
 				invite.setPlayer(playerService.find(id));
 				if (isUnknownPlayer()) {
 					setIdRanking(getListRanking().get(0).getId());
+					setType(INVITE_TYPE.MATCH);
 				} else {
 					setIdRanking(getPlayer().getIdRanking());
+					switch (getPlayer().getType()) {
+						default:
+						case ENTRAINEMENT:
+							setType(INVITE_TYPE.ENTRAINEMENT);
+							break;
+						case MATCH:
+							setType(INVITE_TYPE.MATCH);
+							break;
+					}
 				}
+				
 			}
 		}
 

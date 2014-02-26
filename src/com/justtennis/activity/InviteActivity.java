@@ -16,11 +16,14 @@ import android.view.View.OnFocusChangeListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
+import android.widget.CompoundButton;
+import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
+import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.TimePicker;
 
@@ -36,8 +39,8 @@ import com.justtennis.db.service.PlayerService;
 import com.justtennis.domain.Invite;
 import com.justtennis.domain.Invite.INVITE_TYPE;
 import com.justtennis.domain.Invite.STATUS;
-import com.justtennis.domain.Player.PLAYER_TYPE;
 import com.justtennis.domain.Player;
+import com.justtennis.domain.Player.PLAYER_TYPE;
 import com.justtennis.domain.Ranking;
 import com.justtennis.listener.action.TextWatcherFieldScoreSetBold;
 import com.justtennis.manager.ContactManager;
@@ -70,11 +73,12 @@ public class InviteActivity extends Activity {
 	private TextView edTime;
 	private ImageView ivPhoto;
 	private Spinner spStatus;
-	private Spinner spType;
+//	private Spinner spType;
+//	private BaseViewAdapter adapterType;
+	private Switch swType;
 	private Spinner spRanking;
 	private Bundle savedInstanceState;
 	private BaseImageAdapter adapterStatus;
-	private BaseViewAdapter adapterType;
 	
 	// SCORE
 	private EditText etScore11;
@@ -104,7 +108,8 @@ public class InviteActivity extends Activity {
 		edTime = ((TextView)findViewById(R.id.inviteTime));
 		ivPhoto = (ImageView)findViewById(R.id.iv_photo);
 		spStatus = (Spinner)findViewById(R.id.sp_main_status);
-		spType = (Spinner)findViewById(R.id.sp_main_type);
+//		spType = (Spinner)findViewById(R.id.sp_main_type);
+		swType = (Switch)findViewById(R.id.sw_type);
 		spRanking = (Spinner)findViewById(R.id.sp_main_ranking);
 
 		etScore11 = ((EditText)findViewById(R.id.et_score1_1));
@@ -289,29 +294,16 @@ public class InviteActivity extends Activity {
 	}
 
 	private void initializeListType() {
-		adapterType = new BaseViewAdapter(this, drawableType);
-		adapterType.setViewBinder(new BaseViewAdapter.ViewBinder() {
-			
-			@Override
-			public boolean setViewValue(int position, View view) {
-				view.setTag(getType(position));
-				return true;
-			}
-		});
-		spType.setAdapter(adapterType);
-
-		spType.setOnItemSelectedListener(new OnItemSelectedListener() {
-			@Override
-			public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-				if (view != null) {
-					business.setType((INVITE_TYPE) view.getTag());
-				}
-			}
-
-			@Override
-			public void onNothingSelected(AdapterView<?> arg0) {
-			}
-		});
+//		adapterType = new BaseViewAdapter(this, drawableType);
+//		adapterType.setViewBinder(new BaseViewAdapter.ViewBinder() {
+//			
+//			@Override
+//			public boolean setViewValue(int position, View view) {
+//				view.setTag(getType(position));
+//				return true;
+//			}
+//		});
+//		spType.setAdapter(adapterType);
 	}
 
 	private void initializeDataPlayer() {
@@ -339,7 +331,8 @@ public class InviteActivity extends Activity {
 	}
 
 	private void initializeDataType() {
-		spType.setSelection(getTypePosition());
+//		spType.setSelection(getTypePosition());
+		swType.setChecked(getTypePosition()==0);
 	}
 
 	private void initializeRankingList() {
@@ -452,6 +445,25 @@ public class InviteActivity extends Activity {
 				}
 			}
 		});
+//		spType.setOnItemSelectedListener(new OnItemSelectedListener() {
+//		@Override
+//		public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+//			if (view != null) {
+//				business.setType((INVITE_TYPE) view.getTag());
+//			}
+//		}
+//
+//		@Override
+//		public void onNothingSelected(AdapterView<?> arg0) {
+//		}
+//	});
+	swType.setOnCheckedChangeListener(new OnCheckedChangeListener() {
+		
+		@Override
+		public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+			business.setType(isChecked ? INVITE_TYPE.ENTRAINEMENT : INVITE_TYPE.MATCH);
+		}
+	});
 	}
 
 	private void saveScores() {

@@ -16,12 +16,15 @@ import android.view.View;
 import android.view.View.OnFocusChangeListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
+import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.ArrayAdapter;
+import android.widget.CompoundButton;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
+import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.TimePicker;
 
@@ -64,9 +67,10 @@ public class InviteDemandeActivity extends Activity {
 	private TextView edDate;
 	private TextView edTime;
 	private ImageView ivPhoto;
-	private Spinner spType;
+//	private Spinner spType;
+//	private BaseViewAdapter adapterType;
+	private Switch swType;
 	private Bundle savedInstanceState;
-	private BaseViewAdapter adapterType;
 	private Spinner spStatus;
 	private Spinner spRanking;
 	private TextView tvRanking;
@@ -89,7 +93,8 @@ public class InviteDemandeActivity extends Activity {
 		edDate = ((TextView)findViewById(R.id.inviteDate));
 		edTime = ((TextView)findViewById(R.id.inviteTime));
 		ivPhoto = (ImageView)findViewById(R.id.iv_photo);
-		spType = (Spinner)findViewById(R.id.sp_main_type);
+//		spType = (Spinner)findViewById(R.id.sp_main_type);
+		swType = (Switch)findViewById(R.id.sw_type);
 		spStatus = (Spinner)findViewById(R.id.sp_status);
 		spRanking = (Spinner)findViewById(R.id.sp_ranking);
 		tvStatus = (TextView)findViewById(R.id.tv_status);
@@ -282,27 +287,34 @@ public class InviteDemandeActivity extends Activity {
 	}
 
 	private void initializeListType() {
-		adapterType = new BaseViewAdapter(this, drawableType);
-		adapterType.setViewBinder(new BaseViewAdapter.ViewBinder() {
+//		adapterType = new BaseViewAdapter(this, drawableType);
+//		adapterType.setViewBinder(new BaseViewAdapter.ViewBinder() {
+//			
+//			@Override
+//			public boolean setViewValue(int position, View view) {
+//				view.setTag(getType(position));
+//				return true;
+//			}
+//		});
+//		spType.setAdapter(adapterType);
+//
+//		spType.setOnItemSelectedListener(new OnItemSelectedListener() {
+//			@Override
+//			public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+//				if (view != null) {
+//					business.setType((INVITE_TYPE) view.getTag());
+//				}
+//			}
+//
+//			@Override
+//			public void onNothingSelected(AdapterView<?> arg0) {
+//			}
+//		});
+		swType.setOnCheckedChangeListener(new OnCheckedChangeListener() {
 			
 			@Override
-			public boolean setViewValue(int position, View view) {
-				view.setTag(getType(position));
-				return true;
-			}
-		});
-		spType.setAdapter(adapterType);
-
-		spType.setOnItemSelectedListener(new OnItemSelectedListener() {
-			@Override
-			public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-				if (view != null) {
-					business.setType((INVITE_TYPE) view.getTag());
-				}
-			}
-
-			@Override
-			public void onNothingSelected(AdapterView<?> arg0) {
+			public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+				business.setType(isChecked ? INVITE_TYPE.ENTRAINEMENT : INVITE_TYPE.MATCH);
 			}
 		});
 	}
@@ -377,16 +389,17 @@ public class InviteDemandeActivity extends Activity {
 	}
 
 	private void initializeDataType() {
-		switch(business.getPlayer().getType()) {
-			default:
-			case ENTRAINEMENT:
-				business.setType(INVITE_TYPE.ENTRAINEMENT);
-				break;
-			case MATCH:
-				business.setType(INVITE_TYPE.MATCH);
-				break;
-		}
-		spType.setSelection(getTypePosition());
+//		switch(business.getPlayer().getType()) {
+//			default:
+//			case ENTRAINEMENT:
+//				business.setType(INVITE_TYPE.ENTRAINEMENT);
+//				break;
+//			case MATCH:
+//				business.setType(INVITE_TYPE.MATCH);
+//				break;
+//		}
+//		spType.setSelection(getTypePosition());
+		swType.setChecked(getTypePosition()==0);
 	}
 
 	private void initializeDataMode() {
