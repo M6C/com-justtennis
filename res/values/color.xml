@@ -16,4 +16,6 @@
     <color name="button_text_color">@color/blanc_transparent_5</color>
     <color name="label_text_color">@color/gris_1</color>
 
+    <color name="drw_arrow">@color/gris_1</color>
+    <color name="separator_collapser">@color/bleu_transparent_5</color>
 </resources>

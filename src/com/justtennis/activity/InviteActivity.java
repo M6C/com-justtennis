@@ -27,18 +27,13 @@ import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.TimePicker;
 
-import com.cameleon.common.android.adapter.BaseImageAdapter;
-import com.cameleon.common.android.adapter.BaseImageAdapter.ViewBinder;
-import com.cameleon.common.android.adapter.BaseViewAdapter;
 import com.cameleon.common.android.factory.FactoryDialog;
 import com.cameleon.common.android.factory.listener.OnClickViewListener;
 import com.justtennis.ApplicationConfig;
 import com.justtennis.R;
 import com.justtennis.business.InviteBusiness;
 import com.justtennis.db.service.PlayerService;
-import com.justtennis.domain.Invite;
 import com.justtennis.domain.Invite.INVITE_TYPE;
-import com.justtennis.domain.Invite.STATUS;
 import com.justtennis.domain.Player;
 import com.justtennis.domain.Player.PLAYER_TYPE;
 import com.justtennis.domain.Ranking;
@@ -59,26 +54,22 @@ public class InviteActivity extends Activity {
 	public static final String EXTRA_PLAYER_ID = "PLAYER_ID";
 	private static final int RESULT_PLAYER = 1;
 
-	private final Integer[] drawableStatus = new Integer[] {R.drawable.check_green, R.drawable.check_red, R.drawable.check_yellow};
-//	private final Integer[] drawableType = new Integer[] {R.drawable.check_green, R.drawable.check_red, R.drawable.check_yellow};
-	private final Integer[] drawableType = new Integer[] {R.layout.element_invite_type_entrainement, R.layout.element_invite_type_match};
-
 	private InviteBusiness business;
 	private Long idPlayerForResult = null;
+	private int visibilityAddressContent = View.GONE;
+	private int visibilityScoreContent = View.GONE;
 
 	private LinearLayout llInviteModify;
+	private LinearLayout llAddressContent;
+	private LinearLayout llScoreContent;
 	private TextView tvFirstname;
 	private TextView tvLastname;
 	private TextView edDate;
 	private TextView edTime;
 	private ImageView ivPhoto;
-	private Spinner spStatus;
-//	private Spinner spType;
-//	private BaseViewAdapter adapterType;
 	private Switch swType;
 	private Spinner spRanking;
 	private Bundle savedInstanceState;
-	private BaseImageAdapter adapterStatus;
 	
 	// SCORE
 	private EditText etScore11;
@@ -107,10 +98,11 @@ public class InviteActivity extends Activity {
 		edDate = ((TextView)findViewById(R.id.inviteDate));
 		edTime = ((TextView)findViewById(R.id.inviteTime));
 		ivPhoto = (ImageView)findViewById(R.id.iv_photo);
-		spStatus = (Spinner)findViewById(R.id.sp_main_status);
-//		spType = (Spinner)findViewById(R.id.sp_main_type);
 		swType = (Switch)findViewById(R.id.sw_type);
 		spRanking = (Spinner)findViewById(R.id.sp_main_ranking);
+
+		llAddressContent = (LinearLayout)findViewById(R.id.ll_address_content);
+		llScoreContent = (LinearLayout)findViewById(R.id.ll_score_content);
 
 		etScore11 = ((EditText)findViewById(R.id.et_score1_1));
 		etScore21 = ((EditText)findViewById(R.id.et_score2_1));
@@ -135,9 +127,6 @@ public class InviteActivity extends Activity {
 		etScore25.addTextChangedListener(new TextWatcherFieldScoreSetBold(etScore25, etScore15));
 
 		business = new InviteBusiness(this, NotifierMessageLogger.getInstance());
-
-		initializeListStatus();
-		initializeListType();
 	}
 
 	@Override
@@ -145,6 +134,10 @@ public class InviteActivity extends Activity {
 		super.onResume();
 		initializeData();
 		initializeListener();
+		llAddressContent.setVisibility(visibilityAddressContent);
+
+		visibilityScoreContent = (business.getScores() != null && business.getScores().length>0 ? View.VISIBLE : View.GONE);
+		llScoreContent.setVisibility(visibilityScoreContent);
 	}
 
 	@Override
@@ -226,7 +219,7 @@ public class InviteActivity extends Activity {
 	public void onClickCancel(View view) {
 		finish();
 	}
-	
+
 	public void onClickPlayer(View view) {
 		Intent intent = new Intent(this, ListPlayerActivity.class);
 		intent.putExtra(ListPlayerActivity.EXTRA_MODE, ListPlayerActivity.MODE.FOR_RESULT);
@@ -242,6 +235,16 @@ public class InviteActivity extends Activity {
 		intent.putExtra(PlayerActivity.EXTRA_TYPE, playerType);
 		intent.putExtra(PlayerActivity.EXTRA_RANKING, business.getIdRanking());
 		startActivityForResult(intent, RESULT_PLAYER);
+	}
+
+	public void onClickAddressCollapser(View view) {
+		visibilityAddressContent = (visibilityAddressContent == View.GONE) ? View.VISIBLE : View.GONE;
+		llAddressContent.setVisibility(visibilityAddressContent);
+	}
+
+	public void onClickScoreCollapser(View view) {
+		visibilityScoreContent = (visibilityScoreContent == View.GONE) ? View.VISIBLE : View.GONE;
+		llScoreContent.setVisibility(visibilityScoreContent);
 	}
 
 	private void initializeData() {
@@ -261,49 +264,11 @@ public class InviteActivity extends Activity {
 
 		initializeDataMode();
 		initializeDataType();
-		initializeDataStatus();
 		initializeDataDateTime();
 		initializeDataPlayer();
 		initializeDataScore();
 		initializeRankingList();
 		initializeRanking();
-	}
-
-	private void initializeListStatus() {
-		adapterStatus = new BaseImageAdapter(this, R.layout.list_status_row, R.id.iv_row_status, drawableStatus);
-		adapterStatus.setViewBinder(new ViewBinder() {
-			
-			@Override
-			public boolean setViewValue(int position, View view) {
-				view.setTag(drawableStatus[position]);
-				return true;
-			}
-		});
-		spStatus.setAdapter(adapterStatus);
-
-		spStatus.setOnItemSelectedListener(new OnItemSelectedListener() {
-			@Override
-			public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-				business.setStatus(getStatus(position));
-			}
-
-			@Override
-			public void onNothingSelected(AdapterView<?> arg0) {
-			}
-		});
-	}
-
-	private void initializeListType() {
-//		adapterType = new BaseViewAdapter(this, drawableType);
-//		adapterType.setViewBinder(new BaseViewAdapter.ViewBinder() {
-//			
-//			@Override
-//			public boolean setViewValue(int position, View view) {
-//				view.setTag(getType(position));
-//				return true;
-//			}
-//		});
-//		spType.setAdapter(adapterType);
 	}
 
 	private void initializeDataPlayer() {
@@ -326,12 +291,7 @@ public class InviteActivity extends Activity {
 		edTime.setText(sdfT.format(date));
 	}
 
-	private void initializeDataStatus() {
-		spStatus.setSelection(getStatusPosition());
-	}
-
 	private void initializeDataType() {
-//		spType.setSelection(getTypePosition());
 		swType.setChecked(getTypePosition()==0);
 	}
 
@@ -445,25 +405,13 @@ public class InviteActivity extends Activity {
 				}
 			}
 		});
-//		spType.setOnItemSelectedListener(new OnItemSelectedListener() {
-//		@Override
-//		public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-//			if (view != null) {
-//				business.setType((INVITE_TYPE) view.getTag());
-//			}
-//		}
-//
-//		@Override
-//		public void onNothingSelected(AdapterView<?> arg0) {
-//		}
-//	});
-	swType.setOnCheckedChangeListener(new OnCheckedChangeListener() {
-		
-		@Override
-		public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-			business.setType(isChecked ? INVITE_TYPE.ENTRAINEMENT : INVITE_TYPE.MATCH);
-		}
-	});
+		swType.setOnCheckedChangeListener(new OnCheckedChangeListener() {
+			
+			@Override
+			public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+				business.setType(isChecked ? INVITE_TYPE.ENTRAINEMENT : INVITE_TYPE.MATCH);
+			}
+		});
 	}
 
 	private void saveScores() {
@@ -476,28 +424,6 @@ public class InviteActivity extends Activity {
 			};
 		business.setScores(scores);
 	}
-
-	private int getStatusPosition() {
-		switch(business.getInvite().getStatus()) {
-			case ACCEPT:
-				return 0;
-			case REFUSE:
-				return 1;
-			default:
-				return 2;
-		}
-	}
-
-	private STATUS getStatus(Integer position) {
-		switch(position) {
-			case 0:
-				return STATUS.ACCEPT;
-			case 1:
-				return STATUS.REFUSE;
-			default:
-				return STATUS.UNKNOW;
-		}
-	}
 	
 	private int getTypePosition() {
 		switch(business.getInvite().getType()) {
@@ -506,16 +432,6 @@ public class InviteActivity extends Activity {
 			case MATCH:
 			default:
 				return 1;
-		}
-	}
-
-	private INVITE_TYPE getType(Integer position) {
-		switch(position) {
-			case 0:
-				return Invite.INVITE_TYPE.ENTRAINEMENT;
-			case 1:
-			default:
-				return Invite.INVITE_TYPE.MATCH;
 		}
 	}
 }

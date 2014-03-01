@@ -183,8 +183,6 @@ public class InviteBusiness {
 		if (inv != null && inv.getIdCalendar() != null && 
 			inv.getIdCalendar() != GCalendarHelper.EVENT_ID_NO_CREATED) {
 			EVENT_STATUS status = gCalendarHelper.toEventStatus(invite.getStatus());
-//			gCalendarHelper.updateEventStatus(invite.getIdCalendar(), status);
-//			gCalendarHelper.recreateEventStatus(invite.getIdCalendar(), status);
 			calendarAddEvent(invite, status);
 			gCalendarHelper.deleteCalendarEntry(inv.getIdCalendar());
 		}
@@ -238,10 +236,6 @@ public class InviteBusiness {
 
 	public void setType(INVITE_TYPE type) {
 		invite.setType(type);
-	}
-
-	public void setStatus(STATUS status) {
-		invite.setStatus(status);
 	}
 
 	public Player getPlayer() {

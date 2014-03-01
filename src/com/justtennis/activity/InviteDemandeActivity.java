@@ -16,9 +16,9 @@ import android.view.View;
 import android.view.View.OnFocusChangeListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
-import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.ArrayAdapter;
 import android.widget.CompoundButton;
+import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -28,15 +28,14 @@ import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.TimePicker;
 
-import com.cameleon.common.android.adapter.BaseViewAdapter;
 import com.cameleon.common.android.factory.FactoryDialog;
 import com.cameleon.common.android.factory.listener.OnClickViewListener;
 import com.justtennis.ApplicationConfig;
 import com.justtennis.R;
 import com.justtennis.business.InviteDemandeBusiness;
 import com.justtennis.db.service.PlayerService;
-import com.justtennis.domain.Invite;
 import com.justtennis.domain.Invite.INVITE_TYPE;
+import com.justtennis.domain.Invite.STATUS;
 import com.justtennis.domain.Player;
 import com.justtennis.domain.Ranking;
 import com.justtennis.manager.ContactManager;
@@ -56,8 +55,6 @@ public class InviteDemandeActivity extends Activity {
 	public static final String EXTRA_PLAYER_ID = "PLAYER_ID";
 	private static final int RESULT_PLAYER = 1;
 
-	private final Integer[] drawableType = new Integer[] {R.layout.element_invite_type_entrainement, R.layout.element_invite_type_match};
-
 	private InviteDemandeBusiness business;
 
 	private LinearLayout llInviteDemande;
@@ -67,8 +64,6 @@ public class InviteDemandeActivity extends Activity {
 	private TextView edDate;
 	private TextView edTime;
 	private ImageView ivPhoto;
-//	private Spinner spType;
-//	private BaseViewAdapter adapterType;
 	private Switch swType;
 	private Bundle savedInstanceState;
 	private Spinner spStatus;
@@ -93,7 +88,6 @@ public class InviteDemandeActivity extends Activity {
 		edDate = ((TextView)findViewById(R.id.inviteDate));
 		edTime = ((TextView)findViewById(R.id.inviteTime));
 		ivPhoto = (ImageView)findViewById(R.id.iv_photo);
-//		spType = (Spinner)findViewById(R.id.sp_main_type);
 		swType = (Switch)findViewById(R.id.sw_type);
 		spStatus = (Spinner)findViewById(R.id.sp_status);
 		spRanking = (Spinner)findViewById(R.id.sp_ranking);
@@ -151,6 +145,7 @@ public class InviteDemandeActivity extends Activity {
 	public void onClickOk(View view) {
 		final boolean addCalendar = Calendar.getInstance().getTime().before(business.getDate());
 		if (business.isUnknownPlayer()) {
+			business.setStatus(STATUS.ACCEPT);
 			business.send(null, addCalendar);
 
 			Intent intent = new Intent(InviteDemandeActivity.this, ListInviteActivity.class);
@@ -166,6 +161,7 @@ public class InviteDemandeActivity extends Activity {
 					@Override
 					public void onClick(DialogInterface dialog, View view, int which) {
 						TextView textView = (TextView)view;
+						business.setStatus(STATUS.ACCEPT);
 						business.send(textView.getText().toString(), addCalendar);
 		
 						dialog.dismiss();
@@ -287,29 +283,6 @@ public class InviteDemandeActivity extends Activity {
 	}
 
 	private void initializeListType() {
-//		adapterType = new BaseViewAdapter(this, drawableType);
-//		adapterType.setViewBinder(new BaseViewAdapter.ViewBinder() {
-//			
-//			@Override
-//			public boolean setViewValue(int position, View view) {
-//				view.setTag(getType(position));
-//				return true;
-//			}
-//		});
-//		spType.setAdapter(adapterType);
-//
-//		spType.setOnItemSelectedListener(new OnItemSelectedListener() {
-//			@Override
-//			public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-//				if (view != null) {
-//					business.setType((INVITE_TYPE) view.getTag());
-//				}
-//			}
-//
-//			@Override
-//			public void onNothingSelected(AdapterView<?> arg0) {
-//			}
-//		});
 		swType.setOnCheckedChangeListener(new OnCheckedChangeListener() {
 			
 			@Override
@@ -363,22 +336,6 @@ public class InviteDemandeActivity extends Activity {
 		}
 	}
 
-	private void initializeRankingText() {
-		Player player = business.getPlayer();
-		if (business.isUnknownPlayer()) {
-			List<Ranking> listRanking = business.getListRanking();
-			tvRanking.setText(getString(R.string.txt_ranking_value, listRanking.get(0).getRanking()));
-		} else {
-			Long idRanking = player.getIdRanking();
-			List<Ranking> listRanking = business.getListRanking();
-			for(Ranking ranking : listRanking) {
-				if (ranking.getId().equals(idRanking)) {
-					tvRanking.setText(getString(R.string.txt_ranking_value, ranking.getRanking()));
-				}
-			}
-		}
-	}
-
 	private void initializeDataDateTime() {
 		Date date = business.getDate();
 
@@ -389,16 +346,6 @@ public class InviteDemandeActivity extends Activity {
 	}
 
 	private void initializeDataType() {
-//		switch(business.getPlayer().getType()) {
-//			default:
-//			case ENTRAINEMENT:
-//				business.setType(INVITE_TYPE.ENTRAINEMENT);
-//				break;
-//			case MATCH:
-//				business.setType(INVITE_TYPE.MATCH);
-//				break;
-//		}
-//		spType.setSelection(getTypePosition());
 		swType.setChecked(getTypePosition()==0);
 	}
 
@@ -456,16 +403,6 @@ public class InviteDemandeActivity extends Activity {
 			case MATCH:
 			default:
 				return 1;
-		}
-	}
-
-	private INVITE_TYPE getType(Integer position) {
-		switch(position) {
-			case 0:
-				return Invite.INVITE_TYPE.ENTRAINEMENT;
-			case 1:
-			default:
-				return Invite.INVITE_TYPE.MATCH;
 		}
 	}
 }

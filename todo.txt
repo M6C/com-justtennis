@@ -11,7 +11,7 @@ Ecran Player
  - Pouvoir importer une selection multiple de contacts google
 
 Invite
-[En Cours] - Revoir le design
+ - Saisir une adresse
 
 List Person
 
@@ -23,6 +23,8 @@ Saisie de Message
 ********************* DONE *****************************
 
 Invite
+[20140301] - Ajout des champs de saisie pour l'adresse
+[20140301] - Suppression de la saisie du status et clean de code
 [20140226] - Utilisation d'un switch pour le type d'invite
 [20140223] - Recréé l'évenement calendar de l'Invite quelque soit la donnée modifiée
 [20140221] - Fix - NPE lors du changement du Player

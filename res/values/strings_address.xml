@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="hint_address_line_1">Address line</string>
+    <string name="hint_address_postal_code">CP</string>
+    <string name="hint_address_city">City</string>
+ 
+</resources>
