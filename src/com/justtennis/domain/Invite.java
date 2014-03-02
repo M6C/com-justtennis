@@ -34,6 +34,9 @@ public class Invite extends GenericDBPojo<Long> implements Serializable {
 	private Long idRanking;
 	private SCORE_RESULT scoreResult = SCORE_RESULT.UNFINISHED;
 	private List<ScoreSet> listScoreSet = null;
+	private Address address;
+	private Club club;
+	private Tournament tournament;
 
 	public Invite() {
 	}
@@ -128,5 +131,41 @@ public class Invite extends GenericDBPojo<Long> implements Serializable {
 
 	public void setListScoreSet(List<ScoreSet> listScoreSet) {
 		this.listScoreSet = listScoreSet;
+	}
+
+	public Address getAddress() {
+		return address;
+	}
+
+	public void setAddress(Address address) {
+		this.address = address;
+	}
+
+	public Club getClub() {
+		return club;
+	}
+
+	public void setClub(Club club) {
+		this.club = club;
+	}
+
+	public Tournament getTournament() {
+		return tournament;
+	}
+
+	public void setTournament(Tournament tournament) {
+		this.tournament = tournament;
+	}
+	
+	public Long getIdAddress() {
+		return address == null ? null : address.getId();
+	}
+
+	public Long getIdClub() {
+		return club == null ? null : club.getId();
+	}
+	
+	public Long getIdTournament() {
+		return tournament == null ? null : tournament.getId();
 	}
 }

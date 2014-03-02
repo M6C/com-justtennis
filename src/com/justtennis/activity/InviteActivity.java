@@ -33,10 +33,13 @@ import com.justtennis.ApplicationConfig;
 import com.justtennis.R;
 import com.justtennis.business.InviteBusiness;
 import com.justtennis.db.service.PlayerService;
+import com.justtennis.domain.Address;
+import com.justtennis.domain.Club;
 import com.justtennis.domain.Invite.INVITE_TYPE;
 import com.justtennis.domain.Player;
 import com.justtennis.domain.Player.PLAYER_TYPE;
 import com.justtennis.domain.Ranking;
+import com.justtennis.domain.Tournament;
 import com.justtennis.listener.action.TextWatcherFieldScoreSetBold;
 import com.justtennis.manager.ContactManager;
 import com.justtennis.notifier.NotifierMessageLogger;
@@ -57,10 +60,14 @@ public class InviteActivity extends Activity {
 	private InviteBusiness business;
 	private Long idPlayerForResult = null;
 	private int visibilityAddressContent = View.GONE;
+	private int visibilityClubContent = View.GONE;
+	private int visibilityTournamentContent = View.GONE;
 	private int visibilityScoreContent = View.GONE;
 
 	private LinearLayout llInviteModify;
 	private LinearLayout llAddressContent;
+	private LinearLayout llClubContent;
+	private LinearLayout llTournamentContent;
 	private LinearLayout llScoreContent;
 	private TextView tvFirstname;
 	private TextView tvLastname;
@@ -83,6 +90,12 @@ public class InviteActivity extends Activity {
 	private EditText etScore15;
 	private EditText etScore25;
 
+	// ADDRESS
+	private Spinner spAddress;
+	private EditText etAddressLine1;
+	private EditText etAddressPostalCode;
+	private EditText etAddressCity;
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -101,19 +114,16 @@ public class InviteActivity extends Activity {
 		swType = (Switch)findViewById(R.id.sw_type);
 		spRanking = (Spinner)findViewById(R.id.sp_main_ranking);
 
-		llAddressContent = (LinearLayout)findViewById(R.id.ll_address_content);
-		llScoreContent = (LinearLayout)findViewById(R.id.ll_score_content);
-
-		etScore11 = ((EditText)findViewById(R.id.et_score1_1));
-		etScore21 = ((EditText)findViewById(R.id.et_score2_1));
-		etScore12 = ((EditText)findViewById(R.id.et_score1_2));
-		etScore22 = ((EditText)findViewById(R.id.et_score2_2));
-		etScore13 = ((EditText)findViewById(R.id.et_score1_3));
-		etScore23 = ((EditText)findViewById(R.id.et_score2_3));
-		etScore14 = ((EditText)findViewById(R.id.et_score1_4));
-		etScore24 = ((EditText)findViewById(R.id.et_score2_4));
-		etScore15 = ((EditText)findViewById(R.id.et_score1_5));
-		etScore25 = ((EditText)findViewById(R.id.et_score2_5));
+		etScore11 = (EditText)findViewById(R.id.et_score1_1);
+		etScore21 = (EditText)findViewById(R.id.et_score2_1);
+		etScore12 = (EditText)findViewById(R.id.et_score1_2);
+		etScore22 = (EditText)findViewById(R.id.et_score2_2);
+		etScore13 = (EditText)findViewById(R.id.et_score1_3);
+		etScore23 = (EditText)findViewById(R.id.et_score2_3);
+		etScore14 = (EditText)findViewById(R.id.et_score1_4);
+		etScore24 = (EditText)findViewById(R.id.et_score2_4);
+		etScore15 = (EditText)findViewById(R.id.et_score1_5);
+		etScore25 = (EditText)findViewById(R.id.et_score2_5);
 
 		etScore11.addTextChangedListener(new TextWatcherFieldScoreSetBold(etScore11, etScore21));
 		etScore21.addTextChangedListener(new TextWatcherFieldScoreSetBold(etScore21, etScore11));
@@ -126,6 +136,16 @@ public class InviteActivity extends Activity {
 		etScore15.addTextChangedListener(new TextWatcherFieldScoreSetBold(etScore15, etScore25));
 		etScore25.addTextChangedListener(new TextWatcherFieldScoreSetBold(etScore25, etScore15));
 
+		spAddress = (Spinner)findViewById(R.id.sp_address_list);
+		llAddressContent = (LinearLayout)findViewById(R.id.ll_address_content);
+		etAddressLine1 = (EditText)findViewById(R.id.et_address_line_1);
+		etAddressPostalCode = (EditText)findViewById(R.id.et_address_postal_code);
+		etAddressCity = (EditText)findViewById(R.id.et_address_city);
+
+		llClubContent = (LinearLayout)findViewById(R.id.ll_club_content);
+		llTournamentContent = (LinearLayout)findViewById(R.id.ll_tournament_content);
+		llScoreContent = (LinearLayout)findViewById(R.id.ll_score_content);
+
 		business = new InviteBusiness(this, NotifierMessageLogger.getInstance());
 	}
 
@@ -135,6 +155,8 @@ public class InviteActivity extends Activity {
 		initializeData();
 		initializeListener();
 		llAddressContent.setVisibility(visibilityAddressContent);
+		llClubContent.setVisibility(visibilityClubContent);
+		llTournamentContent.setVisibility(visibilityTournamentContent);
 
 		visibilityScoreContent = (business.getScores() != null && business.getScores().length>0 ? View.VISIBLE : View.GONE);
 		llScoreContent.setVisibility(visibilityScoreContent);
@@ -172,6 +194,9 @@ public class InviteActivity extends Activity {
 
 	public void onClickModify(View view) {
 		saveScores();
+		saveAddress();
+		saveClub();
+		saveTournament();
 
 		business.modify();
 		
@@ -241,6 +266,16 @@ public class InviteActivity extends Activity {
 		visibilityAddressContent = (visibilityAddressContent == View.GONE) ? View.VISIBLE : View.GONE;
 		llAddressContent.setVisibility(visibilityAddressContent);
 	}
+	
+	public void onClickClubCollapser(View view) {
+		visibilityClubContent = (visibilityClubContent == View.GONE) ? View.VISIBLE : View.GONE;
+		llClubContent.setVisibility(visibilityClubContent);
+	}
+	
+	public void onClickTournamentCollapser(View view) {
+		visibilityTournamentContent = (visibilityTournamentContent == View.GONE) ? View.VISIBLE : View.GONE;
+		llTournamentContent.setVisibility(visibilityTournamentContent);
+	}
 
 	public void onClickScoreCollapser(View view) {
 		visibilityScoreContent = (visibilityScoreContent == View.GONE) ? View.VISIBLE : View.GONE;
@@ -269,6 +304,8 @@ public class InviteActivity extends Activity {
 		initializeDataScore();
 		initializeRankingList();
 		initializeRanking();
+		initializeAddressList();
+		initializeAddress();
 	}
 
 	private void initializeDataPlayer() {
@@ -321,6 +358,39 @@ public class InviteActivity extends Activity {
 		for(Ranking ranking : listRanking) {
 			if (ranking.getId().equals(id)) {
 				spRanking.setSelection(position, true);
+				break;
+			} else {
+				position++;
+			}
+		}
+	}
+	
+	private void initializeAddressList() {
+		spAddress.setVisibility(View.VISIBLE);
+		ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, business.getListTxtAddress());
+		dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+		spAddress.setAdapter(dataAdapter);
+		
+		spAddress.setOnItemSelectedListener(new OnItemSelectedListener() {
+			@Override
+			public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+				Address address = business.getListAddress().get(position);
+				business.setAddress(address);
+			}
+			
+			@Override
+			public void onNothingSelected(AdapterView<?> arg0) {
+			}
+		});
+	}
+
+	private void initializeAddress() {
+		Address address = business.getAddress();
+		int position = 0;
+		List<Address> listAddress = business.getListAddress();
+		for(Address ranking : listAddress) {
+			if (ranking.getId().equals(address.getId())) {
+				spAddress.setSelection(position, true);
 				break;
 			} else {
 				position++;
@@ -424,6 +494,30 @@ public class InviteActivity extends Activity {
 			};
 		business.setScores(scores);
 	}
+
+	private void saveAddress() {
+		if (visibilityAddressContent == View.VISIBLE) {
+			Address address = new Address();
+			address.setLine1(getText(etAddressLine1));
+			address.setPostalCode(getText(etAddressPostalCode));
+			address.setCity(getText(etAddressCity));
+			business.setAddress(address);
+		}
+	}
+
+	private void saveClub() {
+		if (visibilityClubContent == View.VISIBLE) {
+			Club club = new Club();
+			business.setClub(club);
+		}
+	}
+
+	private void saveTournament() {
+		if (visibilityTournamentContent == View.VISIBLE) {
+			Tournament tournament = new Tournament();
+			business.setTournament(tournament);
+		}
+	}
 	
 	private int getTypePosition() {
 		switch(business.getInvite().getType()) {
@@ -433,5 +527,13 @@ public class InviteActivity extends Activity {
 			default:
 				return 1;
 		}
+	}
+	
+	private String getText(EditText editText) {
+		String text = editText.getText().toString();
+		if ("".equals(text)) {
+			text = null;
+		}
+		return text;
 	}
 }

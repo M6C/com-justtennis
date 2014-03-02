@@ -12,7 +12,10 @@ import android.database.Cursor;
 
 import com.cameleon.common.android.inotifier.INotifierMessage;
 import com.justtennis.db.sqlite.helper.DBInviteHelper;
+import com.justtennis.domain.Address;
+import com.justtennis.domain.Club;
 import com.justtennis.domain.Invite;
+import com.justtennis.domain.Tournament;
 import com.justtennis.domain.Invite.INVITE_TYPE;
 import com.justtennis.domain.Invite.SCORE_RESULT;
 import com.justtennis.domain.Invite.STATUS;
@@ -33,7 +36,10 @@ public class DBInviteDataSource extends GenericDBDataSource<Invite> {
 		DBInviteHelper.COLUMN_ID_EXTERNAL,
 		DBInviteHelper.COLUMN_ID_CALENDAR,
 		DBInviteHelper.COLUMN_ID_RANKING,
-		DBInviteHelper.COLUMN_SCORE_RESULT
+		DBInviteHelper.COLUMN_SCORE_RESULT,
+		DBInviteHelper.COLUMN_ID_ADDRESS,
+		DBInviteHelper.COLUMN_ID_CLUB,
+		DBInviteHelper.COLUMN_ID_TOURNAMENT
 	};
 
 	public DBInviteDataSource(Context context, INotifierMessage notificationMessage) {
@@ -100,6 +106,9 @@ public class DBInviteDataSource extends GenericDBDataSource<Invite> {
 		values.put(DBInviteHelper.COLUMN_ID_CALENDAR, invite.getIdCalendar());
 		values.put(DBInviteHelper.COLUMN_ID_RANKING, invite.getIdRanking());
 		values.put(DBInviteHelper.COLUMN_SCORE_RESULT, invite.getScoreResult().toString());
+		values.put(DBInviteHelper.COLUMN_ID_ADDRESS, invite.getIdAddress());
+		values.put(DBInviteHelper.COLUMN_ID_CLUB, invite.getIdClub());
+		values.put(DBInviteHelper.COLUMN_ID_TOURNAMENT, invite.getIdTournament());
 	}
 
 	@Override
@@ -118,6 +127,9 @@ public class DBInviteDataSource extends GenericDBDataSource<Invite> {
 		invite.setIdCalendar(DbTool.getInstance().toLong(cursor, col++));
 		invite.setIdRanking(DbTool.getInstance().toLong(cursor, col++));
 		invite.setScoreResult(SCORE_RESULT.valueOf(DbTool.getInstance().toString(cursor, col++, SCORE_RESULT.UNFINISHED.toString())));
+		invite.setAddress(DbTool.getInstance().toPojo(cursor, col++, Address.class));
+		invite.setClub(DbTool.getInstance().toPojo(cursor, col++, Club.class));
+		invite.setTournament(DbTool.getInstance().toPojo(cursor, col++, Tournament.class));
 		return invite;
 	}
 	

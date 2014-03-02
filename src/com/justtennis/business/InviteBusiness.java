@@ -17,18 +17,23 @@ import com.justtennis.R;
 import com.justtennis.activity.InviteActivity;
 import com.justtennis.activity.InviteActivity.MODE;
 import com.justtennis.activity.PlayerActivity;
+import com.justtennis.db.service.AddressService;
 import com.justtennis.db.service.InviteService;
 import com.justtennis.db.service.MessageService;
 import com.justtennis.db.service.PlayerService;
+import com.justtennis.db.service.PojoNamedService;
 import com.justtennis.db.service.RankingService;
 import com.justtennis.db.service.ScoreSetService;
 import com.justtennis.db.service.UserService;
+import com.justtennis.domain.Address;
+import com.justtennis.domain.Club;
 import com.justtennis.domain.Invite;
 import com.justtennis.domain.Invite.INVITE_TYPE;
 import com.justtennis.domain.Invite.STATUS;
 import com.justtennis.domain.Player;
 import com.justtennis.domain.Ranking;
 import com.justtennis.domain.ScoreSet;
+import com.justtennis.domain.Tournament;
 import com.justtennis.domain.User;
 import com.justtennis.helper.GCalendarHelper;
 import com.justtennis.helper.GCalendarHelper.EVENT_STATUS;
@@ -45,6 +50,9 @@ public class InviteBusiness {
 	private UserService userService;
 	private PlayerService playerService;
 	private ScoreSetService scoreSetService;
+	private RankingService rankingService;
+	private AddressService addressService;
+	private PojoNamedService pojoNamedService;
 	private GCalendarHelper gCalendarHelper;
 	private User user;
 	private Invite invite;
@@ -53,8 +61,8 @@ public class InviteBusiness {
 	private String[] listTxtRankings;
 	private String[][] scores;
 
-	private RankingService rankingService;
-
+	private List<Address> listAddress;
+	private String[] listTxtAddress;
 
 	public InviteBusiness(Context context, INotifierMessage notificationMessage) {
 		this.context = context;
@@ -64,6 +72,8 @@ public class InviteBusiness {
 		userService = new UserService(context, notificationMessage);
 		rankingService = new RankingService(context, notificationMessage);
 		scoreSetService = new ScoreSetService(context, notificationMessage);
+		addressService = new AddressService(context, notificationMessage);
+		pojoNamedService = new PojoNamedService();
 		gCalendarHelper = GCalendarHelper.getInstance(context);
 	}
 
@@ -102,6 +112,7 @@ public class InviteBusiness {
 		}
 
 		initializeDataRanking();
+		initializeDataAddress();
 	}
 
 	public void initializeData(Bundle savedInstanceState) {
@@ -109,6 +120,7 @@ public class InviteBusiness {
 		invite = (Invite) savedInstanceState.getSerializable(PlayerActivity.EXTRA_INVITE);
 
 		initializeDataRanking();
+		initializeDataAddress();
 	}
 
 	public void initializeDataRanking() {
@@ -121,6 +133,12 @@ public class InviteBusiness {
 		for(Ranking ranking : listRanking) {
 			listTxtRankings[i++] = ranking.getRanking();
 		}
+	}
+
+	public void initializeDataAddress() {
+		listAddress = addressService.getList();
+		pojoNamedService.order(listAddress);
+		setListTxtAddress(pojoNamedService.getNames(listAddress));
 	}
 
 	public void onSaveInstanceState(Bundle outState) {
@@ -217,9 +235,13 @@ public class InviteBusiness {
 	public void setIdRanking(Long idRanking) {
 		invite.setIdRanking(idRanking);
 	}
-	
+
 	public Long getIdRanking() {
 		return invite.getIdRanking();
+	}
+
+	public Address getAddress() {
+		return invite.getAddress() == null ? null : invite.getAddress();
 	}
 
 	public Invite getInvite() {
@@ -284,6 +306,22 @@ public class InviteBusiness {
 
 	public void setListRanking(List<Ranking> listRanking) {
 		this.listRanking = listRanking;
+	}
+
+	public List<Address> getListAddress() {
+		return listAddress;
+	}
+
+	public void setListAddress(List<Address> listAddress) {
+		this.listAddress = listAddress;
+	}
+
+	public String[] getListTxtAddress() {
+		return listTxtAddress;
+	}
+
+	public void setListTxtAddress(String[] listTxtAddress) {
+		this.listTxtAddress = listTxtAddress;
 	}
 
 	public String[] getListTxtRankings() {
@@ -419,5 +457,30 @@ public class InviteBusiness {
 		}
 		invite.setScoreResult(scoreResult);
 		inviteService.createOrUpdate(invite);
+	}
+
+	public void setAddress(Address address) {
+		if (address.getId() != null) {
+			invite.setAddress(address);
+		}
+		else if (address.getLine1() != null ||
+			address.getPostalCode() != null ||
+			address.getCity() != null) {
+			if (invite.getAddress() != null) {
+				invite.getAddress().setLine1(address.getLine1());
+				invite.getAddress().setPostalCode(address.getPostalCode());
+				invite.getAddress().setCity(address.getCity());
+			} else {
+				invite.setAddress(address);
+			}
+		}
+	}
+
+	public void setClub(Club club) {
+		invite.setClub(club);
+	}
+	
+	public void setTournament(Tournament tournament) {
+		invite.setTournament(tournament);
 	}
 }

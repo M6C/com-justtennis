@@ -205,6 +205,24 @@
 				    android:onClick="onClickAddressCollapser"  >
 					<include layout="@layout/element_address_collapser" />
 				</LinearLayout>
+				<LinearLayout
+				    android:id="@+id/ll_club_collapser"
+				    android:layout_width="match_parent"
+				    android:layout_height="wrap_content"
+				    android:layout_margin="5dp"
+                    android:layout_marginBottom="@dimen/invite_layout_field_marging_bottom"
+				    android:onClick="onClickClubCollapser"  >
+					<include layout="@layout/element_club_collapser" />
+				</LinearLayout>
+				<LinearLayout
+				    android:id="@+id/ll_tournament_collapser"
+				    android:layout_width="match_parent"
+				    android:layout_height="wrap_content"
+				    android:layout_margin="5dp"
+                    android:layout_marginBottom="@dimen/invite_layout_field_marging_bottom"
+				    android:onClick="onClickTournamentCollapser"  >
+					<include layout="@layout/element_tournament_collapser" />
+				</LinearLayout>
                     <!-- </SlidingDrawer> -->
 
                     <LinearLayout

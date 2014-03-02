@@ -3,5 +3,7 @@
 
     <string name="txt_status">Status</string>
     <string name="txt_address">Address</string>
+    <string name="txt_club">Club</string>
+    <string name="txt_tournament">Tournament</string>
  
 </resources>

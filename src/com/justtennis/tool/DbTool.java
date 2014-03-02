@@ -1,5 +1,7 @@
 package com.justtennis.tool;
 
+import com.justtennis.domain.GenericDBPojo;
+
 import android.database.Cursor;
 
 
@@ -58,5 +60,21 @@ public class DbTool {
 			}
 		}
 		return null;
+	}
+
+	@SuppressWarnings("unchecked")
+	public <P extends  GenericDBPojo<Long>> P toPojo(Cursor cursor, int i, Class<P> pojoClass) {
+		P pojo = null;
+		if (!cursor.isNull(i)) {
+			try {
+				pojo = (P) pojoClass.newInstance();
+				pojo.setId(cursor.getLong(i));
+			} catch (InstantiationException e) {
+				e.printStackTrace();
+			} catch (IllegalAccessException e) {
+				e.printStackTrace();
+			}
+		}
+		return pojo;
 	}
 }

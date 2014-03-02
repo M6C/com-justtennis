@@ -23,6 +23,7 @@ Saisie de Message
 ********************* DONE *****************************
 
 Invite
+[20140302] - Début ajout de la notion d'adresse, club et tournoi
 [20140301] - Ajout des champs de saisie pour l'adresse
 [20140301] - Suppression de la saisie du status et clean de code
 [20140226] - Utilisation d'un switch pour le type d'invite

@@ -19,9 +19,12 @@ public class DBInviteHelper extends GenericDBHelper {
 	public static final String COLUMN_ID_CALENDAR = "ID_CALENDAR";
 	public static final String COLUMN_ID_RANKING = "ID_RANKING";
 	public static final String COLUMN_SCORE_RESULT = "SCORE_RESULT";
+	public static final String COLUMN_ID_ADDRESS = "ID_ADDRESS";
+	public static final String COLUMN_ID_CLUB = "ID_CLUB";
+	public static final String COLUMN_ID_TOURNAMENT = "ID_TOURNAMENT";
 
 	public static final String DATABASE_NAME = "Invite.db";
-	public static final int DATABASE_VERSION = 9;
+	public static final int DATABASE_VERSION = 10;
 
 	// Database creation sql statement
 	private static final String DATABASE_CREATE = "CREATE TABLE " + TABLE_NAME + "(" + 
@@ -33,7 +36,10 @@ public class DBInviteHelper extends GenericDBHelper {
 		COLUMN_ID_EXTERNAL + " INTEGER NULL, " + 
 		COLUMN_ID_CALENDAR + " INTEGER NULL, " + 
 		COLUMN_ID_RANKING + " INTEGER NULL, " + 
-		COLUMN_SCORE_RESULT + " INTEGER NULL " + 
+		COLUMN_SCORE_RESULT + " INTEGER NULL, " + 
+		COLUMN_ID_ADDRESS + " INTEGER NULL, " + 
+		COLUMN_ID_CLUB + " INTEGER NULL, " + 
+		COLUMN_ID_TOURNAMENT + " INTEGER NULL " + 
 	");";
 
 	public DBInviteHelper(Context context, INotifierMessage notificationMessage) {
@@ -55,6 +61,11 @@ public class DBInviteHelper extends GenericDBHelper {
 			}
 			if (oldVersion <= 8) {
 				addColumn(database, COLUMN_SCORE_RESULT, "INTEGER NULL");
+			}
+			if (oldVersion <= 9) {
+				addColumn(database, COLUMN_ID_ADDRESS, "INTEGER NULL");
+				addColumn(database, COLUMN_ID_CLUB, "INTEGER NULL");
+				addColumn(database, COLUMN_ID_TOURNAMENT, "INTEGER NULL");
 			}
 		}
 		else {
