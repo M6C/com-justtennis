@@ -5,18 +5,28 @@
     android:baselineAligned="false" >
 
     <LinearLayout
+        android:id="@+id/ll_address_selection"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center_vertical"
-        android:orientation="vertical" >
+        android:orientation="horizontal" >
 	
 	    <Spinner
 	        android:id="@+id/sp_address_list"
-	        android:layout_width="match_parent"
+	        android:layout_width="0dp"
 	        android:layout_height="wrap_content"
+	        android:layout_weight="1"
 	        android:textSize="@dimen/player_field_size" />
+
+	    <ImageView
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:src="@drawable/btn_add"
+	        android:onClick="onClickAddressAdd"
+	    />
 	</LinearLayout>
     <LinearLayout
+        android:id="@+id/ll_address_add"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center_vertical"
@@ -50,21 +60,15 @@
                 android:maxLines="1"
                 android:hint="@string/hint_address_city" />
         </LinearLayout>
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-		android:layout_marginTop="5dp"
-        android:gravity="bottom" >
 
         <Button
-            android:id="@+id/btn_add_demande_no"
+            android:id="@+id/btn_address_validate"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+			android:layout_marginTop="5dp"
             android:background="@color/button_background_color"
-            android:onClick="onClickDemandeAddNo"
-            android:text="@string/button_text_no"
+            android:onClick="onClickAddressValidate"
+            android:text="@string/button_text_add"
             android:textColor="@color/button_text_color" />
     </LinearLayout>
 

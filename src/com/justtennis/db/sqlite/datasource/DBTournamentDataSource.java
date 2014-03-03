@@ -17,7 +17,7 @@ public class DBTournamentDataSource extends GenericDBDataSource<Tournament> {
 	private String[] allColumns = {
 		DBTournamentHelper.COLUMN_ID,
 		DBTournamentHelper.COLUMN_NAME,
-		DBTournamentHelper.COLUMN_ID_ADDRESS
+		DBTournamentHelper.COLUMN_ID_CLUB
 	};
 
 	public DBTournamentDataSource(Context context, INotifierMessage notificationMessage) {
@@ -32,7 +32,7 @@ public class DBTournamentDataSource extends GenericDBDataSource<Tournament> {
 	@Override
 	protected void putContentValue(ContentValues values, Tournament tournament) {
 		values.put(DBTournamentHelper.COLUMN_NAME, tournament.getName());
-		values.put(DBTournamentHelper.COLUMN_ID_ADDRESS, tournament.getIdAddress());
+		values.put(DBTournamentHelper.COLUMN_ID_CLUB, tournament.getIdClub());
 	}
 
 	@Override
@@ -41,7 +41,7 @@ public class DBTournamentDataSource extends GenericDBDataSource<Tournament> {
 		Tournament tournament = new Tournament();
 		tournament.setId(DbTool.getInstance().toLong(cursor, col++));
 		tournament.setName(cursor.getString(col++));
-		tournament.setIdAddress(DbTool.getInstance().toLong(cursor, col++));
+		tournament.setIdClub(DbTool.getInstance().toLong(cursor, col++));
 		return tournament;
 	}
 	

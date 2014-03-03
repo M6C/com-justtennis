@@ -5,6 +5,29 @@
     android:baselineAligned="false" >
 
     <LinearLayout
+        android:id="@+id/ll_club_selection"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:orientation="horizontal" >
+	
+	    <Spinner
+	        android:id="@+id/sp_club_list"
+	        android:layout_width="0dp"
+	        android:layout_height="wrap_content"
+	        android:layout_weight="1"
+	        android:textSize="@dimen/player_field_size" />
+
+	    <ImageView
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:src="@drawable/btn_add"
+	        android:onClick="onClickClubAdd"
+	    />
+	</LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/ll_club_add"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center_vertical"
@@ -16,21 +39,21 @@
             android:layout_height="wrap_content"
             android:hint="@string/hint_club_name"
             android:maxLines="1" />
-    </LinearLayout>
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-		android:layout_marginTop="5dp"
-        android:gravity="bottom" >
+	    <Spinner
+	        android:id="@+id/sp_club_address_list"
+	        android:layout_width="match_parent"
+	        android:layout_height="wrap_content"
+	        android:textSize="@dimen/player_field_size" />
 
         <Button
             android:id="@+id/btn_club_validate"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+			android:layout_marginTop="5dp"
             android:background="@color/button_background_color"
             android:onClick="onClickClubValidate"
-            android:text="@string/button_text_no"
+            android:text="@string/button_text_add"
             android:textColor="@color/button_text_color" />
     </LinearLayout>
 

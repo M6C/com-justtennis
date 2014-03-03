@@ -92,9 +92,19 @@ public class InviteActivity extends Activity {
 
 	// ADDRESS
 	private Spinner spAddress;
+	private Spinner spClub;
+	private Spinner spClubAddress;
+	private Spinner spTournament;
+	private Spinner spTournamentClub;
 	private EditText etAddressLine1;
 	private EditText etAddressPostalCode;
 	private EditText etAddressCity;
+	private View llTournamentAdd;
+	private View llTournamentSelection;
+	private View llClubAdd;
+	private View llClubSelection;
+	private View llAddressAdd;
+	private View llAddressSelection;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -136,14 +146,26 @@ public class InviteActivity extends Activity {
 		etScore15.addTextChangedListener(new TextWatcherFieldScoreSetBold(etScore15, etScore25));
 		etScore25.addTextChangedListener(new TextWatcherFieldScoreSetBold(etScore25, etScore15));
 
+		llAddressAdd = findViewById(R.id.ll_address_add);
+		llAddressSelection = findViewById(R.id.ll_address_selection);
 		spAddress = (Spinner)findViewById(R.id.sp_address_list);
 		llAddressContent = (LinearLayout)findViewById(R.id.ll_address_content);
 		etAddressLine1 = (EditText)findViewById(R.id.et_address_line_1);
 		etAddressPostalCode = (EditText)findViewById(R.id.et_address_postal_code);
 		etAddressCity = (EditText)findViewById(R.id.et_address_city);
 
+		llClubAdd = findViewById(R.id.ll_club_add);
+		llClubSelection = findViewById(R.id.ll_club_selection);
+		spClub = (Spinner)findViewById(R.id.sp_club_list);
+		spClubAddress = (Spinner)findViewById(R.id.sp_club_address_list);
 		llClubContent = (LinearLayout)findViewById(R.id.ll_club_content);
+
+		llTournamentAdd = findViewById(R.id.ll_tournament_add);
+		llTournamentSelection = findViewById(R.id.ll_tournament_selection);
+		spTournament = (Spinner)findViewById(R.id.sp_tournament_list);
+		spTournamentClub = (Spinner)findViewById(R.id.sp_tournament_club_list);
 		llTournamentContent = (LinearLayout)findViewById(R.id.ll_tournament_content);
+
 		llScoreContent = (LinearLayout)findViewById(R.id.ll_score_content);
 
 		business = new InviteBusiness(this, NotifierMessageLogger.getInstance());
@@ -265,16 +287,37 @@ public class InviteActivity extends Activity {
 	public void onClickAddressCollapser(View view) {
 		visibilityAddressContent = (visibilityAddressContent == View.GONE) ? View.VISIBLE : View.GONE;
 		llAddressContent.setVisibility(visibilityAddressContent);
+		llAddressAdd.setVisibility(View.GONE);
+		llAddressSelection.setVisibility(View.VISIBLE);
 	}
 	
 	public void onClickClubCollapser(View view) {
 		visibilityClubContent = (visibilityClubContent == View.GONE) ? View.VISIBLE : View.GONE;
 		llClubContent.setVisibility(visibilityClubContent);
+		llClubAdd.setVisibility(View.GONE);
+		llClubSelection.setVisibility(View.VISIBLE);
 	}
 	
 	public void onClickTournamentCollapser(View view) {
 		visibilityTournamentContent = (visibilityTournamentContent == View.GONE) ? View.VISIBLE : View.GONE;
 		llTournamentContent.setVisibility(visibilityTournamentContent);
+		llTournamentAdd.setVisibility(View.GONE);
+		llTournamentSelection.setVisibility(View.VISIBLE);
+	}
+	
+	public void onClickAddressAdd(View view) {
+		llAddressAdd.setVisibility(View.VISIBLE);
+		llAddressSelection.setVisibility(View.GONE);
+	}
+	
+	public void onClickClubAdd(View view) {
+		llClubAdd.setVisibility(View.VISIBLE);
+		llClubSelection.setVisibility(View.GONE);
+	}
+	
+	public void onClickTournamentAdd(View view) {
+		llTournamentAdd.setVisibility(View.VISIBLE);
+		llTournamentSelection.setVisibility(View.GONE);
 	}
 
 	public void onClickScoreCollapser(View view) {
@@ -305,6 +348,8 @@ public class InviteActivity extends Activity {
 		initializeRankingList();
 		initializeRanking();
 		initializeAddressList();
+		initializeClubList();
+		initializeTournamentList();
 		initializeAddress();
 	}
 
@@ -364,18 +409,71 @@ public class InviteActivity extends Activity {
 			}
 		}
 	}
-	
+
 	private void initializeAddressList() {
+		ArrayAdapter<String> dataAdapter = null;
+
 		spAddress.setVisibility(View.VISIBLE);
-		ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, business.getListTxtAddress());
+		dataAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, business.getListTxtAddress());
 		dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		spAddress.setAdapter(dataAdapter);
-		
 		spAddress.setOnItemSelectedListener(new OnItemSelectedListener() {
 			@Override
 			public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
 				Address address = business.getListAddress().get(position);
 				business.setAddress(address);
+			}
+			
+			@Override
+			public void onNothingSelected(AdapterView<?> arg0) {
+			}
+		});
+
+		spClubAddress.setVisibility(View.VISIBLE);
+		dataAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, business.getListTxtClub());
+		dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+		spClubAddress.setAdapter(dataAdapter);
+	}
+
+	private void initializeClubList() {
+		ArrayAdapter<String> dataAdapter = null;
+
+		spClub.setVisibility(View.VISIBLE);
+		dataAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, business.getListTxtClub());
+		dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+		spClub.setAdapter(dataAdapter);
+		
+		spClub.setOnItemSelectedListener(new OnItemSelectedListener() {
+			@Override
+			public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+				Club club = business.getListClub().get(position);
+				business.setClub(club);
+			}
+			
+			@Override
+			public void onNothingSelected(AdapterView<?> arg0) {
+			}
+		});
+		
+		spTournamentClub.setVisibility(View.VISIBLE);
+		dataAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, business.getListTxtClub());
+		dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+		spTournamentClub.setAdapter(dataAdapter);
+	}
+	
+	private void initializeTournamentList() {
+		ArrayAdapter<String> dataAdapter = null;
+
+		spTournament.setVisibility(View.VISIBLE);
+		dataAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, business.getListTxtTournament());
+		dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+		spTournament.setAdapter(dataAdapter);
+		
+		spTournament.setOnItemSelectedListener(new OnItemSelectedListener() {
+			@Override
+			public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+				Tournament tournament = business.getListTournament().get(position);
+				business.setTournament(tournament);
 			}
 			
 			@Override

@@ -5,10 +5,34 @@
     android:baselineAligned="false" >
 
     <LinearLayout
+        android:id="@+id/ll_tournament_selection"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center_vertical"
-        android:orientation="vertical" >
+        android:orientation="horizontal" >
+
+	    <Spinner
+	        android:id="@+id/sp_tournament_list"
+	        android:layout_width="0dp"
+	        android:layout_height="wrap_content"
+	        android:layout_weight="1"
+	        android:textSize="@dimen/player_field_size" />
+
+	    <ImageView
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:src="@drawable/btn_add"
+	        android:onClick="onClickTournamentAdd"
+	    />
+	</LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/ll_tournament_add"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:orientation="vertical"
+        android:visibility="gone">
 
         <EditText
             android:id="@+id/et_tournament_name"
@@ -16,21 +40,21 @@
             android:layout_height="wrap_content"
             android:hint="@string/hint_tournament_name"
             android:maxLines="1" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-		android:layout_marginTop="5dp"
-        android:gravity="bottom" >
+	
+	    <Spinner
+	        android:id="@+id/sp_tournament_club_list"
+	        android:layout_width="match_parent"
+	        android:layout_height="wrap_content"
+	        android:textSize="@dimen/player_field_size" />
 
         <Button
             android:id="@+id/btn_tournament_validate"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+			android:layout_marginTop="5dp"
             android:background="@color/button_background_color"
             android:onClick="onClickTournamentValidate"
-            android:text="@string/button_text_no"
+            android:text="@string/button_text_add"
             android:textColor="@color/button_text_color" />
     </LinearLayout>
 

@@ -8,7 +8,7 @@ public class Tournament extends GenericDBPojo<Long> implements IPojoNamed {
 	private static final long serialVersionUID = 1L;
 
 	private String name;
-	private Long idAddress;
+	private Long idClub;
 
 	@Override
 	public String getName() {
@@ -17,10 +17,10 @@ public class Tournament extends GenericDBPojo<Long> implements IPojoNamed {
 	public void setName(String name) {
 		this.name = name;
 	}
-	public Long getIdAddress() {
-		return idAddress;
+	public Long getIdClub() {
+		return idClub;
 	}
-	public void setIdAddress(Long idAddress) {
-		this.idAddress = idAddress;
+	public void setIdClub(Long idClub) {
+		this.idClub = idClub;
 	}
 }

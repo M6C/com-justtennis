@@ -18,12 +18,14 @@ import com.justtennis.activity.InviteActivity;
 import com.justtennis.activity.InviteActivity.MODE;
 import com.justtennis.activity.PlayerActivity;
 import com.justtennis.db.service.AddressService;
+import com.justtennis.db.service.ClubService;
 import com.justtennis.db.service.InviteService;
 import com.justtennis.db.service.MessageService;
 import com.justtennis.db.service.PlayerService;
 import com.justtennis.db.service.PojoNamedService;
 import com.justtennis.db.service.RankingService;
 import com.justtennis.db.service.ScoreSetService;
+import com.justtennis.db.service.TournamentService;
 import com.justtennis.db.service.UserService;
 import com.justtennis.domain.Address;
 import com.justtennis.domain.Club;
@@ -52,6 +54,8 @@ public class InviteBusiness {
 	private ScoreSetService scoreSetService;
 	private RankingService rankingService;
 	private AddressService addressService;
+	private ClubService clubService;
+	private TournamentService tournamentService;
 	private PojoNamedService pojoNamedService;
 	private GCalendarHelper gCalendarHelper;
 	private User user;
@@ -63,6 +67,11 @@ public class InviteBusiness {
 
 	private List<Address> listAddress;
 	private String[] listTxtAddress;
+	private List<Club> listClub;
+	private String[] listTxtClub;
+	private List<Tournament> listTournament;
+	private String[] listTxtTournament;
+
 
 	public InviteBusiness(Context context, INotifierMessage notificationMessage) {
 		this.context = context;
@@ -73,6 +82,8 @@ public class InviteBusiness {
 		rankingService = new RankingService(context, notificationMessage);
 		scoreSetService = new ScoreSetService(context, notificationMessage);
 		addressService = new AddressService(context, notificationMessage);
+		clubService = new ClubService(context, notificationMessage);
+		tournamentService = new TournamentService(context, notificationMessage);
 		pojoNamedService = new PojoNamedService();
 		gCalendarHelper = GCalendarHelper.getInstance(context);
 	}
@@ -113,6 +124,8 @@ public class InviteBusiness {
 
 		initializeDataRanking();
 		initializeDataAddress();
+		initializeDataClub();
+		initializeDataTournament();
 	}
 
 	public void initializeData(Bundle savedInstanceState) {
@@ -139,6 +152,18 @@ public class InviteBusiness {
 		listAddress = addressService.getList();
 		pojoNamedService.order(listAddress);
 		setListTxtAddress(pojoNamedService.getNames(listAddress));
+	}
+	
+	public void initializeDataClub() {
+		listClub = clubService.getList();
+		pojoNamedService.order(listClub);
+		setListTxtClub(pojoNamedService.getNames(listClub));
+	}
+	
+	public void initializeDataTournament() {
+		setListTournament(tournamentService.getList());
+		pojoNamedService.order(getListTournament());
+		setListTxtTournament(pojoNamedService.getNames(getListTournament()));
 	}
 
 	public void onSaveInstanceState(Bundle outState) {
@@ -316,6 +341,22 @@ public class InviteBusiness {
 		this.listAddress = listAddress;
 	}
 
+	public List<Club> getListClub() {
+		return listClub;
+	}
+
+	public void setListClub(List<Club> listClub) {
+		this.listClub = listClub;
+	}
+
+	public List<Tournament> getListTournament() {
+		return listTournament;
+	}
+
+	public void setListTournament(List<Tournament> listTournament) {
+		this.listTournament = listTournament;
+	}
+
 	public String[] getListTxtAddress() {
 		return listTxtAddress;
 	}
@@ -330,6 +371,22 @@ public class InviteBusiness {
 
 	public void setListTxtRankings(String[] listTxtRankings) {
 		this.listTxtRankings = listTxtRankings;
+	}
+
+	public String[] getListTxtClub() {
+		return listTxtClub;
+	}
+
+	public void setListTxtClub(String[] listTxtClub) {
+		this.listTxtClub = listTxtClub;
+	}
+
+	public String[] getListTxtTournament() {
+		return listTxtTournament;
+	}
+
+	public void setListTxtTournament(String[] listTxtTournament) {
+		this.listTxtTournament = listTxtTournament;
 	}
 
 	private Invite doConfirm(STATUS status) {

@@ -23,6 +23,7 @@ Saisie de Message
 ********************* DONE *****************************
 
 Invite Demande
+[20140303] - Modification design de la notion d'adresse, club et tournoi
 [20140302] - Clean
 [20140226] - Utilisation d'un switch pour le type d'invite
 [20140223] - Ne créé pas d'évenement calendar pour les Invites passées
