@@ -22,6 +22,9 @@ Saisie de Message
 
 ********************* DONE *****************************
 
+Invite Location
+[20140306] - Création de l'écran
+
 Invite Demande
 [20140303] - Modification design de la notion d'adresse, club et tournoi
 [20140302] - Clean

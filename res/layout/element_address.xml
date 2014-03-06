@@ -33,6 +33,13 @@
         android:orientation="vertical" >
 
         <EditText
+            android:id="@+id/et_address_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/hint_address_name"
+            android:maxLines="1" />
+
+        <EditText
             android:id="@+id/et_address_line_1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -67,7 +74,7 @@
             android:layout_height="wrap_content"
 			android:layout_marginTop="5dp"
             android:background="@color/button_background_color"
-            android:onClick="onClickAddressValidate"
+            android:onClick="onClickAddressAddValidate"
             android:text="@string/button_text_add"
             android:textColor="@color/button_text_color" />
     </LinearLayout>

@@ -17,6 +17,7 @@ public class DBAddressDataSource extends GenericDBDataSource<Address> {
 	private String[] allColumns = {
 		DBAddressHelper.COLUMN_ID,
 		DBAddressHelper.COLUMN_NAME,
+		DBAddressHelper.COLUMN_LINE1,
 		DBAddressHelper.COLUMN_POSTAL_CODE,
 		DBAddressHelper.COLUMN_CITY,
 		DBAddressHelper.COLUMN_GPS

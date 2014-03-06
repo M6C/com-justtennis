@@ -40,12 +40,27 @@
             android:layout_height="wrap_content"
             android:hint="@string/hint_tournament_name"
             android:maxLines="1" />
-	
-	    <Spinner
-	        android:id="@+id/sp_tournament_club_list"
+
+        <LinearLayout
 	        android:layout_width="match_parent"
 	        android:layout_height="wrap_content"
-	        android:textSize="@dimen/player_field_size" />
+	        android:orientation="horizontal"
+	        android:gravity="center_vertical"
+        >
+		    <Spinner
+		        android:id="@+id/sp_tournament_club_list"
+		        android:layout_width="0dp"
+		        android:layout_height="wrap_content"
+		        android:layout_weight="1"
+		        android:textSize="@dimen/player_field_size" />
+
+		    <ImageView
+		        android:layout_width="wrap_content"
+		        android:layout_height="wrap_content"
+		        android:src="@drawable/btn_add"
+		        android:onClick="onClickTournamentClubAdd"
+		    />
+	    </LinearLayout>
 
         <Button
             android:id="@+id/btn_tournament_validate"
@@ -53,7 +68,7 @@
             android:layout_height="wrap_content"
 			android:layout_marginTop="5dp"
             android:background="@color/button_background_color"
-            android:onClick="onClickTournamentValidate"
+            android:onClick="onClickTournamentAddValidate"
             android:text="@string/button_text_add"
             android:textColor="@color/button_text_color" />
     </LinearLayout>

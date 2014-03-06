@@ -13,6 +13,8 @@ import com.justtennis.domain.comparator.PojoNamedComparator;
 
 public class AddressService extends GenericService<Address> {
 
+	public static final long ID_EMPTY_ADDRESS = -2l;
+
 	public AddressService(Context context, INotifierMessage notificationMessage) {
 		super(context, new DBAddressDataSource(context, notificationMessage), notificationMessage);
 	}
@@ -22,5 +24,15 @@ public class AddressService extends GenericService<Address> {
 		setRanking.addAll(listRanking);
 		listRanking.clear();
 		listRanking.addAll(setRanking);
+	}
+
+	public Address getEmptyAddress() {
+		Address ret = new Address();
+		ret.setId(ID_EMPTY_ADDRESS);
+		return ret;
+	}
+	
+	public boolean isEmptyAddress(Address address) {
+		return address.getId()!=null && ID_EMPTY_ADDRESS==address.getId();
 	}
 }

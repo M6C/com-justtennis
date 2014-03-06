@@ -8,7 +8,19 @@ import com.justtennis.domain.Club;
 
 public class ClubService extends GenericService<Club> {
 
+	public static final long ID_EMPTY_CLUB = -2l;
+
 	public ClubService(Context context, INotifierMessage notificationMessage) {
 		super(context, new DBClubDataSource(context, notificationMessage), notificationMessage);
+	}
+
+	public Club getEmptyClub() {
+		Club ret = new Club();
+		ret.setId(ID_EMPTY_CLUB);
+		return ret;
+	}
+	
+	public boolean isEmptyClub(Club club) {
+		return club.getId()!=null && ID_EMPTY_CLUB==club.getId();
 	}
 }

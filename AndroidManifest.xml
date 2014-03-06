@@ -78,6 +78,9 @@
    		   android:windowSoftInputMode="stateHidden"
    		   android:screenOrientation="portrait"
          />
+        <activity android:name=".activity.InviteLocationActivity"
+   		   android:screenOrientation="portrait"
+         />
         <activity android:name=".activity.InviteDemandeActivity"
    		   android:screenOrientation="portrait"
          />

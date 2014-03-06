@@ -188,6 +188,34 @@
                             android:onClick="onClickInviteTime"
                             android:textSize="@dimen/invite_field_size" />
                     </LinearLayout>
+			       <LinearLayout
+			          android:id="@+id/ll_location"
+			          android:layout_width="match_parent"
+			          android:layout_height="wrap_content"
+			          android:layout_marginBottom="@dimen/player_layout_field_marging_bottom"
+			          android:orientation="vertical"
+			          android:padding="@dimen/player_layout_field_padding"
+			          android:onClick="onClickLocation" >
+			
+			          <TextView
+			              android:id="@+id/tv_location"
+			              android:layout_width="match_parent"
+			              android:layout_height="wrap_content"
+			              android:text="@string/txt_location"
+			              android:textSize="@dimen/player_text_size"
+			              android:textStyle="bold"
+			              android:textColor="@android:color/secondary_text_light_nodisable"
+			              android:visibility="gone" />
+			
+			          <TextView
+			              android:id="@+id/et_location"
+			              android:layout_width="match_parent"
+			              android:layout_height="wrap_content"
+			              android:layout_marginLeft="@dimen/player_field_margin_left"
+			              android:gravity="center_horizontal"
+			              android:textSize="@dimen/player_field_size"
+			              android:hint="@string/txt_location" />
+			      </LinearLayout>
                     <!--
  				<SlidingDrawer
 				    android:id="@+id/sd_address"
@@ -196,33 +224,6 @@
 					android:handle="@+id/bt_address_sliding"
 					android:content="@+id/ll_address_content"
 				>                    -->
-				<LinearLayout
-				    android:id="@+id/ll_address_collapser"
-				    android:layout_width="match_parent"
-				    android:layout_height="wrap_content"
-				    android:layout_margin="5dp"
-                    android:layout_marginBottom="@dimen/invite_layout_field_marging_bottom"
-				    android:onClick="onClickAddressCollapser"  >
-					<include layout="@layout/element_address_collapser" />
-				</LinearLayout>
-				<LinearLayout
-				    android:id="@+id/ll_club_collapser"
-				    android:layout_width="match_parent"
-				    android:layout_height="wrap_content"
-				    android:layout_margin="5dp"
-                    android:layout_marginBottom="@dimen/invite_layout_field_marging_bottom"
-				    android:onClick="onClickClubCollapser"  >
-					<include layout="@layout/element_club_collapser" />
-				</LinearLayout>
-				<LinearLayout
-				    android:id="@+id/ll_tournament_collapser"
-				    android:layout_width="match_parent"
-				    android:layout_height="wrap_content"
-				    android:layout_margin="5dp"
-                    android:layout_marginBottom="@dimen/invite_layout_field_marging_bottom"
-				    android:onClick="onClickTournamentCollapser"  >
-					<include layout="@layout/element_tournament_collapser" />
-				</LinearLayout>
                     <!-- </SlidingDrawer> -->
 
                     <LinearLayout

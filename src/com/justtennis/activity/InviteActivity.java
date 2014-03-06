@@ -33,13 +33,10 @@ import com.justtennis.ApplicationConfig;
 import com.justtennis.R;
 import com.justtennis.business.InviteBusiness;
 import com.justtennis.db.service.PlayerService;
-import com.justtennis.domain.Address;
-import com.justtennis.domain.Club;
 import com.justtennis.domain.Invite.INVITE_TYPE;
 import com.justtennis.domain.Player;
 import com.justtennis.domain.Player.PLAYER_TYPE;
 import com.justtennis.domain.Ranking;
-import com.justtennis.domain.Tournament;
 import com.justtennis.listener.action.TextWatcherFieldScoreSetBold;
 import com.justtennis.manager.ContactManager;
 import com.justtennis.notifier.NotifierMessageLogger;
@@ -56,18 +53,13 @@ public class InviteActivity extends Activity {
 	public static final String EXTRA_INVITE = "INVITE";
 	public static final String EXTRA_PLAYER_ID = "PLAYER_ID";
 	private static final int RESULT_PLAYER = 1;
+	private static final int RESULT_LOCATION = 2;
 
 	private InviteBusiness business;
 	private Long idPlayerForResult = null;
-	private int visibilityAddressContent = View.GONE;
-	private int visibilityClubContent = View.GONE;
-	private int visibilityTournamentContent = View.GONE;
 	private int visibilityScoreContent = View.GONE;
 
 	private LinearLayout llInviteModify;
-	private LinearLayout llAddressContent;
-	private LinearLayout llClubContent;
-	private LinearLayout llTournamentContent;
 	private LinearLayout llScoreContent;
 	private TextView tvFirstname;
 	private TextView tvLastname;
@@ -89,22 +81,6 @@ public class InviteActivity extends Activity {
 	private EditText etScore24;
 	private EditText etScore15;
 	private EditText etScore25;
-
-	// ADDRESS
-	private Spinner spAddress;
-	private Spinner spClub;
-	private Spinner spClubAddress;
-	private Spinner spTournament;
-	private Spinner spTournamentClub;
-	private EditText etAddressLine1;
-	private EditText etAddressPostalCode;
-	private EditText etAddressCity;
-	private View llTournamentAdd;
-	private View llTournamentSelection;
-	private View llClubAdd;
-	private View llClubSelection;
-	private View llAddressAdd;
-	private View llAddressSelection;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -146,26 +122,6 @@ public class InviteActivity extends Activity {
 		etScore15.addTextChangedListener(new TextWatcherFieldScoreSetBold(etScore15, etScore25));
 		etScore25.addTextChangedListener(new TextWatcherFieldScoreSetBold(etScore25, etScore15));
 
-		llAddressAdd = findViewById(R.id.ll_address_add);
-		llAddressSelection = findViewById(R.id.ll_address_selection);
-		spAddress = (Spinner)findViewById(R.id.sp_address_list);
-		llAddressContent = (LinearLayout)findViewById(R.id.ll_address_content);
-		etAddressLine1 = (EditText)findViewById(R.id.et_address_line_1);
-		etAddressPostalCode = (EditText)findViewById(R.id.et_address_postal_code);
-		etAddressCity = (EditText)findViewById(R.id.et_address_city);
-
-		llClubAdd = findViewById(R.id.ll_club_add);
-		llClubSelection = findViewById(R.id.ll_club_selection);
-		spClub = (Spinner)findViewById(R.id.sp_club_list);
-		spClubAddress = (Spinner)findViewById(R.id.sp_club_address_list);
-		llClubContent = (LinearLayout)findViewById(R.id.ll_club_content);
-
-		llTournamentAdd = findViewById(R.id.ll_tournament_add);
-		llTournamentSelection = findViewById(R.id.ll_tournament_selection);
-		spTournament = (Spinner)findViewById(R.id.sp_tournament_list);
-		spTournamentClub = (Spinner)findViewById(R.id.sp_tournament_club_list);
-		llTournamentContent = (LinearLayout)findViewById(R.id.ll_tournament_content);
-
 		llScoreContent = (LinearLayout)findViewById(R.id.ll_score_content);
 
 		business = new InviteBusiness(this, NotifierMessageLogger.getInstance());
@@ -176,9 +132,6 @@ public class InviteActivity extends Activity {
 		super.onResume();
 		initializeData();
 		initializeListener();
-		llAddressContent.setVisibility(visibilityAddressContent);
-		llClubContent.setVisibility(visibilityClubContent);
-		llTournamentContent.setVisibility(visibilityTournamentContent);
 
 		visibilityScoreContent = (business.getScores() != null && business.getScores().length>0 ? View.VISIBLE : View.GONE);
 		llScoreContent.setVisibility(visibilityScoreContent);
@@ -201,6 +154,10 @@ public class InviteActivity extends Activity {
 					}
 				}
 				break;
+			case RESULT_LOCATION:
+				if (data!=null) {
+				}
+				break;
 	
 			default:
 				super.onActivityResult(requestCode, resultCode, data);
@@ -216,9 +173,6 @@ public class InviteActivity extends Activity {
 
 	public void onClickModify(View view) {
 		saveScores();
-		saveAddress();
-		saveClub();
-		saveTournament();
 
 		business.modify();
 		
@@ -284,40 +238,10 @@ public class InviteActivity extends Activity {
 		startActivityForResult(intent, RESULT_PLAYER);
 	}
 
-	public void onClickAddressCollapser(View view) {
-		visibilityAddressContent = (visibilityAddressContent == View.GONE) ? View.VISIBLE : View.GONE;
-		llAddressContent.setVisibility(visibilityAddressContent);
-		llAddressAdd.setVisibility(View.GONE);
-		llAddressSelection.setVisibility(View.VISIBLE);
-	}
-	
-	public void onClickClubCollapser(View view) {
-		visibilityClubContent = (visibilityClubContent == View.GONE) ? View.VISIBLE : View.GONE;
-		llClubContent.setVisibility(visibilityClubContent);
-		llClubAdd.setVisibility(View.GONE);
-		llClubSelection.setVisibility(View.VISIBLE);
-	}
-	
-	public void onClickTournamentCollapser(View view) {
-		visibilityTournamentContent = (visibilityTournamentContent == View.GONE) ? View.VISIBLE : View.GONE;
-		llTournamentContent.setVisibility(visibilityTournamentContent);
-		llTournamentAdd.setVisibility(View.GONE);
-		llTournamentSelection.setVisibility(View.VISIBLE);
-	}
-	
-	public void onClickAddressAdd(View view) {
-		llAddressAdd.setVisibility(View.VISIBLE);
-		llAddressSelection.setVisibility(View.GONE);
-	}
-	
-	public void onClickClubAdd(View view) {
-		llClubAdd.setVisibility(View.VISIBLE);
-		llClubSelection.setVisibility(View.GONE);
-	}
-	
-	public void onClickTournamentAdd(View view) {
-		llTournamentAdd.setVisibility(View.VISIBLE);
-		llTournamentSelection.setVisibility(View.GONE);
+	public void onClickLocation(View view) {
+		Intent intent = new Intent(this, InviteLocationActivity.class);
+		intent.putExtra(InviteLocationActivity.EXTRA_INVITE, business.getInvite());
+		startActivityForResult(intent, RESULT_LOCATION);
 	}
 
 	public void onClickScoreCollapser(View view) {
@@ -347,10 +271,6 @@ public class InviteActivity extends Activity {
 		initializeDataScore();
 		initializeRankingList();
 		initializeRanking();
-		initializeAddressList();
-		initializeClubList();
-		initializeTournamentList();
-		initializeAddress();
 	}
 
 	private void initializeDataPlayer() {
@@ -403,92 +323,6 @@ public class InviteActivity extends Activity {
 		for(Ranking ranking : listRanking) {
 			if (ranking.getId().equals(id)) {
 				spRanking.setSelection(position, true);
-				break;
-			} else {
-				position++;
-			}
-		}
-	}
-
-	private void initializeAddressList() {
-		ArrayAdapter<String> dataAdapter = null;
-
-		spAddress.setVisibility(View.VISIBLE);
-		dataAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, business.getListTxtAddress());
-		dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-		spAddress.setAdapter(dataAdapter);
-		spAddress.setOnItemSelectedListener(new OnItemSelectedListener() {
-			@Override
-			public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-				Address address = business.getListAddress().get(position);
-				business.setAddress(address);
-			}
-			
-			@Override
-			public void onNothingSelected(AdapterView<?> arg0) {
-			}
-		});
-
-		spClubAddress.setVisibility(View.VISIBLE);
-		dataAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, business.getListTxtClub());
-		dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-		spClubAddress.setAdapter(dataAdapter);
-	}
-
-	private void initializeClubList() {
-		ArrayAdapter<String> dataAdapter = null;
-
-		spClub.setVisibility(View.VISIBLE);
-		dataAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, business.getListTxtClub());
-		dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-		spClub.setAdapter(dataAdapter);
-		
-		spClub.setOnItemSelectedListener(new OnItemSelectedListener() {
-			@Override
-			public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-				Club club = business.getListClub().get(position);
-				business.setClub(club);
-			}
-			
-			@Override
-			public void onNothingSelected(AdapterView<?> arg0) {
-			}
-		});
-		
-		spTournamentClub.setVisibility(View.VISIBLE);
-		dataAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, business.getListTxtClub());
-		dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-		spTournamentClub.setAdapter(dataAdapter);
-	}
-	
-	private void initializeTournamentList() {
-		ArrayAdapter<String> dataAdapter = null;
-
-		spTournament.setVisibility(View.VISIBLE);
-		dataAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, business.getListTxtTournament());
-		dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-		spTournament.setAdapter(dataAdapter);
-		
-		spTournament.setOnItemSelectedListener(new OnItemSelectedListener() {
-			@Override
-			public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-				Tournament tournament = business.getListTournament().get(position);
-				business.setTournament(tournament);
-			}
-			
-			@Override
-			public void onNothingSelected(AdapterView<?> arg0) {
-			}
-		});
-	}
-
-	private void initializeAddress() {
-		Address address = business.getAddress();
-		int position = 0;
-		List<Address> listAddress = business.getListAddress();
-		for(Address ranking : listAddress) {
-			if (ranking.getId().equals(address.getId())) {
-				spAddress.setSelection(position, true);
 				break;
 			} else {
 				position++;
@@ -592,30 +426,6 @@ public class InviteActivity extends Activity {
 			};
 		business.setScores(scores);
 	}
-
-	private void saveAddress() {
-		if (visibilityAddressContent == View.VISIBLE) {
-			Address address = new Address();
-			address.setLine1(getText(etAddressLine1));
-			address.setPostalCode(getText(etAddressPostalCode));
-			address.setCity(getText(etAddressCity));
-			business.setAddress(address);
-		}
-	}
-
-	private void saveClub() {
-		if (visibilityClubContent == View.VISIBLE) {
-			Club club = new Club();
-			business.setClub(club);
-		}
-	}
-
-	private void saveTournament() {
-		if (visibilityTournamentContent == View.VISIBLE) {
-			Tournament tournament = new Tournament();
-			business.setTournament(tournament);
-		}
-	}
 	
 	private int getTypePosition() {
 		switch(business.getInvite().getType()) {
@@ -625,13 +435,5 @@ public class InviteActivity extends Activity {
 			default:
 				return 1;
 		}
-	}
-	
-	private String getText(EditText editText) {
-		String text = editText.getText().toString();
-		if ("".equals(text)) {
-			text = null;
-		}
-		return text;
 	}
 }
