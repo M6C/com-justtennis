@@ -104,6 +104,18 @@ public class InviteLocationBusiness {
 		tournamentService.createOrUpdate(tournament);
 	}
 
+	public boolean isEmptyTournament(Tournament tournament) {
+		return tournamentService.isEmptyTournament(tournament);
+	}
+
+	public boolean isEmptyClub(Club club) {
+		return clubService.isEmptyClub(club);
+	}
+	
+	public boolean isEmptyAddress(Address address) {
+		return addressService.isEmptyAddress(address);
+	}
+
 	public void save() {
 	}
 

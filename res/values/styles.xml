@@ -15,6 +15,19 @@
     <!-- Application theme. -->
     <style name="AppTheme" parent="AppBaseTheme">
         <!-- All customizations that are NOT specific to a particular API-level can go here. -->
+<!-- 
+	    <item name="android:spinnerStyle">@style/SpinnerStyle</item>
+	    <item name="android:spinnerItemStyle">@style/SpinnerItem</item>
+	    <item name="android:spinnerDropDownItemStyle">@style/SpinnerDropDownItem</item> -->
+ -->
+    </style>
+
+    <!-- Application theme. -->
+    <style name="SpinnerStyleNormal">
+        <!-- All customizations that are NOT specific to a particular API-level can go here. -->
+	    <item name="android:spinnerStyle">@style/SpinnerStyle</item>
+	    <item name="android:spinnerItemStyle">@style/SpinnerItem</item>
+	    <item name="android:spinnerDropDownItemStyle">@style/SpinnerDropDownItem</item> -->
     </style>
 
 </resources>

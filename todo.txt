@@ -21,6 +21,8 @@ Saisie de Message
 
 
 ********************* DONE *****************************
+Common
+[20140309] - Creation d'un custom spinner pour armoniser le design avec les champs de saisie
 
 Invite Location
 [20140306] - Création de l'écran

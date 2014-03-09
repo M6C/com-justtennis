@@ -10,13 +10,13 @@
         android:layout_height="wrap_content"
         android:gravity="center_vertical"
         android:orientation="horizontal" >
-	
+
 	    <Spinner
 	        android:id="@+id/sp_address_list"
 	        android:layout_width="0dp"
 	        android:layout_height="wrap_content"
 	        android:layout_weight="1"
-	        android:textSize="@dimen/player_field_size" />
+	        android:textSize="@dimen/location_field_size" />
 
 	    <ImageView
 	        android:layout_width="wrap_content"
@@ -36,6 +36,7 @@
             android:id="@+id/et_address_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="15dp"
             android:hint="@string/hint_address_name"
             android:maxLines="1" />
 

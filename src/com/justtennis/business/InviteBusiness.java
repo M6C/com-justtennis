@@ -203,6 +203,10 @@ public class InviteBusiness {
 		SmsManager.getInstance().send(context, this.invite.getUser().getPhonenumber(), message);
 	}
 
+	public boolean isEmptyRanking(Ranking ranking) {
+		return rankingService.isEmptyRanking(ranking);
+	}
+
 	public User getUser() {
 		return user;
 	}

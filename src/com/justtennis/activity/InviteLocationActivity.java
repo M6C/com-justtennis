@@ -7,13 +7,12 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemSelectedListener;
-import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
 
 import com.justtennis.R;
+import com.justtennis.adapter.CustomArrayAdapter;
 import com.justtennis.business.InviteLocationBusiness;
 import com.justtennis.domain.Address;
 import com.justtennis.domain.Club;
@@ -64,8 +63,8 @@ public class InviteLocationActivity extends Activity {
 	private View llAddressAdd;
 	private View llAddressSelection;
 
-	private ArrayAdapter<String> adapterClubAddress;
-	private ArrayAdapter<String> adapterAddress;
+	private CustomArrayAdapter<String> adapterClubAddress;
+	private CustomArrayAdapter<String> adapterAddress;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -224,66 +223,93 @@ public class InviteLocationActivity extends Activity {
 	}
 
 	private void initializeAddressList() {
-		adapterAddress = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, business.getListTxtAddress());
-		adapterAddress.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+		adapterAddress = new CustomArrayAdapter<String>(this, business.getListTxtAddress());
+		adapterAddress.setDropDownViewResource(R.layout.spinner_dropdown_item);
 		spAddress.setAdapter(adapterAddress);
-		spAddress.setOnItemSelectedListener(new OnItemSelectedListener() {
+		spAddress.setOnItemSelectedListener(adapterAddress.new OnItemSelectedListener<Address>() {
 			@Override
-			public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-				Address address = business.getListAddress().get(position);
-				business.setAddress(address);
+			public Address getItem(int position) {
+				return business.getListAddress().get(position);
 			}
-			
+
 			@Override
-			public void onNothingSelected(AdapterView<?> arg0) {
+				public boolean isHintItemSelected(Address address) {
+				return business.isEmptyAddress(address);
+			}
+	
+			@Override
+			public void onItemSelected(AdapterView<?> parent, View view, int position, long id, Address address) {
+				super.onItemSelected(parent, view, position, id);
+				business.setAddress(address);
 			}
 		});
 
-		adapterClubAddress = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, business.getListTxtAddress());
-		adapterClubAddress.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+		adapterClubAddress = new CustomArrayAdapter<String>(this, business.getListTxtAddress());
 		spClubAddress.setAdapter(adapterClubAddress);
+		spClubAddress.setOnItemSelectedListener(adapterAddress.new OnItemSelectedListener<Address>() {
+			@Override
+			public Address getItem(int position) {
+				return business.getListAddress().get(position);
+			}
+
+			@Override
+				public boolean isHintItemSelected(Address address) {
+				return business.isEmptyAddress(address);
+			}
+	
+			@Override
+			public void onItemSelected(AdapterView<?> parent, View view, int position, long id, Address address) {
+			}
+		});
 	}
 
 	private void initializeClubList() {
-		ArrayAdapter<String> dataAdapter = null;
+		CustomArrayAdapter<String> dataAdapter = null;
 
-		dataAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, business.getListTxtClub());
-		dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+		dataAdapter = new CustomArrayAdapter<String>(this, business.getListTxtClub());
 		spClub.setAdapter(dataAdapter);
-		
-		spClub.setOnItemSelectedListener(new OnItemSelectedListener() {
+		spClub.setOnItemSelectedListener(dataAdapter.new OnItemSelectedListener<Club>() {
 			@Override
-			public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-				Club club = business.getListClub().get(position);
+			public Club getItem(int position) {
+				return business.getListClub().get(position);
+			}
+
+			@Override
+				public boolean isHintItemSelected(Club club) {
+				return business.isEmptyClub(club);
+			}
+	
+			@Override
+			public void onItemSelected(AdapterView<?> parent, View view, int position, long id, Club club) {
 				business.setClub(club);
 			}
-			
-			@Override
-			public void onNothingSelected(AdapterView<?> arg0) {
-			}
 		});
-		
-		dataAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, business.getListTxtClub());
-		dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+		dataAdapter = new CustomArrayAdapter<String>(this, business.getListTxtClub());
+		dataAdapter.setDropDownViewResource(R.layout.spinner_dropdown_item);
 		spTournamentClub.setAdapter(dataAdapter);
 	}
 	
 	private void initializeTournamentList() {
-		ArrayAdapter<String> dataAdapter = null;
+		CustomArrayAdapter<String> dataAdapter = null;
 
-		dataAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, business.getListTxtTournament());
-		dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+		dataAdapter = new CustomArrayAdapter<String>(this, business.getListTxtTournament());
 		spTournament.setAdapter(dataAdapter);
-		
-		spTournament.setOnItemSelectedListener(new OnItemSelectedListener() {
+
+		spTournament.setOnItemSelectedListener(dataAdapter.new OnItemSelectedListener<Tournament>() {
 			@Override
-			public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-				Tournament tournament = business.getListTournament().get(position);
-				business.setTournament(tournament);
+			public Tournament getItem(int position) {
+				return business.getListTournament().get(position);
 			}
-			
+
 			@Override
-			public void onNothingSelected(AdapterView<?> arg0) {
+				public boolean isHintItemSelected(Tournament tournament) {
+				return business.isEmptyTournament(tournament);
+			}
+	
+			@Override
+			public void onItemSelected(AdapterView<?> parent, View view, int position, long id, Tournament tournament) {
+				business.setTournament(tournament);
 			}
 		});
 	}

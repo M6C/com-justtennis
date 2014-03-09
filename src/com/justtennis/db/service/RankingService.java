@@ -23,4 +23,8 @@ public class RankingService extends GenericService<Ranking> {
 		listRanking.clear();
 		listRanking.addAll(setRanking);
 	}
+
+	public boolean isEmptyRanking(Ranking ranking) {
+		return ranking.getOrder()==0;
+	}
 }

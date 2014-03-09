@@ -15,8 +15,6 @@ import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnFocusChangeListener;
 import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemSelectedListener;
-import android.widget.ArrayAdapter;
 import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.DatePicker;
@@ -32,6 +30,7 @@ import com.cameleon.common.android.factory.FactoryDialog;
 import com.cameleon.common.android.factory.listener.OnClickViewListener;
 import com.justtennis.ApplicationConfig;
 import com.justtennis.R;
+import com.justtennis.adapter.CustomArrayAdapter;
 import com.justtennis.business.InviteDemandeBusiness;
 import com.justtennis.db.service.PlayerService;
 import com.justtennis.domain.Invite.INVITE_TYPE;
@@ -294,19 +293,23 @@ public class InviteDemandeActivity extends Activity {
 
 	private void initializeRankingList() {
 		spRanking.setVisibility(View.VISIBLE);
-		ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, business.getListTxtRankings());
-		dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+		CustomArrayAdapter<String> dataAdapter = new CustomArrayAdapter<String>(this, business.getListTxtRankings());
 		spRanking.setAdapter(dataAdapter);
 
-		spRanking.setOnItemSelectedListener(new OnItemSelectedListener() {
+		spRanking.setOnItemSelectedListener(dataAdapter.new OnItemSelectedListener<Ranking>() {
 			@Override
-			public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-				Ranking ranking = business.getListRanking().get(position);
-				business.setIdRanking(ranking.getId());
+			public Ranking getItem(int position) {
+				return business.getListRanking().get(position);
 			}
 
 			@Override
-			public void onNothingSelected(AdapterView<?> arg0) {
+			public boolean isHintItemSelected(Ranking item) {
+				return business.isEmptyRanking(item);
+			}
+
+			@Override
+			public void onItemSelected(AdapterView<?> parent, View view, int position, long id, Ranking item) {
+				business.setIdRanking(item.getId());
 			}
 		});
 	}

@@ -19,7 +19,7 @@ public class TournamentService extends GenericService<Tournament> {
 		ret.setId(ID_EMPTY_TOURNAMENT);
 		return ret;
 	}
-	
+
 	public boolean isEmptyTournament(Tournament tournament) {
 		return tournament.getId()!=null && ID_EMPTY_TOURNAMENT==tournament.getId();
 	}

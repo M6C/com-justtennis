@@ -52,6 +52,8 @@ public class InviteDemandeBusiness {
 	private List<Ranking> listRanking;
 	private String[] listTxtRankings;
 
+	private RankingService rankingService;
+
 	public InviteDemandeBusiness(Context context, INotifierMessage notificationMessage) {
 		this.context = context;
 		this.notification = notificationMessage;
@@ -122,7 +124,8 @@ public class InviteDemandeBusiness {
 	public void initializeDataRanking() {
 		SortedSet<Ranking> setRanking = new TreeSet<Ranking>(new RankingComparatorByOrder());
 
-		listRanking = new RankingService(context, NotifierMessageLogger.getInstance()).getList();
+		rankingService = new RankingService(context, NotifierMessageLogger.getInstance());
+		listRanking = rankingService.getList();
 		setRanking.addAll(listRanking);
 		
 		listRanking.clear();
@@ -194,6 +197,10 @@ public class InviteDemandeBusiness {
 
 		String message = SmsParser.getInstance(context).toMessageInviteConfirmNo(invite);
 		SmsManager.getInstance().send(context, this.invite.getUser().getPhonenumber(), message);
+	}
+
+	public boolean isEmptyRanking(Ranking ranking) {
+		return rankingService.isEmptyRanking(ranking);
 	}
 
 	public User getUser() {
