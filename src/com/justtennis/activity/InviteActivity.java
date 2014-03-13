@@ -36,6 +36,7 @@ import com.justtennis.domain.Invite.INVITE_TYPE;
 import com.justtennis.domain.Player;
 import com.justtennis.domain.Player.PLAYER_TYPE;
 import com.justtennis.domain.Ranking;
+import com.justtennis.listener.action.TextWatcherFieldEnableView;
 import com.justtennis.listener.action.TextWatcherFieldScoreSetBold;
 import com.justtennis.manager.ContactManager;
 import com.justtennis.notifier.NotifierMessageLogger;
@@ -57,6 +58,7 @@ public class InviteActivity extends Activity {
 	private InviteBusiness business;
 	private Long idPlayerForResult = null;
 	private int visibilityScoreContent = View.GONE;
+	private boolean updateData = false;
 
 	private LinearLayout llInviteModify;
 	private LinearLayout llScoreContent;
@@ -68,6 +70,13 @@ public class InviteActivity extends Activity {
 	private Switch swType;
 	private Spinner spRanking;
 	private Bundle savedInstanceState;
+	private TextView tvLocation;
+	private TextView tvLocationEmpty;
+
+	private LinearLayout llLocationDetail;
+	private TextView tvLocationName;
+	private TextView tvLocationLine1;
+	private TextView tvLocationLine2;
 	
 	// SCORE
 	private EditText etScore11;
@@ -98,6 +107,12 @@ public class InviteActivity extends Activity {
 		ivPhoto = (ImageView)findViewById(R.id.iv_photo);
 		swType = (Switch)findViewById(R.id.sw_type);
 		spRanking = (Spinner)findViewById(R.id.sp_main_ranking);
+		tvLocation = ((TextView)findViewById(R.id.tv_location));
+		tvLocationEmpty = ((TextView)findViewById(R.id.et_location));
+		llLocationDetail = (LinearLayout)findViewById(R.id.ll_location_detail);
+		tvLocationName = ((TextView)findViewById(R.id.tv_location_name));
+		tvLocationLine1 = ((TextView)findViewById(R.id.tv_location_line1));
+		tvLocationLine2 = ((TextView)findViewById(R.id.tv_location_line2));
 
 		etScore11 = (EditText)findViewById(R.id.et_score1_1);
 		etScore21 = (EditText)findViewById(R.id.et_score2_1);
@@ -129,7 +144,14 @@ public class InviteActivity extends Activity {
 	@Override
 	protected void onResume() {
 		super.onResume();
-		initializeData();
+		if (updateData) {
+			business.updateData();
+			if (business.getInvite() != null) {
+				initializeDataLocation();
+			}
+		} else {
+			initializeData();
+		}
 		initializeListener();
 
 		visibilityScoreContent = (business.getScores() != null && business.getScores().length>0 ? View.VISIBLE : View.GONE);
@@ -154,8 +176,7 @@ public class InviteActivity extends Activity {
 				}
 				break;
 			case RESULT_LOCATION:
-				if (data!=null) {
-				}
+				updateData = true;
 				break;
 	
 			default:
@@ -268,6 +289,7 @@ public class InviteActivity extends Activity {
 		initializeDataDateTime();
 		initializeDataPlayer();
 		initializeDataScore();
+		initializeDataLocation();
 		initializeRankingList();
 		initializeRanking();
 	}
@@ -382,6 +404,30 @@ public class InviteActivity extends Activity {
 			}
 		}
 	}
+	
+	private void initializeDataLocation() {
+		String[] location = business.getLocation();
+		if (business.getType() == INVITE_TYPE.ENTRAINEMENT) {
+			tvLocation.setText(getString(R.string.txt_club));
+			tvLocationEmpty.setText(getString(R.string.txt_club));
+		} else {
+			tvLocation.setText(getString(R.string.txt_tournament));
+			tvLocationEmpty.setText(getString(R.string.txt_tournament));
+		}
+
+		if (location != null) {
+			tvLocationName.setText(location[0]);
+			tvLocationLine1.setText(location[1]);
+			tvLocationLine2.setText(location[2]);
+			tvLocation.setVisibility(View.VISIBLE);
+			llLocationDetail.setVisibility(View.VISIBLE);
+			tvLocationEmpty.setVisibility(View.GONE);
+		} else {
+			tvLocation.setVisibility(View.GONE);
+			llLocationDetail.setVisibility(View.GONE);
+			tvLocationEmpty.setVisibility(View.VISIBLE);
+		}
+	}
 
 	private void initializeListener() {
 		edDate.setOnFocusChangeListener(new OnFocusChangeListener() {
@@ -417,6 +463,8 @@ public class InviteActivity extends Activity {
 				business.setType(isChecked ? INVITE_TYPE.ENTRAINEMENT : INVITE_TYPE.MATCH);
 			}
 		});
+
+		tvLocationEmpty.addTextChangedListener(new TextWatcherFieldEnableView(tvLocation, View.GONE));
 	}
 
 	private void saveScores() {

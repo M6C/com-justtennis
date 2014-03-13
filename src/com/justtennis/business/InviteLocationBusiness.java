@@ -11,10 +11,12 @@ import com.justtennis.R;
 import com.justtennis.activity.InviteLocationActivity;
 import com.justtennis.db.service.AddressService;
 import com.justtennis.db.service.ClubService;
+import com.justtennis.db.service.InviteService;
 import com.justtennis.db.service.PojoNamedService;
 import com.justtennis.db.service.TournamentService;
 import com.justtennis.domain.Address;
 import com.justtennis.domain.Club;
+import com.justtennis.domain.GenericDBPojo;
 import com.justtennis.domain.Invite;
 import com.justtennis.domain.Invite.INVITE_TYPE;
 import com.justtennis.domain.Tournament;
@@ -25,6 +27,7 @@ public class InviteLocationBusiness {
 
 	private Context context;
 
+	private InviteService inviteService;
 	private AddressService addressService;
 	private ClubService clubService;
 	private TournamentService tournamentService;
@@ -32,14 +35,15 @@ public class InviteLocationBusiness {
 
 	private Invite invite;
 	private List<Address> listAddress = new ArrayList<Address>();
-	private String[] listTxtAddress;
+	private List<String> listTxtAddress = new ArrayList<String>();
 	private List<Club> listClub = new ArrayList<Club>();
-	private String[] listTxtClub;
+	private List<String> listTxtClub = new ArrayList<String>();
 	private List<Tournament> listTournament = new ArrayList<Tournament>();
-	private String[] listTxtTournament;
+	private List<String> listTxtTournament = new ArrayList<String>();
 
 	public InviteLocationBusiness(Context context, INotifierMessage notificationMessage) {
 		this.context = context;
+		inviteService = new InviteService(context, notificationMessage);
 		addressService = new AddressService(context, notificationMessage);
 		clubService = new ClubService(context, notificationMessage);
 		tournamentService = new TournamentService(context, notificationMessage);
@@ -56,52 +60,88 @@ public class InviteLocationBusiness {
 
 	public void initializeDataAddress() {
 		listAddress.clear();
-		listAddress.add(addressService.getEmptyAddress());
-		listAddress.get(0).setName(context.getString(R.string.txt_address));
 		listAddress.addAll(addressService.getList());
 		pojoNamedService.order(listAddress);
-		setListTxtAddress(pojoNamedService.getNames(listAddress));
+
+		listAddress.add(0, addressService.getEmptyAddress());
+		listAddress.get(0).setName(context.getString(R.string.txt_address));
+
+		initializeTxtAddress();
+	}
+
+	public void initializeTxtAddress() {
+		listTxtAddress.clear();
+		listTxtAddress.addAll(pojoNamedService.getNames(listAddress));
 	}
 	
 	public void initializeDataClub() {
 		listClub.clear();
-		listClub.add(clubService.getEmptyClub());
-		listClub.get(0).setName(context.getString(R.string.txt_club));
 		listClub.addAll(clubService.getList());
 		pojoNamedService.order(listClub);
-		setListTxtClub(pojoNamedService.getNames(listClub));
+
+		listClub.add(0, clubService.getEmptyClub());
+		listClub.get(0).setName(context.getString(R.string.txt_club));
+
+		initializeTxtClub();
+	}
+
+	public void initializeTxtClub() {
+		listTxtClub.clear();
+		listTxtClub.addAll(pojoNamedService.getNames(listClub));
 	}
 
 	public void initializeDataTournament() {
 		listTournament.clear();
-		listTournament.add(tournamentService.getEmptyTournament());
-		listTournament.get(0).setName(context.getString(R.string.txt_tournament));
 		listTournament.addAll(tournamentService.getList());
-		pojoNamedService.order(getListTournament());
-		setListTxtTournament(pojoNamedService.getNames(getListTournament()));
+		pojoNamedService.order(listTournament);
+
+		listTournament.add(0, tournamentService.getEmptyTournament());
+		listTournament.get(0).setName(context.getString(R.string.txt_tournament));
+
+		initializeTxtTournament();
 	}
 
-	public void addAddress(String name, String line1, String postalCode, String city) {
+	public void initializeTxtTournament() {
+		listTxtTournament.clear();
+		listTxtTournament.addAll(pojoNamedService.getNames(listTournament));
+	}
+
+	public Address addAddress(String name, String line1, String postalCode, String city) {
 		Address address = new Address();
 		address.setName(name);
 		address.setLine1(line1);
 		address.setPostalCode(postalCode);
 		address.setCity(city);
 		addressService.createOrUpdate(address);
+		return address;
 	}
 	
-	public void addClub(String name, Long idAddress) {
+	public Club addClub(String name, Long idAddress) {
 		Club club = new Club();
 		club.setName(name);
 		club.setIdAddress(idAddress);
 		clubService.createOrUpdate(club);
+		return club;
 	}
 	
-	public void addTournament(String name, Long idClub) {
+	public Tournament addTournament(String name, Long idClub) {
 		Tournament tournament = new Tournament();
 		tournament.setName(name);
 		tournament.setIdClub(idClub);
 		tournamentService.createOrUpdate(tournament);
+		return tournament;
+	}
+
+	public int getAddressPosition(Address address) {
+		return getPojoPosition(listAddress, address);
+	}
+	
+	public int getClubPosition(Club club) {
+		return getPojoPosition(listClub, club);
+	}
+
+	public int getTournamentPosition(Tournament tournament) {
+		return getPojoPosition(listTournament, tournament);
 	}
 
 	public boolean isEmptyTournament(Tournament tournament) {
@@ -117,6 +157,7 @@ public class InviteLocationBusiness {
 	}
 
 	public void save() {
+		inviteService.createOrUpdate(invite);
 	}
 
 	public INVITE_TYPE getType() {
@@ -159,27 +200,27 @@ public class InviteLocationBusiness {
 		this.listTournament = listTournament;
 	}
 
-	public String[] getListTxtAddress() {
+	public List<String> getListTxtAddress() {
 		return listTxtAddress;
 	}
 
-	public void setListTxtAddress(String[] listTxtAddress) {
+	public void setListTxtAddress(List<String> listTxtAddress) {
 		this.listTxtAddress = listTxtAddress;
 	}
 
-	public String[] getListTxtClub() {
+	public List<String> getListTxtClub() {
 		return listTxtClub;
 	}
 
-	public void setListTxtClub(String[] listTxtClub) {
+	public void setListTxtClub(List<String> listTxtClub) {
 		this.listTxtClub = listTxtClub;
 	}
 
-	public String[] getListTxtTournament() {
+	public List<String> getListTxtTournament() {
 		return listTxtTournament;
 	}
 
-	public void setListTxtTournament(String[] listTxtTournament) {
+	public void setListTxtTournament(List<String> listTxtTournament) {
 		this.listTxtTournament = listTxtTournament;
 	}
 
@@ -206,5 +247,16 @@ public class InviteLocationBusiness {
 	
 	public void setTournament(Tournament tournament) {
 		invite.setTournament(tournament);
+	}
+
+	private <P extends GenericDBPojo<Long>> int getPojoPosition(List<P> listPojo, P pojo) {
+		int ret=-1;
+		for(int i=0 ; i<listPojo.size() ; i++) {
+			if (listPojo.get(i).getId().equals(pojo.getId())) {
+				ret = i;
+				break;
+			}
+		}
+		return ret;
 	}
 }

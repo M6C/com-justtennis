@@ -1,5 +1,6 @@
 package com.justtennis.db.service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.SortedSet;
 import java.util.TreeSet;
@@ -16,11 +17,10 @@ public class PojoNamedService {
 		listPojo.addAll(set);
 	}
 
-	public <P extends IPojoNamed> String[] getNames(List<P> listPojo) {
-		String[] listTxtPojo = new String[listPojo.size()];
-		int i = 0;
+	public <P extends IPojoNamed> List<String> getNames(List<P> listPojo) {
+		List<String> listTxtPojo = new ArrayList<String>();
 		for(IPojoNamed pojo : listPojo) {
-			listTxtPojo[i++] = pojo.getName();
+			listTxtPojo.add(pojo.getName());
 		}
 		return listTxtPojo;
 	}

@@ -1,5 +1,6 @@
 package com.justtennis.business;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
@@ -17,11 +18,14 @@ import com.justtennis.R;
 import com.justtennis.activity.InviteActivity;
 import com.justtennis.activity.InviteActivity.MODE;
 import com.justtennis.activity.PlayerActivity;
+import com.justtennis.db.service.AddressService;
+import com.justtennis.db.service.ClubService;
 import com.justtennis.db.service.InviteService;
 import com.justtennis.db.service.MessageService;
 import com.justtennis.db.service.PlayerService;
 import com.justtennis.db.service.RankingService;
 import com.justtennis.db.service.ScoreSetService;
+import com.justtennis.db.service.TournamentService;
 import com.justtennis.db.service.UserService;
 import com.justtennis.domain.Address;
 import com.justtennis.domain.Club;
@@ -48,13 +52,16 @@ public class InviteBusiness {
 	private UserService userService;
 	private PlayerService playerService;
 	private ScoreSetService scoreSetService;
+	private AddressService addressService;
+	private ClubService clubService;
+	private TournamentService tournamentService;
 	private RankingService rankingService;
 	private GCalendarHelper gCalendarHelper;
 	private User user;
 	private Invite invite;
 	private MODE mode = MODE.INVITE_MODIFY;
 	private List<Ranking> listRanking;
-	private String[] listTxtRankings;
+	private List<String> listTxtRankings;
 	private String[][] scores;
 
 	public InviteBusiness(Context context, INotifierMessage notificationMessage) {
@@ -65,6 +72,9 @@ public class InviteBusiness {
 		userService = new UserService(context, notificationMessage);
 		rankingService = new RankingService(context, notificationMessage);
 		scoreSetService = new ScoreSetService(context, notificationMessage);
+		addressService = new AddressService(context, notificationMessage);
+		clubService = new ClubService(context, notificationMessage);
+		tournamentService = new TournamentService(context, notificationMessage);
 		gCalendarHelper = GCalendarHelper.getInstance(context);
 	}
 
@@ -92,7 +102,27 @@ public class InviteBusiness {
 				setIdRanking(getPlayer().getIdRanking());
 			}
 		}
+		initializeData(invite);
+	}
 
+	public void initializeData(Bundle savedInstanceState) {
+		mode = (MODE) savedInstanceState.getSerializable(InviteActivity.EXTRA_MODE);
+		invite = (Invite) savedInstanceState.getSerializable(PlayerActivity.EXTRA_INVITE);
+
+		initializeDataRanking();
+	}
+
+	public void updateData() {
+		if (this.invite!=null && this.invite.getId() != null) {
+			Invite invite = inviteService.find(this.invite.getId());
+			if (invite != null) {
+				this.invite = invite;
+				initializeData(invite);
+			}
+		}
+	}
+	
+	private void initializeData(Invite invite) {
 		if (invite.getDate()==null) {
 			Calendar calendar = GregorianCalendar.getInstance(ApplicationConfig.getLocal());
 			calendar.setTime(new Date());
@@ -105,22 +135,15 @@ public class InviteBusiness {
 		initializeDataRanking();
 	}
 
-	public void initializeData(Bundle savedInstanceState) {
-		mode = (MODE) savedInstanceState.getSerializable(InviteActivity.EXTRA_MODE);
-		invite = (Invite) savedInstanceState.getSerializable(PlayerActivity.EXTRA_INVITE);
-
-		initializeDataRanking();
-	}
-
 	public void initializeDataRanking() {
 
 		listRanking = rankingService.getList();
 		rankingService.order(listRanking);
 
 		int i=0;
-		listTxtRankings = new String[listRanking.size()];
+		listTxtRankings = new ArrayList<String>();
 		for(Ranking ranking : listRanking) {
-			listTxtRankings[i++] = ranking.getRanking();
+			listTxtRankings.add(ranking.getRanking());
 		}
 	}
 
@@ -303,11 +326,11 @@ public class InviteBusiness {
 		this.listRanking = listRanking;
 	}
 
-	public String[] getListTxtRankings() {
+	public List<String> getListTxtRankings() {
 		return listTxtRankings;
 	}
 
-	public void setListTxtRankings(String[] listTxtRankings) {
+	public void setListTxtRankings(List<String> listTxtRankings) {
 		this.listTxtRankings = listTxtRankings;
 	}
 
@@ -452,6 +475,54 @@ public class InviteBusiness {
 			} else {
 				invite.setAddress(address);
 			}
+		}
+	}
+
+	public String[] getLocation() {
+		if (getType() == INVITE_TYPE.ENTRAINEMENT) {
+			if (getClub() != null && getClub().getId() != null) {
+				return getAddress(getClub().getId());
+			}
+		} else {
+			if (getTournament() != null) {
+				Tournament tournament = tournamentService.find(getTournament().getId());
+				if (tournament != null && tournament.getIdClub() != null) {
+					return getAddress(tournament.getIdClub());
+				}
+			}
+		}
+		return null;
+	}
+	
+	public String[] getAddress(long idClub) {
+		String name = "";
+		String line1 = "";
+		String line2 = "";
+		Club club = clubService.find(idClub);
+		if (club != null) {
+			if (club.getName()!=null) {
+				name = club.getName();
+			}
+			if (club.getIdAddress() != null) {
+				Address address = addressService.find(club.getIdAddress());
+				if (address != null) {
+					if (address.getLine1() != null) {
+						line1 = address.getLine1();
+					}
+					if (address.getPostalCode() != null) {
+						line2 += address.getPostalCode();
+					}
+					if (address.getCity() != null) {
+						line2 += " " + address.getCity();
+					}
+					line2 = line2.trim();
+				}
+			}
+		}
+		if ("".equals(name) && "".equals(line1) && "".equals(line2)) {
+			return null;
+		} else {
+			return new String[] {name, line1, line2};
 		}
 	}
 

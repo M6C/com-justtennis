@@ -52,6 +52,8 @@ public class InviteLocationActivity extends Activity {
 	private Spinner spClubAddress;
 	private Spinner spTournament;
 	private Spinner spTournamentClub;
+	private EditText etTournamentName;
+	private EditText etClubName;
 	private EditText etAddressName;
 	private EditText etAddressLine1;
 	private EditText etAddressPostalCode;
@@ -65,6 +67,11 @@ public class InviteLocationActivity extends Activity {
 
 	private CustomArrayAdapter<String> adapterClubAddress;
 	private CustomArrayAdapter<String> adapterAddress;
+
+	private CustomArrayAdapter<String> adapterTournamentClub;
+	private CustomArrayAdapter<String> adapterClub;
+
+	private CustomArrayAdapter<String> adapterTournament;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -86,6 +93,7 @@ public class InviteLocationActivity extends Activity {
 		llClubCollapser = (LinearLayout)findViewById(R.id.ll_club_collapser);
 		llClubAdd = findViewById(R.id.ll_club_add);
 		llClubSelection = findViewById(R.id.ll_club_selection);
+		etClubName = (EditText)findViewById(R.id.et_club_name);
 		spClub = (Spinner)findViewById(R.id.sp_club_list);
 		spClubAddress = (Spinner)findViewById(R.id.sp_club_address_list);
 
@@ -93,6 +101,7 @@ public class InviteLocationActivity extends Activity {
 		llTournamentCollapser = (LinearLayout)findViewById(R.id.ll_tournament_collapser);
 		llTournamentAdd = findViewById(R.id.ll_tournament_add);
 		llTournamentSelection = findViewById(R.id.ll_tournament_selection);
+		etTournamentName = (EditText)findViewById(R.id.et_tournament_name);
 		spTournament = (Spinner)findViewById(R.id.sp_tournament_list);
 		spTournamentClub = (Spinner)findViewById(R.id.sp_tournament_club_list);
 
@@ -162,11 +171,17 @@ public class InviteLocationActivity extends Activity {
 	}
 
 	public void onClickAddressAddValidate(View view) {
-		business.addAddress(getText(etAddressName), getText(etAddressLine1), getText(etAddressPostalCode), getText(etAddressCity));
+		Address address = business.addAddress(getText(etAddressName), getText(etAddressLine1), getText(etAddressPostalCode), getText(etAddressCity));
+		business.setAddress(address);
+
 		business.initializeDataAddress();
 		adapterClubAddress.notifyDataSetChanged();
 		adapterAddress.notifyDataSetChanged();
 		manageVisibility(false, false, false, true, false, false);
+
+		spClubAddress.setSelection(business.getAddressPosition(address), true);
+		spAddress.setSelection(business.getAddressPosition(address), true);
+
 	}
 	
 	public void onClickClubAdd(View view) {
@@ -175,6 +190,21 @@ public class InviteLocationActivity extends Activity {
 	}
 	
 	public void onClickClubAddValidate(View view) {
+		Club club = business.addClub(getText(etClubName), business.getAddress().getId());
+		business.setClub(club);
+
+		if (business.getType() == INVITE_TYPE.MATCH) {
+			business.initializeDataClub();
+			adapterClub.notifyDataSetChanged();
+			adapterTournamentClub.notifyDataSetChanged();
+
+			manageVisibility(false, true, false, false, false, false);
+			spTournamentClub.setSelection(business.getClubPosition(club), true);
+			spClub.setSelection(business.getClubPosition(club), true);
+		} else {
+			business.save();
+			finish();
+		}
 	}
 	
 	public void onClickClubAddressAdd(View view) {
@@ -187,6 +217,19 @@ public class InviteLocationActivity extends Activity {
 	}
 	
 	public void onClickTournamentAddValidate(View view) {
+		Tournament tournament = business.addTournament(getText(etTournamentName), business.getClub().getId());
+		business.setTournament(tournament);
+
+		if (business.getType() == INVITE_TYPE.MATCH) {
+			business.initializeDataTournament();
+			adapterTournament.notifyDataSetChanged();
+			manageVisibility(true, false, false, false, false, false);
+
+			spTournament.setSelection(business.getTournamentPosition(tournament), true);
+		} else {
+			business.save();
+			finish();
+		}
 	}
 
 	public void onClickTournamentClubAdd(View view) {
@@ -220,98 +263,25 @@ public class InviteLocationActivity extends Activity {
 		initializeAddress();
 		initializeClub();
 		initializeTournament();
+		initializeAddressListener();
+		initializeClubListener();
+		initializeTournamentListener();
 	}
 
 	private void initializeAddressList() {
 		adapterAddress = new CustomArrayAdapter<String>(this, business.getListTxtAddress());
 		adapterAddress.setDropDownViewResource(R.layout.spinner_dropdown_item);
 		spAddress.setAdapter(adapterAddress);
-		spAddress.setOnItemSelectedListener(adapterAddress.new OnItemSelectedListener<Address>() {
-			@Override
-			public Address getItem(int position) {
-				return business.getListAddress().get(position);
-			}
-
-			@Override
-				public boolean isHintItemSelected(Address address) {
-				return business.isEmptyAddress(address);
-			}
-	
-			@Override
-			public void onItemSelected(AdapterView<?> parent, View view, int position, long id, Address address) {
-				super.onItemSelected(parent, view, position, id);
-				business.setAddress(address);
-			}
-		});
-
-		adapterClubAddress = new CustomArrayAdapter<String>(this, business.getListTxtAddress());
-		spClubAddress.setAdapter(adapterClubAddress);
-		spClubAddress.setOnItemSelectedListener(adapterAddress.new OnItemSelectedListener<Address>() {
-			@Override
-			public Address getItem(int position) {
-				return business.getListAddress().get(position);
-			}
-
-			@Override
-				public boolean isHintItemSelected(Address address) {
-				return business.isEmptyAddress(address);
-			}
-	
-			@Override
-			public void onItemSelected(AdapterView<?> parent, View view, int position, long id, Address address) {
-			}
-		});
 	}
 
 	private void initializeClubList() {
-		CustomArrayAdapter<String> dataAdapter = null;
-
-		dataAdapter = new CustomArrayAdapter<String>(this, business.getListTxtClub());
-		spClub.setAdapter(dataAdapter);
-		spClub.setOnItemSelectedListener(dataAdapter.new OnItemSelectedListener<Club>() {
-			@Override
-			public Club getItem(int position) {
-				return business.getListClub().get(position);
-			}
-
-			@Override
-				public boolean isHintItemSelected(Club club) {
-				return business.isEmptyClub(club);
-			}
-	
-			@Override
-			public void onItemSelected(AdapterView<?> parent, View view, int position, long id, Club club) {
-				business.setClub(club);
-			}
-		});
-
-		dataAdapter = new CustomArrayAdapter<String>(this, business.getListTxtClub());
-		dataAdapter.setDropDownViewResource(R.layout.spinner_dropdown_item);
-		spTournamentClub.setAdapter(dataAdapter);
+		adapterClub = new CustomArrayAdapter<String>(this, business.getListTxtClub());
+		spClub.setAdapter(adapterClub);
 	}
 	
 	private void initializeTournamentList() {
-		CustomArrayAdapter<String> dataAdapter = null;
-
-		dataAdapter = new CustomArrayAdapter<String>(this, business.getListTxtTournament());
-		spTournament.setAdapter(dataAdapter);
-
-		spTournament.setOnItemSelectedListener(dataAdapter.new OnItemSelectedListener<Tournament>() {
-			@Override
-			public Tournament getItem(int position) {
-				return business.getListTournament().get(position);
-			}
-
-			@Override
-				public boolean isHintItemSelected(Tournament tournament) {
-				return business.isEmptyTournament(tournament);
-			}
-	
-			@Override
-			public void onItemSelected(AdapterView<?> parent, View view, int position, long id, Tournament tournament) {
-				business.setTournament(tournament);
-			}
-		});
+		adapterTournament = new CustomArrayAdapter<String>(this, business.getListTxtTournament());
+		spTournament.setAdapter(adapterTournament);
 	}
 
 	private void initializeAddress() {
@@ -420,5 +390,105 @@ public class InviteLocationActivity extends Activity {
 		llAddressContent.setVisibility(visibilityAddressContent);
 		llAddressAdd.setVisibility(visibilityAddressContent);
 		llAddressSelection.setVisibility(visibilityAddressSelection);
+	}
+
+	private void initializeAddressListener() {
+		spAddress.setOnItemSelectedListener(adapterAddress.new OnItemSelectedListener<Address>() {
+			@Override
+			public Address getItem(int position) {
+				return business.getListAddress().get(position);
+			}
+
+			@Override
+				public boolean isHintItemSelected(Address address) {
+				return business.isEmptyAddress(address);
+			}
+	
+			@Override
+			public void onItemSelected(AdapterView<?> parent, View view, int position, long id, Address address) {
+				business.setAddress(address);
+			}
+		});
+
+		adapterClubAddress = new CustomArrayAdapter<String>(this, business.getListTxtAddress());
+		spClubAddress.setAdapter(adapterClubAddress);
+		spClubAddress.setOnItemSelectedListener(adapterAddress.new OnItemSelectedListener<Address>() {
+			@Override
+			public Address getItem(int position) {
+				return business.getListAddress().get(position);
+			}
+
+			@Override
+				public boolean isHintItemSelected(Address address) {
+				return business.isEmptyAddress(address);
+			}
+	
+			@Override
+			public void onItemSelected(AdapterView<?> parent, View view, int position, long id, Address address) {
+				business.setAddress(address);
+			}
+		});
+	}
+
+	private void initializeClubListener() {
+		spClub.setOnItemSelectedListener(adapterClub.new OnItemSelectedListener<Club>() {
+			@Override
+			public Club getItem(int position) {
+				return business.getListClub().get(position);
+			}
+
+			@Override
+				public boolean isHintItemSelected(Club club) {
+				return business.isEmptyClub(club);
+			}
+	
+			@Override
+			public void onItemSelected(AdapterView<?> parent, View view, int position, long id, Club club) {
+				business.setClub(club);
+				business.save();
+				finish();
+			}
+		});
+
+		adapterTournamentClub = new CustomArrayAdapter<String>(this, business.getListTxtClub());
+		adapterTournamentClub.setDropDownViewResource(R.layout.spinner_dropdown_item);
+		spTournamentClub.setAdapter(adapterTournamentClub);
+		spTournamentClub.setOnItemSelectedListener(adapterTournamentClub.new OnItemSelectedListener<Club>() {
+			@Override
+			public Club getItem(int position) {
+				return business.getListClub().get(position);
+			}
+
+			@Override
+				public boolean isHintItemSelected(Club club) {
+				return business.isEmptyClub(club);
+			}
+	
+			@Override
+			public void onItemSelected(AdapterView<?> parent, View view, int position, long id, Club club) {
+				business.setClub(club);
+			}
+		});
+	}
+
+	private void initializeTournamentListener() {
+		spTournament.setOnItemSelectedListener(adapterTournament.new OnItemSelectedListener<Tournament>() {
+			@Override
+			public Tournament getItem(int position) {
+				return business.getListTournament().get(position);
+			}
+
+			@Override
+				public boolean isHintItemSelected(Tournament tournament) {
+				return business.isEmptyTournament(tournament);
+			}
+	
+			@Override
+			public void onItemSelected(AdapterView<?> parent, View view, int position, long id, Tournament tournament) {
+				business.setTournament(tournament);
+				business.save();
+				finish();
+			}
+		});
 	}
 }

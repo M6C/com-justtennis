@@ -1,5 +1,7 @@
 package com.justtennis.adapter;
 
+import java.util.List;
+
 import android.content.Context;
 import android.view.View;
 import android.widget.AdapterView;
@@ -10,7 +12,7 @@ import com.justtennis.R;
 
 public class CustomArrayAdapter<T> extends ArrayAdapter<T> {
 
-	public CustomArrayAdapter(Context context, T[] objects) {
+	public CustomArrayAdapter(Context context, List<T> objects) {
 		super(context, R.layout.spinner_item, objects);
 		setDropDownViewResource(R.layout.spinner_dropdown_item);
 	}
@@ -30,6 +32,7 @@ public class CustomArrayAdapter<T> extends ArrayAdapter<T> {
 				color = android.R.color.black;
 			}
 			((TextView)view.findViewById(android.R.id.text1)).setTextColor(getContext().getResources().getColor(color));
+			onItemSelected(parent, view, position, id, item);
 		}
 
 		@Override

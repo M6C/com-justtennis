@@ -1,5 +1,6 @@
 package com.justtennis.business;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
@@ -50,7 +51,7 @@ public class InviteDemandeBusiness {
 	private Invite invite;
 	private MODE mode = MODE.INVITE_DEMANDE;
 	private List<Ranking> listRanking;
-	private String[] listTxtRankings;
+	private List<String> listTxtRankings;
 
 	private RankingService rankingService;
 
@@ -132,9 +133,9 @@ public class InviteDemandeBusiness {
 		listRanking.addAll(setRanking);
 
 		int i=0;
-		listTxtRankings = new String[setRanking.size()];
+		listTxtRankings = new ArrayList<String>();
 		for(Ranking ranking : setRanking) {
-			listTxtRankings[i++] = ranking.getRanking();
+			listTxtRankings.add(ranking.getRanking());
 		}
 	}
 
@@ -267,11 +268,11 @@ public class InviteDemandeBusiness {
 		this.listRanking = listRanking;
 	}
 
-	public String[] getListTxtRankings() {
+	public List<String> getListTxtRankings() {
 		return listTxtRankings;
 	}
 
-	public void setListTxtRankings(String[] listTxtRankings) {
+	public void setListTxtRankings(List<String> listTxtRankings) {
 		this.listTxtRankings = listTxtRankings;
 	}
 

@@ -21,11 +21,12 @@ Saisie de Message
 
 
 ********************* DONE *****************************
+Invite Location
+[20140313] - Utilisation dans l'écran d'invite (Reste encore des bug)
+[20140306] - Création de l'écran
+
 Common
 [20140309] - Creation d'un custom spinner pour armoniser le design avec les champs de saisie
-
-Invite Location
-[20140306] - Création de l'écran
 
 Invite Demande
 [20140303] - Modification design de la notion d'adresse, club et tournoi
