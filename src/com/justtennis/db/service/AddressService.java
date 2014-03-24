@@ -31,8 +31,12 @@ public class AddressService extends GenericService<Address> {
 		ret.setId(ID_EMPTY_ADDRESS);
 		return ret;
 	}
-	
+
 	public boolean isEmptyAddress(Address address) {
 		return address.getId()!=null && ID_EMPTY_ADDRESS==address.getId();
+	}
+	
+	public boolean isRealAddress(Address address) {
+		return address.getId()!=null && address.getId() > 0;
 	}
 }

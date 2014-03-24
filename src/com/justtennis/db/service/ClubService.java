@@ -19,8 +19,12 @@ public class ClubService extends GenericService<Club> {
 		ret.setId(ID_EMPTY_CLUB);
 		return ret;
 	}
-	
+
 	public boolean isEmptyClub(Club club) {
 		return club.getId()!=null && ID_EMPTY_CLUB==club.getId();
+	}
+	
+	public boolean isRealClub(Club club) {
+		return club.getId()!=null && club.getId() > 0;
 	}
 }

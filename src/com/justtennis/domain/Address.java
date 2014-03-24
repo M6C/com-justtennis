@@ -1,25 +1,16 @@
 package com.justtennis.domain;
 
-import com.justtennis.domain.interfaces.IPojoNamed;
 
 
-public class Address extends GenericDBPojo<Long> implements IPojoNamed {
+public class Address extends GenericDBPojoNamed {
 	
 	private static final long serialVersionUID = 1L;
 
-	private String name;
 	private String line1;
 	private String postalCode;
 	private String city;
 	private String gps;
 
-	@Override
-	public String getName() {
-		return name;
-	}
-	public void setName(String name) {
-		this.name = name;
-	}
 	public String getLine1() {
 		return line1;
 	}

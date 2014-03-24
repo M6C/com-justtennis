@@ -23,4 +23,8 @@ public class TournamentService extends GenericService<Tournament> {
 	public boolean isEmptyTournament(Tournament tournament) {
 		return tournament.getId()!=null && ID_EMPTY_TOURNAMENT==tournament.getId();
 	}
+	
+	public boolean isRealTournament(Tournament tournament) {
+		return tournament.getId()!=null && tournament.getId() > 0;
+	}
 }

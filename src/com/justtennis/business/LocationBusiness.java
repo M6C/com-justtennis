@@ -8,7 +8,7 @@ import android.content.Intent;
 
 import com.cameleon.common.android.inotifier.INotifierMessage;
 import com.justtennis.R;
-import com.justtennis.activity.InviteLocationActivity;
+import com.justtennis.activity.LocationActivity;
 import com.justtennis.db.service.AddressService;
 import com.justtennis.db.service.ClubService;
 import com.justtennis.db.service.InviteService;
@@ -21,9 +21,9 @@ import com.justtennis.domain.Invite;
 import com.justtennis.domain.Invite.INVITE_TYPE;
 import com.justtennis.domain.Tournament;
 
-public class InviteLocationBusiness {
+public class LocationBusiness {
 
-	private static final String TAG = InviteLocationBusiness.class.getSimpleName();
+	private static final String TAG = LocationBusiness.class.getSimpleName();
 
 	private Context context;
 
@@ -41,7 +41,7 @@ public class InviteLocationBusiness {
 	private List<Tournament> listTournament = new ArrayList<Tournament>();
 	private List<String> listTxtTournament = new ArrayList<String>();
 
-	public InviteLocationBusiness(Context context, INotifierMessage notificationMessage) {
+	public LocationBusiness(Context context, INotifierMessage notificationMessage) {
 		this.context = context;
 		inviteService = new InviteService(context, notificationMessage);
 		addressService = new AddressService(context, notificationMessage);
@@ -51,7 +51,7 @@ public class InviteLocationBusiness {
 	}
 
 	public void initializeData(Intent intent) {
-		invite = (Invite) intent.getSerializableExtra(InviteLocationActivity.EXTRA_INVITE);
+		invite = (Invite) intent.getSerializableExtra(LocationActivity.EXTRA_INVITE);
 
 		initializeDataAddress();
 		initializeDataClub();
@@ -107,7 +107,12 @@ public class InviteLocationBusiness {
 	}
 
 	public Address addAddress(String name, String line1, String postalCode, String city) {
-		Address address = new Address();
+		Address address = null;
+		if (getAddress() != null && getAddress() != null && addressService.isRealAddress(getAddress())) {
+			address = getAddress();
+		} else {
+			address = new Address();
+		}
 		address.setName(name);
 		address.setLine1(line1);
 		address.setPostalCode(postalCode);
@@ -117,7 +122,12 @@ public class InviteLocationBusiness {
 	}
 	
 	public Club addClub(String name, Long idAddress) {
-		Club club = new Club();
+		Club club = null;
+		if (getClub() != null && getClub().getId() != null && clubService.isRealClub(getClub())) {
+			club = getClub();
+		} else {
+			club = new Club();
+		}
 		club.setName(name);
 		club.setIdAddress(idAddress);
 		clubService.createOrUpdate(club);
@@ -125,11 +135,37 @@ public class InviteLocationBusiness {
 	}
 	
 	public Tournament addTournament(String name, Long idClub) {
-		Tournament tournament = new Tournament();
+		Tournament tournament = null;
+		if (getTournament() != null && getTournament().getId()!=null && tournamentService.isRealTournament(getTournament())) {
+			tournament = getTournament();
+		} else {
+			tournament = new Tournament();
+		}
 		tournament.setName(name);
 		tournament.setIdClub(idClub);
 		tournamentService.createOrUpdate(tournament);
 		return tournament;
+	}
+
+	public void deleteAddress() {
+		Address address = getAddress();
+		if (address!=null && !addressService.isEmptyAddress(address)) {
+			addressService.delete(address);
+		}
+	}
+
+	public void deleteClub() {
+		Club address = getClub();
+		if (address!=null && !clubService.isEmptyClub(address)) {
+			clubService.delete(address);
+		}
+	}
+	
+	public void deleteTournament() {
+		Tournament address = getTournament();
+		if (address!=null && !tournamentService.isEmptyTournament(address)) {
+			tournamentService.delete(address);
+		}
 	}
 
 	public int getAddressPosition(Address address) {

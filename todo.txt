@@ -22,6 +22,7 @@ Saisie de Message
 
 ********************* DONE *****************************
 Invite Location
+[20140324] - Ajout d'ecrans generic
 [20140313] - Utilisation dans l'écran d'invite (Reste encore des bug)
 [20140306] - Création de l'écran
 

@@ -31,7 +31,12 @@ public class CustomArrayAdapter<T> extends ArrayAdapter<T> {
 			} else {
 				color = android.R.color.black;
 			}
-			((TextView)view.findViewById(android.R.id.text1)).setTextColor(getContext().getResources().getColor(color));
+			if (view != null) {
+				TextView textView = (TextView)view.findViewById(android.R.id.text1);
+				if (textView != null) {
+					textView.setTextColor(getContext().getResources().getColor(color));
+				}
+			}
 			onItemSelected(parent, view, position, id, item);
 		}
 

@@ -1,5 +1,6 @@
 package com.justtennis.activity;
 
+import java.io.Serializable;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -11,6 +12,7 @@ import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnFocusChangeListener;
 import android.widget.AdapterView;
@@ -56,9 +58,9 @@ public class InviteActivity extends Activity {
 	private static final int RESULT_LOCATION = 2;
 
 	private InviteBusiness business;
-	private Long idPlayerForResult = null;
+	private Long idPlayerFromResult = null;
 	private int visibilityScoreContent = View.GONE;
-	private boolean updateData = false;
+	private Serializable locationFromResult;
 
 	private LinearLayout llInviteModify;
 	private LinearLayout llScoreContent;
@@ -144,14 +146,25 @@ public class InviteActivity extends Activity {
 	@Override
 	protected void onResume() {
 		super.onResume();
-		if (updateData) {
-			business.updateData();
-			if (business.getInvite() != null) {
-				initializeDataLocation();
-			}
-		} else {
-			initializeData();
+		Intent intent = getIntent();
+		if (savedInstanceState!=null) {
+			business.initializeData(savedInstanceState);
+			savedInstanceState = null;
 		}
+		else {
+			business.initializeData(intent);
+		}
+
+		if (idPlayerFromResult != null) {
+			business.setPlayer(idPlayerFromResult);
+			idPlayerFromResult = null;
+		}
+
+		if (locationFromResult != null) {
+			business.setLocation(locationFromResult);
+			locationFromResult = null;
+		}
+		initializeData();
 		initializeListener();
 
 		visibilityScoreContent = (business.getScores() != null && business.getScores().length>0 ? View.VISIBLE : View.GONE);
@@ -171,12 +184,14 @@ public class InviteActivity extends Activity {
 				if (data!=null) {
 					long id = data.getLongExtra(ListPlayerActivity.EXTRA_PLAYER_ID, PlayerService.ID_EMPTY_PLAYER);
 					if (id != PlayerService.ID_EMPTY_PLAYER) {
-						idPlayerForResult = Long.valueOf(id);
+						idPlayerFromResult = Long.valueOf(id);
 					}
 				}
 				break;
 			case RESULT_LOCATION:
-				updateData = true;
+				if (data != null) {
+					locationFromResult = data.getSerializableExtra(LocationActivity.EXTRA_OUT_LOCATION);
+				}
 				break;
 	
 			default:
@@ -259,8 +274,8 @@ public class InviteActivity extends Activity {
 	}
 
 	public void onClickLocation(View view) {
-		Intent intent = new Intent(this, InviteLocationActivity.class);
-		intent.putExtra(InviteLocationActivity.EXTRA_INVITE, business.getInvite());
+		Intent intent = new Intent(this, LocationTournamentActivity.class);
+		intent.putExtra(LocationActivity.EXTRA_INVITE, business.getInvite());
 		startActivityForResult(intent, RESULT_LOCATION);
 	}
 
@@ -270,20 +285,6 @@ public class InviteActivity extends Activity {
 	}
 
 	private void initializeData() {
-		Intent intent = getIntent();
-		if (savedInstanceState!=null) {
-			business.initializeData(savedInstanceState);
-			savedInstanceState = null;
-		}
-		else {
-			business.initializeData(intent);
-		}
-
-		if (idPlayerForResult != null) {
-			business.setPlayer(idPlayerForResult);
-			idPlayerForResult = null;
-		}
-
 		initializeDataMode();
 		initializeDataType();
 		initializeDataDateTime();
@@ -292,9 +293,11 @@ public class InviteActivity extends Activity {
 		initializeDataLocation();
 		initializeRankingList();
 		initializeRanking();
+		initializeDataLocation();
 	}
 
 	private void initializeDataPlayer() {
+		Log.d(TAG, "initializeDataPlayer");
 		Player player = business.getPlayer();
 		if (player!=null) {
 			tvFirstname.setText(player.getFirstName());
@@ -306,6 +309,7 @@ public class InviteActivity extends Activity {
 	}
 
 	private void initializeDataDateTime() {
+		Log.d(TAG, "initializeDataTime");
 		Date date = business.getDate();
 
 		DateFormat sdfD = new SimpleDateFormat(getString(R.string.msg_common_format_date), ApplicationConfig.getLocal());
@@ -315,10 +319,12 @@ public class InviteActivity extends Activity {
 	}
 
 	private void initializeDataType() {
+		Log.d(TAG, "initializeDataType");
 		swType.setChecked(getTypePosition()==0);
 	}
 
 	private void initializeRankingList() {
+		Log.d(TAG, "initializeRankingList");
 		spRanking.setVisibility(View.VISIBLE);
 		CustomArrayAdapter<String> dataAdapter = new CustomArrayAdapter<String>(this, business.getListTxtRankings());
 		spRanking.setAdapter(dataAdapter);
@@ -342,6 +348,7 @@ public class InviteActivity extends Activity {
 	}
 
 	private void initializeRanking() {
+		Log.d(TAG, "initializeRanking");
 		Long id = business.getIdRanking();
 		int position = 0;
 		List<Ranking> listRanking = business.getListRanking();
@@ -356,6 +363,7 @@ public class InviteActivity extends Activity {
 	}
 
 	private void initializeDataMode() {
+		Log.d(TAG, "initializeDataMode");
 		switch (business.getMode()) {
 			default:
 			case INVITE_MODIFY:
@@ -367,6 +375,7 @@ public class InviteActivity extends Activity {
 	}
 
 	private void initializeDataScore() {
+		Log.d(TAG, "initializeDataScore");
 
 		String[][] scores = business.getScores();
 		if (scores!=null) {
@@ -406,7 +415,8 @@ public class InviteActivity extends Activity {
 	}
 	
 	private void initializeDataLocation() {
-		String[] location = business.getLocation();
+		Log.d(TAG, "initializeDataLocation");
+		String[] location = business.getLocationLine();
 		if (business.getType() == INVITE_TYPE.ENTRAINEMENT) {
 			tvLocation.setText(getString(R.string.txt_club));
 			tvLocationEmpty.setText(getString(R.string.txt_club));

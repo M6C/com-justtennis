@@ -78,7 +78,13 @@
    		   android:windowSoftInputMode="stateHidden"
    		   android:screenOrientation="portrait"
          />
-        <activity android:name=".activity.InviteLocationActivity"
+        <activity android:name=".activity.LocationTournamentActivity"
+   		   android:screenOrientation="portrait"
+         />
+        <activity android:name=".activity.LocationClubActivity"
+   		   android:screenOrientation="portrait"
+         />
+        <activity android:name=".activity.LocationAddressActivity"
    		   android:screenOrientation="portrait"
          />
         <activity android:name=".activity.InviteDemandeActivity"

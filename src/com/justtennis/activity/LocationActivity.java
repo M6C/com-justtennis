@@ -1,8 +1,11 @@
 package com.justtennis.activity;
 
+import java.io.Serializable;
 import java.util.List;
 
 import android.app.Activity;
+import android.content.DialogInterface;
+import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -11,23 +14,26 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
 
+import com.cameleon.common.android.factory.FactoryDialog;
 import com.justtennis.R;
 import com.justtennis.adapter.CustomArrayAdapter;
-import com.justtennis.business.InviteLocationBusiness;
+import com.justtennis.business.LocationBusiness;
 import com.justtennis.domain.Address;
 import com.justtennis.domain.Club;
 import com.justtennis.domain.Invite.INVITE_TYPE;
 import com.justtennis.domain.Tournament;
+import com.justtennis.listener.ok.OnClickInviteDeleteListenerOk;
 import com.justtennis.notifier.NotifierMessageLogger;
 
-public class InviteLocationActivity extends Activity {
+public class LocationActivity extends Activity {
 
 	@SuppressWarnings("unused")
-	private static final String TAG = InviteLocationActivity.class.getSimpleName();
+	private static final String TAG = LocationActivity.class.getSimpleName();
 
 	public static final String EXTRA_INVITE = "EXTRA_INVITE";
+	public static final String EXTRA_OUT_LOCATION = "EXTRA_OUT_LOCATION";
 
-	private InviteLocationBusiness business;
+	private LocationBusiness business;
 
 	private int visibilityTournamentSelection = View.GONE;
 	private int visibilityClubSelection = View.GONE;
@@ -64,6 +70,11 @@ public class InviteLocationActivity extends Activity {
 	private View llClubSelection;
 	private View llAddressAdd;
 	private View llAddressSelection;
+	private View ivAddressDelete;
+	private View ivClubDelete;
+	private View ivClubAddressDelete;
+	private View ivTournamentDelete;
+	private View ivTournamentClubDelete;
 
 	private CustomArrayAdapter<String> adapterClubAddress;
 	private CustomArrayAdapter<String> adapterAddress;
@@ -105,7 +116,14 @@ public class InviteLocationActivity extends Activity {
 		spTournament = (Spinner)findViewById(R.id.sp_tournament_list);
 		spTournamentClub = (Spinner)findViewById(R.id.sp_tournament_club_list);
 
-		business = new InviteLocationBusiness(this, NotifierMessageLogger.getInstance());
+		ivAddressDelete = findViewById(R.id.iv_address_delete);
+		ivClubDelete = findViewById(R.id.iv_club_delete);
+		ivTournamentDelete = findViewById(R.id.iv_tournament_delete);
+
+		ivTournamentClubDelete = findViewById(R.id.iv_tournament_club_delete);
+		ivClubAddressDelete = findViewById(R.id.iv_club_address_delete);
+		
+		business = new LocationBusiness(this, NotifierMessageLogger.getInstance());
 	}
 
 	@Override
@@ -126,8 +144,14 @@ public class InviteLocationActivity extends Activity {
 
 	@Override
 	public void onBackPressed() {
-		onClickCancel(null);
-		super.onBackPressed();
+		if (llAddressContent.getVisibility() == View.VISIBLE) {
+			manageVisibility(false, false, false, false, true, false);
+		} else if (llAddressSelection.getVisibility() == View.VISIBLE) {
+			manageVisibility(false, false, false, true, false, false);
+		} else {
+			onClickCancel(null);
+			super.onBackPressed();
+		}
 	}
 
 	public void onClickModify(View view) {
@@ -135,8 +159,20 @@ public class InviteLocationActivity extends Activity {
 		saveClub();
 		saveTournament();
 
-		business.save();
-		
+		returnResult();
+	}
+
+	private void returnResult() {
+		Serializable out = null;
+		if (business.getType() == INVITE_TYPE.MATCH) {
+			out = business.getTournament();
+		} else {
+			out = business.getClub();
+		}
+		Intent data = new Intent();
+		data.putExtra(EXTRA_OUT_LOCATION, out);
+		setResult(Activity.RESULT_OK, data);
+
 		finish();
 	}
 	
@@ -164,10 +200,89 @@ public class InviteLocationActivity extends Activity {
 		llTournamentAdd.setVisibility(View.GONE);
 		llTournamentSelection.setVisibility(View.VISIBLE);
 	}
-	
+
 	public void onClickAddressAdd(View view) {
 		llAddressAdd.setVisibility(View.VISIBLE);
 		llAddressSelection.setVisibility(View.GONE);
+	}
+
+	public void onClickAddressDelete(View view) {
+		OnClickListener listener = new OnClickListener() {
+			@Override
+			public void onClick(DialogInterface arg0, int arg1) {
+				business.deleteAddress();
+
+				business.initializeDataAddress();
+				adapterClubAddress.notifyDataSetChanged();
+				adapterAddress.notifyDataSetChanged();
+			}
+		};
+		FactoryDialog.getInstance()
+			.buildOkCancelDialog(this, listener, R.string.dialog_location_address_delete_title, R.string.dialog_location_address_delete_message)
+			.show();
+	}
+
+	public void onClickClubDelete(View view) {
+		OnClickListener listener = new OnClickListener() {
+			@Override
+			public void onClick(DialogInterface arg0, int arg1) {
+				business.deleteClub();
+
+				business.initializeDataClub();
+				adapterTournamentClub.notifyDataSetChanged();
+				adapterClub.notifyDataSetChanged();
+			}
+		};
+		FactoryDialog.getInstance()
+			.buildOkCancelDialog(this, listener, R.string.dialog_location_club_delete_title, R.string.dialog_location_club_delete_message)
+			.show();
+	}
+	
+	public void onClickClubAddressDelete(View view) {
+		OnClickListener listener = new OnClickListener() {
+			@Override
+			public void onClick(DialogInterface arg0, int arg1) {
+				business.deleteAddress();
+
+				business.initializeDataAddress();
+				adapterClubAddress.notifyDataSetChanged();
+				adapterAddress.notifyDataSetChanged();
+			}
+		};
+		FactoryDialog.getInstance()
+			.buildOkCancelDialog(this, listener, R.string.dialog_location_address_delete_title, R.string.dialog_location_address_delete_message)
+			.show();
+	}
+	
+	public void onClickTournamentDelete(View view) {
+		OnClickListener listener = new OnClickListener() {
+			@Override
+			public void onClick(DialogInterface arg0, int arg1) {
+				business.deleteTournament();
+
+				business.initializeDataTournament();
+				adapterTournament.notifyDataSetChanged();
+			}
+		};
+		FactoryDialog.getInstance()
+			.buildOkCancelDialog(this, listener, R.string.dialog_location_tournament_delete_title, R.string.dialog_location_tournament_delete_message)
+			.show();
+	}
+	
+	public void onClickTournamentClubDelete(View view) {
+		OnClickListener listener = new OnClickListener() {
+			@Override
+			public void onClick(DialogInterface arg0, int arg1) {
+				business.deleteClub();
+
+				business.initializeDataClub();
+				adapterClub.notifyDataSetChanged();
+				adapterTournamentClub.notifyDataSetChanged();
+			}
+		};
+		FactoryDialog.getInstance()
+			.buildOkCancelDialog(this, listener, R.string.dialog_location_club_delete_title, R.string.dialog_location_club_delete_message)
+			.show();
 	}
 
 	public void onClickAddressAddValidate(View view) {
@@ -181,7 +296,6 @@ public class InviteLocationActivity extends Activity {
 
 		spClubAddress.setSelection(business.getAddressPosition(address), true);
 		spAddress.setSelection(business.getAddressPosition(address), true);
-
 	}
 	
 	public void onClickClubAdd(View view) {
@@ -202,8 +316,7 @@ public class InviteLocationActivity extends Activity {
 			spTournamentClub.setSelection(business.getClubPosition(club), true);
 			spClub.setSelection(business.getClubPosition(club), true);
 		} else {
-			business.save();
-			finish();
+			returnResult();
 		}
 	}
 	
@@ -227,8 +340,7 @@ public class InviteLocationActivity extends Activity {
 
 			spTournament.setSelection(business.getTournamentPosition(tournament), true);
 		} else {
-			business.save();
-			finish();
+			returnResult();
 		}
 	}
 
@@ -297,6 +409,10 @@ public class InviteLocationActivity extends Activity {
 					position++;
 				}
 			}
+			etAddressName.setText(address.getName());
+			etAddressLine1.setText(address.getLine1());
+			etAddressPostalCode.setText(address.getPostalCode());
+			etAddressCity.setText(address.getCity());
 		}
 	}
 
@@ -313,6 +429,18 @@ public class InviteLocationActivity extends Activity {
 					position++;
 				}
 			}
+			etClubName.setText(club.getName());
+			if (club.getIdAddress() != null) {
+				List<Address> listClubAddress = business.getListAddress();
+				for(Address item : listClubAddress) {
+					if (item.getId().equals(club.getIdAddress())) {
+						spClubAddress.setSelection(position, true);
+						break;
+					} else {
+						position++;
+					}
+				}
+			}
 		}
 	}
 	
@@ -324,6 +452,16 @@ public class InviteLocationActivity extends Activity {
 			for(Tournament item : list) {
 				if (item.getId().equals(tournament.getId())) {
 					spTournament.setSelection(position, true);
+					break;
+				} else {
+					position++;
+				}
+			}
+			etTournamentName.setText(tournament.getName());
+			List<Club> listTournamentClub = business.getListClub();
+			for(Club item : listTournamentClub) {
+				if (item.getId().equals(tournament.getIdClub())) {
+					spTournamentClub.setSelection(position, true);
 					break;
 				} else {
 					position++;
@@ -407,6 +545,7 @@ public class InviteLocationActivity extends Activity {
 			@Override
 			public void onItemSelected(AdapterView<?> parent, View view, int position, long id, Address address) {
 				business.setAddress(address);
+				ivAddressDelete.setEnabled(address != null && !business.isEmptyAddress(address));
 			}
 		});
 
@@ -426,6 +565,7 @@ public class InviteLocationActivity extends Activity {
 			@Override
 			public void onItemSelected(AdapterView<?> parent, View view, int position, long id, Address address) {
 				business.setAddress(address);
+				ivClubAddressDelete.setEnabled(address != null && !business.isEmptyAddress(address));
 			}
 		});
 	}
@@ -445,8 +585,8 @@ public class InviteLocationActivity extends Activity {
 			@Override
 			public void onItemSelected(AdapterView<?> parent, View view, int position, long id, Club club) {
 				business.setClub(club);
-				business.save();
-				finish();
+				ivClubDelete.setEnabled(club != null && !business.isEmptyClub(club));
+				returnResult();
 			}
 		});
 
@@ -467,6 +607,7 @@ public class InviteLocationActivity extends Activity {
 			@Override
 			public void onItemSelected(AdapterView<?> parent, View view, int position, long id, Club club) {
 				business.setClub(club);
+				ivTournamentClubDelete.setEnabled(club != null && !business.isEmptyClub(club));
 			}
 		});
 	}
@@ -486,8 +627,8 @@ public class InviteLocationActivity extends Activity {
 			@Override
 			public void onItemSelected(AdapterView<?> parent, View view, int position, long id, Tournament tournament) {
 				business.setTournament(tournament);
-				business.save();
-				finish();
+				ivTournamentDelete.setEnabled(tournament != null && !business.isEmptyTournament(tournament));
+				returnResult();
 			}
 		});
 	}

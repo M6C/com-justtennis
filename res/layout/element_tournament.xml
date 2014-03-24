@@ -60,6 +60,17 @@
 		        android:src="@drawable/btn_add"
 		        android:onClick="onClickTournamentClubAdd"
 		    />
+
+		    <ImageView android:id="@+id/iv_tournament_club_delete"
+			    android:layout_width="25dip"
+			    android:layout_height="25dip"
+			    android:layout_weight=".1"
+			    android:layout_marginLeft="5dp"
+			    android:src="@drawable/player_delete"
+			    android:layout_gravity="center_vertical|center_horizontal"
+			    android:contentDescription="@string/button_desctiption_delete"
+			    android:onClick="onClickTournamentClubDelete"
+			/>
 	    </LinearLayout>
 
         <Button

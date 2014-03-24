@@ -1,5 +1,6 @@
 package com.justtennis.business;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -286,6 +287,14 @@ public class InviteBusiness {
 		this.invite.setPlayer(player);
 	}
 
+	public void setLocation(Serializable location) {
+		if (getType() == INVITE_TYPE.MATCH) {
+			setTournament((Tournament)location);
+		} else {
+			setClub((Club)location);
+		}
+	}
+
 	public MODE getMode() {
 		return mode;
 	}
@@ -478,7 +487,7 @@ public class InviteBusiness {
 		}
 	}
 
-	public String[] getLocation() {
+	public String[] getLocationLine() {
 		if (getType() == INVITE_TYPE.ENTRAINEMENT) {
 			if (getClub() != null && getClub().getId() != null) {
 				return getAddress(getClub().getId());
