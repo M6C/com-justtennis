@@ -55,6 +55,7 @@ public class LocationTournamentActivity extends GenericSpinnerFormActivity<Tourn
 	@Override
 	public void onClickAddFormList(View view) {
 		Intent intent = new Intent(this, LocationClubActivity.class);
+		intent.putExtra(LocationClubActivity.EXTRA_MODE, MODE.ADD);
 
 		if (business.getData().getIdClub() != null) {
 			@SuppressWarnings("unchecked")

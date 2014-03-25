@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.Intent;
 
 import com.cameleon.common.android.inotifier.INotifierMessage;
+import com.justtennis.activity.GenericSpinnerFormActivity;
 import com.justtennis.db.service.GenericService;
 import com.justtennis.db.service.PojoNamedService;
 import com.justtennis.domain.GenericDBPojoNamed;
@@ -15,8 +16,6 @@ public abstract class GenericSpinnerFormBusiness <DATA extends GenericDBPojoName
 
 	@SuppressWarnings("unused")
 	private static final String TAG = GenericSpinnerFormBusiness.class.getSimpleName();
-	public static final String EXTRA_DATA = "EXTRA_DATA";
-
 	private Context context;
 
 	private GenericService<DATA> dataService;
@@ -41,8 +40,8 @@ public abstract class GenericSpinnerFormBusiness <DATA extends GenericDBPojoName
 
 	@SuppressWarnings("unchecked")
 	public void initializeData(Intent intent) {
-		if (intent != null && intent.hasExtra(EXTRA_DATA)) {
-			data = (DATA) intent.getSerializableExtra(EXTRA_DATA);
+		if (intent != null && intent.hasExtra(GenericSpinnerFormActivity.EXTRA_DATA)) {
+			data = (DATA) intent.getSerializableExtra(GenericSpinnerFormActivity.EXTRA_DATA);
 		} else {
 			data = getNewData();
 		}

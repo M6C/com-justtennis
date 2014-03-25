@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.view.View;
 
 import com.justtennis.R;
+import com.justtennis.activity.GenericSpinnerFormActivity.MODE;
 import com.justtennis.business.GenericSpinnerFormBusiness;
 import com.justtennis.business.LocationClubBusiness;
 import com.justtennis.domain.Address;
@@ -55,6 +56,7 @@ public class LocationClubActivity extends GenericSpinnerFormActivity<Club> {
 	@Override
 	public void onClickAddFormList(View view) {
 		Intent intent = new Intent(this, LocationAddressActivity.class);
+		intent.putExtra(LocationClubActivity.EXTRA_MODE, MODE.ADD);
 
 		if (business.getData().getIdAddress() != null) {
 			@SuppressWarnings("unchecked")

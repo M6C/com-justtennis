@@ -23,7 +23,12 @@ public abstract class GenericSpinnerFormActivity <P extends GenericDBPojoNamed> 
 	@SuppressWarnings("unused")
 	private static final String TAG = GenericSpinnerFormActivity.class.getSimpleName();
 
+	public enum MODE {
+		SELECTION, ADD
+	};
+
 	public static final String EXTRA_DATA = "EXTRA_DATA";
+	public static final String EXTRA_MODE = "EXTRA_MODE";
 	public static final String EXTRA_OUT_LOCATION = "EXTRA_OUT_LOCATION";
 
 	private GenericSpinnerFormBusiness<P> business;
@@ -31,6 +36,7 @@ public abstract class GenericSpinnerFormActivity <P extends GenericDBPojoNamed> 
 
 	private int visibilitySelection = View.VISIBLE;
 	private int visibilityContent = View.VISIBLE;
+	private MODE mode = MODE.SELECTION;
 
 	private LinearLayout llContent;
 
@@ -46,8 +52,6 @@ public abstract class GenericSpinnerFormActivity <P extends GenericDBPojoNamed> 
 	private Spinner spListForm;
 	private CustomArrayAdapter<String> adapterData;
 	private CustomArrayAdapter<String> adapterDataForm;
-
-
 
 	public abstract IGenericSpinnerFormResource getResource();
 	public abstract void onClickValidate(View view);
@@ -75,6 +79,12 @@ public abstract class GenericSpinnerFormActivity <P extends GenericDBPojoNamed> 
 		business = getBusiness();
 		resource = getResource();
 
+		Intent intent = getIntent();
+		if (intent != null) {
+			if (intent.hasExtra(EXTRA_MODE)) {
+				mode = (MODE) intent.getSerializableExtra(EXTRA_MODE);
+			}
+		}
 		initializeResource();
 		initializeViewForm(llForm);
 	}
@@ -83,11 +93,7 @@ public abstract class GenericSpinnerFormActivity <P extends GenericDBPojoNamed> 
 	protected void onResume() {
 		super.onResume();
 		initializeData();
-
-		llSelection.setVisibility(visibilitySelection);
-		llContent.setVisibility(visibilityContent);
-		llAdd.setVisibility(View.GONE);
-		llSelection.setVisibility(View.VISIBLE);
+		manageVisibility();
 	}
 	
 	public void onClickCancel(View view) {
@@ -95,8 +101,8 @@ public abstract class GenericSpinnerFormActivity <P extends GenericDBPojoNamed> 
 	}
 
 	public void onClickAdd(View view) {
-		llAdd.setVisibility(View.VISIBLE);
-		llSelection.setVisibility(View.GONE);
+		mode = MODE.ADD;
+		manageVisibility();
 
 		View formAdd = buildFormAdd();
 		if (formAdd != null) {
@@ -143,6 +149,14 @@ public abstract class GenericSpinnerFormActivity <P extends GenericDBPojoNamed> 
 		initializeListener();
 	}
 
+	private void manageVisibility() {
+		visibilitySelection = (mode == MODE.SELECTION ? View.VISIBLE : View.GONE);
+		visibilityContent = (mode == MODE.SELECTION ? View.GONE : View.VISIBLE);
+
+		llSelection.setVisibility(visibilitySelection);
+//		llContent.setVisibility(visibilityContent);
+		llAdd.setVisibility(visibilityContent);
+	}
 	protected void initializeList() {
 		adapterData = new CustomArrayAdapter<String>(this, business.getListDataTxt());
 		spList.setAdapter(adapterData);

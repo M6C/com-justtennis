@@ -274,7 +274,15 @@ public class InviteActivity extends Activity {
 	}
 
 	public void onClickLocation(View view) {
-		Intent intent = new Intent(this, LocationTournamentActivity.class);
+		Intent intent = null;
+		switch(business.getType()) {
+			case ENTRAINEMENT:
+				intent = new Intent(this, LocationClubActivity.class);
+				break;
+			case MATCH:
+				intent = new Intent(this, LocationTournamentActivity.class);
+				break;
+		}
 		intent.putExtra(LocationActivity.EXTRA_INVITE, business.getInvite());
 		startActivityForResult(intent, RESULT_LOCATION);
 	}
