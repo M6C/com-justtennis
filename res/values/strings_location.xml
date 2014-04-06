@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
+    <string name="dialog_location_delete_title">Delete</string>
+    <string name="dialog_location_delete_message">Delete ?</string>
+
     <string name="dialog_location_address_delete_title">Delete Address</string>
     <string name="dialog_location_address_delete_message">Delete ?</string>
     <string name="dialog_location_club_delete_title">Delete Club</string>

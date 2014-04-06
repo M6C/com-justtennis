@@ -22,6 +22,7 @@ Saisie de Message
 
 ********************* DONE *****************************
 Invite Location
+[20140406] - Refactor Ecran location
 [20140325] - Affichage de l'ecran location en mode ajout si on clique sur add du formulaire
 [20140324] - Ajout d'ecrans generic
 [20140313] - Utilisation dans l'écran d'invite (Reste encore des bug)

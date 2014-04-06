@@ -7,6 +7,14 @@ public class Message extends GenericDBPojo<Long> {
 	private String message;
 	private Long idPlayer;
 
+	public Message() {
+		super();
+	}
+	
+	public Message(Long id) {
+		super(id);
+	}
+
 	public String getMessage() {
 		return message;
 	}

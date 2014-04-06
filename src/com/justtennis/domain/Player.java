@@ -19,6 +19,14 @@ public class Player extends Person {
 	private Bitmap photo;
 	private PLAYER_TYPE type = PLAYER_TYPE.ENTRAINEMENT;
 
+	public Player() {
+		super();
+	}
+
+	public Player(Long id) {
+		super(id);
+	}
+
 	public Long getIdClub() {
 		return idClub;
 	}

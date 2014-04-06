@@ -8,6 +8,15 @@ public class GenericDBPojo<ID> implements Serializable {
 
 	private ID id;
 
+	public GenericDBPojo() {
+		super();
+	}
+	
+	public GenericDBPojo(ID id) {
+		super();
+		this.id = id;
+	}
+
 	public ID getId() {
 		return id;
 	}

@@ -12,6 +12,14 @@ public class Person extends GenericDBPojo<Long> {
 	private String postalCode;
 	private String locality;
 
+	public Person() {
+		super();
+	}
+
+	public Person(Long id) {
+		super(id);
+	}
+
 	public String getFullName() {
 		String name = "";
 		if (getFirstName() != null && !getFirstName().isEmpty()) {

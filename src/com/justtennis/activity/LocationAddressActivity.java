@@ -1,11 +1,10 @@
 package com.justtennis.activity;
 
-import android.app.Activity;
-import android.content.Intent;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.EditText;
 
 import com.justtennis.R;
-import com.justtennis.business.GenericSpinnerFormBusiness;
 import com.justtennis.business.LocationAddressBusiness;
 import com.justtennis.domain.Address;
 import com.justtennis.notifier.NotifierMessageLogger;
@@ -16,6 +15,10 @@ public class LocationAddressActivity extends GenericSpinnerFormActivity<Address>
 	private static final String TAG = LocationAddressActivity.class.getSimpleName();
 
 	private LocationAddressBusiness business;
+
+	private EditText etAddressLine1;
+	private EditText etAddressPostalCode;
+	private EditText etAddressCity;
 
 	@Override
 	public IGenericSpinnerFormResource getResource() {
@@ -29,26 +32,16 @@ public class LocationAddressActivity extends GenericSpinnerFormActivity<Address>
 			public int getNameHintStringId() {
 				return R.string.hint_address_name;
 			}
+
+			@Override
+			public Class<?> getFormListActivityClass() {
+				return null;
+			}
 		};
 	}
 
 	@Override
-	public void onBackPressed() {
-		onClickCancel(null);
-	}
-
-	@Override
-	public void onClickValidate(View view) {
-	}
-
-	@Override
-	public void onClickAddValidate(View view) {
-		super.onClickAddValidate(view);
-		returnResult();
-	}
-
-	@Override
-	protected GenericSpinnerFormBusiness<Address> getBusiness() {
+	protected LocationAddressBusiness getBusiness() {
 		if (business==null) {
 			business = new LocationAddressBusiness(this, NotifierMessageLogger.getInstance());
 		}
@@ -56,19 +49,30 @@ public class LocationAddressActivity extends GenericSpinnerFormActivity<Address>
 	}
 
 	@Override
-	protected View buildFormAdd() {
-		return null;
+	protected View buildFormAdd(ViewGroup llForm) {
+		View view = getLayoutInflater().inflate(R.layout.location_element_address, llForm, false);
+
+		etAddressLine1 = (EditText)view.findViewById(R.id.et_address_line_1);
+		etAddressPostalCode = (EditText)view.findViewById(R.id.et_address_postal_code);
+		etAddressCity = (EditText)view.findViewById(R.id.et_address_city);
+
+		return view;
 	}
 
-	private void returnResult() {
-		Intent data = new Intent();
-		data.putExtra(EXTRA_OUT_LOCATION, business.getAddress());
-		setResult(Activity.RESULT_OK, data);
-
-		finish();
+	@Override
+	protected void initializeField() {
+		super.initializeField();
+		Address data = business.getData();
+		etAddressLine1.setText(data.getLine1());
+		etAddressPostalCode.setText(data.getPostalCode());
+		etAddressCity.setText(data.getCity());
 	}
-	
-	public void onClickCancel(View view) {
-		finish();
+
+	@Override
+	protected void updateData(Address data) {
+		super.updateData(data);
+		data.setLine1(etAddressLine1.getText().toString());
+		data.setPostalCode(etAddressPostalCode.getText().toString());
+		data.setCity(etAddressCity.getText().toString());
 	}
 }

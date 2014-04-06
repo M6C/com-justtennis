@@ -2,7 +2,7 @@ package com.justtennis.domain;
 
 
 
-public class Address extends GenericDBPojoNamed {
+public class Address extends GenericDBPojoNamedSubId {
 	
 	private static final long serialVersionUID = 1L;
 
@@ -10,6 +10,18 @@ public class Address extends GenericDBPojoNamed {
 	private String postalCode;
 	private String city;
 	private String gps;
+
+	public Address() {
+		super();
+	}
+
+	public Address(Long id) {
+		super(id);
+	}
+
+	public Address(Long id, String name) {
+		super(id, name);
+	}
 
 	public String getLine1() {
 		return line1;

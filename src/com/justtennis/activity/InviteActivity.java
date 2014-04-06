@@ -45,6 +45,7 @@ import com.justtennis.notifier.NotifierMessageLogger;
 
 public class InviteActivity extends Activity {
 
+	private static final String KEY_LOCATION_FROM_RESULT = "KEY_LOCATION_FROM_RESULT";
 	@SuppressWarnings("unused")
 	private static final String TAG = InviteActivity.class.getSimpleName();
 
@@ -148,6 +149,7 @@ public class InviteActivity extends Activity {
 		super.onResume();
 		Intent intent = getIntent();
 		if (savedInstanceState!=null) {
+//			locationFromResult = savedInstanceState.getSerializable(KEY_LOCATION_FROM_RESULT);
 			business.initializeData(savedInstanceState);
 			savedInstanceState = null;
 		}
@@ -203,6 +205,7 @@ public class InviteActivity extends Activity {
 	@Override
 	protected void onSaveInstanceState(Bundle outState) {
 		business.onSaveInstanceState(outState);
+//		outState.putSerializable(KEY_LOCATION_FROM_RESULT, locationFromResult);
 		super.onSaveInstanceState(outState);
 	}
 
@@ -278,9 +281,15 @@ public class InviteActivity extends Activity {
 		switch(business.getType()) {
 			case ENTRAINEMENT:
 				intent = new Intent(this, LocationClubActivity.class);
+				if (business.getInvite().getClub() != null) {
+					intent.putExtra(GenericSpinnerFormActivity.EXTRA_DATA, business.getInvite().getClub());
+				}
 				break;
 			case MATCH:
 				intent = new Intent(this, LocationTournamentActivity.class);
+				if (business.getInvite().getTournament() != null) {
+					intent.putExtra(GenericSpinnerFormActivity.EXTRA_DATA, business.getInvite().getTournament());
+				}
 				break;
 		}
 		intent.putExtra(LocationActivity.EXTRA_INVITE, business.getInvite());

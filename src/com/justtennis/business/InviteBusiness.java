@@ -495,8 +495,8 @@ public class InviteBusiness {
 		} else {
 			if (getTournament() != null) {
 				Tournament tournament = tournamentService.find(getTournament().getId());
-				if (tournament != null && tournament.getIdClub() != null) {
-					return getAddress(tournament.getIdClub());
+				if (tournament != null && tournament.getSubId() != null) {
+					return getAddress(tournament.getSubId());
 				}
 			}
 		}
@@ -512,8 +512,8 @@ public class InviteBusiness {
 			if (club.getName()!=null) {
 				name = club.getName();
 			}
-			if (club.getIdAddress() != null) {
-				Address address = addressService.find(club.getIdAddress());
+			if (club.getSubId() != null) {
+				Address address = addressService.find(club.getSubId());
 				if (address != null) {
 					if (address.getLine1() != null) {
 						line1 = address.getLine1();

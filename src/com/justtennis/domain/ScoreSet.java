@@ -12,6 +12,11 @@ public class ScoreSet extends GenericDBPojo<Long> implements Serializable {
 	private Integer value2;
 
 	public ScoreSet() {
+		super();
+	}
+
+	public ScoreSet(Long id) {
+		super(id);
 	}
 
 	public ScoreSet(Invite invite, Integer order, Integer value1, Integer value2) {

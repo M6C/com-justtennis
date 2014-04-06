@@ -13,6 +13,14 @@ public class Contact extends Person {
 	private String lookup;
 	private boolean hasPhone;
 
+	public Contact() {
+		super();
+	}
+
+	public Contact(Long id) {
+		super(id);
+	}
+
 	public List<Phone> getListPhone() {
 		return listPhone;
 	}

@@ -8,6 +8,14 @@ public class Ranking extends GenericDBPojo<Long> {
 	private Integer serie;
 	private Integer order;
 
+	public Ranking() {
+		super();
+	}
+
+	public Ranking(Long id) {
+		super(id);
+	}
+
 	public String getRanking() {
 		return ranking;
 	}

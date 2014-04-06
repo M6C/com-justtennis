@@ -1,15 +1,18 @@
 package com.justtennis.business;
 
 import android.content.Context;
+import android.content.Intent;
 
 import com.cameleon.common.android.inotifier.INotifierMessage;
 import com.justtennis.R;
+import com.justtennis.activity.GenericSpinnerFormActivity;
 import com.justtennis.db.service.GenericService;
 import com.justtennis.db.service.TournamentService;
+import com.justtennis.domain.Club;
 import com.justtennis.domain.Invite;
 import com.justtennis.domain.Tournament;
 
-public class LocationTournamentBusiness extends GenericSpinnerFormBusiness<Tournament>{
+public class LocationTournamentBusiness extends GenericSpinnerFormBusiness<Tournament, Club>{
 
 	@SuppressWarnings("unused")
 	private static final String TAG = LocationTournamentBusiness.class.getSimpleName();
@@ -17,8 +20,6 @@ public class LocationTournamentBusiness extends GenericSpinnerFormBusiness<Tourn
 	private Invite invite;
 
 	private TournamentService service;
-
-	private LocationClubBusiness locationClubBusiness;
 
 	public LocationTournamentBusiness(Context context, INotifierMessage notificationMessage) {
 		super(context, notificationMessage);
@@ -52,8 +53,10 @@ public class LocationTournamentBusiness extends GenericSpinnerFormBusiness<Tourn
 	@Override
 	protected void initializeSubBusiness(Context context, INotifierMessage notificationMessage) {
 		if (subBusiness == null) {
+			Intent intent = new Intent();
+			intent.putExtra(GenericSpinnerFormActivity.EXTRA_DATA, new Club(getData().getSubId()));
 			subBusiness = new LocationClubBusiness(context, notificationMessage);
-			subBusiness.initializeData(null);
+			subBusiness.initializeData(intent);
 		}
 	}
 
@@ -65,7 +68,7 @@ public class LocationTournamentBusiness extends GenericSpinnerFormBusiness<Tourn
 			tournament = new Tournament();
 		}
 		tournament.setName(name);
-		tournament.setIdClub(idClub);
+		tournament.setSubId(idClub);
 		return super.add(tournament);
 	}
 	

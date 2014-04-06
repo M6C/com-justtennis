@@ -32,7 +32,7 @@ public class DBClubDataSource extends GenericDBDataSource<Club> {
 	@Override
 	protected void putContentValue(ContentValues values, Club club) {
 		values.put(DBClubHelper.COLUMN_NAME, club.getName());
-		values.put(DBClubHelper.COLUMN_ID_ADDRESS, club.getIdAddress());
+		values.put(DBClubHelper.COLUMN_ID_ADDRESS, club.getSubId());
 	}
 
 	@Override
@@ -41,7 +41,7 @@ public class DBClubDataSource extends GenericDBDataSource<Club> {
 		Club club = new Club();
 		club.setId(DbTool.getInstance().toLong(cursor, col++));
 		club.setName(cursor.getString(col++));
-		club.setIdAddress(DbTool.getInstance().toLong(cursor, col++));
+		club.setSubId(DbTool.getInstance().toLong(cursor, col++));
 		return club;
 	}
 	

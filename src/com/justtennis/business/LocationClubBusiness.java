@@ -1,20 +1,20 @@
 package com.justtennis.business;
 
 import android.content.Context;
+import android.content.Intent;
 
 import com.cameleon.common.android.inotifier.INotifierMessage;
 import com.justtennis.R;
-import com.justtennis.db.service.GenericService;
+import com.justtennis.activity.GenericSpinnerFormActivity;
 import com.justtennis.db.service.ClubService;
-import com.justtennis.domain.Invite;
+import com.justtennis.db.service.GenericService;
+import com.justtennis.domain.Address;
 import com.justtennis.domain.Club;
 
-public class LocationClubBusiness extends GenericSpinnerFormBusiness<Club>{
+public class LocationClubBusiness extends GenericSpinnerFormBusiness<Club, Address>{
 
 	@SuppressWarnings("unused")
 	private static final String TAG = LocationClubBusiness.class.getSimpleName();
-
-	private Invite invite;
 
 	private ClubService service;
 
@@ -50,11 +50,13 @@ public class LocationClubBusiness extends GenericSpinnerFormBusiness<Club>{
 	@Override
 	protected void initializeSubBusiness(Context context, INotifierMessage notificationMessage) {
 		if (subBusiness == null) {
+			Intent intent = new Intent();
+			intent.putExtra(GenericSpinnerFormActivity.EXTRA_DATA, new Address(getData().getSubId()));
 			subBusiness = new LocationAddressBusiness(context, notificationMessage);
-			subBusiness.initializeData(null);
+			subBusiness.initializeData(intent);
 		}
 	}
-
+/*
 	public Club addClub(String name, Long idAddress) {
 		Club club = null;
 		if (getClub() != null && getClub().getId()!=null && service.isRealClub(getClub())) {
@@ -68,13 +70,10 @@ public class LocationClubBusiness extends GenericSpinnerFormBusiness<Club>{
 	}
 	
 	public void deleteClub() {
-		Club address = getClub();
+		Club address = getData();
 		if (address!=null && !service.isEmptyClub(address)) {
 			service.delete(address);
 		}
 	}
-	
-	public Club getClub() {
-		return invite.getClub() == null ? null : invite.getClub();
-	}
+*/
 }

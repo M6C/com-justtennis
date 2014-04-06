@@ -9,6 +9,19 @@ public class GenericDBPojoNamed extends GenericDBPojo<Long> implements IPojoName
 
 	private String name;
 
+	public GenericDBPojoNamed() {
+		super();
+	}
+
+	public GenericDBPojoNamed(Long id) {
+		super(id);
+	}
+
+	public GenericDBPojoNamed(Long id, String name) {
+		super(id);
+		this.name = name;
+	}
+
 	@Override
 	public String getName() {
 		return name;

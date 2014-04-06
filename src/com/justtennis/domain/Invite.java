@@ -5,7 +5,7 @@ import java.util.Date;
 import java.util.List;
 
 public class Invite extends GenericDBPojo<Long> implements Serializable {
-	
+
 	private static final long serialVersionUID = 1L;
 	
 	public static final long PLAY_DURATION_DEFAULT = 60 * 60 * 1000;
@@ -39,6 +39,10 @@ public class Invite extends GenericDBPojo<Long> implements Serializable {
 	private Tournament tournament;
 
 	public Invite() {
+	}
+	
+	public Invite(Long id) {
+		super(id);
 	}
 
 	public Invite(User user, Player player) {

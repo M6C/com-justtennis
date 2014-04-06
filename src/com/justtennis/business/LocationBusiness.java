@@ -23,6 +23,7 @@ import com.justtennis.domain.Tournament;
 
 public class LocationBusiness {
 
+	@SuppressWarnings("unused")
 	private static final String TAG = LocationBusiness.class.getSimpleName();
 
 	private Context context;
@@ -129,7 +130,7 @@ public class LocationBusiness {
 			club = new Club();
 		}
 		club.setName(name);
-		club.setIdAddress(idAddress);
+		club.setSubId(idAddress);
 		clubService.createOrUpdate(club);
 		return club;
 	}
@@ -142,7 +143,7 @@ public class LocationBusiness {
 			tournament = new Tournament();
 		}
 		tournament.setName(name);
-		tournament.setIdClub(idClub);
+		tournament.setSubId(idClub);
 		tournamentService.createOrUpdate(tournament);
 		return tournament;
 	}

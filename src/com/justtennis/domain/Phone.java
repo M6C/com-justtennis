@@ -6,7 +6,15 @@ public class Phone extends GenericDBPojo<Long> {
 
 	private String number;
 	private int type;
-	
+
+	public Phone() {
+		super();
+	}
+
+	public Phone(Long id) {
+		super(id);
+	}
+
 	public String getNumber() {
 		return number;
 	}

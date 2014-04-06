@@ -430,10 +430,10 @@ public class LocationActivity extends Activity {
 				}
 			}
 			etClubName.setText(club.getName());
-			if (club.getIdAddress() != null) {
+			if (club.getSubId() != null) {
 				List<Address> listClubAddress = business.getListAddress();
 				for(Address item : listClubAddress) {
-					if (item.getId().equals(club.getIdAddress())) {
+					if (item.getId().equals(club.getSubId())) {
 						spClubAddress.setSelection(position, true);
 						break;
 					} else {
@@ -460,7 +460,7 @@ public class LocationActivity extends Activity {
 			etTournamentName.setText(tournament.getName());
 			List<Club> listTournamentClub = business.getListClub();
 			for(Club item : listTournamentClub) {
-				if (item.getId().equals(tournament.getIdClub())) {
+				if (item.getId().equals(tournament.getSubId())) {
 					spTournamentClub.setSelection(position, true);
 					break;
 				} else {
