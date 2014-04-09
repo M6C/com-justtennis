@@ -58,6 +58,8 @@ public abstract class GenericSpinnerFormActivity <P extends GenericDBPojoNamedSu
 	private CustomArrayAdapter<String> adapterData;
 	private CustomArrayAdapter<String> adapterDataForm;
 
+	private MODE modeOnCreate = null;
+
 	public abstract IGenericSpinnerFormResource getResource();
 	protected abstract GenericSpinnerFormBusiness<P, ?> getBusiness();
 	protected abstract View buildFormAdd(ViewGroup llForm);
@@ -65,7 +67,7 @@ public abstract class GenericSpinnerFormActivity <P extends GenericDBPojoNamedSu
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		Log.i(TAG, "onCreate");
+		Log.i(TAG, "onCreate mode:" + mode);
 
 		setContentView(R.layout.generic_spinner_form);
 
@@ -86,35 +88,55 @@ public abstract class GenericSpinnerFormActivity <P extends GenericDBPojoNamedSu
 		if (intent != null) {
 			if (intent.hasExtra(EXTRA_MODE)) {
 				mode = (MODE) intent.getSerializableExtra(EXTRA_MODE);
+				modeOnCreate  = mode;
+				Log.i(TAG, "onCreate intent.mode:" + mode);
 			}
 		}
+
 		initializeResource();
 		initializeFormAdd();
+		initializeData();
+		initializeAdapter();
+		initializeListener();
 	}
 
 	@Override
 	protected void onResume() {
-		Log.i(TAG, "onResume");
+		Log.i(TAG, "onResume mode:" + mode);
 		super.onResume();
-		initializeData();
+		initializeList();
 		manageVisibility();
 	}
 
 	@Override
 	public void onBackPressed() {
-		onClickCancel(null);
+		if (modeOnCreate == MODE.ADD) {
+			onClickCancel(null);
+		} else if (mode == MODE.ADD) {
+			mode = MODE.SELECTION;
+			manageVisibility();
+		} else {
+			onClickCancel(null);
+		}
 	}
 
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		Log.i(TAG, "onActivityResult");
-		if (resultCode == RESULT_OK) {
-			if (resultCode == RESULT_FORM_LIST) {
+		if (requestCode == RESULT_FORM_LIST) {
+			setMode(MODE.ADD);
+			if (resultCode == RESULT_OK) {
 				@SuppressWarnings("unchecked")
 				GenericDBPojo<Long>  pojo = (GenericDBPojo<Long>) data.getSerializableExtra(EXTRA_OUT_LOCATION);
-				business.getData().setSubId(pojo != null ? pojo.getId() : null);
-//				business.getSubBusiness().setData(pojo);
-				setMode(MODE.ADD);
+				if (pojo != null) {
+					business.getData().setSubId(pojo.getId());
+					if (adapterDataForm != null) {
+						adapterDataForm.notifyDataSetChanged();
+					}
+					if (business.getSubBusiness() != null) {
+						spListForm.setSelection(business.getSubBusiness().getPosition(pojo.getId()));
+					}
+				}
 			}
 		}
 	}
@@ -132,11 +154,11 @@ public abstract class GenericSpinnerFormActivity <P extends GenericDBPojoNamedSu
 	}
 
 	public void onClickDelete(View view) {
-		delete(business);
+		delete(spList, adapterData, business);
 	}
 
 	public void onClickDeleteFormList(View view) {
-		delete(business.getSubBusiness());
+		delete(spListForm, adapterDataForm, business.getSubBusiness());
 
 		if (business.getSubBusiness().isEmptyData()) {
 			business.getData().setSubId(null);
@@ -185,27 +207,19 @@ public abstract class GenericSpinnerFormActivity <P extends GenericDBPojoNamedSu
 
 	protected void initializeData() {
 		Log.i(TAG, "initializeData");
-		Intent intent = getIntent();
-		business.initializeData(intent);
-
-		initializeAdapter();
-		initializeListener();
-		initializeList();
+		business.initializeData(getIntent());
 	}
 
 	protected void initializeAdapter() {
 		adapterData = new CustomArrayAdapter<String>(this, business.getListDataTxt());
+		spList.setAdapter(adapterData);
 		if (business.getSubBusiness() != null) {
 			adapterDataForm = new CustomArrayAdapter<String>(this, business.getSubBusiness().getListDataTxt());
+			spListForm.setAdapter(adapterDataForm);
 		}
 	}
 
 	protected void initializeList() {
-		if (adapterDataForm != null) {
-			spListForm.setAdapter(adapterDataForm);
-		}
-
-		spList.setAdapter(adapterData);
 		spList.setSelection(business.getPosition(), true);
 	}
 
@@ -247,10 +261,10 @@ public abstract class GenericSpinnerFormActivity <P extends GenericDBPojoNamedSu
 				public boolean isHintItemSelected(GenericDBPojoNamedSubId pojo) {
 					return false;//business.getSubBusiness() != null ? business.getSubBusiness().isEmptyData(pojo) : false;
 				}
-	
+
 				@Override
 				public void onItemSelected(AdapterView<?> parent, View view, int position, long id, GenericDBPojoNamedSubId data) {
-					business.getData().setSubId(data.getId());
+					business.setSubDataById(data.getId());
 				}
 			});
 		}
@@ -274,6 +288,7 @@ public abstract class GenericSpinnerFormActivity <P extends GenericDBPojoNamedSu
 	}
 
 	private void manageVisibility() {
+		Log.i(TAG, "manageVisibility mode:" + mode);
 		visibilitySelection = (mode == MODE.SELECTION ? View.VISIBLE : View.GONE);
 		visibilityContent = (mode == MODE.SELECTION ? View.GONE : View.VISIBLE);
 
@@ -294,12 +309,14 @@ public abstract class GenericSpinnerFormActivity <P extends GenericDBPojoNamedSu
 		finish();
 	}
 
-	private void delete(final GenericSpinnerFormBusiness<?, ?> business) {
+	private void delete(final Spinner spListForm, final CustomArrayAdapter<String> adapterDataForm, final GenericSpinnerFormBusiness<?, ?> business) {
 		if (!business.isEmptyData()) {
 			OnClickListener listener = new OnClickListener() {
 				@Override
 				public void onClick(DialogInterface arg0, int arg1) {
 					business.deleteData();
+					adapterDataForm.notifyDataSetChanged();
+					spListForm.setSelection(0);
 				}
 			};
 			FactoryDialog.getInstance()

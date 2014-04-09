@@ -48,13 +48,14 @@ public class LocationClubBusiness extends GenericSpinnerFormBusiness<Club, Addre
 	}
 
 	@Override
-	protected void initializeSubBusiness(Context context, INotifierMessage notificationMessage) {
-		if (subBusiness == null) {
-			Intent intent = new Intent();
-			intent.putExtra(GenericSpinnerFormActivity.EXTRA_DATA, new Address(getData().getSubId()));
-			subBusiness = new LocationAddressBusiness(context, notificationMessage);
-			subBusiness.initializeData(intent);
-		}
+	protected GenericSpinnerFormBusiness<Address, ?> initializeSubBusiness(Context context, INotifierMessage notificationMessage) {
+//		if (subBusiness == null) {
+//			Intent intent = new Intent();
+//			intent.putExtra(GenericSpinnerFormActivity.EXTRA_DATA, new Address(getData().getSubId()));
+//			subBusiness = new LocationAddressBusiness(context, notificationMessage);
+//			subBusiness.initializeData(intent);
+//		}
+		return new LocationAddressBusiness(context, notificationMessage);
 	}
 /*
 	public Club addClub(String name, Long idAddress) {

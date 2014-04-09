@@ -51,13 +51,14 @@ public class LocationTournamentBusiness extends GenericSpinnerFormBusiness<Tourn
 	}
 
 	@Override
-	protected void initializeSubBusiness(Context context, INotifierMessage notificationMessage) {
-		if (subBusiness == null) {
-			Intent intent = new Intent();
-			intent.putExtra(GenericSpinnerFormActivity.EXTRA_DATA, new Club(getData().getSubId()));
-			subBusiness = new LocationClubBusiness(context, notificationMessage);
-			subBusiness.initializeData(intent);
-		}
+	protected GenericSpinnerFormBusiness<Club, ?> initializeSubBusiness(Context context, INotifierMessage notificationMessage) {
+//		if (subBusiness == null) {
+//			Intent intent = new Intent();
+//			intent.putExtra(GenericSpinnerFormActivity.EXTRA_DATA, new Club(getData().getSubId()));
+//			subBusiness = new LocationClubBusiness(context, notificationMessage);
+//			subBusiness.initializeData(intent);
+//		}
+		return new LocationClubBusiness(context, notificationMessage);
 	}
 
 	public Tournament addTournament(String name, Long idClub) {

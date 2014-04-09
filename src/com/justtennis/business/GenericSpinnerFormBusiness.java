@@ -10,6 +10,7 @@ import com.cameleon.common.android.inotifier.INotifierMessage;
 import com.justtennis.activity.GenericSpinnerFormActivity;
 import com.justtennis.db.service.GenericService;
 import com.justtennis.db.service.PojoNamedService;
+import com.justtennis.domain.Address;
 import com.justtennis.domain.GenericDBPojoNamedSubId;
 
 public abstract class GenericSpinnerFormBusiness <DATA extends GenericDBPojoNamedSubId, SUB_DATA extends GenericDBPojoNamedSubId> {
@@ -29,6 +30,7 @@ public abstract class GenericSpinnerFormBusiness <DATA extends GenericDBPojoName
 
 	public abstract boolean isEmptyData(DATA pojo);
 	protected abstract GenericService<DATA> initializeService(Context context, INotifierMessage notificationMessage);
+	protected abstract GenericSpinnerFormBusiness<SUB_DATA, ?> initializeSubBusiness(Context context, INotifierMessage notificationMessage);
 	protected abstract DATA getEmptyData();
 	protected abstract DATA getNewData();
 
@@ -37,30 +39,54 @@ public abstract class GenericSpinnerFormBusiness <DATA extends GenericDBPojoName
 		this.notificationMessage = notificationMessage;
 		pojoNamedService = new PojoNamedService();
 		dataService = initializeService(context, notificationMessage);
+		subBusiness = initializeSubBusiness(context, notificationMessage);
 	}
 
 	@SuppressWarnings("unchecked")
 	public void initializeData(Intent intent) {
+		List<DATA> list = getService().getList();
+
+		listData.clear();
+		listData.addAll(list);
+		pojoNamedService.order(listData);
+		
+		listData.add(0, getEmptyData());
+
 		if (intent != null && intent.hasExtra(GenericSpinnerFormActivity.EXTRA_DATA)) {
 			data = (DATA) intent.getSerializableExtra(GenericSpinnerFormActivity.EXTRA_DATA);
 			if (data != null && data.getId() != null) {
-				data = dataService.find(data.getId());
+				if (list.contains(data)) {
+					for(DATA d : list) {
+						if (data.equals(d)) {
+							data = d;
+							break;
+						}
+					}
+				} else {
+					data = dataService.find(data.getId());
+				}
 			}
 		}
 		if (data == null) {
 			data = getNewData();
 		}
 
-		listData.clear();
-		listData.addAll(getService().getList());
-		pojoNamedService.order(listData);
-
-		listData.add(0, getEmptyData());
+		if (data.getSubId() != null && subBusiness != null) {
+			SUB_DATA subData = subBusiness.getEmptyData();
+			subData.setId(data.getSubId());
+			Intent subIntent = new Intent();
+			subIntent.putExtra(GenericSpinnerFormActivity.EXTRA_DATA, subData);
+			subBusiness.initializeData(subIntent);
+		}
 
 		initializeTxt();
+		initializeSubData();
+	}
+
+	public void initializeSubData() {
 		initializeSubBusiness(context, notificationMessage);
 	}
-	
+
 	public void saveData() {
 		if (isEmptyData()) {
 			data.setId(null);
@@ -89,11 +115,21 @@ public abstract class GenericSpinnerFormBusiness <DATA extends GenericDBPojoName
 	public void delete(DATA pojo) {
 		if (pojo!=null && !isEmptyData(pojo)) {
 			getService().delete(pojo);
+
+			int position = getPosition(pojo);
+			if (position >= 0){
+				listData.remove(position);
+				listDataTxt.remove(position);
+			}
 		}
 	}
 	
 	public int getPosition(DATA pojo) {
-		return getPojoPosition(listData, pojo);
+		return getPosition(pojo.getId());
+	}
+	
+	public int getPosition(Long id) {
+		return getPojoPosition(listData, id);
 	}
 
 	public GenericService<DATA> getService() {
@@ -107,11 +143,20 @@ public abstract class GenericSpinnerFormBusiness <DATA extends GenericDBPojoName
 	public DATA getData() {
 		return data;
 	}
-	
+
 	public void setData(DATA data) {
 		this.data = data;
+		if (data != null) {
+			setSubDataById(data.getSubId());
+		}
+	}
+
+	public void setSubDataById(Long subId) {
+		if (data != null) {
+			data.setSubId(subId);
+		}
 		if (subBusiness != null) {
-			subBusiness.setData(data.getSubId() == null ? null : subBusiness.getService().find(data.getSubId()));
+			subBusiness.setData(subId == null ? null : subBusiness.getService().find(subId));
 		}
 	}
 
@@ -123,9 +168,6 @@ public abstract class GenericSpinnerFormBusiness <DATA extends GenericDBPojoName
 		return listDataTxt;
 	}
 
-	protected void initializeSubBusiness(Context context, INotifierMessage notificationMessage) {
-	}
-
 	protected void initializeTxt() {
 		listDataTxt.clear();
 		listDataTxt.addAll(pojoNamedService.getNames(listData));
@@ -135,10 +177,10 @@ public abstract class GenericSpinnerFormBusiness <DATA extends GenericDBPojoName
 		return context;
 	}
 
-	protected int getPojoPosition(List<DATA> listPojo, DATA pojo) {
+	protected int getPojoPosition(List<DATA> listPojo, Long id) {
 		int ret=-1;
 		for(int i=0 ; i<listPojo.size() ; i++) {
-			if (listPojo.get(i).getId().equals(pojo.getId())) {
+			if (listPojo.get(i).getId().equals(id)) {
 				ret = i;
 				break;
 			}

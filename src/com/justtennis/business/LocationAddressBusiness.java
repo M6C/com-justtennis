@@ -45,7 +45,8 @@ public class LocationAddressBusiness extends GenericSpinnerFormBusiness<Address,
 	}
 
 	@Override
-	protected void initializeSubBusiness(Context context, INotifierMessage notificationMessage) {
+	protected GenericSpinnerFormBusiness<Address, ?> initializeSubBusiness(Context context, INotifierMessage notificationMessage) {
+		return null;
 	}
 
 //	public Address addAddress(String name, String line1, String postalCode, String city, String gps) {

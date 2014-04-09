@@ -24,4 +24,17 @@ public class GenericDBPojo<ID> implements Serializable {
 	public void setId(ID id) {
 		this.id = id;
 	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (o instanceof GenericDBPojo<?>) {
+			GenericDBPojo<?> pojo = (GenericDBPojo<?>)o;
+			if (id == null && pojo.getId() == null) {
+				return true;
+			} else {
+				return id.equals(pojo.getId());
+			}
+		}
+		return super.equals(o);
+	}
 }
