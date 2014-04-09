@@ -24,7 +24,7 @@ import com.justtennis.domain.Address;
 import com.justtennis.domain.GenericDBPojo;
 import com.justtennis.domain.GenericDBPojoNamedSubId;
 
-public abstract class GenericSpinnerFormActivity <P extends GenericDBPojoNamedSubId> extends Activity {
+public abstract class GenericSpinnerFormActivity <DATA extends GenericDBPojoNamedSubId> extends Activity {
 
 	private static final String TAG = GenericSpinnerFormActivity.class.getSimpleName();
 
@@ -38,7 +38,7 @@ public abstract class GenericSpinnerFormActivity <P extends GenericDBPojoNamedSu
 	public static final String EXTRA_MODE = "EXTRA_MODE";
 	public static final String EXTRA_OUT_LOCATION = "EXTRA_OUT_LOCATION";
 
-	private GenericSpinnerFormBusiness<P, ?> business;
+	private GenericSpinnerFormBusiness<DATA, ?> business;
 	private IGenericSpinnerFormResource resource;
 
 	private int visibilitySelection = View.VISIBLE;
@@ -61,7 +61,7 @@ public abstract class GenericSpinnerFormActivity <P extends GenericDBPojoNamedSu
 	private MODE modeOnCreate = null;
 
 	public abstract IGenericSpinnerFormResource getResource();
-	protected abstract GenericSpinnerFormBusiness<P, ?> getBusiness();
+	protected abstract GenericSpinnerFormBusiness<DATA, ?> getBusiness();
 	protected abstract View buildFormAdd(ViewGroup llForm);
 
 	@Override
@@ -232,19 +232,19 @@ public abstract class GenericSpinnerFormActivity <P extends GenericDBPojoNamedSu
 	}
 
 	protected void initializeListener() {
-		spList.setOnItemSelectedListener(adapterData.new OnItemSelectedListener<P>() {
+		spList.setOnItemSelectedListener(adapterData.new OnItemSelectedListener<DATA>() {
 			@Override
-			public P getItem(int position) {
+			public DATA getItem(int position) {
 				return business.getListData().get(position);
 			}
 
 			@Override
-				public boolean isHintItemSelected(P address) {
+				public boolean isHintItemSelected(DATA address) {
 				return business.isEmptyData(address);
 			}
 	
 			@Override
-			public void onItemSelected(AdapterView<?> parent, View view, int position, long id, P data) {
+			public void onItemSelected(AdapterView<?> parent, View view, int position, long id, DATA data) {
 				business.setData(data);
 				initializeField();
 			}
@@ -256,10 +256,15 @@ public abstract class GenericSpinnerFormActivity <P extends GenericDBPojoNamedSu
 				public GenericDBPojoNamedSubId getItem(int pojo) {
 					return business.getSubBusiness().getListData().get(pojo);
 				}
-				
+
 				@Override
 				public boolean isHintItemSelected(GenericDBPojoNamedSubId pojo) {
-					return false;//business.getSubBusiness() != null ? business.getSubBusiness().isEmptyData(pojo) : false;
+					@SuppressWarnings("unchecked")
+					GenericSpinnerFormBusiness<GenericDBPojoNamedSubId, ?> subBusiness = (GenericSpinnerFormBusiness<GenericDBPojoNamedSubId, ?>) business.getSubBusiness();
+					if (subBusiness != null) {
+						return subBusiness.isEmptyData(pojo);
+					}
+					return false;
 				}
 
 				@Override
@@ -278,7 +283,7 @@ public abstract class GenericSpinnerFormActivity <P extends GenericDBPojoNamedSu
 		return text;
 	}
 
-	protected void updateData(P data) {
+	protected void updateData(DATA data) {
 		data.setName(etName.getText().toString());
 		if (business.getSubBusiness() != null) {
 			int position = spListForm.getSelectedItemPosition();

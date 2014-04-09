@@ -9,6 +9,7 @@ import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
 import com.justtennis.R;
+import com.justtennis.domain.GenericDBPojo;
 
 public class CustomArrayAdapter<T> extends ArrayAdapter<T> {
 
@@ -17,7 +18,7 @@ public class CustomArrayAdapter<T> extends ArrayAdapter<T> {
 		setDropDownViewResource(R.layout.spinner_dropdown_item);
 	}
 
-	public abstract class OnItemSelectedListener<I> implements android.widget.AdapterView.OnItemSelectedListener {
+	public abstract class OnItemSelectedListener<I extends GenericDBPojo<?>> implements android.widget.AdapterView.OnItemSelectedListener {
 		public abstract boolean isHintItemSelected(I item);
 		public abstract void onItemSelected(AdapterView<?> parent, View view, int position, long id, I item);
 		public abstract I getItem(int position);
