@@ -22,6 +22,7 @@ Saisie de Message
 
 ********************* DONE *****************************
 Invite Location
+[20140410] - Adapte l'affichage quant le clavier s'affiche
 [20140409] - Fix Grise l'item empty des spinners
 [20140409] - Fix Selection des sous element après création ou suppression
 [20140406] - Refactor Ecran location

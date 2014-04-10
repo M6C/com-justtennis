@@ -80,12 +80,15 @@
          />
         <activity android:name=".activity.LocationTournamentActivity"
    		   android:screenOrientation="portrait"
+   		   android:windowSoftInputMode="adjustResize"
          />
         <activity android:name=".activity.LocationClubActivity"
    		   android:screenOrientation="portrait"
+   		   android:windowSoftInputMode="adjustResize"
          />
         <activity android:name=".activity.LocationAddressActivity"
    		   android:screenOrientation="portrait"
+   		   android:windowSoftInputMode="adjustResize"
          />
         <activity android:name=".activity.InviteDemandeActivity"
    		   android:screenOrientation="portrait"
