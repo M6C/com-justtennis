@@ -24,11 +24,13 @@ import com.justtennis.db.service.MessageService;
 import com.justtennis.db.service.PlayerService;
 import com.justtennis.db.service.RankingService;
 import com.justtennis.db.service.UserService;
+import com.justtennis.domain.Club;
 import com.justtennis.domain.Invite;
 import com.justtennis.domain.Invite.INVITE_TYPE;
 import com.justtennis.domain.Invite.STATUS;
 import com.justtennis.domain.Player;
 import com.justtennis.domain.Ranking;
+import com.justtennis.domain.Tournament;
 import com.justtennis.domain.User;
 import com.justtennis.domain.comparator.RankingComparatorByOrder;
 import com.justtennis.helper.GCalendarHelper;
@@ -169,6 +171,12 @@ public class InviteDemandeBusiness {
 			invite.setId(this.invite.getId());
 		}
 
+		if (invite.getType() == INVITE_TYPE.ENTRAINEMENT) {
+			if (invite.getPlayer().getIdClub() != null) {
+				invite.setClub(new Club(invite.getPlayer().getIdClub()));
+			}
+		} else {
+		}
 		inviteService.createOrUpdate(invite);
 
 		Player player = getPlayer();

@@ -13,6 +13,9 @@ Ecran Player
 Invite
  - Saisir une adresse
 
+Invite Demande
+ - Initialisation de la localisation pour les Matchs
+
 List Person
 
 List Invite
@@ -21,6 +24,16 @@ Saisie de Message
 
 
 ********************* DONE *****************************
+Invite Demande
+[20140413] - Initialisation de la localisation pour les entrainements
+[20140303] - Modification design de la notion d'adresse, club et tournoi
+[20140302] - Clean
+[20140226] - Utilisation d'un switch pour le type d'invite
+[20140223] - Ne créé pas d'évenement calendar pour les Invites passées
+[20140222] - Possibilité de créé un nouveau Player si on a selectionné "Unknow Player"
+[20140222] - Possibilité de saisir le classement
+[20140211] - Creation d'une nouvelle activity pour faire seulement des invites
+
 Ecran Utilisateur
 [20140413] - Saisie de la localisation
 [20140214] - Integration de la gestion du Message dans l'écran User
@@ -49,15 +62,6 @@ Invite Location
 
 Common
 [20140309] - Creation d'un custom spinner pour armoniser le design avec les champs de saisie
-
-Invite Demande
-[20140303] - Modification design de la notion d'adresse, club et tournoi
-[20140302] - Clean
-[20140226] - Utilisation d'un switch pour le type d'invite
-[20140223] - Ne créé pas d'évenement calendar pour les Invites passées
-[20140222] - Possibilité de créé un nouveau Player si on a selectionné "Unknow Player"
-[20140222] - Possibilité de saisir le classement
-[20140211] - Creation d'une nouvelle activity pour faire seulement des invites
 
 Invite
 [20140302] - Début ajout de la notion d'adresse, club et tournoi
