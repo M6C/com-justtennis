@@ -40,15 +40,20 @@ public abstract class GenericDBHelper extends DBAbstractHelper {
 	protected void addColumn(SQLiteDatabase database, String column, String type) {
 		addColumn(database, column, type, null);
 	}
-	
 	protected void addColumn(SQLiteDatabase database, String column, String type, String defaultValue) {
 		logMe("UPGRADE DATABASE TABLE " + getTableName() + " ADD COLUMN:" + column + " BEFORE");
-		database.execSQL("ALTER TABLE " + getTableName() + " ADD COLUMN " + column + " " + type);
+		execSQL(database, "ALTER TABLE " + getTableName() + " ADD COLUMN " + column + " " + type);
 
 		if (defaultValue != null) {
 			logMe("UPDATE TABLE " + getTableName() + " COLUMN:" + column + " WITH VALUE:" + defaultValue);
-			database.execSQL("UPDATE " + getTableName() + " SET " + column + " = '" + defaultValue + "'");
+			execSQL(database, "UPDATE " + getTableName() + " SET " + column + " = '" + defaultValue + "'");
 		}
 		logMe("UPGRADE DATABASE TABLE " + getTableName() + " ADD COLUMN:" + column + " AFTER");
+	}
+	
+	protected void execSQL(SQLiteDatabase database, String sql) {
+		logMe("execSQL: '" + sql + "' BEFORE");
+		database.execSQL(sql);
+		logMe("execSQL: '" + sql + "' AFTER");
 	}
 }

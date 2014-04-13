@@ -17,6 +17,7 @@ public class DBPlayerDataSource extends GenericDBDataSource<Player> {
 	// Database fields
 	private String[] allColumns = {
 		DBPlayerHelper.COLUMN_ID,
+		DBPlayerHelper.COLUMN_ID_TOURNAMENT,
 		DBPlayerHelper.COLUMN_ID_CLUB,
 		DBPlayerHelper.COLUMN_ID_RANKING,
 		DBPlayerHelper.COLUMN_FIRSTNAME,
@@ -42,6 +43,7 @@ public class DBPlayerDataSource extends GenericDBDataSource<Player> {
 
 	@Override
 	protected void putContentValue(ContentValues values, Player player) {
+		values.put(DBPlayerHelper.COLUMN_ID_TOURNAMENT, player.getIdTournament());
 		values.put(DBPlayerHelper.COLUMN_ID_CLUB, player.getIdClub());
 		values.put(DBPlayerHelper.COLUMN_ID_RANKING, player.getIdRanking());
 		values.put(DBPlayerHelper.COLUMN_FIRSTNAME, player.getFirstName());
@@ -61,6 +63,7 @@ public class DBPlayerDataSource extends GenericDBDataSource<Player> {
 		int col = 0;
 		Player player = new Player();
 		player.setId(DbTool.getInstance().toLong(cursor, col++));
+		player.setIdTournament(DbTool.getInstance().toLong(cursor, col++));
 		player.setIdClub(DbTool.getInstance().toLong(cursor, col++));
 		player.setIdRanking(DbTool.getInstance().toLong(cursor, col++));
 		player.setFirstName(cursor.getString(col++));

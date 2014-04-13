@@ -1,6 +1,7 @@
 package com.justtennis.db.sqlite.helper;
 
 import android.content.Context;
+import android.database.sqlite.SQLiteDatabase;
 
 import com.cameleon.common.android.inotifier.INotifierMessage;
 
@@ -10,6 +11,7 @@ public class DBUserHelper extends GenericDBHelper {
 
 	public static final String TABLE_NAME = "USER";
 
+	public static final String COLUMN_ID_TOURNAMENT = "ID_TOURNAMENT";
 	public static final String COLUMN_ID_CLUB = "ID_CLUB";
 	public static final String COLUMN_ID_RANKING = "ID_RANKING";
 	public static final String COLUMN_FIRSTNAME = "FIRSTNAME";
@@ -21,11 +23,12 @@ public class DBUserHelper extends GenericDBHelper {
 	public static final String COLUMN_LOCALITY = "LOCALITY";
 
 	private static final String DATABASE_NAME = "User.db";
-	private static final int DATABASE_VERSION = 5;
+	private static final int DATABASE_VERSION = 6;
 
 	// Database creation sql statement
 	private static final String DATABASE_CREATE = "CREATE TABLE " + TABLE_NAME + "(" + 
 		COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " + 
+		COLUMN_ID_TOURNAMENT + " INTEGER NULL, " + 
 		COLUMN_ID_CLUB + " INTEGER NULL, " + 
 		COLUMN_ID_RANKING + " INTEGER NULL, " + 
 		COLUMN_FIRSTNAME + " TEXT NULL, " + 
@@ -39,6 +42,18 @@ public class DBUserHelper extends GenericDBHelper {
 
 	public DBUserHelper(Context context, INotifierMessage notificationMessage) {
 		super(context, notificationMessage, DATABASE_NAME, DATABASE_VERSION);
+	}
+
+	@Override
+	public void onUpgrade(SQLiteDatabase database, int oldVersion, int newVersion) {
+		if (newVersion>oldVersion) {
+			if (oldVersion <= 5) {
+				addColumn(database, COLUMN_ID_TOURNAMENT, " INTEGER NULL ");
+			}
+		}
+		else {
+			super.onUpgrade(database, oldVersion, newVersion);
+		}
 	}
 
 	@Override

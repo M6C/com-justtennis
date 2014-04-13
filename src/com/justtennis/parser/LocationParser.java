@@ -41,7 +41,25 @@ public class LocationParser extends GenericParser {
 	}
 
 	public String[] toAddress(Player player) {
-		return player == null || player.getIdClub() == null ? null : getAddress(player.getIdClub());
+		String[] ret = null;
+		if (player != null && player.getIdClub() != null) {
+			switch (player.getType()) {
+				case ENTRAINEMENT:
+					ret = getAddress(new Club(player.getIdClub()));
+					break;
+				case MATCH:
+					if (player.getIdClub() != null) {
+						ret = getAddress(new Club(player.getIdClub()));
+					} else if (player.getIdTournament() != null) {
+						Tournament tournament = tournamentService.find(player.getIdTournament());
+						if (tournament != null) {
+							ret = getAddress(tournament);
+						}
+					}
+					break;
+			}
+		}
+		return ret;
 	}
 
 	public void setAddress(Invite invite, Address address) {
@@ -67,42 +85,54 @@ public class LocationParser extends GenericParser {
 		if (invite != null) {
 			if (invite.getType() == INVITE_TYPE.ENTRAINEMENT) {
 				if (invite.getClub() != null && invite.getClub().getId() != null) {
-					return getAddress(invite.getClub().getId());
+					return getAddress(new Club(invite.getClub().getId()));
 				}
 			} else {
 				if (invite.getTournament() != null) {
 					Tournament tournament = tournamentService.find(invite.getTournament().getId());
-					if (tournament != null && tournament.getSubId() != null) {
-						return getAddress(tournament.getSubId());
+					if (tournament != null) {
+						return getAddress(tournament);
 					}
 				}
 			}
 		}
 		return null;
 	}
-	
-	private String[] getAddress(long idClub) {
+
+	private String[] getAddress(Tournament tournament) {
+		String[] address = null;
+		if (tournament != null && tournament.getSubId() != null) {
+			getAddress(new Club(tournament.getSubId()));
+		}
+		if (address == null && tournament != null && tournament.getName() != null && !tournament.getName().equals("")) {
+			address = new String[]{tournament.getName(), "", ""};
+		}
+		return address;
+	}
+	private String[] getAddress(Club club) {
 		String name = "";
 		String line1 = "";
 		String line2 = "";
-		Club club = clubService.find(idClub);
-		if (club != null) {
-			if (club.getName()!=null) {
-				name = club.getName();
-			}
-			if (club.getSubId() != null) {
-				Address address = addressService.find(club.getSubId());
-				if (address != null) {
-					if (address.getLine1() != null) {
-						line1 = address.getLine1();
+		if (club != null && club.getId() != null) {
+			club = clubService.find(club.getId());
+			if (club != null) {
+				if (club.getName()!=null) {
+					name = club.getName();
+				}
+				if (club.getSubId() != null) {
+					Address address = addressService.find(club.getSubId());
+					if (address != null) {
+						if (address.getLine1() != null) {
+							line1 = address.getLine1();
+						}
+						if (address.getPostalCode() != null) {
+							line2 += address.getPostalCode();
+						}
+						if (address.getCity() != null) {
+							line2 += " " + address.getCity();
+						}
+						line2 = line2.trim();
 					}
-					if (address.getPostalCode() != null) {
-						line2 += address.getPostalCode();
-					}
-					if (address.getCity() != null) {
-						line2 += " " + address.getCity();
-					}
-					line2 = line2.trim();
 				}
 			}
 		}

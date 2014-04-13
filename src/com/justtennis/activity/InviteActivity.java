@@ -446,6 +446,11 @@ public class InviteActivity extends Activity {
 			tvLocationName.setText(location[0]);
 			tvLocationLine1.setText(location[1]);
 			tvLocationLine2.setText(location[2]);
+
+			tvLocationName.setVisibility(location[0] != null ? View.VISIBLE : View.GONE);
+			tvLocationLine1.setVisibility(location[1] != null ? View.VISIBLE : View.GONE);
+			tvLocationLine2.setVisibility(location[2] != null ? View.VISIBLE : View.GONE);
+
 			tvLocation.setVisibility(View.VISIBLE);
 			llLocationDetail.setVisibility(View.VISIBLE);
 			tvLocationEmpty.setVisibility(View.GONE);

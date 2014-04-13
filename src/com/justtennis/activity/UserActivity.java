@@ -27,7 +27,9 @@ import com.justtennis.R;
 import com.justtennis.business.UserBusiness;
 import com.justtennis.domain.Club;
 import com.justtennis.domain.Ranking;
+import com.justtennis.domain.Tournament;
 import com.justtennis.domain.User;
+import com.justtennis.domain.Player.PLAYER_TYPE;
 import com.justtennis.listener.action.TextWatcherFieldEnableView;
 import com.justtennis.parser.SmsParser;
 
@@ -233,10 +235,10 @@ public class UserActivity extends Activity implements INotifierMessage {
 				}
 				break;
 			case MATCH:
-//				intent = new Intent(this, LocationTournamentActivity.class);
-//				if (business.getInvite().getTournament() != null) {
-//					intent.putExtra(GenericSpinnerFormActivity.EXTRA_DATA, business.getInvite().getTournament());
-//				}
+				intent = new Intent(this, LocationTournamentActivity.class);
+				if (user.getIdClub() != null) {
+					intent.putExtra(GenericSpinnerFormActivity.EXTRA_DATA, new Tournament(user.getIdClub()));
+				}
 				break;
 		}
 		if (intent != null) {
@@ -273,8 +275,13 @@ public class UserActivity extends Activity implements INotifierMessage {
 		}
 
 		String[] location = getLocationLine();
-		tvLocation.setText(getString(R.string.txt_club));
-		tvLocationEmpty.setText(getString(R.string.txt_club));
+		if (user.getType() == PLAYER_TYPE.ENTRAINEMENT) {
+			tvLocation.setText(getString(R.string.txt_club));
+			tvLocationEmpty.setText(getString(R.string.txt_club));
+		} else {
+			tvLocation.setText(getString(R.string.txt_tournament));
+			tvLocationEmpty.setText(getString(R.string.txt_tournament));
+		}
 
 		if (location != null) {
 			tvLocationName.setText(location[0]);

@@ -29,6 +29,7 @@ import com.justtennis.domain.Club;
 import com.justtennis.domain.Player;
 import com.justtennis.domain.Player.PLAYER_TYPE;
 import com.justtennis.domain.Ranking;
+import com.justtennis.domain.Tournament;
 import com.justtennis.listener.action.TextWatcherFieldEnableView;
 import com.justtennis.listener.ok.OnClickPlayerCreateListenerOk;
 import com.justtennis.notifier.NotifierMessageLogger;
@@ -265,14 +266,13 @@ public class PlayerActivity extends Activity {
 				}
 				break;
 			case MATCH:
-//				intent = new Intent(this, LocationTournamentActivity.class);
-//				if (business.getInvite().getTournament() != null) {
-//					intent.putExtra(GenericSpinnerFormActivity.EXTRA_DATA, business.getInvite().getTournament());
-//				}
+				intent = new Intent(this, LocationTournamentActivity.class);
+				if (business.getPlayer().getIdClub() != null) {
+					intent.putExtra(GenericSpinnerFormActivity.EXTRA_DATA, new Tournament(business.getPlayer().getIdClub()));
+				}
 				break;
 		}
 		if (intent != null) {
-//			intent.putExtra(LocationActivity.EXTRA_INVITE, business.getInvite());
 			startActivityForResult(intent, RESULT_LOCATION);
 		}
 	}

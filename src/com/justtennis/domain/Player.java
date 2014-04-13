@@ -12,6 +12,7 @@ public class Player extends Person {
 		MATCH
 	};
 
+	private Long idTournament;
 	private Long idClub;
 	private Long idRanking;
 	private Long idExternal;
@@ -27,6 +28,12 @@ public class Player extends Person {
 		super(id);
 	}
 
+	public Long getIdTournament() {
+		return idTournament;
+	}
+	public void setIdTournament(Long idTournament) {
+		this.idTournament = idTournament;
+	}
 	public Long getIdClub() {
 		return idClub;
 	}

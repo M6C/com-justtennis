@@ -220,20 +220,17 @@
 				              android:layout_width="match_parent"
 				              android:layout_height="wrap_content"
 				              android:textSize="@dimen/invite_field_size_small_1"
-				              android:textStyle="bold"
-				              android:hint="@string/txt_location" />
+				              android:textStyle="bold" />
 				          <TextView
 				              android:id="@+id/tv_location_line1"
 				              android:layout_width="match_parent"
 				              android:layout_height="wrap_content"
-				              android:textSize="@dimen/invite_field_size_small_2"
-				              android:hint="@string/txt_location" />
+				              android:textSize="@dimen/invite_field_size_small_2" />
 				          <TextView
 				              android:id="@+id/tv_location_line2"
 				              android:layout_width="match_parent"
 				              android:layout_height="wrap_content"
-				              android:textSize="@dimen/invite_field_size_small_2"
-				              android:hint="@string/txt_location" />
+				              android:textSize="@dimen/invite_field_size_small_2" />
 			          </LinearLayout>			
 			          <TextView
 			              android:id="@+id/et_location"
@@ -241,8 +238,7 @@
 			              android:layout_height="wrap_content"
 			              android:layout_marginLeft="@dimen/invite_field_margin_left"
 			              android:gravity="center_horizontal"
-			              android:textSize="@dimen/invite_field_size"
-			              android:hint="@string/txt_location" />
+			              android:textSize="@dimen/invite_field_size" />
 			      </LinearLayout>
                     <!--
  				<SlidingDrawer

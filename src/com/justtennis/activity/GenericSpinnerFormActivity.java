@@ -292,8 +292,10 @@ public abstract class GenericSpinnerFormActivity <DATA extends GenericDBPojoName
 		data.setName(etName.getText().toString());
 		if (business.getSubBusiness() != null) {
 			int position = spListForm.getSelectedItemPosition();
-			GenericDBPojo<Long> subItem = (GenericDBPojo<Long>)business.getSubBusiness().getListData().get(position);
-			data.setSubId(subItem.getId());
+			if (position >= 0) {
+				GenericDBPojo<Long> subItem = (GenericDBPojo<Long>)business.getSubBusiness().getListData().get(position);
+				data.setSubId(subItem.getId());
+			}
 		}
 	}
 

@@ -14,7 +14,6 @@ Invite
  - Saisir une adresse
 
 Invite Demande
- - Initialisation de la localisation pour les Matchs
 
 List Person
 
@@ -25,6 +24,7 @@ Saisie de Message
 
 ********************* DONE *****************************
 Invite Demande
+[20140413] - Initialisation de la localisation pour les Matchs
 [20140413] - Initialisation de la localisation pour les entrainements
 [20140303] - Modification design de la notion d'adresse, club et tournoi
 [20140302] - Clean

@@ -22,6 +22,7 @@ import com.justtennis.domain.Invite;
 import com.justtennis.domain.Player;
 import com.justtennis.domain.Player.PLAYER_TYPE;
 import com.justtennis.domain.Ranking;
+import com.justtennis.domain.Tournament;
 import com.justtennis.domain.User;
 import com.justtennis.domain.comparator.RankingComparatorByOrder;
 import com.justtennis.manager.SmsManager;
@@ -207,7 +208,7 @@ public class PlayerBusiness {
 
 	public void setLocation(Serializable location) {
 		if (player.getType() == PLAYER_TYPE.MATCH) {
-//			setTournament((Tournament)location);
+			player.setIdClub(((Tournament)location).getId());
 		} else {
 			player.setIdClub(((Club)location).getId());
 		}
