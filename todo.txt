@@ -21,6 +21,22 @@ Saisie de Message
 
 
 ********************* DONE *****************************
+Ecran Utilisateur
+[20140413] - Saisie de la localisation
+[20140214] - Integration de la gestion du Message dans l'écran User
+[20140206] - Revu du design
+[20140105] - Ajout du classement
+
+Ecran Player
+[20140413] - Saisie de la localisation
+[20140223] - Ajout la notion de type de Player
+[20140206] - Revu du design
+[20140110] - Trier les invites par date descendante
+[20140109] - Afficher la liste des invites en mode modification
+[20140108] - Ajout du classement
+[20131229] - Passer par un startActivityForResult pour importer un contact google (comme le scan QrCode)
+[20131228] - Recuperer les infos 'Prenom' et 'Nom' découpé
+
 Invite Location
 [20140410] - Adapte l'affichage quant le clavier s'affiche
 [20140409] - Fix Grise l'item empty des spinners
@@ -96,24 +112,10 @@ List Invite
 [20131225] - Pouvoir modifier une invite
 [20131221] - Gerer l'affichage du type d'invite
 
-Ecran Player
-[20140223] - Ajout la notion de type de Player
-[20140206] - Revu du design
-[20140110] - Trier les invites par date descendante
-[20140109] - Afficher la liste des invites en mode modification
-[20140108] - Ajout du classement
-[20131229] - Passer par un startActivityForResult pour importer un contact google (comme le scan QrCode)
-[20131228] - Recuperer les infos 'Prenom' et 'Nom' découpé
-
 List Player
 [20140222] - Empèche la suppression d'un joueur si il a au moins une invite
 [20140216] - Sort Player List
 [20140212] - Ajout d'un bouton Close
-
-Ecran Utilisateur
-[20140214] - Integration de la gestion du Message dans l'écran User
-[20140206] - Revu du design
-[20140105] - Ajout du classement
 
 Ecran Player & User
 [20140207] - TextWatcher sur les EditText qui rend visible les TextView si non vide.

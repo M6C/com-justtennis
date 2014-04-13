@@ -1,6 +1,7 @@
 
 package com.justtennis.activity;
 
+import java.io.Serializable;
 import java.util.List;
 
 import org.gdocument.gtracergps.launcher.log.Logger;
@@ -9,6 +10,7 @@ import android.app.Activity;
 import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
@@ -23,6 +25,7 @@ import com.cameleon.common.android.adapter.BaseViewAdapter;
 import com.cameleon.common.android.factory.FactoryDialog;
 import com.justtennis.R;
 import com.justtennis.business.PlayerBusiness;
+import com.justtennis.domain.Club;
 import com.justtennis.domain.Player;
 import com.justtennis.domain.Player.PLAYER_TYPE;
 import com.justtennis.domain.Ranking;
@@ -43,6 +46,7 @@ public class PlayerActivity extends Activity {
 	private static final String TAG = PlayerActivity.class.getSimpleName();
 	private static final int RESULT_CODE_QRCODE_SCAN = 0;
 	private static final int RESULT_CODE_GOOGLE = 1;
+	private static final int RESULT_LOCATION = 2;
 	public static final String EXTRA_PLAYER = "PLAYER";
 	public static final String EXTRA_PLAYER_ID = "PLAYER_ID";
 	public static final String EXTRA_INVITE = "INVITE";
@@ -73,7 +77,16 @@ public class PlayerActivity extends Activity {
 	private LinearLayout llCreate;
 	private LinearLayout llModify;
 	private LinearLayout llAddDemande;
+
+	private TextView tvLocation;
+	private TextView tvLocationEmpty;
+	private LinearLayout llLocationDetail;
+	private TextView tvLocationName;
+	private TextView tvLocationLine1;
+	private TextView tvLocationLine2;
+
 	private boolean fromQrCode = false;
+	private Serializable locationFromResult;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -98,6 +111,12 @@ public class PlayerActivity extends Activity {
 		llCreate = (LinearLayout)findViewById(R.id.ll_create);
 		llModify = (LinearLayout)findViewById(R.id.ll_modify);
 		llAddDemande = (LinearLayout)findViewById(R.id.ll_add_demande);
+		tvLocation = ((TextView)findViewById(R.id.tv_location));
+		tvLocationEmpty = ((TextView)findViewById(R.id.et_location));
+		llLocationDetail = (LinearLayout)findViewById(R.id.ll_location_detail);
+		tvLocationName = ((TextView)findViewById(R.id.tv_location_name));
+		tvLocationLine1 = ((TextView)findViewById(R.id.tv_location_line1));
+		tvLocationLine2 = ((TextView)findViewById(R.id.tv_location_line2));
 
 		initializeListener();
 		
@@ -114,6 +133,8 @@ public class PlayerActivity extends Activity {
 
 		initializeListType();
 		initializeType();
+
+		initializeLocation();
 	}
 
 	@Override
@@ -150,6 +171,10 @@ public class PlayerActivity extends Activity {
 				fromQrCode = false;
 			} else if (resultCode == RESULT_CANCELED) {
 				// Handle cancel
+			}
+		} else if (requestCode==RESULT_LOCATION) {
+			if (data != null) {
+				locationFromResult = data.getSerializableExtra(LocationActivity.EXTRA_OUT_LOCATION);
 			}
 		}
 	}
@@ -228,6 +253,28 @@ public class PlayerActivity extends Activity {
 	public void onClickDemandeAddNo(View view) {
 		business.demandeAddNo();
 		finish();
+	}
+	
+	public void onClickLocation(View view) {
+		Intent intent = null;
+		switch(business.getPlayer().getType()) {
+			case ENTRAINEMENT:
+				intent = new Intent(this, LocationClubActivity.class);
+				if (business.getPlayer().getIdClub() != null) {
+					intent.putExtra(GenericSpinnerFormActivity.EXTRA_DATA, new Club(business.getPlayer().getIdClub()));
+				}
+				break;
+			case MATCH:
+//				intent = new Intent(this, LocationTournamentActivity.class);
+//				if (business.getInvite().getTournament() != null) {
+//					intent.putExtra(GenericSpinnerFormActivity.EXTRA_DATA, business.getInvite().getTournament());
+//				}
+				break;
+		}
+		if (intent != null) {
+//			intent.putExtra(LocationActivity.EXTRA_INVITE, business.getInvite());
+			startActivityForResult(intent, RESULT_LOCATION);
+		}
 	}
 
 	private void importScan() {
@@ -380,6 +427,36 @@ public class PlayerActivity extends Activity {
 		spType.setSelection(getTypePosition());
 	}
 
+	private void initializeLocation() {
+		Log.d(TAG, "initializeDataLocation");
+		if (locationFromResult != null) {
+			business.setLocation(locationFromResult);
+			locationFromResult = null;
+		}
+
+		String[] location = business.getLocationLine();
+		if (getType() == PLAYER_TYPE.ENTRAINEMENT) {
+			tvLocation.setText(getString(R.string.txt_club));
+			tvLocationEmpty.setText(getString(R.string.txt_club));
+		} else {
+			tvLocation.setText(getString(R.string.txt_tournament));
+			tvLocationEmpty.setText(getString(R.string.txt_tournament));
+		}
+
+		if (location != null) {
+			tvLocationName.setText(location[0]);
+			tvLocationLine1.setText(location[1]);
+			tvLocationLine2.setText(location[2]);
+			tvLocation.setVisibility(View.VISIBLE);
+			llLocationDetail.setVisibility(View.VISIBLE);
+			tvLocationEmpty.setVisibility(View.GONE);
+		} else {
+			tvLocation.setVisibility(View.GONE);
+			llLocationDetail.setVisibility(View.GONE);
+			tvLocationEmpty.setVisibility(View.VISIBLE);
+		}
+	}
+
 	private int getTypePosition() {
 		if(business.getPlayer() != null) {
 			switch(business.getPlayer().getType()) {
@@ -394,13 +471,17 @@ public class PlayerActivity extends Activity {
 		}
 	}
 
+	private PLAYER_TYPE getType() {
+		return business.getPlayer().getType();
+	}
+	
 	private PLAYER_TYPE getType(Integer position) {
 		switch(position) {
-			case 0:
-				return PLAYER_TYPE.ENTRAINEMENT;
-			case 1:
-			default:
-				return PLAYER_TYPE.MATCH;
+		case 0:
+			return PLAYER_TYPE.ENTRAINEMENT;
+		case 1:
+		default:
+			return PLAYER_TYPE.MATCH;
 		}
 	}
 }

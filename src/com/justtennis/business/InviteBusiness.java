@@ -41,6 +41,7 @@ import com.justtennis.domain.User;
 import com.justtennis.helper.GCalendarHelper;
 import com.justtennis.helper.GCalendarHelper.EVENT_STATUS;
 import com.justtennis.manager.SmsManager;
+import com.justtennis.parser.LocationParser;
 import com.justtennis.parser.SmsParser;
 
 public class InviteBusiness {
@@ -53,11 +54,9 @@ public class InviteBusiness {
 	private UserService userService;
 	private PlayerService playerService;
 	private ScoreSetService scoreSetService;
-	private AddressService addressService;
-	private ClubService clubService;
-	private TournamentService tournamentService;
 	private RankingService rankingService;
 	private GCalendarHelper gCalendarHelper;
+	private LocationParser locationParser;
 	private User user;
 	private Invite invite;
 	private MODE mode = MODE.INVITE_MODIFY;
@@ -73,10 +72,8 @@ public class InviteBusiness {
 		userService = new UserService(context, notificationMessage);
 		rankingService = new RankingService(context, notificationMessage);
 		scoreSetService = new ScoreSetService(context, notificationMessage);
-		addressService = new AddressService(context, notificationMessage);
-		clubService = new ClubService(context, notificationMessage);
-		tournamentService = new TournamentService(context, notificationMessage);
 		gCalendarHelper = GCalendarHelper.getInstance(context);
+		locationParser = LocationParser.getInstance(context, notificationMessage);
 	}
 
 	public void initializeData(Intent intent) {
@@ -471,68 +468,11 @@ public class InviteBusiness {
 	}
 
 	public void setAddress(Address address) {
-		if (address.getId() != null) {
-			invite.setAddress(address);
-		}
-		else if (address.getLine1() != null ||
-			address.getPostalCode() != null ||
-			address.getCity() != null) {
-			if (invite.getAddress() != null) {
-				invite.getAddress().setLine1(address.getLine1());
-				invite.getAddress().setPostalCode(address.getPostalCode());
-				invite.getAddress().setCity(address.getCity());
-			} else {
-				invite.setAddress(address);
-			}
-		}
+		locationParser.setAddress(invite, address);
 	}
 
 	public String[] getLocationLine() {
-		if (getType() == INVITE_TYPE.ENTRAINEMENT) {
-			if (getClub() != null && getClub().getId() != null) {
-				return getAddress(getClub().getId());
-			}
-		} else {
-			if (getTournament() != null) {
-				Tournament tournament = tournamentService.find(getTournament().getId());
-				if (tournament != null && tournament.getSubId() != null) {
-					return getAddress(tournament.getSubId());
-				}
-			}
-		}
-		return null;
-	}
-	
-	public String[] getAddress(long idClub) {
-		String name = "";
-		String line1 = "";
-		String line2 = "";
-		Club club = clubService.find(idClub);
-		if (club != null) {
-			if (club.getName()!=null) {
-				name = club.getName();
-			}
-			if (club.getSubId() != null) {
-				Address address = addressService.find(club.getSubId());
-				if (address != null) {
-					if (address.getLine1() != null) {
-						line1 = address.getLine1();
-					}
-					if (address.getPostalCode() != null) {
-						line2 += address.getPostalCode();
-					}
-					if (address.getCity() != null) {
-						line2 += " " + address.getCity();
-					}
-					line2 = line2.trim();
-				}
-			}
-		}
-		if ("".equals(name) && "".equals(line1) && "".equals(line2)) {
-			return null;
-		} else {
-			return new String[] {name, line1, line2};
-		}
+		return locationParser.toAddress(invite);
 	}
 
 	public void setClub(Club club) {

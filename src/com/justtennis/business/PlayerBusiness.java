@@ -1,5 +1,6 @@
 package com.justtennis.business;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -15,6 +16,8 @@ import com.justtennis.activity.PlayerActivity.MODE;
 import com.justtennis.db.service.PlayerService;
 import com.justtennis.db.service.RankingService;
 import com.justtennis.db.service.UserService;
+import com.justtennis.domain.Address;
+import com.justtennis.domain.Club;
 import com.justtennis.domain.Invite;
 import com.justtennis.domain.Player;
 import com.justtennis.domain.Player.PLAYER_TYPE;
@@ -23,6 +26,7 @@ import com.justtennis.domain.User;
 import com.justtennis.domain.comparator.RankingComparatorByOrder;
 import com.justtennis.manager.SmsManager;
 import com.justtennis.notifier.NotifierMessageLogger;
+import com.justtennis.parser.LocationParser;
 import com.justtennis.parser.PlayerParser;
 import com.justtennis.parser.SmsParser;
 
@@ -33,6 +37,7 @@ public class PlayerBusiness {
 //	private InviteService inviteService;
 	private PlayerService playerService;
 	private PlayerParser playerParser;
+	private LocationParser locationParser;
 	private User user;
 	private Player player;
 	private Invite invite;
@@ -47,6 +52,7 @@ public class PlayerBusiness {
 		userService = new UserService(context, notificationMessage);
 		playerService = new PlayerService(context, notificationMessage);
 		playerParser = PlayerParser.getInstance();
+		locationParser = LocationParser.getInstance(context, notificationMessage);
 	}
 
 	public void initialize(Intent intent) {
@@ -193,6 +199,22 @@ public class PlayerBusiness {
 
 	public List<Ranking> getListRanking() {
 		return listRanking;
+	}
+
+	public void setAddress(Address address) {
+		locationParser.setAddress(invite, address);
+	}
+
+	public void setLocation(Serializable location) {
+		if (player.getType() == PLAYER_TYPE.MATCH) {
+//			setTournament((Tournament)location);
+		} else {
+			player.setIdClub(((Club)location).getId());
+		}
+	}
+
+	public String[] getLocationLine() {
+		return locationParser.toAddress(player);
 	}
 
 //	private void initializeDataInvite() {

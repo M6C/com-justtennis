@@ -430,7 +430,7 @@ public class InviteActivity extends Activity {
 			}
 		}
 	}
-	
+
 	private void initializeDataLocation() {
 		Log.d(TAG, "initializeDataLocation");
 		String[] location = business.getLocationLine();

@@ -15,6 +15,7 @@ import com.justtennis.domain.Ranking;
 import com.justtennis.domain.User;
 import com.justtennis.domain.comparator.RankingComparatorByOrder;
 import com.justtennis.notifier.NotifierMessageLogger;
+import com.justtennis.parser.LocationParser;
 import com.justtennis.parser.UserParser;
 
 public class UserBusiness {
@@ -22,6 +23,7 @@ public class UserBusiness {
 	private UserService userService;
 	private MessageService messageService;
 	private UserParser userParser;
+	private LocationParser locationParser;
 	private Context context;
 	private String[] listTxtRankings;
 	private List<Ranking> listRanking;
@@ -32,6 +34,7 @@ public class UserBusiness {
 		userService = new UserService(context, notificationMessage);
 		messageService = new MessageService(context, notificationMessage);
 		userParser = UserParser.getInstance();
+		locationParser = LocationParser.getInstance(context, notificationMessage);
 	}
 
 	public void initializeData() {
@@ -74,6 +77,10 @@ public class UserBusiness {
 
 	public User findUser() {
 		return userService.find();
+	}
+
+	public String[] getLocationLine(User user) {
+		return locationParser.toAddress(user);
 	}
 	
 	public String getMessage() {
