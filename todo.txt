@@ -23,6 +23,17 @@ Saisie de Message
 
 
 ********************* DONE *****************************
+Ecran Player
+[20140414] - Fix sur la creation d'un player
+[20140413] - Saisie de la localisation
+[20140223] - Ajout la notion de type de Player
+[20140206] - Revu du design
+[20140110] - Trier les invites par date descendante
+[20140109] - Afficher la liste des invites en mode modification
+[20140108] - Ajout du classement
+[20131229] - Passer par un startActivityForResult pour importer un contact google (comme le scan QrCode)
+[20131228] - Recuperer les infos 'Prenom' et 'Nom' découpé
+
 Invite Demande
 [20140413] - Initialisation de la localisation pour les Matchs
 [20140413] - Initialisation de la localisation pour les entrainements
@@ -39,16 +50,6 @@ Ecran Utilisateur
 [20140214] - Integration de la gestion du Message dans l'écran User
 [20140206] - Revu du design
 [20140105] - Ajout du classement
-
-Ecran Player
-[20140413] - Saisie de la localisation
-[20140223] - Ajout la notion de type de Player
-[20140206] - Revu du design
-[20140110] - Trier les invites par date descendante
-[20140109] - Afficher la liste des invites en mode modification
-[20140108] - Ajout du classement
-[20131229] - Passer par un startActivityForResult pour importer un contact google (comme le scan QrCode)
-[20131228] - Recuperer les infos 'Prenom' et 'Nom' découpé
 
 Invite Location
 [20140410] - Adapte l'affichage quant le clavier s'affiche

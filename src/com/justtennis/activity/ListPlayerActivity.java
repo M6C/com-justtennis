@@ -148,6 +148,7 @@ public class ListPlayerActivity extends Activity {
 			intent.putExtra(PlayerActivity.EXTRA_MODE, PlayerActivity.MODE.FOR_RESULT);
 			startActivityForResult(intent, RESULT_PLAYER_FOR_INFO);
 		} else {
+			intent.removeExtra(EXTRA_MODE);
 			startActivity(intent);
 		}
 	}

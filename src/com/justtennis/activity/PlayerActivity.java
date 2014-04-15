@@ -378,6 +378,9 @@ public class PlayerActivity extends Activity {
 				if (view != null) {
 					Player player = business.initializePlayer();
 					player.setType((PLAYER_TYPE) view.getTag());
+					player.setIdClub(null);
+					player.setIdTournament(null);
+					initializeLocation();
 				}
 			}
 
@@ -435,12 +438,12 @@ public class PlayerActivity extends Activity {
 		}
 
 		String[] location = business.getLocationLine();
-		if (getType() == PLAYER_TYPE.ENTRAINEMENT) {
-			tvLocation.setText(getString(R.string.txt_club));
-			tvLocationEmpty.setText(getString(R.string.txt_club));
-		} else {
+		if (getType() == PLAYER_TYPE.MATCH) {
 			tvLocation.setText(getString(R.string.txt_tournament));
 			tvLocationEmpty.setText(getString(R.string.txt_tournament));
+		} else {
+			tvLocation.setText(getString(R.string.txt_club));
+			tvLocationEmpty.setText(getString(R.string.txt_club));
 		}
 
 		if (location != null) {
@@ -472,7 +475,7 @@ public class PlayerActivity extends Activity {
 	}
 
 	private PLAYER_TYPE getType() {
-		return business.getPlayer().getType();
+		return business.getPlayer() != null ? business.getPlayer().getType() : null;
 	}
 	
 	private PLAYER_TYPE getType(Integer position) {

@@ -37,7 +37,22 @@ public class LocationParser extends GenericParser {
 	}
 
 	public String[] toAddress(Invite invite) {
-		return invite == null ? null : getLocationLine(invite);
+		String[] ret = null;
+		if (invite != null) {
+			if (invite.getType() == INVITE_TYPE.ENTRAINEMENT) {
+				if (invite.getClub() != null && invite.getClub().getId() != null) {
+					ret = getAddress(new Club(invite.getClub().getId()));
+				}
+			} else {
+				if (invite.getTournament() != null) {
+					Tournament tournament = tournamentService.find(invite.getTournament().getId());
+					if (tournament != null) {
+						ret = getAddress(tournament);
+					}
+				}
+			}
+		}
+		return ret;
 	}
 
 	public String[] toAddress(Player player) {
@@ -54,6 +69,15 @@ public class LocationParser extends GenericParser {
 						Tournament tournament = tournamentService.find(player.getIdTournament());
 						if (tournament != null) {
 							ret = getAddress(tournament);
+							if (ret != null && ret.length >= 3) {
+								if (ret[0] != null && ret[1] == null && ret[2] == null) {
+									String[] address = getAddress(new Club(player.getIdClub()));
+									if (address != null && address.length >= 3) {
+										ret[1] = address[1];
+										ret[2] = address[2];
+									}
+								}
+							}
 						}
 					}
 					break;
