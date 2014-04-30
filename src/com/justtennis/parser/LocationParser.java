@@ -57,10 +57,12 @@ public class LocationParser extends GenericParser {
 
 	public String[] toAddress(Player player) {
 		String[] ret = null;
-		if (player != null && player.getIdClub() != null) {
+		if (player != null) {
 			switch (player.getType()) {
 				case ENTRAINEMENT:
-					ret = getAddress(new Club(player.getIdClub()));
+					if (player.getIdClub() != null) {
+						ret = getAddress(new Club(player.getIdClub()));
+					}
 					break;
 				case MATCH:
 					if (player.getIdClub() != null) {

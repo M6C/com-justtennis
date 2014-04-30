@@ -24,6 +24,7 @@ Saisie de Message
 
 ********************* DONE *****************************
 Ecran Player
+[20140430] - Fix sur la selection de la localisation
 [20140414] - Fix sur la creation d'un player
 [20140413] - Saisie de la localisation
 [20140223] - Ajout la notion de type de Player

@@ -45,9 +45,9 @@ import com.justtennis.notifier.NotifierMessageLogger;
 
 public class InviteActivity extends Activity {
 
-	private static final String KEY_LOCATION_FROM_RESULT = "KEY_LOCATION_FROM_RESULT";
-	@SuppressWarnings("unused")
 	private static final String TAG = InviteActivity.class.getSimpleName();
+	@SuppressWarnings("unused")
+	private static final String KEY_LOCATION_FROM_RESULT = "KEY_LOCATION_FROM_RESULT";
 
 	public enum MODE {
 		INVITE_MODIFY
@@ -58,6 +58,7 @@ public class InviteActivity extends Activity {
 	private static final int RESULT_PLAYER = 1;
 	private static final int RESULT_LOCATION = 2;
 
+	private Bundle savedInstanceState;
 	private InviteBusiness business;
 	private Long idPlayerFromResult = null;
 	private int visibilityScoreContent = View.GONE;
@@ -72,7 +73,6 @@ public class InviteActivity extends Activity {
 	private ImageView ivPhoto;
 	private Switch swType;
 	private Spinner spRanking;
-	private Bundle savedInstanceState;
 	private TextView tvLocation;
 	private TextView tvLocationEmpty;
 

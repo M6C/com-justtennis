@@ -9,6 +9,7 @@ import java.util.TreeSet;
 
 import android.content.Context;
 import android.content.Intent;
+import android.os.Bundle;
 
 import com.cameleon.common.android.inotifier.INotifierMessage;
 import com.justtennis.activity.PlayerActivity;
@@ -97,6 +98,14 @@ public class PlayerBusiness {
 		initializeDataRanking();
 	}
 
+	public void initialize(Bundle savedInstanceState) {
+		mode = (MODE) savedInstanceState.getSerializable(PlayerActivity.EXTRA_MODE);
+		invite = (Invite) savedInstanceState.getSerializable(PlayerActivity.EXTRA_INVITE);
+		player = (Player) savedInstanceState.getSerializable(PlayerActivity.EXTRA_PLAYER);
+
+		initializeDataRanking();
+	}
+
 	public void initializeDataRanking() {
 		SortedSet<Ranking> setRanking = new TreeSet<Ranking>(new RankingComparatorByOrder());
 
@@ -111,6 +120,12 @@ public class PlayerBusiness {
 		for(Ranking ranking : setRanking) {
 			listTxtRankings[i++] = ranking.getRanking();
 		}
+	}
+
+	public void onSaveInstanceState(Bundle outState) {
+		outState.putSerializable(PlayerActivity.EXTRA_MODE, mode);
+		outState.putSerializable(PlayerActivity.EXTRA_INVITE, invite);
+		outState.putSerializable(PlayerActivity.EXTRA_PLAYER, player);
 	}
 
 	public long getPlayerCount() {
@@ -208,7 +223,7 @@ public class PlayerBusiness {
 
 	public void setLocation(Serializable location) {
 		if (player.getType() == PLAYER_TYPE.MATCH) {
-			player.setIdClub(((Tournament)location).getId());
+			player.setIdTournament(((Tournament)location).getId());
 		} else {
 			player.setIdClub(((Club)location).getId());
 		}

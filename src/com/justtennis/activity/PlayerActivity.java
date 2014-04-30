@@ -57,6 +57,7 @@ public class PlayerActivity extends Activity {
 
 	private final Integer[] drawableType = new Integer[] {R.layout.element_invite_type_entrainement, R.layout.element_invite_type_match};
 
+	private Bundle savedInstanceState;
 	private PlayerBusiness business;
 
 	private TextView tvFirstname;
@@ -92,6 +93,10 @@ public class PlayerActivity extends Activity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		if (this.savedInstanceState==null) {
+			this.savedInstanceState = savedInstanceState;
+		}
+
 		setContentView(R.layout.player);
 
 		tvFirstname = (TextView)findViewById(R.id.tv_firstname);
@@ -130,11 +135,12 @@ public class PlayerActivity extends Activity {
 		initialize();
 
 		initializeRankingList();
-		initializeRanking();
-
 		initializeListType();
+
+		initializeRanking();
 		initializeType();
 
+		initializeListenerListType();
 		initializeLocation();
 	}
 
@@ -178,6 +184,12 @@ public class PlayerActivity extends Activity {
 				locationFromResult = data.getSerializableExtra(LocationActivity.EXTRA_OUT_LOCATION);
 			}
 		}
+	}
+
+	@Override
+	protected void onSaveInstanceState(Bundle outState) {
+		business.onSaveInstanceState(outState);
+		super.onSaveInstanceState(outState);
 	}
 
 	public void onClickCreate(View view) {
@@ -305,7 +317,12 @@ public class PlayerActivity extends Activity {
 
 	private void initialize() {
 		Intent intent = getIntent();
-		business.initialize(intent);
+		if (savedInstanceState!=null) {
+			business.initialize(savedInstanceState);
+		}
+		else {
+			business.initialize(intent);
+		}
 
 		Player player = business.getPlayer();
 		MODE mode = business.getMode();
@@ -343,6 +360,25 @@ public class PlayerActivity extends Activity {
 		etPhonenumber.addTextChangedListener(new TextWatcherFieldEnableView(tvPhonenumber, View.GONE));
 	}
 
+	private void initializeListenerListType() {
+		spType.setOnItemSelectedListener(new OnItemSelectedListener() {
+			@Override
+			public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+				if (view != null) {
+					Player player = business.initializePlayer();
+					player.setType((PLAYER_TYPE) view.getTag());
+					player.setIdClub(null);
+					player.setIdTournament(null);
+					initializeLocation();
+				}
+			}
+
+			@Override
+			public void onNothingSelected(AdapterView<?> arg0) {
+			}
+		});
+	}
+
 	private void initializeView(Player player) {
 		boolean bEditable = !business.isUnknownPlayer(player);
 		int iVisibility = (business.isUnknownPlayer(player) ? View.GONE : View.VISIBLE);
@@ -371,23 +407,6 @@ public class PlayerActivity extends Activity {
 			}
 		});
 		spType.setAdapter(adapterType);
-
-		spType.setOnItemSelectedListener(new OnItemSelectedListener() {
-			@Override
-			public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-				if (view != null) {
-					Player player = business.initializePlayer();
-					player.setType((PLAYER_TYPE) view.getTag());
-					player.setIdClub(null);
-					player.setIdTournament(null);
-					initializeLocation();
-				}
-			}
-
-			@Override
-			public void onNothingSelected(AdapterView<?> arg0) {
-			}
-		});
 	}
 
 	private void initializeRankingList() {
@@ -410,24 +429,11 @@ public class PlayerActivity extends Activity {
 	}
 
 	private void initializeRanking() {
-		Player player = business.getPlayer();
-		if (player!=null) {
-			Long id = player.getIdRanking();
-			int position = 0;
-			List<Ranking> listRanking = business.getListRanking();
-			for(Ranking ranking : listRanking) {
-				if (ranking.getId().equals(id)) {
-					spRanking.setSelection(position, true);
-					break;
-				} else {
-					position++;
-				}
-			}
-		}
+		spRanking.setSelection(getRankingPosition(), true);
 	}
 
 	private void initializeType() {
-		spType.setSelection(getTypePosition());
+		spType.setSelection(getTypePosition(), true);
 	}
 
 	private void initializeLocation() {
@@ -460,6 +466,23 @@ public class PlayerActivity extends Activity {
 		}
 	}
 
+	private int getRankingPosition() {
+		int position = 0;
+		Player player = business.getPlayer();
+		if (player!=null) {
+			Long id = player.getIdRanking();
+			List<Ranking> listRanking = business.getListRanking();
+			for(Ranking ranking : listRanking) {
+				if (ranking.getId().equals(id)) {
+					break;
+				} else {
+					position++;
+				}
+			}
+		}
+		return position;
+	}
+		
 	private int getTypePosition() {
 		if(business.getPlayer() != null) {
 			switch(business.getPlayer().getType()) {

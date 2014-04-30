@@ -105,7 +105,7 @@ public class InviteBusiness {
 
 	public void initializeData(Bundle savedInstanceState) {
 		mode = (MODE) savedInstanceState.getSerializable(InviteActivity.EXTRA_MODE);
-		invite = (Invite) savedInstanceState.getSerializable(PlayerActivity.EXTRA_INVITE);
+		invite = (Invite) savedInstanceState.getSerializable(InviteActivity.EXTRA_INVITE);
 
 		initializeDataRanking();
 	}
