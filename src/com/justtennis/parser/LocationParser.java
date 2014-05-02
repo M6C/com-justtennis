@@ -50,6 +50,20 @@ public class LocationParser extends GenericParser {
 						ret = getAddress(tournament);
 					}
 				}
+				if (invite.getClub() != null && invite.getClub().getId() != null) {
+					String[] clubAddress = getAddress(new Club(invite.getClub().getId()));
+					if (clubAddress != null) {
+						if (ret == null) {
+							ret = clubAddress;
+						} else {
+							if (ret[0].isEmpty()) {
+								ret[0] = clubAddress[0];
+							}
+							ret[1] = clubAddress[1];
+							ret[2] = clubAddress[2];
+						}
+					}
+				}
 			}
 		}
 		return ret;
@@ -127,11 +141,22 @@ public class LocationParser extends GenericParser {
 
 	private String[] getAddress(Tournament tournament) {
 		String[] address = null;
-		if (tournament != null && tournament.getSubId() != null) {
-			getAddress(new Club(tournament.getSubId()));
-		}
 		if (address == null && tournament != null && tournament.getName() != null && !tournament.getName().equals("")) {
 			address = new String[]{tournament.getName(), "", ""};
+		}
+		if (tournament != null && tournament.getSubId() != null) {
+			String[] clubAddress = getAddress(new Club(tournament.getSubId()));
+			if (clubAddress != null) {
+				if (address == null) {
+					address = clubAddress;
+				} else {
+					if (address[0].isEmpty()) {
+						address[0] = clubAddress[0];
+					}
+					address[1] = clubAddress[1];
+					address[2] = clubAddress[2];
+				}
+			}
 		}
 		return address;
 	}

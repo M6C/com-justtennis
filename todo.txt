@@ -24,6 +24,7 @@ Saisie de Message
 
 ********************* DONE *****************************
 Invite Location
+[20140502] - Pouvoir selectionner un club specifiquement pour une invite
 [20140502] - Fix sur l'affichage de la liste des sous elements
 [20140410] - Adapte l'affichage quant le clavier s'affiche
 [20140409] - Fix Grise l'item empty des spinners

@@ -159,8 +159,8 @@
                             android:layout_marginLeft="@dimen/invite_field_margin_left"
                             android:editable="false"
                             android:gravity="center_vertical|center_horizontal"
-                            android:onClick="onClickInviteDate"
-                            android:textSize="@dimen/invite_field_size" />
+                            android:textSize="@dimen/invite_field_size"
+                            android:onClick="onClickInviteDate" />
                     </LinearLayout>
 
                     <LinearLayout
@@ -214,6 +214,7 @@
 			              android:layout_marginLeft="@dimen/invite_field_margin_left"
 			              android:orientation="vertical"
 			              android:visibility="gone"
+				          android:onClick="onClickLocationClub"			              
 			          >
 				          <TextView
 				              android:id="@+id/tv_location_name"

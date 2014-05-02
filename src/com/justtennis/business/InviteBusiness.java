@@ -19,14 +19,11 @@ import com.justtennis.R;
 import com.justtennis.activity.InviteActivity;
 import com.justtennis.activity.InviteActivity.MODE;
 import com.justtennis.activity.PlayerActivity;
-import com.justtennis.db.service.AddressService;
-import com.justtennis.db.service.ClubService;
 import com.justtennis.db.service.InviteService;
 import com.justtennis.db.service.MessageService;
 import com.justtennis.db.service.PlayerService;
 import com.justtennis.db.service.RankingService;
 import com.justtennis.db.service.ScoreSetService;
-import com.justtennis.db.service.TournamentService;
 import com.justtennis.db.service.UserService;
 import com.justtennis.domain.Address;
 import com.justtennis.domain.Club;
@@ -290,6 +287,10 @@ public class InviteBusiness {
 		} else {
 			setClub((Club)location);
 		}
+	}
+	
+	public void setLocationClub(Serializable location) {
+		setClub((Club)location);
 	}
 
 	public MODE getMode() {

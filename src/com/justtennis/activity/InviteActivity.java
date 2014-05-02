@@ -57,12 +57,14 @@ public class InviteActivity extends Activity {
 	public static final String EXTRA_PLAYER_ID = "PLAYER_ID";
 	private static final int RESULT_PLAYER = 1;
 	private static final int RESULT_LOCATION = 2;
+	private static final int RESULT_LOCATION_CLUB = 3;
 
 	private Bundle savedInstanceState;
 	private InviteBusiness business;
 	private Long idPlayerFromResult = null;
 	private int visibilityScoreContent = View.GONE;
 	private Serializable locationFromResult;
+	private Serializable locationClubFromResult;
 
 	private LinearLayout llInviteModify;
 	private LinearLayout llScoreContent;
@@ -149,7 +151,6 @@ public class InviteActivity extends Activity {
 		super.onResume();
 		Intent intent = getIntent();
 		if (savedInstanceState!=null) {
-//			locationFromResult = savedInstanceState.getSerializable(KEY_LOCATION_FROM_RESULT);
 			business.initializeData(savedInstanceState);
 			savedInstanceState = null;
 		}
@@ -164,6 +165,11 @@ public class InviteActivity extends Activity {
 
 		if (locationFromResult != null) {
 			business.setLocation(locationFromResult);
+			locationFromResult = null;
+		}
+		
+		if (locationClubFromResult != null) {
+			business.setLocationClub(locationClubFromResult);
 			locationFromResult = null;
 		}
 		initializeData();
@@ -195,6 +201,11 @@ public class InviteActivity extends Activity {
 					locationFromResult = data.getSerializableExtra(LocationActivity.EXTRA_OUT_LOCATION);
 				}
 				break;
+			case RESULT_LOCATION_CLUB:
+				if (data != null) {
+					locationClubFromResult = data.getSerializableExtra(LocationActivity.EXTRA_OUT_LOCATION);
+				}
+				break;
 	
 			default:
 				super.onActivityResult(requestCode, resultCode, data);
@@ -205,7 +216,6 @@ public class InviteActivity extends Activity {
 	@Override
 	protected void onSaveInstanceState(Bundle outState) {
 		business.onSaveInstanceState(outState);
-//		outState.putSerializable(KEY_LOCATION_FROM_RESULT, locationFromResult);
 		super.onSaveInstanceState(outState);
 	}
 
@@ -294,6 +304,17 @@ public class InviteActivity extends Activity {
 		}
 		intent.putExtra(LocationActivity.EXTRA_INVITE, business.getInvite());
 		startActivityForResult(intent, RESULT_LOCATION);
+	}
+	
+	public void onClickLocationClub(View view) {
+		if (business.getType() == INVITE_TYPE.MATCH) {
+			Intent intent = new Intent(this, LocationClubActivity.class);
+			if (business.getInvite().getClub() != null) {
+				intent.putExtra(GenericSpinnerFormActivity.EXTRA_DATA, business.getInvite().getClub());
+			}
+			intent.putExtra(LocationActivity.EXTRA_INVITE, business.getInvite());
+			startActivityForResult(intent, RESULT_LOCATION_CLUB);
+		}
 	}
 
 	public void onClickScoreCollapser(View view) {
