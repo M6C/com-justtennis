@@ -48,30 +48,4 @@ public class LocationAddressBusiness extends GenericSpinnerFormBusiness<Address,
 	protected GenericSpinnerFormBusiness<Address, ?> initializeSubBusiness(Context context, INotifierMessage notificationMessage) {
 		return null;
 	}
-
-//	public Address addAddress(String name, String line1, String postalCode, String city, String gps) {
-//		Address address = null;
-//		if (getAddress() != null && getAddress().getId()!=null && service.isRealAddress(getAddress())) {
-//			address = getAddress();
-//		} else {
-//			address = new Address();
-//		}
-//		address.setName(name);
-//		address.setLine1(line1);
-//		address.setPostalCode(postalCode);
-//		address.setCity(city);
-//		address.setGps(gps);
-//		return super.add(address);
-//	}
-//	
-//	public void deleteAddress() {
-//		Address address = getAddress();
-//		if (address!=null && !service.isEmptyAddress(address)) {
-//			service.delete(address);
-//		}
-//	}
-//	
-//	public Address getAddress() {
-//		return invite.getAddress() == null ? null : invite.getAddress();
-//	}
 }

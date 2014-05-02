@@ -71,11 +71,13 @@ public abstract class GenericSpinnerFormBusiness <DATA extends GenericDBPojoName
 			data = getNewData();
 		}
 
-		if (data.getSubId() != null && subBusiness != null) {
-			SUB_DATA subData = subBusiness.getEmptyData();
-			subData.setId(data.getSubId());
+		if (subBusiness != null) {
 			Intent subIntent = new Intent();
-			subIntent.putExtra(GenericSpinnerFormActivity.EXTRA_DATA, subData);
+			if (data.getSubId() != null) {
+				SUB_DATA subData = subBusiness.getEmptyData();
+				subData.setId(data.getSubId());
+				subIntent.putExtra(GenericSpinnerFormActivity.EXTRA_DATA, subData);
+			}
 			subBusiness.initializeData(subIntent);
 		}
 

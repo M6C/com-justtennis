@@ -1,11 +1,9 @@
 package com.justtennis.business;
 
 import android.content.Context;
-import android.content.Intent;
 
 import com.cameleon.common.android.inotifier.INotifierMessage;
 import com.justtennis.R;
-import com.justtennis.activity.GenericSpinnerFormActivity;
 import com.justtennis.db.service.ClubService;
 import com.justtennis.db.service.GenericService;
 import com.justtennis.domain.Address;
@@ -49,32 +47,6 @@ public class LocationClubBusiness extends GenericSpinnerFormBusiness<Club, Addre
 
 	@Override
 	protected GenericSpinnerFormBusiness<Address, ?> initializeSubBusiness(Context context, INotifierMessage notificationMessage) {
-//		if (subBusiness == null) {
-//			Intent intent = new Intent();
-//			intent.putExtra(GenericSpinnerFormActivity.EXTRA_DATA, new Address(getData().getSubId()));
-//			subBusiness = new LocationAddressBusiness(context, notificationMessage);
-//			subBusiness.initializeData(intent);
-//		}
 		return new LocationAddressBusiness(context, notificationMessage);
 	}
-/*
-	public Club addClub(String name, Long idAddress) {
-		Club club = null;
-		if (getClub() != null && getClub().getId()!=null && service.isRealClub(getClub())) {
-			club = getClub();
-		} else {
-			club = new Club();
-		}
-		club.setName(name);
-		club.setIdAddress(idAddress);
-		return super.add(club);
-	}
-	
-	public void deleteClub() {
-		Club address = getData();
-		if (address!=null && !service.isEmptyClub(address)) {
-			service.delete(address);
-		}
-	}
-*/
 }
