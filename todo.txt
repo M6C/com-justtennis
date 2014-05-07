@@ -23,6 +23,20 @@ Saisie de Message
 
 
 ********************* DONE *****************************
+
+Ecran Player
+[20140507] - Fix sur l'import d'un player
+[20140430] - Fix sur la selection de la localisation
+[20140414] - Fix sur la creation d'un player
+[20140413] - Saisie de la localisation
+[20140223] - Ajout la notion de type de Player
+[20140206] - Revu du design
+[20140110] - Trier les invites par date descendante
+[20140109] - Afficher la liste des invites en mode modification
+[20140108] - Ajout du classement
+[20131229] - Passer par un startActivityForResult pour importer un contact google (comme le scan QrCode)
+[20131228] - Recuperer les infos 'Prenom' et 'Nom' découpé
+
 Invite Location
 [20140502] - Pouvoir selectionner un club specifiquement pour une invite
 [20140502] - Fix sur l'affichage de la liste des sous elements
@@ -34,18 +48,6 @@ Invite Location
 [20140324] - Ajout d'ecrans generic
 [20140313] - Utilisation dans l'écran d'invite (Reste encore des bug)
 [20140306] - Création de l'écran
-
-Ecran Player
-[20140430] - Fix sur la selection de la localisation
-[20140414] - Fix sur la creation d'un player
-[20140413] - Saisie de la localisation
-[20140223] - Ajout la notion de type de Player
-[20140206] - Revu du design
-[20140110] - Trier les invites par date descendante
-[20140109] - Afficher la liste des invites en mode modification
-[20140108] - Ajout du classement
-[20131229] - Passer par un startActivityForResult pour importer un contact google (comme le scan QrCode)
-[20131228] - Recuperer les infos 'Prenom' et 'Nom' découpé
 
 Invite Demande
 [20140413] - Initialisation de la localisation pour les Matchs

@@ -10,6 +10,7 @@ import java.util.TreeSet;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 
 import com.cameleon.common.android.inotifier.INotifierMessage;
 import com.justtennis.activity.PlayerActivity;
@@ -179,7 +180,15 @@ public class PlayerBusiness {
 	}
 
 	public Player getPlayer() {
-		return player;
+		switch (mode) {
+			case FOR_RESULT:
+			case CREATE:
+			case MODIFY:
+			default:
+				return player;
+			case DEMANDE_ADD:
+				return invite == null ? null : invite.getPlayer();
+		}
 	}
 
 	public void setPlayer(Player player) {

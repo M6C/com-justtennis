@@ -123,16 +123,17 @@ public class PlayerActivity extends Activity {
 		tvLocationName = ((TextView)findViewById(R.id.tv_location_name));
 		tvLocationLine1 = ((TextView)findViewById(R.id.tv_location_line1));
 		tvLocationLine2 = ((TextView)findViewById(R.id.tv_location_line2));
-
-		initializeListener();
 		
 		business = new PlayerBusiness(this, NotifierMessageLogger.getInstance());
+
+		initializeListener();
+		initialize();
 	}
 
 	@Override
 	protected void onResume() {
 		super.onResume();
-		initialize();
+		initializeView();
 
 		initializeRankingList();
 		initializeListType();
@@ -162,8 +163,7 @@ public class PlayerActivity extends Activity {
 				Logger.logMe(TAG, qrcodeData);
 				
 				Player player = PlayerParser.getInstance().fromData(qrcodeData);
-
-				initializeView(player);
+				business.setPlayer(player);
 				
 				fromQrCode = true;
 			} else if (resultCode == RESULT_CANCELED) {
@@ -173,7 +173,7 @@ public class PlayerActivity extends Activity {
 			if (resultCode == RESULT_OK) {
 				Player player = (Player) data.getSerializableExtra(ListPersonActivity.EXTRA_PLAYER);
 
-				initializeView(player);
+				business.setPlayer(player);
 				
 				fromQrCode = false;
 			} else if (resultCode == RESULT_CANCELED) {
@@ -324,7 +324,6 @@ public class PlayerActivity extends Activity {
 			business.initialize(intent);
 		}
 
-		Player player = business.getPlayer();
 		MODE mode = business.getMode();
 
 		switch (mode) {
@@ -343,13 +342,7 @@ public class PlayerActivity extends Activity {
 				llCreate.setVisibility(View.GONE);
 				llModify.setVisibility(View.GONE);
 				llAddDemande.setVisibility(View.VISIBLE);
-				
-				player = business.getInvite().getUser();
 				break;
-		}
-
-		if (player!=null) {
-			initializeView(player);
 		}
 	}
 
@@ -379,10 +372,21 @@ public class PlayerActivity extends Activity {
 		});
 	}
 
-	private void initializeView(Player player) {
-		boolean bEditable = !business.isUnknownPlayer(player);
-		int iVisibility = (business.isUnknownPlayer(player) ? View.GONE : View.VISIBLE);
+	private void initializeView() {
+		Player player = business.getPlayer();
+		boolean bEditable = true;
+		int iVisibility = View.VISIBLE;
+		String firstname = "", lastname = "", birthday = "", phonenumber  = "";
 
+		if (player!=null) {
+			bEditable = !business.isUnknownPlayer(player);
+			iVisibility = (business.isUnknownPlayer(player) ? View.GONE : View.VISIBLE);
+
+			firstname = player.getFirstName();
+			lastname = player.getLastName();
+			birthday = player.getBirthday();
+			phonenumber = player.getPhonenumber();
+		}
 		etFirstname.setEnabled(bEditable);
 		llLastname.setVisibility(iVisibility);
 		llBirthday.setVisibility(iVisibility);
@@ -390,10 +394,10 @@ public class PlayerActivity extends Activity {
 		llRanking.setVisibility(iVisibility);
 		llType.setVisibility(iVisibility);
 
-		etFirstname.setText(player.getFirstName());
-		etLastname.setText(player.getLastName());
-		etBirthday.setText(player.getBirthday());
-		etPhonenumber.setText(player.getPhonenumber());
+		etFirstname.setText(firstname);
+		etLastname.setText(lastname);
+		etBirthday.setText(birthday);
+		etPhonenumber.setText(phonenumber);
 	}
 
 	private void initializeListType() {

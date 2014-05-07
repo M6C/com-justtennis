@@ -1,6 +1,7 @@
 package com.justtennis.adapter;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import android.view.LayoutInflater;
@@ -15,9 +16,12 @@ import com.justtennis.ApplicationConfig;
 import com.justtennis.R;
 import com.justtennis.activity.ListPlayerActivity;
 import com.justtennis.business.ListPlayerBusiness;
+import com.justtennis.db.service.RankingService;
 import com.justtennis.domain.Player;
+import com.justtennis.domain.Ranking;
 import com.justtennis.filter.ListPlayerByTypeFilter;
 import com.justtennis.manager.ContactManager;
+import com.justtennis.notifier.NotifierMessageLogger;
 
 public class ListPlayerAdapter extends ArrayAdapter<Player> {
 
@@ -25,6 +29,7 @@ public class ListPlayerAdapter extends ArrayAdapter<Player> {
 	private ListPlayerActivity activity;
 	private Filter filter = null;
 	private ArrayList<Player> valueOld;
+	private HashMap<Long, Ranking> mapRanking;
 
 	public ListPlayerAdapter(ListPlayerActivity activity, List<Player> value) {
 		super(activity, R.layout.list_player_row, android.R.id.text1, value);
@@ -41,6 +46,7 @@ public class ListPlayerAdapter extends ArrayAdapter<Player> {
 				notifyDataSetChanged();
 			}
 		}, valueOld);
+		mapRanking = new RankingService(activity, NotifierMessageLogger.getInstance()).getMapById();
 	}
 
 	@Override
@@ -81,15 +87,18 @@ public class ListPlayerAdapter extends ArrayAdapter<Player> {
 		ImageView imageSend = (ImageView) rowView.findViewById(R.id.iv_send);
 		ImageView imagePlayer = (ImageView) rowView.findViewById(R.id.iv_player);
 		ImageView imageDelete = (ImageView) rowView.findViewById(R.id.iv_delete);
+		TextView ranking = (TextView) rowView.findViewById(R.id.tv_ranking);
 		TextView firstname = (TextView) rowView.findViewById(R.id.tv_fistname);
 		TextView lastname = (TextView) rowView.findViewById(R.id.tv_lastname);
 
 		imageDelete.setVisibility(iVisibility);
 		lastname.setVisibility(iVisibility);
 
+		Ranking r = mapRanking.get(v.getIdRanking()); 
 		imageSend.setTag(v);
 		imagePlayer.setTag(v);
 		imageDelete.setTag(v);
+		ranking.setText(r == null ? "" : r.getRanking());
 		firstname.setText(v.getFirstName());
 		lastname.setText(v.getLastName());
 		

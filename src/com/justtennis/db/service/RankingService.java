@@ -1,5 +1,6 @@
 package com.justtennis.db.service;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.SortedSet;
 import java.util.TreeSet;
@@ -22,6 +23,15 @@ public class RankingService extends GenericService<Ranking> {
 		setRanking.addAll(listRanking);
 		listRanking.clear();
 		listRanking.addAll(setRanking);
+	}
+
+	public HashMap<Long, Ranking> getMapById() {
+		HashMap<Long, Ranking> ret = new HashMap<Long, Ranking>();
+		List<Ranking> lisRanking = getList();
+		for(Ranking ranking : lisRanking) {
+			ret.put(ranking.getId(), ranking);
+		}
+		return ret;
 	}
 
 	public boolean isEmptyRanking(Ranking ranking) {
