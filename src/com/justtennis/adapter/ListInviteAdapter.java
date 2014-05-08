@@ -2,6 +2,7 @@ package com.justtennis.adapter;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import android.annotation.SuppressLint;
@@ -17,9 +18,13 @@ import android.widget.TextView;
 
 import com.justtennis.ApplicationConfig;
 import com.justtennis.R;
+import com.justtennis.db.service.RankingService;
 import com.justtennis.domain.Invite;
+import com.justtennis.domain.Ranking;
 import com.justtennis.domain.ScoreSet;
 import com.justtennis.filter.ListInviteByPlayerFilter;
+import com.justtennis.notifier.NotifierMessageLogger;
+import com.justtennis.parser.LocationParser;
 
 public class ListInviteAdapter extends ArrayAdapter<Invite> {
 
@@ -34,6 +39,8 @@ public class ListInviteAdapter extends ArrayAdapter<Invite> {
 	private final static SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm");
 	private ADAPTER_INVITE_MODE mode;
 	private Filter filter = null;
+	private HashMap<Long, Ranking> rankingService;
+	private LocationParser locationParser;
 
 	public ListInviteAdapter(Activity activity, List<Invite> value) {
 		this(activity, value, ADAPTER_INVITE_MODE.MODIFY);
@@ -55,6 +62,9 @@ public class ListInviteAdapter extends ArrayAdapter<Invite> {
 				notifyDataSetChanged();
 			}
 		}, valueOld);
+		NotifierMessageLogger notifier = NotifierMessageLogger.getInstance();
+		rankingService = new RankingService(activity, notifier).getMapById();
+		locationParser = LocationParser.getInstance(activity, notifier);
 	}
 
 	@Override
@@ -91,12 +101,15 @@ public class ListInviteAdapter extends ArrayAdapter<Invite> {
 		TextView tvPlayer = (TextView) rowView.findViewById(R.id.tv_player);
 		TextView tvDate = (TextView) rowView.findViewById(R.id.tv_date);
 		TextView tvScore = (TextView) rowView.findViewById(R.id.tv_score);
-		ImageView ivStatus = (ImageView) rowView.findViewById(R.id.iv_status);
+		TextView tvRanking = (TextView) rowView.findViewById(R.id.tv_ranking);
+		TextView tvClubName = (TextView) rowView.findViewById(R.id.tv_club_name);
 		ImageView imageDelete = (ImageView) rowView.findViewById(R.id.iv_delete);
 		View vTypeEntrainement = rowView.findViewById(R.id.tv_type_entrainement);
 		View vTypeMatch = rowView.findViewById(R.id.tv_type_match);
 
-		tvPlayer.setText(v.getPlayer()==null ? "" : v.getPlayer().getFirstName() + " " + v.getPlayer().getLastName());
+		Ranking r = rankingService.get(v.getIdRanking()); 
+		tvPlayer.setText(v.getPlayer()==null ? "" : Html.fromHtml("<b>" + v.getPlayer().getFirstName() + "</b> " + v.getPlayer().getLastName()));
+		tvRanking.setText(r == null ? "" : r.getRanking());
 		tvDate.setText(v.getDate()==null ? "" : sdf.format(v.getDate()));
 		imageDelete.setTag(v);
 
@@ -104,6 +117,8 @@ public class ListInviteAdapter extends ArrayAdapter<Invite> {
 			tvPlayer.setText(tvPlayer.getText() + " [" + v.getPlayer().getId() + "|" + v.getPlayer().getIdExternal() + "]");
 			tvDate.setText(tvDate.getText() + " [" + v.getId() + "|" + v.getIdExternal() + "]");
 		}
+
+		initializeLocation(v, tvClubName);
 
 		String textScore = buildTextScore(v);
 		if (textScore != null) {
@@ -188,5 +203,15 @@ public class ListInviteAdapter extends ArrayAdapter<Invite> {
 			}
 		}
 		return ret;
+	}
+
+	private void initializeLocation(final Invite v, TextView clubName) {
+		String[] address = locationParser.toAddress(v);
+		if (address != null) {
+			clubName.setText(address[0]);
+			clubName.setVisibility(View.VISIBLE);
+		} else {
+			clubName.setVisibility(View.GONE);
+		}
 	}
 }

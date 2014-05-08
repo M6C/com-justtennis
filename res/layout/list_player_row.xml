@@ -12,7 +12,6 @@
     <ImageView android:id="@+id/iv_player"
 	    android:layout_width="35dip"
 	    android:layout_height="35dip"
-	    android:layout_weight=".1"
 	    android:src="@drawable/player_unknow_2"
 	    android:layout_gravity="center_vertical|center_horizontal"
 	    android:contentDescription="@string/button_desctiption_player_unknow"
@@ -21,41 +20,32 @@
     <LinearLayout
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_weight=".8"
-        android:orientation="vertical"
+        android:layout_weight="1"
+        android:orientation="horizontal"
     >
+		<TextView
+		    android:id="@+id/tv_ranking"
+		    android:layout_width="30dp"
+		    android:layout_height="wrap_content"
+		    android:textSize="14sp"
+		    android:layout_marginLeft="2sp"
+		    android:layout_marginRight="2sp"
+		/>
 
 	    <LinearLayout
-	        android:layout_width="match_parent"
+		    android:layout_width="0dp"
 	        android:layout_height="wrap_content"
-	        android:orientation="horizontal"
+		    android:layout_weight="1"
+	        android:orientation="vertical"
 	    >
-	
-			<TextView
-			    android:id="@+id/tv_ranking"
-			    android:layout_width="30dp"
-			    android:layout_height="wrap_content"
-			    android:textStyle="bold"
-			    android:textSize="12sp"
-			    android:layout_marginRight="3sp"
-			/>
 	
 			<TextView
 			    android:id="@+id/tv_name"
-			    android:layout_width="wrap_content"
+		        android:layout_width="match_parent"
 			    android:layout_height="wrap_content"
 			    android:textSize="16sp"
-			    android:layout_marginRight="5sp"
 			/>
-			
-		</LinearLayout>
-	
-	    <LinearLayout
-	        android:layout_width="match_parent"
-	        android:layout_height="wrap_content"
-	        android:orientation="vertical"
-	        android:layout_marginLeft="33dp"
-	    >
+
 	        <TextView
 	            android:id="@+id/tv_club_name"
 	            android:layout_width="match_parent"
@@ -92,7 +82,6 @@
     <ImageView android:id="@+id/iv_delete"
 	    android:layout_width="35dip"
 	    android:layout_height="35dip"
-	    android:layout_weight=".1"
 	    android:src="@drawable/player_delete"
 	    android:layout_gravity="center_vertical|center_horizontal"
 	    android:contentDescription="@string/button_desctiption_delete"

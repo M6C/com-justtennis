@@ -37,8 +37,6 @@ public class ListPlayerAdapter extends ArrayAdapter<Player> {
 	private Filter filter = null;
 	private ArrayList<Player> valueOld;
 	private HashMap<Long, Ranking> rankingService;
-	private ClubService clubService;
-	private TournamentService tournamentService;
 	private LocationParser locationParser;
 
 	public ListPlayerAdapter(ListPlayerActivity activity, List<Player> value) {
@@ -58,8 +56,6 @@ public class ListPlayerAdapter extends ArrayAdapter<Player> {
 		}, valueOld);
 		NotifierMessageLogger notifier = NotifierMessageLogger.getInstance();
 		rankingService = new RankingService(activity, notifier).getMapById();
-		clubService = new ClubService(activity, notifier);
-		tournamentService = new TournamentService(activity, notifier);
 		locationParser = LocationParser.getInstance(activity, notifier);
 	}
 
