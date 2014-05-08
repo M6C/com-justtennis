@@ -18,7 +18,6 @@ import com.justtennis.ApplicationConfig;
 import com.justtennis.R;
 import com.justtennis.activity.InviteActivity;
 import com.justtennis.activity.InviteActivity.MODE;
-import com.justtennis.activity.PlayerActivity;
 import com.justtennis.db.service.InviteService;
 import com.justtennis.db.service.MessageService;
 import com.justtennis.db.service.PlayerService;
@@ -83,8 +82,11 @@ public class InviteBusiness {
 			mode = (MODE) intent.getSerializableExtra(InviteActivity.EXTRA_MODE);
 		}
 
+		if (intent.hasExtra(InviteActivity.EXTRA_USER)) {
+			user = (User) intent.getSerializableExtra(InviteActivity.EXTRA_USER);
+		}
 		if (intent.hasExtra(InviteActivity.EXTRA_INVITE)) {
-			invite = (Invite) intent.getSerializableExtra(PlayerActivity.EXTRA_INVITE);
+			invite = (Invite) intent.getSerializableExtra(InviteActivity.EXTRA_INVITE);
 			if (getIdRanking()==null) {
 				setIdRanking(getPlayer().getIdRanking());
 			}
@@ -135,7 +137,6 @@ public class InviteBusiness {
 		listRanking = rankingService.getList();
 		rankingService.order(listRanking);
 
-		int i=0;
 		listTxtRankings = new ArrayList<String>();
 		for(Ranking ranking : listRanking) {
 			listTxtRankings.add(ranking.getRanking());
@@ -145,6 +146,7 @@ public class InviteBusiness {
 	public void onSaveInstanceState(Bundle outState) {
 		outState.putSerializable(InviteActivity.EXTRA_MODE, mode);
 		outState.putSerializable(InviteActivity.EXTRA_INVITE, invite);
+		outState.putSerializable(InviteActivity.EXTRA_USER, user);
 	}
 
 	private void initializeScores() {
@@ -474,6 +476,10 @@ public class InviteBusiness {
 
 	public String[] getLocationLine() {
 		return locationParser.toAddress(invite);
+	}
+	
+	public String[] getLocationLineUser() {
+		return locationParser.toAddress(user);
 	}
 
 	public void setClub(Club club) {

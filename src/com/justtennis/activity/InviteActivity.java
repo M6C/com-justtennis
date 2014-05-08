@@ -7,10 +7,13 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
+import java.util.Locale;
 
 import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.location.LocationListener;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -54,6 +57,7 @@ public class InviteActivity extends Activity {
 	};
 	public static final String EXTRA_MODE = "MODE";
 	public static final String EXTRA_INVITE = "INVITE";
+	public static final String EXTRA_USER = "USER";
 	public static final String EXTRA_PLAYER_ID = "PLAYER_ID";
 	private static final int RESULT_PLAYER = 1;
 	private static final int RESULT_LOCATION = 2;
@@ -305,7 +309,7 @@ public class InviteActivity extends Activity {
 		intent.putExtra(LocationActivity.EXTRA_INVITE, business.getInvite());
 		startActivityForResult(intent, RESULT_LOCATION);
 	}
-	
+
 	public void onClickLocationClub(View view) {
 		if (business.getType() == INVITE_TYPE.MATCH) {
 			Intent intent = new Intent(this, LocationClubActivity.class);
@@ -317,6 +321,40 @@ public class InviteActivity extends Activity {
 		}
 	}
 
+	public void onClickLocationMap(View view) {
+		String[] locationLineUser = business.getLocationLineUser();
+		String[] locationLine = business.getLocationLine();
+
+		if (locationLineUser != null && locationLine != null) {
+			String addressUser = null;
+			String address = null;
+			String line = null;
+
+			for(int i=1 ; i<locationLineUser.length ; i++) {
+				line = locationLineUser[i];
+				if (addressUser == null) {
+					addressUser = line;
+				} else {
+					addressUser += "," + line;
+				}
+			}
+			
+			for(int i=1 ; i<locationLine.length ; i++) {
+				line = locationLine[i];
+				if (address == null) {
+					address = line;
+				} else {
+					address += "," + line;
+				}
+			}
+
+			String uri = String.format(Locale.ENGLISH, "http://maps.google.com/maps?saddr=%s&daddr=%s", addressUser, address);
+			Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(uri));
+			intent.setClassName("com.google.android.apps.maps", "com.google.android.maps.MapsActivity");
+			startActivity(intent);
+		}
+	}
+	
 	public void onClickScoreCollapser(View view) {
 		visibilityScoreContent = (visibilityScoreContent == View.GONE) ? View.VISIBLE : View.GONE;
 		llScoreContent.setVisibility(visibilityScoreContent);
