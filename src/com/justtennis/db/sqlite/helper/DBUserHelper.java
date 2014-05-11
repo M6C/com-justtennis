@@ -13,6 +13,7 @@ public class DBUserHelper extends GenericDBHelper {
 
 	public static final String COLUMN_ID_TOURNAMENT = "ID_TOURNAMENT";
 	public static final String COLUMN_ID_CLUB = "ID_CLUB";
+	public static final String COLUMN_ID_ADDRESS = "ID_ADDRESS";
 	public static final String COLUMN_ID_RANKING = "ID_RANKING";
 	public static final String COLUMN_FIRSTNAME = "FIRSTNAME";
 	public static final String COLUMN_LASTNAME = "LASTNAME";
@@ -23,13 +24,14 @@ public class DBUserHelper extends GenericDBHelper {
 	public static final String COLUMN_LOCALITY = "LOCALITY";
 
 	private static final String DATABASE_NAME = "User.db";
-	private static final int DATABASE_VERSION = 6;
+	private static final int DATABASE_VERSION = 7;
 
 	// Database creation sql statement
 	private static final String DATABASE_CREATE = "CREATE TABLE " + TABLE_NAME + "(" + 
 		COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " + 
 		COLUMN_ID_TOURNAMENT + " INTEGER NULL, " + 
 		COLUMN_ID_CLUB + " INTEGER NULL, " + 
+		COLUMN_ID_ADDRESS + " INTEGER NULL, " + 
 		COLUMN_ID_RANKING + " INTEGER NULL, " + 
 		COLUMN_FIRSTNAME + " TEXT NULL, " + 
 		COLUMN_LASTNAME + " TEXT NULL, " + 
@@ -49,6 +51,9 @@ public class DBUserHelper extends GenericDBHelper {
 		if (newVersion>oldVersion) {
 			if (oldVersion <= 5) {
 				addColumn(database, COLUMN_ID_TOURNAMENT, " INTEGER NULL ");
+			}
+			if (oldVersion <= 6) {
+				addColumn(database, COLUMN_ID_ADDRESS, " INTEGER NULL ");
 			}
 		}
 		else {

@@ -199,6 +199,7 @@
              android:layout_marginLeft="@dimen/invite_field_margin_left"
              android:orientation="vertical"
              android:visibility="gone"
+	         android:onClick="onClickLocationDetail"			              
          >
           <TextView
               android:id="@+id/tv_location_name"

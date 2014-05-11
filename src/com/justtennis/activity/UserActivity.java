@@ -25,10 +25,12 @@ import com.cameleon.common.android.factory.FactoryDialog;
 import com.cameleon.common.android.inotifier.INotifierMessage;
 import com.justtennis.R;
 import com.justtennis.business.UserBusiness;
+import com.justtennis.domain.Address;
 import com.justtennis.domain.Club;
 import com.justtennis.domain.Ranking;
 import com.justtennis.domain.Tournament;
 import com.justtennis.domain.User;
+import com.justtennis.domain.Invite.INVITE_TYPE;
 import com.justtennis.domain.Player.PLAYER_TYPE;
 import com.justtennis.listener.action.TextWatcherFieldEnableView;
 import com.justtennis.parser.SmsParser;
@@ -38,6 +40,7 @@ public class UserActivity extends Activity implements INotifierMessage {
 	private static final String TAG = UserActivity.class.getSimpleName();
 
 	private static final int RESULT_LOCATION = 2;
+	private static final int RESULT_LOCATION_DETAIL = 3;
 
 	private UserBusiness business;
 	private TextView tvFirstname;
@@ -61,6 +64,7 @@ public class UserActivity extends Activity implements INotifierMessage {
 
 	private User user;
 	private Serializable locationFromResult;
+	private Serializable addressFromResult;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -85,6 +89,8 @@ public class UserActivity extends Activity implements INotifierMessage {
 		tvLocationName = ((TextView)findViewById(R.id.tv_location_name));
 		tvLocationLine1 = ((TextView)findViewById(R.id.tv_location_line1));
 		tvLocationLine2 = ((TextView)findViewById(R.id.tv_location_line2));
+
+		findViewById(R.id.ll_type).setVisibility(View.GONE);
 
 		initializeListener();
 
@@ -142,6 +148,10 @@ public class UserActivity extends Activity implements INotifierMessage {
 		if (requestCode==RESULT_LOCATION) {
 			if (data != null) {
 				locationFromResult = data.getSerializableExtra(LocationActivity.EXTRA_OUT_LOCATION);
+			}
+		} else if (requestCode==RESULT_LOCATION_DETAIL) {
+			if (data != null) {
+				addressFromResult = data.getSerializableExtra(LocationActivity.EXTRA_OUT_LOCATION);
 			}
 		}
 	}
@@ -246,6 +256,14 @@ public class UserActivity extends Activity implements INotifierMessage {
 		}
 	}
 
+	public void onClickLocationDetail(View view) {
+		Intent intent = new Intent(this, LocationAddressActivity.class);
+		if (user.getIdAddress() != null) {
+			intent.putExtra(GenericSpinnerFormActivity.EXTRA_DATA, new Address(user.getIdAddress()));
+		}
+		startActivityForResult(intent, RESULT_LOCATION_DETAIL);
+	}
+
 	private void initializeListener() {
 		etFirstname.addTextChangedListener(new TextWatcherFieldEnableView(tvFirstname, View.GONE));
 		etLastname.addTextChangedListener(new TextWatcherFieldEnableView(tvLastname, View.GONE));
@@ -273,6 +291,10 @@ public class UserActivity extends Activity implements INotifierMessage {
 			setLocation(locationFromResult);
 			locationFromResult = null;
 		}
+		if (addressFromResult != null) {
+			setLocationDetail(addressFromResult);
+			addressFromResult = null;
+		}
 
 		String[] location = getLocationLine();
 		if (user.getType() == PLAYER_TYPE.ENTRAINEMENT) {
@@ -296,7 +318,7 @@ public class UserActivity extends Activity implements INotifierMessage {
 			tvLocationEmpty.setVisibility(View.VISIBLE);
 		}
 	}
-	
+
 	private void buildUser() {
 		if (user==null)
 			user = new User();
@@ -309,6 +331,10 @@ public class UserActivity extends Activity implements INotifierMessage {
 
 	private void setLocation(Serializable location) {
 		user.setIdClub(((Club)location).getId());
+	}
+	
+	private void setLocationDetail(Serializable location) {
+		user.setIdAddress(((Address)location).getId());
 	}
 
 	public String[] getLocationLine() {

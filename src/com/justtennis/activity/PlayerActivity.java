@@ -279,14 +279,18 @@ public class PlayerActivity extends Activity {
 				break;
 			case MATCH:
 				intent = new Intent(this, LocationTournamentActivity.class);
-				if (business.getPlayer().getIdClub() != null) {
-					intent.putExtra(GenericSpinnerFormActivity.EXTRA_DATA, new Tournament(business.getPlayer().getIdClub()));
+				if (business.getPlayer().getIdTournament() != null) {
+					intent.putExtra(GenericSpinnerFormActivity.EXTRA_DATA, new Tournament(business.getPlayer().getIdTournament()));
 				}
 				break;
 		}
 		if (intent != null) {
 			startActivityForResult(intent, RESULT_LOCATION);
 		}
+	}
+
+	public void onClickLocationDetail(View view) {
+		onClickLocation(view);
 	}
 
 	private void importScan() {

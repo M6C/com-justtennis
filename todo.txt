@@ -23,6 +23,13 @@ Saisie de Message
 
 
 ********************* DONE *****************************
+Ecran Utilisateur
+[20140511] - Pouvoir selectionner une adresse differente du club
+[20140413] - Saisie de la localisation
+[20140214] - Integration de la gestion du Message dans l'écran User
+[20140206] - Revu du design
+[20140105] - Ajout du classement
+
 Invite
 [20140508] - Affichage de l'itineraire via GoogleMap
 [20140302] - Début ajout de la notion d'adresse, club et tournoi
@@ -102,12 +109,6 @@ Invite Demande
 [20140222] - Possibilité de créé un nouveau Player si on a selectionné "Unknow Player"
 [20140222] - Possibilité de saisir le classement
 [20140211] - Creation d'une nouvelle activity pour faire seulement des invites
-
-Ecran Utilisateur
-[20140413] - Saisie de la localisation
-[20140214] - Integration de la gestion du Message dans l'écran User
-[20140206] - Revu du design
-[20140105] - Ajout du classement
 
 Common
 [20140309] - Creation d'un custom spinner pour armoniser le design avec les champs de saisie

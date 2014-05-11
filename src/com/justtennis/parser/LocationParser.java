@@ -98,6 +98,18 @@ public class LocationParser extends GenericParser {
 					}
 					break;
 			}
+
+			if (player.getIdAddress() != null) {
+				String[] addressLine = getAddress(new Address(player.getIdAddress()));
+				if (addressLine != null) {
+					if (ret == null) {
+						ret = addressLine;
+					} else {
+						ret[1] = addressLine[1];
+						ret[2] = addressLine[2];
+					}
+				}
+			}
 		}
 		return ret;
 	}
@@ -160,6 +172,7 @@ public class LocationParser extends GenericParser {
 		}
 		return address;
 	}
+
 	private String[] getAddress(Club club) {
 		String name = "";
 		String line1 = "";
@@ -171,20 +184,44 @@ public class LocationParser extends GenericParser {
 					name = club.getName();
 				}
 				if (club.getSubId() != null) {
-					Address address = addressService.find(club.getSubId());
-					if (address != null) {
-						if (address.getLine1() != null) {
-							line1 = address.getLine1();
+					String[] addressLine = getAddress(new Address(club.getSubId()));
+					if (addressLine != null) {
+						if (name == null || "".equals(name)) {
+							name = addressLine[0];
 						}
-						if (address.getPostalCode() != null) {
-							line2 += address.getPostalCode();
-						}
-						if (address.getCity() != null) {
-							line2 += " " + address.getCity();
-						}
-						line2 = line2.trim();
+						line1 = addressLine[1];
+						line2 = addressLine[2];
 					}
 				}
+			}
+		}
+		if ("".equals(name) && "".equals(line1) && "".equals(line2)) {
+			return null;
+		} else {
+			return new String[] {name, line1, line2};
+		}
+	}
+	
+	private String[] getAddress(Address address) {
+		String name = "";
+		String line1 = "";
+		String line2 = "";
+		if (address != null && address.getId() != null) {
+			address = addressService.find(address.getId());
+			if (address != null) {
+				if (address.getName() != null) {
+					name = address.getName();
+				}
+				if (address.getLine1() != null) {
+					line1 = address.getLine1();
+				}
+				if (address.getPostalCode() != null) {
+					line2 += address.getPostalCode();
+				}
+				if (address.getCity() != null) {
+					line2 += " " + address.getCity();
+				}
+				line2 = line2.trim();
 			}
 		}
 		if ("".equals(name) && "".equals(line1) && "".equals(line2)) {

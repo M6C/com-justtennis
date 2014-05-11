@@ -14,6 +14,7 @@ public class Player extends Person {
 
 	private Long idTournament;
 	private Long idClub;
+	private Long idAddress;
 	private Long idRanking;
 	private Long idExternal;
 	private Long idGoogle;
@@ -40,6 +41,14 @@ public class Player extends Person {
 	public void setIdClub(Long idClub) {
 		this.idClub = idClub;
 	}
+	public Long getIdAddress() {
+		return idAddress;
+	}
+
+	public void setIdAddress(Long idAddress) {
+		this.idAddress = idAddress;
+	}
+
 	public Long getIdRanking() {
 		return idRanking;
 	}

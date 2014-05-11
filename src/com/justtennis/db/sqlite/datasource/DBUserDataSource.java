@@ -18,6 +18,7 @@ public class DBUserDataSource extends GenericDBDataSource<User> {
 		DBUserHelper.COLUMN_ID,
 		DBUserHelper.COLUMN_ID_TOURNAMENT,
 		DBUserHelper.COLUMN_ID_CLUB,
+		DBUserHelper.COLUMN_ID_ADDRESS,
 		DBUserHelper.COLUMN_ID_RANKING,
 		DBUserHelper.COLUMN_FIRSTNAME,
 		DBUserHelper.COLUMN_LASTNAME,
@@ -41,6 +42,7 @@ public class DBUserDataSource extends GenericDBDataSource<User> {
 	protected void putContentValue(ContentValues values, User player) {
 		values.put(DBUserHelper.COLUMN_ID_TOURNAMENT, player.getIdClub());
 		values.put(DBUserHelper.COLUMN_ID_CLUB, player.getIdClub());
+		values.put(DBUserHelper.COLUMN_ID_ADDRESS, player.getIdAddress());
 		values.put(DBUserHelper.COLUMN_ID_RANKING, player.getIdRanking());
 		values.put(DBUserHelper.COLUMN_FIRSTNAME, player.getFirstName());
 		values.put(DBUserHelper.COLUMN_LASTNAME, player.getLastName());
@@ -58,6 +60,7 @@ public class DBUserDataSource extends GenericDBDataSource<User> {
 		player.setId(DbTool.getInstance().toLong(cursor, col++));
 		player.setIdTournament(DbTool.getInstance().toLong(cursor, col++));
 		player.setIdClub(DbTool.getInstance().toLong(cursor, col++));
+		player.setIdAddress(DbTool.getInstance().toLong(cursor, col++));
 		player.setIdRanking(DbTool.getInstance().toLong(cursor, col++));
 		player.setFirstName(cursor.getString(col++));
 		player.setLastName(cursor.getString(col++));

@@ -61,7 +61,7 @@ public class InviteActivity extends Activity {
 	public static final String EXTRA_PLAYER_ID = "PLAYER_ID";
 	private static final int RESULT_PLAYER = 1;
 	private static final int RESULT_LOCATION = 2;
-	private static final int RESULT_LOCATION_CLUB = 3;
+	private static final int RESULT_LOCATION_DETAIL = 3;
 
 	private Bundle savedInstanceState;
 	private InviteBusiness business;
@@ -205,7 +205,7 @@ public class InviteActivity extends Activity {
 					locationFromResult = data.getSerializableExtra(LocationActivity.EXTRA_OUT_LOCATION);
 				}
 				break;
-			case RESULT_LOCATION_CLUB:
+			case RESULT_LOCATION_DETAIL:
 				if (data != null) {
 					locationClubFromResult = data.getSerializableExtra(LocationActivity.EXTRA_OUT_LOCATION);
 				}
@@ -310,14 +310,14 @@ public class InviteActivity extends Activity {
 		startActivityForResult(intent, RESULT_LOCATION);
 	}
 
-	public void onClickLocationClub(View view) {
+	public void onClickLocationDetail(View view) {
 		if (business.getType() == INVITE_TYPE.MATCH) {
 			Intent intent = new Intent(this, LocationClubActivity.class);
 			if (business.getInvite().getClub() != null) {
 				intent.putExtra(GenericSpinnerFormActivity.EXTRA_DATA, business.getInvite().getClub());
 			}
 			intent.putExtra(LocationActivity.EXTRA_INVITE, business.getInvite());
-			startActivityForResult(intent, RESULT_LOCATION_CLUB);
+			startActivityForResult(intent, RESULT_LOCATION_DETAIL);
 		}
 	}
 
