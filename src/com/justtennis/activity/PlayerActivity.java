@@ -97,8 +97,16 @@ public class PlayerActivity extends Activity {
 			this.savedInstanceState = savedInstanceState;
 		}
 
-		setContentView(R.layout.player);
+		initializeLayoutView();
+		initializeViewById();
+		
+		business = createBusiness();
 
+		initializeListener();
+		initialize();
+	}
+
+	protected void initializeViewById() {
 		tvFirstname = (TextView)findViewById(R.id.tv_firstname);
 		tvLastname = (TextView)findViewById(R.id.tv_lastname);
 		tvBirthday = (TextView)findViewById(R.id.tv_birthday);
@@ -123,11 +131,6 @@ public class PlayerActivity extends Activity {
 		tvLocationName = ((TextView)findViewById(R.id.tv_location_name));
 		tvLocationLine1 = ((TextView)findViewById(R.id.tv_location_line1));
 		tvLocationLine2 = ((TextView)findViewById(R.id.tv_location_line2));
-		
-		business = createBusiness();
-
-		initializeListener();
-		initialize();
 	}
 
 	@Override
@@ -298,6 +301,10 @@ public class PlayerActivity extends Activity {
 		return new PlayerBusiness(this, NotifierMessageLogger.getInstance());
 	}
 
+	protected void initializeLayoutView() {
+		setContentView(R.layout.player);
+	}
+
 	private void importScan() {
 		Intent intent = new Intent("com.google.zxing.client.android.SCAN");
 		intent.putExtra("SCAN_MODE", "QR_CODE_MODE");
@@ -355,7 +362,7 @@ public class PlayerActivity extends Activity {
 		}
 	}
 
-	private void initializeListener() {
+	protected void initializeListener() {
 		etFirstname.addTextChangedListener(new TextWatcherFieldEnableView(tvFirstname, View.GONE));
 		etLastname.addTextChangedListener(new TextWatcherFieldEnableView(tvLastname, View.GONE));
 		etBirthday.addTextChangedListener(new TextWatcherFieldEnableView(tvBirthday, View.GONE));

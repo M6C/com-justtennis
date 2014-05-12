@@ -10,6 +10,11 @@ public class Message extends GenericDBPojo<Long> {
 	public Message() {
 		super();
 	}
+
+	public Message(String message) {
+		super();
+		this.message = message;
+	}
 	
 	public Message(Long id) {
 		super(id);
