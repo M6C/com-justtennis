@@ -188,6 +188,7 @@ public class PlayerActivity extends Activity {
 
 	@Override
 	protected void onSaveInstanceState(Bundle outState) {
+		buildPlayer();
 		business.onSaveInstanceState(outState);
 		super.onSaveInstanceState(outState);
 	}

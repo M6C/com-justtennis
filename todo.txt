@@ -23,6 +23,20 @@ Saisie de Message
 
 
 ********************* DONE *****************************
+Ecran Player
+[20140512] - Fix sur le onSaveInstanceState
+[20140507] - Fix sur l'import d'un player
+[20140430] - Fix sur la selection de la localisation
+[20140414] - Fix sur la creation d'un player
+[20140413] - Saisie de la localisation
+[20140223] - Ajout la notion de type de Player
+[20140206] - Revu du design
+[20140110] - Trier les invites par date descendante
+[20140109] - Afficher la liste des invites en mode modification
+[20140108] - Ajout du classement
+[20131229] - Passer par un startActivityForResult pour importer un contact google (comme le scan QrCode)
+[20131228] - Recuperer les infos 'Prenom' et 'Nom' découpé
+
 Ecran Utilisateur
 [20140511] - Pouvoir selectionner une adresse differente du club
 [20140413] - Saisie de la localisation
@@ -73,19 +87,6 @@ List Player
 [20140222] - Empèche la suppression d'un joueur si il a au moins une invite
 [20140216] - Sort Player List
 [20140212] - Ajout d'un bouton Close
-
-Ecran Player
-[20140507] - Fix sur l'import d'un player
-[20140430] - Fix sur la selection de la localisation
-[20140414] - Fix sur la creation d'un player
-[20140413] - Saisie de la localisation
-[20140223] - Ajout la notion de type de Player
-[20140206] - Revu du design
-[20140110] - Trier les invites par date descendante
-[20140109] - Afficher la liste des invites en mode modification
-[20140108] - Ajout du classement
-[20131229] - Passer par un startActivityForResult pour importer un contact google (comme le scan QrCode)
-[20131228] - Recuperer les infos 'Prenom' et 'Nom' découpé
 
 Invite Location
 [20140502] - Pouvoir selectionner un club specifiquement pour une invite
