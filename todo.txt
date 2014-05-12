@@ -23,6 +23,11 @@ Saisie de Message
 
 
 ********************* DONE *****************************
+Ecran Player & User
+[20140512] - Utilisation de l'ecran Player pour l'ecran User
+[20140207] - TextWatcher sur les EditText qui rend visible les TextView si non vide.
+[20140207] - Mise en commun des champs de saisie avec le User
+
 Ecran Player
 [20140512] - Fix sur le onSaveInstanceState
 [20140507] - Fix sur l'import d'un player
@@ -130,10 +135,6 @@ Statistique
 [20140213] - Revu du Design
 [20140213] - Invite by Ranking ordred
 [20140212] - Ajout Activity Chart
-
-Ecran Player & User
-[20140207] - TextWatcher sur les EditText qui rend visible les TextView si non vide.
-[20140207] - Mise en commun des champs de saisie avec le User
 
 Saisie de Message
 [20131229] - Pouvoir inserer le champ à la position courante du curseur

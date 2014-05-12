@@ -1,101 +1,41 @@
 package com.justtennis.business;
 
-import java.util.List;
-import java.util.SortedSet;
-import java.util.TreeSet;
-
 import android.content.Context;
+import android.content.Intent;
 
 import com.cameleon.common.android.inotifier.INotifierMessage;
-import com.justtennis.db.service.MessageService;
-import com.justtennis.db.service.RankingService;
+import com.justtennis.activity.PlayerActivity.MODE;
+import com.justtennis.db.service.GenericService;
 import com.justtennis.db.service.UserService;
-import com.justtennis.domain.Message;
-import com.justtennis.domain.Ranking;
-import com.justtennis.domain.User;
-import com.justtennis.domain.comparator.RankingComparatorByOrder;
-import com.justtennis.notifier.NotifierMessageLogger;
-import com.justtennis.parser.LocationParser;
-import com.justtennis.parser.UserParser;
+import com.justtennis.domain.Player;
 
-public class UserBusiness {
+public class UserBusiness extends PlayerBusiness {
 
-	private UserService userService;
-	private MessageService messageService;
-	private UserParser userParser;
-	private LocationParser locationParser;
-	private Context context;
-	private String[] listTxtRankings;
-	private List<Ranking> listRanking;
-	private Message message;
+	private UserService service;
 
 	public UserBusiness(Context context, INotifierMessage notificationMessage) {
-		this.context = context;
-		userService = new UserService(context, notificationMessage);
-		messageService = new MessageService(context, notificationMessage);
-		userParser = UserParser.getInstance();
-		locationParser = LocationParser.getInstance(context, notificationMessage);
+		super(context, notificationMessage);
 	}
 
-	public void initializeData() {
-		SortedSet<Ranking> setRanking = new TreeSet<Ranking>(new RankingComparatorByOrder());
-
-		listRanking = new RankingService(context, NotifierMessageLogger.getInstance()).getList();
-		setRanking.addAll(listRanking);
-		
-		listRanking.clear();
-		listRanking.addAll(setRanking);
-
-		int i=0;
-		listTxtRankings = new String[setRanking.size()];
-		for(Ranking ranking : setRanking) {
-			listTxtRankings[i++] = ranking.getRanking();
-		}
-
-		message = messageService.getCommon();
-		if (message==null) {
-			message = new Message();
-		}
+	@SuppressWarnings("unchecked")
+	@Override
+	protected <P extends Player> GenericService<P> createPlayerService(Context context, INotifierMessage notificationMessage) {
+		service = new UserService(context, notificationMessage);
+		return (GenericService<P>) service;
 	}
 
-	public long getUserCount() {
-		return userService.getCount();
-	}
-
-    /**
-     * 
-     * @param user
-     */
-	public void submit(User user, String message) {
-		userService.createOrUpdate(user);
-
-		this.message.setMessage(message);
-
-		// Save in database
-		messageService.createOrUpdate(this.message);
-	}
-
-	public User findUser() {
-		return userService.find();
-	}
-
-	public String[] getLocationLine(User user) {
-		return locationParser.toAddress(user);
+	@Override
+	protected void initializePlayer(Intent intent) {
+		player = service.find();
 	}
 	
-	public String getMessage() {
-		return message.getMessage();
-	}
-	
-	public String toQRCode(User user) {
-		return userParser.toDataText(user);
+	@Override
+	protected void initializeMode(Intent intent) {
+		mode = (player == null || player.getId() == null) ? MODE.CREATE : MODE.MODIFY;
 	}
 
-	public String[] getListTxtRankings() {
-		return listTxtRankings;
-	}
-
-	public List<Ranking> getListRanking() {
-		return listRanking;
+	@Override
+	public boolean isUnknownPlayer(Player player) {
+		return false;
 	}
 }

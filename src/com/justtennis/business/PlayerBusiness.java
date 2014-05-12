@@ -10,11 +10,11 @@ import java.util.TreeSet;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
 
 import com.cameleon.common.android.inotifier.INotifierMessage;
 import com.justtennis.activity.PlayerActivity;
 import com.justtennis.activity.PlayerActivity.MODE;
+import com.justtennis.db.service.GenericService;
 import com.justtennis.db.service.PlayerService;
 import com.justtennis.db.service.RankingService;
 import com.justtennis.db.service.UserService;
@@ -35,64 +35,43 @@ import com.justtennis.parser.SmsParser;
 
 public class PlayerBusiness {
 
+	protected Player player;
+	protected MODE mode;
+	protected GenericService<Player> playerService;
+
 	private Context context;
 	private UserService userService;
-//	private InviteService inviteService;
-	private PlayerService playerService;
 	private PlayerParser playerParser;
 	private LocationParser locationParser;
 	private User user;
-	private Player player;
 	private Invite invite;
 	private List<Invite> list = new ArrayList<Invite>();
 	private List<Ranking> listRanking;
 	private String[] listTxtRankings;
-	private MODE mode;
 
 	public PlayerBusiness(Context context, INotifierMessage notificationMessage) {
 		this.context = context;
-//		inviteService = new InviteService(context, notificationMessage);
 		userService = new UserService(context, notificationMessage);
-		playerService = new PlayerService(context, notificationMessage);
+		playerService = createPlayerService(context, notificationMessage);
 		playerParser = PlayerParser.getInstance();
 		locationParser = LocationParser.getInstance(context, notificationMessage);
 	}
 
 	public void initialize(Intent intent) {
 		user = userService.find();
-		player = null;
-		invite = null;
 
-		if (intent.hasExtra(PlayerActivity.EXTRA_PLAYER_ID)) {
-			long playerId = intent.getLongExtra(PlayerActivity.EXTRA_PLAYER_ID, PlayerService.ID_EMPTY_PLAYER);
-			if (playerId != PlayerService.ID_EMPTY_PLAYER) {
-				player = findPlayer(playerId);
-			}
-		}
-		else if (intent.hasExtra(PlayerActivity.EXTRA_PLAYER)) {
-			player = (Player) intent.getSerializableExtra(PlayerActivity.EXTRA_PLAYER);
-		}
-		else if (intent.hasExtra(PlayerActivity.EXTRA_INVITE)) {
-			invite = (Invite) intent.getSerializableExtra(PlayerActivity.EXTRA_INVITE);
-		}
-		mode = MODE.CREATE;
+		initializePlayer(intent);
+		initializeInvite(intent);
+		initializeMode(intent);
 
-		if (player!=null && player.getId()!=null) {
-			mode = MODE.MODIFY;
-		}
-
-		if (intent.hasExtra(PlayerActivity.EXTRA_MODE)) {
-			mode = (MODE) intent.getSerializableExtra(PlayerActivity.EXTRA_MODE);
-		}
-		
 		if (intent.hasExtra(PlayerActivity.EXTRA_TYPE)) {
-			initializePlayer().setType((PLAYER_TYPE) intent.getSerializableExtra(PlayerActivity.EXTRA_TYPE));
+			buildPlayer().setType((PLAYER_TYPE) intent.getSerializableExtra(PlayerActivity.EXTRA_TYPE));
 		}
 		
 		if (intent.hasExtra(PlayerActivity.EXTRA_RANKING)) {
 			long idRanking = intent.getLongExtra(PlayerActivity.EXTRA_RANKING, -1);
 			if (idRanking != -1)  {
-				initializePlayer().setIdRanking(idRanking);
+				buildPlayer().setIdRanking(idRanking);
 			}
 		}
 		
@@ -168,7 +147,7 @@ public class PlayerBusiness {
 	}
 
 	public boolean isUnknownPlayer(Player player) {
-		return playerService.isUnknownPlayer(player);
+		return ((PlayerService)playerService).isUnknownPlayer(player);
 	}
 
 	public MODE getMode() {
@@ -211,7 +190,7 @@ public class PlayerBusiness {
 		return playerParser.toDataText(player);
 	}
 
-	public Player initializePlayer() {
+	public Player buildPlayer() {
 		if (player==null) {
 			player = new Player();
 		}
@@ -240,6 +219,43 @@ public class PlayerBusiness {
 
 	public String[] getLocationLine() {
 		return locationParser.toAddress(player);
+	}
+
+	@SuppressWarnings("unchecked")
+	protected <P extends Player> GenericService<P> createPlayerService(Context context, INotifierMessage notificationMessage) {
+		return (GenericService<P>) new PlayerService(context, notificationMessage);
+	}
+
+	protected void initializeMode(Intent intent) {
+		mode = MODE.CREATE;
+
+		if (player!=null && player.getId()!=null) {
+			mode = MODE.MODIFY;
+		}
+
+		if (intent.hasExtra(PlayerActivity.EXTRA_MODE)) {
+			mode = (MODE) intent.getSerializableExtra(PlayerActivity.EXTRA_MODE);
+		}
+	}
+
+	protected void initializeInvite(Intent intent) {
+		invite = null;
+		if (intent.hasExtra(PlayerActivity.EXTRA_INVITE)) {
+			invite = (Invite) intent.getSerializableExtra(PlayerActivity.EXTRA_INVITE);
+		}
+	}
+
+	protected void initializePlayer(Intent intent) {
+		player = null;
+		if (intent.hasExtra(PlayerActivity.EXTRA_PLAYER_ID)) {
+			long playerId = intent.getLongExtra(PlayerActivity.EXTRA_PLAYER_ID, PlayerService.ID_EMPTY_PLAYER);
+			if (playerId != PlayerService.ID_EMPTY_PLAYER) {
+				player = findPlayer(playerId);
+			}
+		}
+		if (intent.hasExtra(PlayerActivity.EXTRA_PLAYER)) {
+			player = (Player) intent.getSerializableExtra(PlayerActivity.EXTRA_PLAYER);
+		}
 	}
 
 //	private void initializeDataInvite() {

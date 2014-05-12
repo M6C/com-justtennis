@@ -124,7 +124,7 @@ public class PlayerActivity extends Activity {
 		tvLocationLine1 = ((TextView)findViewById(R.id.tv_location_line1));
 		tvLocationLine2 = ((TextView)findViewById(R.id.tv_location_line2));
 		
-		business = new PlayerBusiness(this, NotifierMessageLogger.getInstance());
+		business = createBusiness();
 
 		initializeListener();
 		initialize();
@@ -294,6 +294,10 @@ public class PlayerActivity extends Activity {
 		onClickLocation(view);
 	}
 
+	protected PlayerBusiness createBusiness() {
+		return new PlayerBusiness(this, NotifierMessageLogger.getInstance());
+	}
+
 	private void importScan() {
 		Intent intent = new Intent("com.google.zxing.client.android.SCAN");
 		intent.putExtra("SCAN_MODE", "QR_CODE_MODE");
@@ -312,7 +316,7 @@ public class PlayerActivity extends Activity {
 	}
 
 	private void buildPlayer() {
-		Player player = business.initializePlayer();
+		Player player = business.buildPlayer();
 
 		player.setFirstName(etFirstname.getText().toString());
 		player.setLastName(etLastname.getText().toString());
@@ -363,7 +367,7 @@ public class PlayerActivity extends Activity {
 			@Override
 			public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
 				if (view != null) {
-					Player player = business.initializePlayer();
+					Player player = business.buildPlayer();
 					player.setType((PLAYER_TYPE) view.getTag());
 					player.setIdClub(null);
 					player.setIdTournament(null);
@@ -427,7 +431,7 @@ public class PlayerActivity extends Activity {
 			@Override
 			public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
 				Ranking ranking = business.getListRanking().get(position);
-				Player player = business.initializePlayer();
+				Player player = business.buildPlayer();
 				player.setIdRanking(ranking.getId());
 			}
 
