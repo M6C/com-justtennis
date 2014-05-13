@@ -23,6 +23,14 @@ Saisie de Message
 
 
 ********************* DONE *****************************
+Ecran Utilisateur
+[20140513] - Recupertion du code pour pouvoir selectionner une adresse differente du club
+[20140511] - Pouvoir selectionner une adresse differente du club
+[20140413] - Saisie de la localisation
+[20140214] - Integration de la gestion du Message dans l'écran User
+[20140206] - Revu du design
+[20140105] - Ajout du classement
+
 Ecran Player & User
 [20140512] - Utilisation de l'ecran Player pour l'ecran User
 [20140207] - TextWatcher sur les EditText qui rend visible les TextView si non vide.
@@ -41,13 +49,6 @@ Ecran Player
 [20140108] - Ajout du classement
 [20131229] - Passer par un startActivityForResult pour importer un contact google (comme le scan QrCode)
 [20131228] - Recuperer les infos 'Prenom' et 'Nom' découpé
-
-Ecran Utilisateur
-[20140511] - Pouvoir selectionner une adresse differente du club
-[20140413] - Saisie de la localisation
-[20140214] - Integration de la gestion du Message dans l'écran User
-[20140206] - Revu du design
-[20140105] - Ajout du classement
 
 Invite
 [20140508] - Affichage de l'itineraire via GoogleMap

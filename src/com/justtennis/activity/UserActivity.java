@@ -1,8 +1,10 @@
 
 package com.justtennis.activity;
 
+import java.io.Serializable;
+
 import android.app.Dialog;
-import android.os.Bundle;
+import android.content.Intent;
 import android.view.View;
 import android.view.Window;
 import android.widget.AdapterView;
@@ -14,6 +16,8 @@ import com.cameleon.common.android.factory.FactoryDialog;
 import com.justtennis.R;
 import com.justtennis.business.PlayerBusiness;
 import com.justtennis.business.UserBusiness;
+import com.justtennis.domain.Address;
+import com.justtennis.domain.User;
 import com.justtennis.listener.action.TextWatcherFieldEnableView;
 import com.justtennis.notifier.NotifierMessageLogger;
 import com.justtennis.parser.SmsParser;
@@ -21,14 +25,31 @@ import com.justtennis.parser.SmsParser;
 
 public class UserActivity extends PlayerActivity {
 
+	private static final int RESULT_LOCATION_DETAIL = 3;
+
 	private TextView tvMessage;
 	private EditText etMessage;
 	private UserBusiness business;
+
+	private Serializable addressFromResult;
 
 	@Override
 	protected void onResume() {
 		super.onResume();
 		etMessage.setText(business.getMessage());
+	}
+
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		super.onActivityResult(requestCode, resultCode, data);
+		
+		if (requestCode==RESULT_LOCATION_DETAIL) {
+			if (data != null) {
+				addressFromResult = data.getSerializableExtra(LocationActivity.EXTRA_OUT_LOCATION);
+			}
+		} else {
+			super.onActivityResult(requestCode, resultCode, data);
+		}
 	}
 
 	@Override
@@ -44,7 +65,17 @@ public class UserActivity extends PlayerActivity {
 
 		findViewById(R.id.ll_type).setVisibility(View.GONE);
 	}
-	
+
+	@Override
+	protected void initializeLocation() {
+		super.initializeLocation();
+		if (addressFromResult != null) {
+			User user = (User) business.getPlayer();
+			user.setIdAddress(((Address)addressFromResult).getId());
+			addressFromResult = null;
+		}
+	}
+
 	@Override
 	protected PlayerBusiness createBusiness() {
 		business = new UserBusiness(this, NotifierMessageLogger.getInstance());
@@ -61,6 +92,16 @@ public class UserActivity extends PlayerActivity {
 	public void onClickModify(View view) {
 		super.onClickModify(view);
 		business.saveMessage(etMessage.getText().toString());
+	}
+
+	@Override
+	public void onClickLocationDetail(View view) {
+		Intent intent = new Intent(this, LocationAddressActivity.class);
+		User user = (User) business.getPlayer();
+		if (user.getIdAddress() != null) {
+			intent.putExtra(GenericSpinnerFormActivity.EXTRA_DATA, new Address(user.getIdAddress()));
+		}
+		startActivityForResult(intent, RESULT_LOCATION_DETAIL);
 	}
 
 	public void onClickMenuAjoutChamp(View view) {

@@ -368,6 +368,36 @@ public class PlayerActivity extends Activity {
 		etBirthday.addTextChangedListener(new TextWatcherFieldEnableView(tvBirthday, View.GONE));
 		etPhonenumber.addTextChangedListener(new TextWatcherFieldEnableView(tvPhonenumber, View.GONE));
 	}
+	
+	protected void initializeLocation() {
+		Log.d(TAG, "initializeDataLocation");
+		if (locationFromResult != null) {
+			business.setLocation(locationFromResult);
+			locationFromResult = null;
+		}
+		
+		String[] location = business.getLocationLine();
+		if (getType() == PLAYER_TYPE.MATCH) {
+			tvLocation.setText(getString(R.string.txt_tournament));
+			tvLocationEmpty.setText(getString(R.string.txt_tournament));
+		} else {
+			tvLocation.setText(getString(R.string.txt_club));
+			tvLocationEmpty.setText(getString(R.string.txt_club));
+		}
+		
+		if (location != null) {
+			tvLocationName.setText(location[0]);
+			tvLocationLine1.setText(location[1]);
+			tvLocationLine2.setText(location[2]);
+			tvLocation.setVisibility(View.VISIBLE);
+			llLocationDetail.setVisibility(View.VISIBLE);
+			tvLocationEmpty.setVisibility(View.GONE);
+		} else {
+			tvLocation.setVisibility(View.GONE);
+			llLocationDetail.setVisibility(View.GONE);
+			tvLocationEmpty.setVisibility(View.VISIBLE);
+		}
+	}
 
 	private void initializeListenerListType() {
 		spType.setOnItemSelectedListener(new OnItemSelectedListener() {
@@ -454,36 +484,6 @@ public class PlayerActivity extends Activity {
 
 	private void initializeType() {
 		spType.setSelection(getTypePosition(), true);
-	}
-
-	private void initializeLocation() {
-		Log.d(TAG, "initializeDataLocation");
-		if (locationFromResult != null) {
-			business.setLocation(locationFromResult);
-			locationFromResult = null;
-		}
-
-		String[] location = business.getLocationLine();
-		if (getType() == PLAYER_TYPE.MATCH) {
-			tvLocation.setText(getString(R.string.txt_tournament));
-			tvLocationEmpty.setText(getString(R.string.txt_tournament));
-		} else {
-			tvLocation.setText(getString(R.string.txt_club));
-			tvLocationEmpty.setText(getString(R.string.txt_club));
-		}
-
-		if (location != null) {
-			tvLocationName.setText(location[0]);
-			tvLocationLine1.setText(location[1]);
-			tvLocationLine2.setText(location[2]);
-			tvLocation.setVisibility(View.VISIBLE);
-			llLocationDetail.setVisibility(View.VISIBLE);
-			tvLocationEmpty.setVisibility(View.GONE);
-		} else {
-			tvLocation.setVisibility(View.GONE);
-			llLocationDetail.setVisibility(View.GONE);
-			tvLocationEmpty.setVisibility(View.VISIBLE);
-		}
 	}
 
 	private int getRankingPosition() {
