@@ -30,7 +30,9 @@ public class MainActivity extends Activity implements INotifierMessage {
 	private Dialog dialogExit;
 
 	private LinearLayout llTypeEntrainement;
+//	private LinearLayout llTypeEntrainementCursor;
 	private LinearLayout llTypeMatch;
+//	private LinearLayout llTypeMatchCursor;
 	private TypeManager typeManager;
 
 	@Override
@@ -39,7 +41,9 @@ public class MainActivity extends Activity implements INotifierMessage {
 		setContentView(R.layout.main_01);
 
 		llTypeEntrainement = (LinearLayout)findViewById(R.id.ll_type_entrainement);
+//		llTypeEntrainementCursor = (LinearLayout)findViewById(R.id.ll_type_entrainement_cursor);
 		llTypeMatch = (LinearLayout)findViewById(R.id.ll_type_match);
+//		llTypeMatchCursor = (LinearLayout)findViewById(R.id.ll_type_match_cursor);
 
 		business = new MainBusiness(this, this);
 		typeManager = TypeManager.getInstance();
@@ -67,15 +71,19 @@ public class MainActivity extends Activity implements INotifierMessage {
 	private void initializeLayoutType() {
 		switch(typeManager.getType()) {
 			case MATCH: {
-				llTypeMatch.setVisibility(View.VISIBLE);
-				llTypeEntrainement.setVisibility(View.INVISIBLE);
+				llTypeMatch.setAlpha(1f);
+//				llTypeMatchCursor.setVisibility(View.VISIBLE);
+				llTypeEntrainement.setAlpha(.2f);
+//				llTypeEntrainementCursor.setVisibility(View.INVISIBLE);
 			}
 			break;
 
 			case ENTRAINEMENT:
 			default: {
-				llTypeEntrainement.setVisibility(View.VISIBLE);
-				llTypeMatch.setVisibility(View.INVISIBLE);
+				llTypeEntrainement.setAlpha(1f);
+//				llTypeEntrainementCursor.setVisibility(View.VISIBLE);
+				llTypeMatch.setAlpha(.2f);
+//				llTypeMatchCursor.setVisibility(View.INVISIBLE);
 			}
 			break;
 		}

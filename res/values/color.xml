@@ -5,9 +5,13 @@
     <color name="gris_1">#666666</color>
     <color name="gris_2">#888888</color>
     <color name="gris_3">#999999</color>
+    <color name="bleu_clair_1">#7777FF</color>
     <color name="bleu_transparent_3">#660000CC</color>
     <color name="bleu_transparent_4">#990000CC</color>
     <color name="bleu_transparent_5">#BB0000CC</color>
+
+    <color name="orange_pumpkin_transparent_3">#88FF7518</color>
+    <color name="orange_tangelo_transparent_1">#F7794D00</color>
 
     <color name="form_background_color">@color/blanc_transparent_5</color>
     <color name="form_field_background_color">@color/blanc_transparent_4</color>

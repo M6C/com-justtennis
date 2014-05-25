@@ -23,6 +23,17 @@ Saisie de Message
 
 
 ********************* DONE *****************************
+Ecran Accueil
+[20140525] - Modification graphique de l'affiche du type
+[20140226] - Ajout d'une confirmation pour le partage de l'application
+[20140226] - Backup & Restore. Ajout des DBHelper manquant
+[20140225] - Partage l'application sans faire de copie sur la sd
+[20140223] - Ajout la possibilité de partager l'application
+[20140216] - Ajout Menu Statistique
+[20140214] - Clean le menu overflow
+[20140109] - Ajouter un menu pour sauvegarder la base 
+[20140109] - Ajouter un menu pour restorer la base 
+
 Common
 [20140525] - Rend parametrable les requêtes en fonction du type de match selectionné sur l'accueil
 [20140309] - Creation d'un custom spinner pour armoniser le design avec les champs de saisie
@@ -120,16 +131,6 @@ Invite Demande
 [20140222] - Possibilité de créé un nouveau Player si on a selectionné "Unknow Player"
 [20140222] - Possibilité de saisir le classement
 [20140211] - Creation d'une nouvelle activity pour faire seulement des invites
-
-Ecran Accueil
-[20140226] - Ajout d'une confirmation pour le partage de l'application
-[20140226] - Backup & Restore. Ajout des DBHelper manquant
-[20140225] - Partage l'application sans faire de copie sur la sd
-[20140223] - Ajout la possibilité de partager l'application
-[20140216] - Ajout Menu Statistique
-[20140214] - Clean le menu overflow
-[20140109] - Ajouter un menu pour sauvegarder la base 
-[20140109] - Ajouter un menu pour restorer la base 
 
 Statistique
 [20140223] - Ne prend en compte que les matchs passés
