@@ -26,16 +26,15 @@ import com.justtennis.db.service.RankingService;
 import com.justtennis.db.service.UserService;
 import com.justtennis.domain.Club;
 import com.justtennis.domain.Invite;
-import com.justtennis.domain.Invite.INVITE_TYPE;
 import com.justtennis.domain.Invite.STATUS;
 import com.justtennis.domain.Player;
 import com.justtennis.domain.Ranking;
-import com.justtennis.domain.Tournament;
 import com.justtennis.domain.User;
 import com.justtennis.domain.comparator.RankingComparatorByOrder;
 import com.justtennis.helper.GCalendarHelper;
 import com.justtennis.helper.GCalendarHelper.EVENT_STATUS;
 import com.justtennis.manager.SmsManager;
+import com.justtennis.manager.TypeManager;
 import com.justtennis.notifier.NotifierMessageLogger;
 import com.justtennis.parser.SmsParser;
 
@@ -90,16 +89,16 @@ public class InviteDemandeBusiness {
 				invite.setPlayer(playerService.find(id));
 				if (isUnknownPlayer()) {
 					setIdRanking(getListRanking().get(0).getId());
-					setType(INVITE_TYPE.MATCH);
+					setType(TypeManager.TYPE.MATCH);
 				} else {
 					setIdRanking(getPlayer().getIdRanking());
 					switch (getPlayer().getType()) {
 						default:
 						case ENTRAINEMENT:
-							setType(INVITE_TYPE.ENTRAINEMENT);
+							setType(TypeManager.TYPE.ENTRAINEMENT);
 							break;
 						case MATCH:
-							setType(INVITE_TYPE.MATCH);
+							setType(TypeManager.TYPE.MATCH);
 							break;
 					}
 				}
@@ -171,7 +170,7 @@ public class InviteDemandeBusiness {
 			invite.setId(this.invite.getId());
 		}
 
-		if (invite.getType() == INVITE_TYPE.ENTRAINEMENT) {
+		if (invite.getType() == TypeManager.TYPE.ENTRAINEMENT) {
 			if (invite.getPlayer().getIdClub() != null) {
 				invite.setClub(new Club(invite.getPlayer().getIdClub()));
 			}
@@ -240,11 +239,11 @@ public class InviteDemandeBusiness {
 		this.invite = invite;
 	}
 
-	public INVITE_TYPE getType() {
+	public TypeManager.TYPE getType() {
 		return invite.getType();
 	}
 
-	public void setType(INVITE_TYPE type) {
+	public void setType(TypeManager.TYPE type) {
 		invite.setType(type);
 	}
 
@@ -310,7 +309,7 @@ public class InviteDemandeBusiness {
 			text += " [invite:" + invite.getId() + "|user:" + invite.getUser().getId() + "|player:" + invite.getPlayer().getId() + "|calendar:" + invite.getIdCalendar() + "]";
 		}
 		String title = null;
-		if (getType()==INVITE_TYPE.MATCH) {
+		if (getType()==TypeManager.TYPE.MATCH) {
 			title = "Just Tennis Match vs " + player.getFirstName() + " " + player.getLastName();
 		} else {
 			title = "Just Tennis Entrainement vs " + player.getFirstName() + " " + player.getLastName();

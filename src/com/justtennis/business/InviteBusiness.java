@@ -27,7 +27,6 @@ import com.justtennis.db.service.UserService;
 import com.justtennis.domain.Address;
 import com.justtennis.domain.Club;
 import com.justtennis.domain.Invite;
-import com.justtennis.domain.Invite.INVITE_TYPE;
 import com.justtennis.domain.Invite.STATUS;
 import com.justtennis.domain.Player;
 import com.justtennis.domain.Ranking;
@@ -37,6 +36,7 @@ import com.justtennis.domain.User;
 import com.justtennis.helper.GCalendarHelper;
 import com.justtennis.helper.GCalendarHelper.EVENT_STATUS;
 import com.justtennis.manager.SmsManager;
+import com.justtennis.manager.TypeManager;
 import com.justtennis.parser.LocationParser;
 import com.justtennis.parser.SmsParser;
 
@@ -267,11 +267,11 @@ public class InviteBusiness {
 		this.invite = invite;
 	}
 
-	public INVITE_TYPE getType() {
+	public TypeManager.TYPE getType() {
 		return invite.getType();
 	}
 
-	public void setType(INVITE_TYPE type) {
+	public void setType(TypeManager.TYPE type) {
 		invite.setType(type);
 	}
 
@@ -284,7 +284,7 @@ public class InviteBusiness {
 	}
 
 	public void setLocation(Serializable location) {
-		if (getType() == INVITE_TYPE.MATCH) {
+		if (getType() == TypeManager.TYPE.MATCH) {
 			setTournament((Tournament)location);
 		} else {
 			setClub((Club)location);
@@ -304,16 +304,16 @@ public class InviteBusiness {
 
 		if (isUnknownPlayer()) {
 			setIdRanking(getListRanking().get(0).getId());
-			setType(INVITE_TYPE.MATCH);
+			setType(TypeManager.TYPE.MATCH);
 		} else {
 			setIdRanking(getPlayer().getIdRanking());
 			switch (getPlayer().getType()) {
 			default:
 			case ENTRAINEMENT:
-				setType(INVITE_TYPE.ENTRAINEMENT);
+				setType(TypeManager.TYPE.ENTRAINEMENT);
 				break;
 			case MATCH:
-				setType(INVITE_TYPE.MATCH);
+				setType(TypeManager.TYPE.MATCH);
 				break;
 			}
 		}
@@ -369,7 +369,7 @@ public class InviteBusiness {
 			text += " [invite:" + invite.getId() + "|user:" + invite.getUser().getId() + "|player:" + invite.getPlayer().getId() + "|calendar:" + invite.getIdCalendar() + "]";
 		}
 		String title = null;
-		if (getType()==INVITE_TYPE.MATCH) {
+		if (getType()==TypeManager.TYPE.MATCH) {
 			title = "Just Tennis Match vs " + player.getFirstName() + " " + player.getLastName();
 		} else {
 			title = "Just Tennis Entrainement vs " + player.getFirstName() + " " + player.getLastName();

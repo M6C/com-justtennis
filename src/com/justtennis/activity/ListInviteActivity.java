@@ -16,11 +16,10 @@ import com.justtennis.R;
 import com.justtennis.adapter.ListInviteAdapter;
 import com.justtennis.business.ListInviteBusiness;
 import com.justtennis.domain.Invite;
-import com.justtennis.domain.Invite.INVITE_TYPE;
 import com.justtennis.domain.Player;
-import com.justtennis.domain.Player.PLAYER_TYPE;
 import com.justtennis.listener.itemclick.OnItemClickListInvite;
 import com.justtennis.listener.ok.OnClickInviteDeleteListenerOk;
+import com.justtennis.manager.TypeManager;
 import com.justtennis.notifier.NotifierMessageLogger;
 
 public class ListInviteActivity extends Activity {
@@ -38,7 +37,7 @@ public class ListInviteActivity extends Activity {
 	private Spinner spFilterType;
 	private Filter filter;
 	private CharSequence filterPlayerValue = null;
-	private INVITE_TYPE filterTypeValue;
+	private TypeManager.TYPE filterTypeValue;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -127,7 +126,7 @@ public class ListInviteActivity extends Activity {
 	}
 
 	private void initializeTypeList() {
-		String[] listTypeName = new String[]{"", INVITE_TYPE.ENTRAINEMENT.toString(), INVITE_TYPE.MATCH.toString()};
+		String[] listTypeName = new String[]{"", TypeManager.TYPE.ENTRAINEMENT.toString(), TypeManager.TYPE.MATCH.toString()};
 		ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, listTypeName);
 		dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		spFilterType.setAdapter(dataAdapter);
@@ -142,10 +141,10 @@ public class ListInviteActivity extends Activity {
 							filterTypeValue = null;
 							break;
 						case 1:
-							filterTypeValue = INVITE_TYPE.ENTRAINEMENT;
+							filterTypeValue = TypeManager.TYPE.ENTRAINEMENT;
 							break;
 						case 2:
-							filterTypeValue = INVITE_TYPE.MATCH;
+							filterTypeValue = TypeManager.TYPE.MATCH;
 							break;
 					}
 

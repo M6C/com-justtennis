@@ -22,12 +22,13 @@ import com.justtennis.domain.Address;
 import com.justtennis.domain.Club;
 import com.justtennis.domain.Invite;
 import com.justtennis.domain.Player;
-import com.justtennis.domain.Player.PLAYER_TYPE;
 import com.justtennis.domain.Ranking;
 import com.justtennis.domain.Tournament;
 import com.justtennis.domain.User;
 import com.justtennis.domain.comparator.RankingComparatorByOrder;
 import com.justtennis.manager.SmsManager;
+import com.justtennis.manager.TypeManager;
+import com.justtennis.manager.TypeManager.TYPE;
 import com.justtennis.notifier.NotifierMessageLogger;
 import com.justtennis.parser.LocationParser;
 import com.justtennis.parser.PlayerParser;
@@ -48,6 +49,7 @@ public class PlayerBusiness {
 	private List<Invite> list = new ArrayList<Invite>();
 	private List<Ranking> listRanking;
 	private String[] listTxtRankings;
+	private TypeManager typeManager;
 
 	public PlayerBusiness(Context context, INotifierMessage notificationMessage) {
 		this.context = context;
@@ -55,6 +57,7 @@ public class PlayerBusiness {
 		playerService = createPlayerService(context, notificationMessage);
 		playerParser = PlayerParser.getInstance();
 		locationParser = LocationParser.getInstance(context, notificationMessage);
+		typeManager = TypeManager.getInstance();
 	}
 
 	public void initialize(Intent intent) {
@@ -65,7 +68,7 @@ public class PlayerBusiness {
 		initializeMode(intent);
 
 		if (intent.hasExtra(PlayerActivity.EXTRA_TYPE)) {
-			buildPlayer().setType((PLAYER_TYPE) intent.getSerializableExtra(PlayerActivity.EXTRA_TYPE));
+			buildPlayer().setType((TypeManager.TYPE) intent.getSerializableExtra(PlayerActivity.EXTRA_TYPE));
 		}
 		
 		if (intent.hasExtra(PlayerActivity.EXTRA_RANKING)) {
@@ -193,6 +196,7 @@ public class PlayerBusiness {
 	public Player buildPlayer() {
 		if (player==null) {
 			player = new Player();
+			player.setType(typeManager.getType());
 		}
 		return player;
 	}
@@ -210,7 +214,7 @@ public class PlayerBusiness {
 	}
 
 	public void setLocation(Serializable location) {
-		if (player.getType() == PLAYER_TYPE.MATCH) {
+		if (player.getType() == TypeManager.TYPE.MATCH) {
 			player.setIdTournament(((Tournament)location).getId());
 		} else {
 			player.setIdClub(((Club)location).getId());
@@ -277,5 +281,9 @@ public class PlayerBusiness {
 
 	private Player findPlayer(long id) {
 		return playerService.find(id);
+	}
+
+	public TYPE getPlayerType() {
+		return getPlayer() == null ? typeManager.getType() : getPlayer().getType();
 	}
 }

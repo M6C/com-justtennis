@@ -8,7 +8,6 @@ import android.net.Uri;
 import android.provider.ContactsContract;
 
 import com.justtennis.domain.Contact;
-import com.justtennis.manager.mapper.ContactMapper;
 import com.justtennis.manager.mapper.ContactStructuredMapper;
 
 public class ContactStructuredManager extends GenericCursorManager<Contact, ContactStructuredMapper> {

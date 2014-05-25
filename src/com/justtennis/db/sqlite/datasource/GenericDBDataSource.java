@@ -137,8 +137,8 @@ public abstract class GenericDBDataSource<POJO extends GenericDBPojo<Long>> {
 		Date dateStart = new Date();
 		List<POJO> pojos = new ArrayList<POJO>();
 		
-		Cursor cursor = db.query(dbHelper.getTableName(),
-				getAllColumns(), null, null, null, null, null);
+		String where = customizeWhere(null);
+		Cursor cursor = db.query(dbHelper.getTableName(), getAllColumns(), where, null, null, null, null);
 		
 		cursor.moveToFirst();
 		while (!cursor.isAfterLast()) {
@@ -158,7 +158,8 @@ public abstract class GenericDBDataSource<POJO extends GenericDBPojo<Long>> {
 	 * @return Table count
 	 */
 	public long count() {
-		Cursor mCount= db.rawQuery("select count(*) from "+dbHelper.getTableName(), null);
+		String where = customizeWhere(null);
+		Cursor mCount= db.rawQuery("select count(*) from "+dbHelper.getTableName() + " " + where, null);
 		mCount.moveToFirst();
 		long ret = mCount.getLong(0);
 		mCount.close();
@@ -208,7 +209,7 @@ public abstract class GenericDBDataSource<POJO extends GenericDBPojo<Long>> {
 		List<POJO> ret = new ArrayList<POJO>();
 		
 		Cursor cursor = db.query(dbHelper.getTableName(), getAllColumns(), 
-				sqlWhere, params, null, null, null);
+				customizeWhere(sqlWhere), params, null, null, null);
 		
 		cursor.moveToFirst();
 		while (!cursor.isAfterLast()) {
@@ -243,6 +244,10 @@ public abstract class GenericDBDataSource<POJO extends GenericDBPojo<Long>> {
 
 		logMe("query(sql:" + sql + ")", dateStart);
 		return ret;
+	}
+
+	protected String customizeWhere(String where) {
+		return (where == null) ? "" : where;
 	}
 
 	protected void logMe(String msg, Date dateStart) {

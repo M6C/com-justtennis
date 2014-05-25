@@ -2,15 +2,12 @@ package com.justtennis.domain;
 
 import android.graphics.Bitmap;
 
+import com.justtennis.manager.TypeManager;
+
 
 public class Player extends Person {
 	
 	private static final long serialVersionUID = 1L;
-
-	public enum PLAYER_TYPE {
-		ENTRAINEMENT,
-		MATCH
-	};
 
 	private Long idTournament;
 	private Long idClub;
@@ -19,7 +16,7 @@ public class Player extends Person {
 	private Long idExternal;
 	private Long idGoogle;
 	private Bitmap photo;
-	private PLAYER_TYPE type = PLAYER_TYPE.ENTRAINEMENT;
+	private TypeManager.TYPE type = TypeManager.TYPE.ENTRAINEMENT;
 
 	public Player() {
 		super();
@@ -73,10 +70,10 @@ public class Player extends Person {
 	public void setPhoto(Bitmap photo) {
 		this.photo = photo;
 	}
-	public PLAYER_TYPE getType() {
+	public TypeManager.TYPE getType() {
 		return type;
 	}
-	public void setType(PLAYER_TYPE type) {
+	public void setType(TypeManager.TYPE type) {
 		this.type = type;
 	}
 }

@@ -19,12 +19,12 @@ import com.justtennis.adapter.ListPlayerAdapter;
 import com.justtennis.business.ListPlayerBusiness;
 import com.justtennis.db.service.PlayerService;
 import com.justtennis.domain.Player;
-import com.justtennis.domain.Player.PLAYER_TYPE;
 import com.justtennis.listener.itemclick.OnItemClickListPlayer;
 import com.justtennis.listener.itemclick.OnItemClickListPlayerForResult;
 import com.justtennis.listener.itemclick.OnItemClickListPlayerInvite;
 import com.justtennis.listener.ok.OnClickPlayerDeleteListenerOk;
 import com.justtennis.listener.ok.OnClickPlayerSendListenerOk;
+import com.justtennis.manager.TypeManager;
 import com.justtennis.notifier.NotifierMessageLogger;
 import com.justtennis.parser.PlayerParser;
 
@@ -50,7 +50,7 @@ public class ListPlayerActivity extends Activity {
 	private LinearLayout llFilterType;
 	private Spinner spFilterType;
 	private Filter filter;
-	private PLAYER_TYPE filterTypeValue = null;
+	private TypeManager.TYPE filterTypeValue = null;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -214,7 +214,7 @@ public class ListPlayerActivity extends Activity {
 	}
 
 	private void initializeTypeList() {
-		String[] listTypeName = new String[]{"", PLAYER_TYPE.ENTRAINEMENT.toString(), PLAYER_TYPE.MATCH.toString()};
+		String[] listTypeName = new String[]{"", TypeManager.TYPE.ENTRAINEMENT.toString(), TypeManager.TYPE.MATCH.toString()};
 		ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, listTypeName);
 		dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		spFilterType.setAdapter(dataAdapter);
@@ -228,10 +228,10 @@ public class ListPlayerActivity extends Activity {
 							filterTypeValue = null;
 							break;
 						case 1:
-							filterTypeValue = PLAYER_TYPE.ENTRAINEMENT;
+							filterTypeValue = TypeManager.TYPE.ENTRAINEMENT;
 							break;
 						case 2:
-							filterTypeValue = PLAYER_TYPE.MATCH;
+							filterTypeValue = TypeManager.TYPE.MATCH;
 							break;
 					}
 					filter.filter(filterTypeValue == null ? null : filterTypeValue.toString());

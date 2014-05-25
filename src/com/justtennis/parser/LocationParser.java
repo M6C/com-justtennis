@@ -9,9 +9,9 @@ import com.justtennis.db.service.TournamentService;
 import com.justtennis.domain.Address;
 import com.justtennis.domain.Club;
 import com.justtennis.domain.Invite;
-import com.justtennis.domain.Invite.INVITE_TYPE;
 import com.justtennis.domain.Player;
 import com.justtennis.domain.Tournament;
+import com.justtennis.manager.TypeManager;
 
 public class LocationParser extends GenericParser {
 	
@@ -39,7 +39,7 @@ public class LocationParser extends GenericParser {
 	public String[] toAddress(Invite invite) {
 		String[] ret = null;
 		if (invite != null) {
-			if (invite.getType() == INVITE_TYPE.ENTRAINEMENT) {
+			if (invite.getType() == TypeManager.TYPE.ENTRAINEMENT) {
 				if (invite.getClub() != null && invite.getClub().getId() != null) {
 					ret = getAddress(new Club(invite.getClub().getId()));
 				}
@@ -135,7 +135,7 @@ public class LocationParser extends GenericParser {
 
 	private String[] getLocationLine(Invite invite) {
 		if (invite != null) {
-			if (invite.getType() == INVITE_TYPE.ENTRAINEMENT) {
+			if (invite.getType() == TypeManager.TYPE.ENTRAINEMENT) {
 				if (invite.getClub() != null && invite.getClub().getId() != null) {
 					return getAddress(new Club(invite.getClub().getId()));
 				}

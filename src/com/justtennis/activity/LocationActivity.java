@@ -20,9 +20,8 @@ import com.justtennis.adapter.CustomArrayAdapter;
 import com.justtennis.business.LocationBusiness;
 import com.justtennis.domain.Address;
 import com.justtennis.domain.Club;
-import com.justtennis.domain.Invite.INVITE_TYPE;
 import com.justtennis.domain.Tournament;
-import com.justtennis.listener.ok.OnClickInviteDeleteListenerOk;
+import com.justtennis.manager.TypeManager;
 import com.justtennis.notifier.NotifierMessageLogger;
 
 public class LocationActivity extends Activity {
@@ -131,8 +130,8 @@ public class LocationActivity extends Activity {
 		super.onResume();
 		initializeData();
 
-		visibilityTournamentCollapser = (business.getType() == INVITE_TYPE.MATCH) ? View.VISIBLE : View.GONE;
-		visibilityClubCollapser = (business.getType() == INVITE_TYPE.MATCH) ? View.GONE : View.VISIBLE;
+		visibilityTournamentCollapser = (business.getType() == TypeManager.TYPE.MATCH) ? View.VISIBLE : View.GONE;
+		visibilityClubCollapser = (business.getType() == TypeManager.TYPE.MATCH) ? View.GONE : View.VISIBLE;
 
 		llAddressCollapser.setVisibility(visibilityAddressCollapser);
 		llAddressContent.setVisibility(visibilityAddressContent);
@@ -164,7 +163,7 @@ public class LocationActivity extends Activity {
 
 	private void returnResult() {
 		Serializable out = null;
-		if (business.getType() == INVITE_TYPE.MATCH) {
+		if (business.getType() == TypeManager.TYPE.MATCH) {
 			out = business.getTournament();
 		} else {
 			out = business.getClub();
@@ -307,7 +306,7 @@ public class LocationActivity extends Activity {
 		Club club = business.addClub(getText(etClubName), business.getAddress().getId());
 		business.setClub(club);
 
-		if (business.getType() == INVITE_TYPE.MATCH) {
+		if (business.getType() == TypeManager.TYPE.MATCH) {
 			business.initializeDataClub();
 			adapterClub.notifyDataSetChanged();
 			adapterTournamentClub.notifyDataSetChanged();
@@ -333,7 +332,7 @@ public class LocationActivity extends Activity {
 		Tournament tournament = business.addTournament(getText(etTournamentName), business.getClub().getId());
 		business.setTournament(tournament);
 
-		if (business.getType() == INVITE_TYPE.MATCH) {
+		if (business.getType() == TypeManager.TYPE.MATCH) {
 			business.initializeDataTournament();
 			adapterTournament.notifyDataSetChanged();
 			manageVisibility(true, false, false, false, false, false);

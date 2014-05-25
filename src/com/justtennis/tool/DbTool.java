@@ -1,8 +1,8 @@
 package com.justtennis.tool;
 
-import com.justtennis.domain.GenericDBPojo;
-
 import android.database.Cursor;
+
+import com.justtennis.domain.GenericDBPojo;
 
 
 public class DbTool {

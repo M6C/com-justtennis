@@ -15,14 +15,14 @@ import com.justtennis.db.sqlite.helper.DBInviteHelper;
 import com.justtennis.domain.Address;
 import com.justtennis.domain.Club;
 import com.justtennis.domain.Invite;
-import com.justtennis.domain.Tournament;
-import com.justtennis.domain.Invite.INVITE_TYPE;
 import com.justtennis.domain.Invite.SCORE_RESULT;
 import com.justtennis.domain.Invite.STATUS;
 import com.justtennis.domain.Player;
+import com.justtennis.domain.Tournament;
+import com.justtennis.manager.TypeManager;
 import com.justtennis.tool.DbTool;
 
-public class DBInviteDataSource extends GenericDBDataSource<Invite> {
+public class DBInviteDataSource extends GenericDBDataSourceByType<Invite> {
 
 	private static final String TAG = DBInviteDataSource.class.getCanonicalName();
 
@@ -76,11 +76,13 @@ public class DBInviteDataSource extends GenericDBDataSource<Invite> {
 	 * Return Count Invite by Ranking
 	 * @return Count Invite by Ranking
 	 */
-	public HashMap<String,Double> countByTypeGroupByRanking(Invite.INVITE_TYPE type, Invite.SCORE_RESULT scoreResult) {
+	public HashMap<String,Double> countByTypeGroupByRanking(TypeManager.TYPE type, Invite.SCORE_RESULT scoreResult) {
 		String where = " WHERE ";
 		where += DBInviteHelper.COLUMN_TIME + " < " + Calendar.getInstance().getTimeInMillis();
 		if (type != null) {
 			where += " AND " + DBInviteHelper.COLUMN_TYPE + " = '" + type + "'";
+		} else {
+			where = customizeWhere(where);
 		}
 		if (scoreResult != null) {
 			where += " AND " + DBInviteHelper.COLUMN_SCORE_RESULT + " = '" + scoreResult + "'";
@@ -122,7 +124,7 @@ public class DBInviteDataSource extends GenericDBDataSource<Invite> {
 		String date = cursor.getString(col++);
 		invite.setDate(date==null || "null".equals(date.toLowerCase(Locale.FRANCE)) ? null : new Date(Long.parseLong(date)));
 		invite.setStatus(STATUS.valueOf(DbTool.getInstance().toString(cursor, col++, STATUS.UNKNOW.toString())));
-		invite.setType(INVITE_TYPE.valueOf(DbTool.getInstance().toString(cursor, col++, INVITE_TYPE.ENTRAINEMENT.toString())));
+		invite.setType(TypeManager.TYPE.valueOf(DbTool.getInstance().toString(cursor, col++, TypeManager.TYPE.ENTRAINEMENT.toString())));
 		invite.setIdExternal(DbTool.getInstance().toLong(cursor, col++));
 		invite.setIdCalendar(DbTool.getInstance().toLong(cursor, col++));
 		invite.setIdRanking(DbTool.getInstance().toLong(cursor, col++));

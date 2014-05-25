@@ -11,9 +11,9 @@ import com.justtennis.R;
 import com.justtennis.db.service.InviteService;
 import com.justtennis.db.service.RankingService;
 import com.justtennis.domain.Invite;
-import com.justtennis.domain.Invite.INVITE_TYPE;
 import com.justtennis.domain.Invite.SCORE_RESULT;
 import com.justtennis.domain.Ranking;
+import com.justtennis.manager.TypeManager;
 
 public class PieChartBusiness {
 
@@ -22,13 +22,13 @@ public class PieChartBusiness {
 
 	public enum CHART_DATA_TYPE {
 		ALL(null, R.string.chart_type_all), 
-		ENTRAINEMENT(INVITE_TYPE.ENTRAINEMENT, R.string.chart_type_entrainement),
-		MATCH(INVITE_TYPE.MATCH, R.string.chart_type_match);
+		ENTRAINEMENT(TypeManager.TYPE.ENTRAINEMENT, R.string.chart_type_entrainement),
+		MATCH(TypeManager.TYPE.MATCH, R.string.chart_type_match);
 
-		public INVITE_TYPE type;
+		public TypeManager.TYPE type;
 		public int stringId;
 
-		CHART_DATA_TYPE(INVITE_TYPE type, int stringId) {
+		CHART_DATA_TYPE(TypeManager.TYPE type, int stringId) {
 			this.type = type;
 			this.stringId = stringId;
 		}
@@ -70,7 +70,7 @@ public class PieChartBusiness {
 		return getData(chartDataType);
 	}
 	
-	private HashMap<String, Double> getDataByRanking(INVITE_TYPE type, Invite.SCORE_RESULT scoreResult) {
+	private HashMap<String, Double> getDataByRanking(TypeManager.TYPE type, Invite.SCORE_RESULT scoreResult) {
 		HashMap<String,Double> data = inviteService.countByTypeGroupByRanking(type, scoreResult);
 		return sortDataByRanking(data);
 	}

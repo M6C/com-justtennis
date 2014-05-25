@@ -17,7 +17,6 @@ import com.justtennis.domain.Person;
 import com.justtennis.domain.Player;
 import com.justtennis.domain.User;
 import com.justtennis.manager.ContactManager;
-import com.justtennis.manager.ContactStructuredManager;
 import com.justtennis.manager.SmsManager;
 import com.justtennis.notifier.NotifierMessageLogger;
 import com.justtennis.parser.SmsParser;

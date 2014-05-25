@@ -4,6 +4,8 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
+import com.justtennis.manager.TypeManager;
+
 public class Invite extends GenericDBPojo<Long> implements Serializable {
 
 	private static final long serialVersionUID = 1L;
@@ -16,11 +18,6 @@ public class Invite extends GenericDBPojo<Long> implements Serializable {
 		REFUSE
 	};
 
-	public enum INVITE_TYPE {
-		ENTRAINEMENT,
-		MATCH
-	};
-
 	public enum SCORE_RESULT {
 		VICTORY, DEFEAT, UNFINISHED
 	}
@@ -30,7 +27,7 @@ public class Invite extends GenericDBPojo<Long> implements Serializable {
 	private STATUS status = STATUS.UNKNOW;
 	private Long idExternal;
 	private Long idCalendar;
-	private INVITE_TYPE type = INVITE_TYPE.ENTRAINEMENT;
+	private TypeManager.TYPE type = TypeManager.TYPE.ENTRAINEMENT;
 	private Long idRanking;
 	private SCORE_RESULT scoreResult = SCORE_RESULT.UNFINISHED;
 	private List<ScoreSet> listScoreSet = null;
@@ -56,7 +53,7 @@ public class Invite extends GenericDBPojo<Long> implements Serializable {
 		this.date = date;
 	}
 
-	public Invite(User user, Player player, Date date, INVITE_TYPE type) {
+	public Invite(User user, Player player, Date date, TypeManager.TYPE type) {
 		this.user = user;
 		this.player = player;
 		this.date = date;
@@ -106,10 +103,10 @@ public class Invite extends GenericDBPojo<Long> implements Serializable {
 	public void setIdCalendar(Long idCalendar) {
 		this.idCalendar = idCalendar;
 	}
-	public INVITE_TYPE getType() {
+	public TypeManager.TYPE getType() {
 		return type;
 	}
-	public void setType(INVITE_TYPE type) {
+	public void setType(TypeManager.TYPE type) {
 		this.type = type;
 	}
 

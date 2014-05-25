@@ -65,6 +65,7 @@ public class PlayerParser extends GenericParser {
 		ret.setPostalCode(user.getPostalCode());
 		ret.setAddress(user.getAddress());
 		ret.setIdExternal(user.getIdExternal());
+		ret.setType(user.getType());
 		return ret;
 	}
 

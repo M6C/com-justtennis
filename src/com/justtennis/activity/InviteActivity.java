@@ -12,7 +12,6 @@ import java.util.Locale;
 import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.location.LocationListener;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
@@ -37,13 +36,12 @@ import com.justtennis.R;
 import com.justtennis.adapter.CustomArrayAdapter;
 import com.justtennis.business.InviteBusiness;
 import com.justtennis.db.service.PlayerService;
-import com.justtennis.domain.Invite.INVITE_TYPE;
 import com.justtennis.domain.Player;
-import com.justtennis.domain.Player.PLAYER_TYPE;
 import com.justtennis.domain.Ranking;
 import com.justtennis.listener.action.TextWatcherFieldEnableView;
 import com.justtennis.listener.action.TextWatcherFieldScoreSetBold;
 import com.justtennis.manager.ContactManager;
+import com.justtennis.manager.TypeManager;
 import com.justtennis.notifier.NotifierMessageLogger;
 
 public class InviteActivity extends Activity {
@@ -276,13 +274,13 @@ public class InviteActivity extends Activity {
 	public void onClickPlayer(View view) {
 		Intent intent = new Intent(this, ListPlayerActivity.class);
 		intent.putExtra(ListPlayerActivity.EXTRA_MODE, ListPlayerActivity.MODE.FOR_RESULT);
-		PLAYER_TYPE playerType = PLAYER_TYPE.ENTRAINEMENT;
+		TypeManager.TYPE playerType = TypeManager.TYPE.ENTRAINEMENT;
 		switch(business.getType()) {
 			case ENTRAINEMENT:
-				playerType = PLAYER_TYPE.ENTRAINEMENT;
+				playerType = TypeManager.TYPE.ENTRAINEMENT;
 				break;
 			case MATCH:
-				playerType = PLAYER_TYPE.MATCH;
+				playerType = TypeManager.TYPE.MATCH;
 				break;
 		}
 		intent.putExtra(PlayerActivity.EXTRA_TYPE, playerType);
@@ -311,7 +309,7 @@ public class InviteActivity extends Activity {
 	}
 
 	public void onClickLocationDetail(View view) {
-		if (business.getType() == INVITE_TYPE.MATCH) {
+		if (business.getType() == TypeManager.TYPE.MATCH) {
 			Intent intent = new Intent(this, LocationClubActivity.class);
 			if (business.getInvite().getClub() != null) {
 				intent.putExtra(GenericSpinnerFormActivity.EXTRA_DATA, business.getInvite().getClub());
@@ -493,7 +491,7 @@ public class InviteActivity extends Activity {
 	private void initializeDataLocation() {
 		Log.d(TAG, "initializeDataLocation");
 		String[] location = business.getLocationLine();
-		if (business.getType() == INVITE_TYPE.ENTRAINEMENT) {
+		if (business.getType() == TypeManager.TYPE.ENTRAINEMENT) {
 			tvLocation.setText(getString(R.string.txt_club));
 			tvLocationEmpty.setText(getString(R.string.txt_club));
 		} else {
@@ -551,7 +549,7 @@ public class InviteActivity extends Activity {
 			
 			@Override
 			public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-				business.setType(isChecked ? INVITE_TYPE.ENTRAINEMENT : INVITE_TYPE.MATCH);
+				business.setType(isChecked ? TypeManager.TYPE.ENTRAINEMENT : TypeManager.TYPE.MATCH);
 			}
 		});
 

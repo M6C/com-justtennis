@@ -33,11 +33,11 @@ import com.justtennis.R;
 import com.justtennis.adapter.CustomArrayAdapter;
 import com.justtennis.business.InviteDemandeBusiness;
 import com.justtennis.db.service.PlayerService;
-import com.justtennis.domain.Invite.INVITE_TYPE;
 import com.justtennis.domain.Invite.STATUS;
 import com.justtennis.domain.Player;
 import com.justtennis.domain.Ranking;
 import com.justtennis.manager.ContactManager;
+import com.justtennis.manager.TypeManager;
 import com.justtennis.notifier.NotifierMessageLogger;
 
 public class InviteDemandeActivity extends Activity {
@@ -286,7 +286,7 @@ public class InviteDemandeActivity extends Activity {
 			
 			@Override
 			public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-				business.setType(isChecked ? INVITE_TYPE.ENTRAINEMENT : INVITE_TYPE.MATCH);
+				business.setType(isChecked ? TypeManager.TYPE.ENTRAINEMENT : TypeManager.TYPE.MATCH);
 			}
 		});
 	}

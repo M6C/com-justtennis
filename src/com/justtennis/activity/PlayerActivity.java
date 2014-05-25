@@ -27,11 +27,12 @@ import com.justtennis.R;
 import com.justtennis.business.PlayerBusiness;
 import com.justtennis.domain.Club;
 import com.justtennis.domain.Player;
-import com.justtennis.domain.Player.PLAYER_TYPE;
 import com.justtennis.domain.Ranking;
 import com.justtennis.domain.Tournament;
 import com.justtennis.listener.action.TextWatcherFieldEnableView;
 import com.justtennis.listener.ok.OnClickPlayerCreateListenerOk;
+import com.justtennis.manager.TypeManager;
+import com.justtennis.manager.TypeManager.TYPE;
 import com.justtennis.notifier.NotifierMessageLogger;
 import com.justtennis.parser.PlayerParser;
 
@@ -377,7 +378,7 @@ public class PlayerActivity extends Activity {
 		}
 		
 		String[] location = business.getLocationLine();
-		if (getType() == PLAYER_TYPE.MATCH) {
+		if (getType() == TypeManager.TYPE.MATCH) {
 			tvLocation.setText(getString(R.string.txt_tournament));
 			tvLocationEmpty.setText(getString(R.string.txt_tournament));
 		} else {
@@ -405,7 +406,7 @@ public class PlayerActivity extends Activity {
 			public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
 				if (view != null) {
 					Player player = business.buildPlayer();
-					player.setType((PLAYER_TYPE) view.getTag());
+					player.setType((TypeManager.TYPE) view.getTag());
 					player.setIdClub(null);
 					player.setIdTournament(null);
 					initializeLocation();
@@ -504,30 +505,26 @@ public class PlayerActivity extends Activity {
 	}
 		
 	private int getTypePosition() {
-		if(business.getPlayer() != null) {
-			switch(business.getPlayer().getType()) {
-				case ENTRAINEMENT:
-					return 0;
-				case MATCH:
-				default:
-					return 1;
-			}
-		} else {
-			return 0;
+		switch(business.getPlayerType()) {
+			case ENTRAINEMENT:
+				return 0;
+			case MATCH:
+			default:
+				return 1;
 		}
 	}
 
-	private PLAYER_TYPE getType() {
+	private TypeManager.TYPE getType() {
 		return business.getPlayer() != null ? business.getPlayer().getType() : null;
 	}
 	
-	private PLAYER_TYPE getType(Integer position) {
+	private TypeManager.TYPE getType(Integer position) {
 		switch(position) {
 		case 0:
-			return PLAYER_TYPE.ENTRAINEMENT;
+			return TypeManager.TYPE.ENTRAINEMENT;
 		case 1:
 		default:
-			return PLAYER_TYPE.MATCH;
+			return TypeManager.TYPE.MATCH;
 		}
 	}
 }

@@ -7,10 +7,10 @@ import android.database.Cursor;
 import com.cameleon.common.android.inotifier.INotifierMessage;
 import com.justtennis.db.sqlite.helper.DBPlayerHelper;
 import com.justtennis.domain.Player;
-import com.justtennis.domain.Player.PLAYER_TYPE;
+import com.justtennis.manager.TypeManager;
 import com.justtennis.tool.DbTool;
 
-public class DBPlayerDataSource extends GenericDBDataSource<Player> {
+public class DBPlayerDataSource extends GenericDBDataSourceByType<Player> {
 
 	private static final String TAG = DBPlayerDataSource.class.getCanonicalName();
 
@@ -78,7 +78,7 @@ public class DBPlayerDataSource extends GenericDBDataSource<Player> {
 		player.setLocality(cursor.getString(col++));
 		player.setIdExternal(DbTool.getInstance().toLong(cursor, col++));
 		player.setIdGoogle(DbTool.getInstance().toLong(cursor, col++));
-		player.setType(PLAYER_TYPE.valueOf(DbTool.getInstance().toString(cursor, col++, PLAYER_TYPE.ENTRAINEMENT.toString())));
+		player.setType(TypeManager.TYPE.valueOf(DbTool.getInstance().toString(cursor, col++, TypeManager.TYPE.ENTRAINEMENT.toString())));
 		return player;
 	}
 	

@@ -23,6 +23,10 @@ Saisie de Message
 
 
 ********************* DONE *****************************
+Common
+[20140525] - Rend parametrable les requêtes en fonction du type de match selectionné sur l'accueil
+[20140309] - Creation d'un custom spinner pour armoniser le design avec les champs de saisie
+
 Ecran Utilisateur
 [20140513] - Recupertion du code pour pouvoir selectionner une adresse differente du club
 [20140511] - Pouvoir selectionner une adresse differente du club
@@ -116,9 +120,6 @@ Invite Demande
 [20140222] - Possibilité de créé un nouveau Player si on a selectionné "Unknow Player"
 [20140222] - Possibilité de saisir le classement
 [20140211] - Creation d'une nouvelle activity pour faire seulement des invites
-
-Common
-[20140309] - Creation d'un custom spinner pour armoniser le design avec les champs de saisie
 
 Ecran Accueil
 [20140226] - Ajout d'une confirmation pour le partage de l'application

@@ -10,7 +10,6 @@ import com.cameleon.common.android.inotifier.INotifierMessage;
 import com.justtennis.activity.GenericSpinnerFormActivity;
 import com.justtennis.db.service.GenericService;
 import com.justtennis.db.service.PojoNamedService;
-import com.justtennis.domain.Address;
 import com.justtennis.domain.GenericDBPojoNamedSubId;
 
 public abstract class GenericSpinnerFormBusiness <DATA extends GenericDBPojoNamedSubId, SUB_DATA extends GenericDBPojoNamedSubId> {

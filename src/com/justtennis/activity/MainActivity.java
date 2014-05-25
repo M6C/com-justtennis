@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.View;
+import android.widget.LinearLayout;
 
 import com.cameleon.common.android.factory.FactoryDialog;
 import com.cameleon.common.android.inotifier.INotifierMessage;
@@ -18,6 +19,8 @@ import com.justtennis.listener.ok.OnClickDBBackupListenerOk;
 import com.justtennis.listener.ok.OnClickDBRestoreListenerOk;
 import com.justtennis.listener.ok.OnClickExitListenerOk;
 import com.justtennis.listener.ok.OnClickSendApkListenerOk;
+import com.justtennis.manager.TypeManager;
+import com.justtennis.manager.TypeManager.TYPE;
 
 public class MainActivity extends Activity implements INotifierMessage {
 
@@ -26,12 +29,20 @@ public class MainActivity extends Activity implements INotifierMessage {
 	private MainBusiness business;
 	private Dialog dialogExit;
 
+	private LinearLayout llTypeEntrainement;
+	private LinearLayout llTypeMatch;
+	private TypeManager typeManager;
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.main_01);
-		
+
+		llTypeEntrainement = (LinearLayout)findViewById(R.id.ll_type_entrainement);
+		llTypeMatch = (LinearLayout)findViewById(R.id.ll_type_match);
+
 		business = new MainBusiness(this, this);
+		typeManager = TypeManager.getInstance();
 
 		dialogExit = FactoryDialog.getInstance().buildYesNoDialog(
 			this, new OnClickExitListenerOk(this), R.string.dialog_exit_title, R.string.dialog_exit_message);
@@ -43,11 +54,30 @@ public class MainActivity extends Activity implements INotifierMessage {
 
 		business.onResume();
 
+		initializeLayoutType();
+
 		if (business.getUserCount()==0) {
 			Intent intent = new Intent(getApplicationContext(), UserActivity.class);
 			startActivity(intent);
 			
 			finish();
+		}
+	}
+
+	private void initializeLayoutType() {
+		switch(typeManager.getType()) {
+			case MATCH: {
+				llTypeMatch.setVisibility(View.VISIBLE);
+				llTypeEntrainement.setVisibility(View.INVISIBLE);
+			}
+			break;
+
+			case ENTRAINEMENT:
+			default: {
+				llTypeEntrainement.setVisibility(View.VISIBLE);
+				llTypeMatch.setVisibility(View.INVISIBLE);
+			}
+			break;
 		}
 	}
 
@@ -167,5 +197,15 @@ public class MainActivity extends Activity implements INotifierMessage {
 		View menuOverFlowContent = findViewById(R.id.ll_menu_overflow_content);
 		int visibility = (menuOverFlowContent.getVisibility()==View.GONE) ? View.VISIBLE : View.GONE;
 		menuOverFlowContent.setVisibility(visibility);
+	}
+	
+	public void onClickTypeEntrainement(View view) {
+		typeManager.setType(TYPE.ENTRAINEMENT);
+		initializeLayoutType();
+	}
+	
+	public void onClickTypeMatch(View view) {
+		typeManager.setType(TYPE.MATCH);
+		initializeLayoutType();
 	}
 }

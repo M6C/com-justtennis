@@ -18,8 +18,8 @@ import com.justtennis.domain.Address;
 import com.justtennis.domain.Club;
 import com.justtennis.domain.GenericDBPojo;
 import com.justtennis.domain.Invite;
-import com.justtennis.domain.Invite.INVITE_TYPE;
 import com.justtennis.domain.Tournament;
+import com.justtennis.manager.TypeManager;
 
 public class LocationBusiness {
 
@@ -197,7 +197,7 @@ public class LocationBusiness {
 		inviteService.createOrUpdate(invite);
 	}
 
-	public INVITE_TYPE getType() {
+	public TypeManager.TYPE getType() {
 		return invite.getType();
 	}
 

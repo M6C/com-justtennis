@@ -5,7 +5,6 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
-import android.annotation.SuppressLint;
 import android.content.Context;
 
 import com.justtennis.ApplicationConfig;

@@ -4,7 +4,7 @@ import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 
 import com.cameleon.common.android.inotifier.INotifierMessage;
-import com.justtennis.domain.Player.PLAYER_TYPE;
+import com.justtennis.manager.TypeManager;
 
 public class DBPlayerHelper extends GenericDBHelper {
 
@@ -60,7 +60,7 @@ public class DBPlayerHelper extends GenericDBHelper {
 				addColumn(database, COLUMN_ID_GOOGLE, " INTEGER NULL ");
 			}
 			if (oldVersion <= 6) {
-				addColumn(database, COLUMN_TYPE, " INTEGER NULL ", PLAYER_TYPE.ENTRAINEMENT.toString());
+				addColumn(database, COLUMN_TYPE, " INTEGER NULL ", TypeManager.TYPE.ENTRAINEMENT.toString());
 			}
 			if (oldVersion <= 7) {
 				addColumn(database, COLUMN_ID_TOURNAMENT, " INTEGER NULL ");

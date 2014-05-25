@@ -8,6 +8,7 @@ import android.content.Context;
 import com.cameleon.common.android.inotifier.INotifierMessage;
 import com.justtennis.db.sqlite.datasource.DBInviteDataSource;
 import com.justtennis.domain.Invite;
+import com.justtennis.manager.TypeManager;
 
 public class InviteService extends GenericService<Invite> {
 
@@ -35,7 +36,7 @@ public class InviteService extends GenericService<Invite> {
     	}
 	}
 
-	public HashMap<String,Double> countByTypeGroupByRanking(Invite.INVITE_TYPE type, Invite.SCORE_RESULT scoreResult) {
+	public HashMap<String,Double> countByTypeGroupByRanking(TypeManager.TYPE type, Invite.SCORE_RESULT scoreResult) {
 		try {
 			dbDataSource.open();
 			return ((DBInviteDataSource)dbDataSource).countByTypeGroupByRanking(type, scoreResult);
