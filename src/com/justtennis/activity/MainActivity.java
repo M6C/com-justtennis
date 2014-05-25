@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.View;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 
 import com.cameleon.common.android.factory.FactoryDialog;
 import com.cameleon.common.android.inotifier.INotifierMessage;
@@ -29,6 +30,7 @@ public class MainActivity extends Activity implements INotifierMessage {
 	private MainBusiness business;
 	private Dialog dialogExit;
 
+	private RelativeLayout rlMain;
 	private LinearLayout llTypeEntrainement;
 //	private LinearLayout llTypeEntrainementCursor;
 	private LinearLayout llTypeMatch;
@@ -40,6 +42,7 @@ public class MainActivity extends Activity implements INotifierMessage {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.main_01);
 
+		rlMain = (RelativeLayout)findViewById(R.id.rl_main);
 		llTypeEntrainement = (LinearLayout)findViewById(R.id.ll_type_entrainement);
 //		llTypeEntrainementCursor = (LinearLayout)findViewById(R.id.ll_type_entrainement_cursor);
 		llTypeMatch = (LinearLayout)findViewById(R.id.ll_type_match);
@@ -71,6 +74,7 @@ public class MainActivity extends Activity implements INotifierMessage {
 	private void initializeLayoutType() {
 		switch(typeManager.getType()) {
 			case MATCH: {
+				rlMain.setBackgroundResource(R.drawable.background_01_orange);
 				llTypeMatch.setAlpha(1f);
 //				llTypeMatchCursor.setVisibility(View.VISIBLE);
 				llTypeEntrainement.setAlpha(.2f);
@@ -80,6 +84,7 @@ public class MainActivity extends Activity implements INotifierMessage {
 
 			case ENTRAINEMENT:
 			default: {
+				rlMain.setBackgroundResource(R.drawable.background_01);
 				llTypeEntrainement.setAlpha(1f);
 //				llTypeEntrainementCursor.setVisibility(View.VISIBLE);
 				llTypeMatch.setAlpha(.2f);

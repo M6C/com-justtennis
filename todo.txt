@@ -24,6 +24,7 @@ Saisie de Message
 
 ********************* DONE *****************************
 Ecran Accueil
+[20140525] - Change le background en fonction du type
 [20140525] - Modification graphique de l'affiche du type
 [20140226] - Ajout d'une confirmation pour le partage de l'application
 [20140226] - Backup & Restore. Ajout des DBHelper manquant
