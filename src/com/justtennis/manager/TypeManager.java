@@ -1,5 +1,9 @@
 package com.justtennis.manager;
 
+import com.justtennis.R;
+
+import android.view.View;
+
 public class TypeManager {
 
 	public enum TYPE {
@@ -26,5 +30,19 @@ public class TypeManager {
 
 	public void setType(TYPE type) {
 		this.type = type;
+	}
+
+	public void initializeActivity(View view, boolean main) {
+		switch(type) {
+			case MATCH: {
+				view.setBackgroundResource(main ? R.drawable.background_01_orange : R.drawable.background_03_orange);
+			}
+			break;
+			default:
+			case ENTRAINEMENT: {
+				view.setBackgroundResource(main ? R.drawable.background_01 : R.drawable.background_02);
+			}
+			break;
+		}
 	}
 }

@@ -64,6 +64,7 @@ public class ListInviteActivity extends Activity {
 		
 		initializePlayerList();
 		initializeTypeList();
+		TypeManager.getInstance().initializeActivity(findViewById(R.id.layout_main), false);
 	}
 
 	@Override

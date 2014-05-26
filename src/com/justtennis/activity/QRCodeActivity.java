@@ -10,6 +10,7 @@ import android.widget.ImageView;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.WriterException;
 import com.justtennis.R;
+import com.justtennis.manager.TypeManager;
 import com.justtennis.tool.QRCodeTool;
 
 public class QRCodeActivity extends Activity {
@@ -26,6 +27,7 @@ public class QRCodeActivity extends Activity {
 		setContentView(R.layout.qrcode);
 
 		image_view = (ImageView) findViewById(R.id.qr_code);
+		TypeManager.getInstance().initializeActivity(findViewById(R.id.layout_main), false);
 	}
 
 	@Override

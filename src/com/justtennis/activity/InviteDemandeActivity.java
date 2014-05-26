@@ -102,6 +102,7 @@ public class InviteDemandeActivity extends Activity {
 		business = new InviteDemandeBusiness(this, NotifierMessageLogger.getInstance());
 
 		initializeListType();
+		TypeManager.getInstance().initializeActivity(findViewById(R.id.layout_main), false);
 	}
 
 	@Override

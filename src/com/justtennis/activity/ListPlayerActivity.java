@@ -68,6 +68,7 @@ public class ListPlayerActivity extends Activity {
 		list.setAdapter(adapter);
 
 		initializeTypeList();
+		TypeManager.getInstance().initializeActivity(findViewById(R.id.layout_main), false);
 	}
 
 	@Override

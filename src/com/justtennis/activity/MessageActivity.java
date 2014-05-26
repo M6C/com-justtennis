@@ -13,6 +13,7 @@ import android.widget.EditText;
 import com.cameleon.common.android.factory.FactoryDialog;
 import com.justtennis.R;
 import com.justtennis.business.MessageBusiness;
+import com.justtennis.manager.TypeManager;
 import com.justtennis.notifier.NotifierMessageLogger;
 import com.justtennis.parser.SmsParser;
 
@@ -31,6 +32,7 @@ public class MessageActivity extends Activity {
 		etMessage = (EditText)findViewById(R.id.et_message);
 
 		business = new MessageBusiness(this, NotifierMessageLogger.getInstance());
+		TypeManager.getInstance().initializeActivity(findViewById(R.id.layout_main), false);
 	}
 
 	@Override

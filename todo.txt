@@ -23,6 +23,11 @@ Saisie de Message
 
 
 ********************* DONE *****************************
+Common
+[20140526] - Initialise le fond des activity en fonction du type de match selectionné.
+[20140525] - Rend parametrable les requêtes en fonction du type de match selectionné sur l'accueil
+[20140309] - Creation d'un custom spinner pour armoniser le design avec les champs de saisie
+
 Ecran Accueil
 [20140525] - Change le background en fonction du type
 [20140525] - Modification graphique de l'affiche du type
@@ -34,10 +39,6 @@ Ecran Accueil
 [20140214] - Clean le menu overflow
 [20140109] - Ajouter un menu pour sauvegarder la base 
 [20140109] - Ajouter un menu pour restorer la base 
-
-Common
-[20140525] - Rend parametrable les requêtes en fonction du type de match selectionné sur l'accueil
-[20140309] - Creation d'un custom spinner pour armoniser le design avec les champs de saisie
 
 Ecran Utilisateur
 [20140513] - Recupertion du code pour pouvoir selectionner une adresse differente du club

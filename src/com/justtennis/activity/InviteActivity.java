@@ -146,6 +146,8 @@ public class InviteActivity extends Activity {
 		llScoreContent = (LinearLayout)findViewById(R.id.ll_score_content);
 
 		business = new InviteBusiness(this, NotifierMessageLogger.getInstance());
+
+		TypeManager.getInstance().initializeActivity(findViewById(R.id.layout_main), false);
 	}
 
 	@Override

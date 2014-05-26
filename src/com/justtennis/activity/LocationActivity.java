@@ -123,6 +123,7 @@ public class LocationActivity extends Activity {
 		ivClubAddressDelete = findViewById(R.id.iv_club_address_delete);
 		
 		business = new LocationBusiness(this, NotifierMessageLogger.getInstance());
+		TypeManager.getInstance().initializeActivity(findViewById(R.id.layout_main), false);
 	}
 
 	@Override

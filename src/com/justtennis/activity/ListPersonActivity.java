@@ -11,6 +11,7 @@ import com.justtennis.adapter.ListPersonAdapter;
 import com.justtennis.business.ListPersonBusiness;
 import com.justtennis.listener.action.OnEditorActionListenerFilter;
 import com.justtennis.listener.itemclick.OnItemClickListPerson;
+import com.justtennis.manager.TypeManager;
 import com.justtennis.notifier.NotifierMessageLogger;
 
 public class ListPersonActivity extends Activity {
@@ -41,6 +42,7 @@ public class ListPersonActivity extends Activity {
 		list.setOnItemClickListener(new OnItemClickListPerson(this));
 		list.setTextFilterEnabled(true);
 		etFilter.addTextChangedListener(new OnEditorActionListenerFilter(adapter.getFilter()));
+		TypeManager.getInstance().initializeActivity(findViewById(R.id.layout_main), false);
 	}
 
 	@Override

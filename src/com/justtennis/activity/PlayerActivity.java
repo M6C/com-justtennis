@@ -105,6 +105,7 @@ public class PlayerActivity extends Activity {
 
 		initializeListener();
 		initialize();
+		TypeManager.getInstance().initializeActivity(findViewById(R.id.layout_main), false);
 	}
 
 	protected void initializeViewById() {

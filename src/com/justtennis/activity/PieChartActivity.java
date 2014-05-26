@@ -25,6 +25,7 @@ import com.justtennis.R;
 import com.justtennis.business.PieChartBusiness;
 import com.justtennis.business.PieChartBusiness.CHART_DATA_TYPE;
 import com.justtennis.business.PieChartBusiness.CHART_SCORE_RESULT;
+import com.justtennis.manager.TypeManager;
 import com.justtennis.notifier.NotifierMessageLogger;
 
 //http://code.google.com/p/achartengine/source/browse/trunk/achartengine/
@@ -63,6 +64,7 @@ public class PieChartActivity extends Activity {
 
 		initializeTypeData();
 		initializeScoreData();
+		TypeManager.getInstance().initializeActivity(findViewById(R.id.layout_main), false);
 	}
 
 	@Override
