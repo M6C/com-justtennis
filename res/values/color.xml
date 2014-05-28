@@ -10,6 +10,8 @@
     <color name="bleu_transparent_4">#990000CC</color>
     <color name="bleu_transparent_5">#BB0000CC</color>
 
+    <color name="orange_transparent_5">#BBF94D00</color>
+
     <color name="orange_pumpkin_transparent_3">#88FF7518</color>
     <color name="orange_tangelo_transparent_1">#F7794D00</color>
 
@@ -23,4 +25,6 @@
 
     <color name="drw_arrow">@color/gris_1</color>
     <color name="separator_collapser">@color/bleu_transparent_5</color>
+
+    <color name="button_background_color_orange">@color/orange_transparent_5</color>
 </resources>

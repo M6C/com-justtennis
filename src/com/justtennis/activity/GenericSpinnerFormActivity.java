@@ -24,7 +24,7 @@ import com.justtennis.domain.Address;
 import com.justtennis.domain.GenericDBPojo;
 import com.justtennis.domain.GenericDBPojoNamedSubId;
 
-public abstract class GenericSpinnerFormActivity <DATA extends GenericDBPojoNamedSubId> extends Activity {
+public abstract class GenericSpinnerFormActivity <DATA extends GenericDBPojoNamedSubId> extends GenericActivity {
 
 	private static final String TAG = GenericSpinnerFormActivity.class.getSimpleName();
 

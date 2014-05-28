@@ -122,8 +122,6 @@
 		    android:layout_height="wrap_content"
 		    android:layout_weight=".5"
 	    	android:layout_marginRight="5dp"
-	        android:background="@color/button_background_color"
-	        android:textColor="@color/button_text_color"
 	        android:text="@string/button_text_submit"
 	        android:onClick="onClickSubmit"
 	    />
@@ -131,8 +129,6 @@
 		    android:layout_width="match_parent"
 		    android:layout_height="wrap_content"
 		    android:layout_weight=".5"
-	        android:background="@color/button_background_color"
-	        android:textColor="@color/button_text_color"
 	        android:text="@string/button_text_qrcode"
 	        android:onClick="onClickQRCode"
 	    />

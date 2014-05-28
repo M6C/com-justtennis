@@ -46,8 +46,6 @@
 		    android:layout_height="wrap_content"
 		    android:layout_weight=".5"
 	    	android:layout_marginRight="5dp"
-	        android:background="@color/button_background_color"
-	        android:textColor="@color/button_text_color"
 	        android:text="@string/button_text_add"
 	        android:onClick="onClickAdd"
 	    />
@@ -56,8 +54,6 @@
 		    android:layout_width="0dp"
 		    android:layout_height="wrap_content"
 		    android:layout_weight=".5"
-	        android:background="@color/button_background_color"
-	        android:textColor="@color/button_text_color"
 	        android:text="@string/button_text_close"
 	        android:onClick="onClickClose"
 	    />

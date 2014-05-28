@@ -289,19 +289,17 @@
             android:layout_height="wrap_content"
             android:layout_marginRight="5dp"
             android:layout_weight=".5"
-            android:background="@color/button_background_color"
             android:onClick="onClickModify"
             android:text="@string/button_text_modify"
-            android:textColor="@color/button_text_color" />
+        />
 
         <Button
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight=".5"
-            android:background="@color/button_background_color"
             android:onClick="onClickCancel"
             android:text="@string/button_text_cancel"
-            android:textColor="@color/button_text_color" />
+        />
     </LinearLayout>
 
 </LinearLayout>

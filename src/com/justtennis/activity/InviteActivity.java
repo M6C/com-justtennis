@@ -9,7 +9,6 @@ import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Locale;
 
-import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
@@ -44,7 +43,7 @@ import com.justtennis.manager.ContactManager;
 import com.justtennis.manager.TypeManager;
 import com.justtennis.notifier.NotifierMessageLogger;
 
-public class InviteActivity extends Activity {
+public class InviteActivity extends GenericActivity {
 
 	private static final String TAG = InviteActivity.class.getSimpleName();
 	@SuppressWarnings("unused")

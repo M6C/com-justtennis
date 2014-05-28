@@ -6,7 +6,6 @@ import java.util.List;
 
 import org.gdocument.gtracergps.launcher.log.Logger;
 
-import android.app.Activity;
 import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
@@ -32,11 +31,10 @@ import com.justtennis.domain.Tournament;
 import com.justtennis.listener.action.TextWatcherFieldEnableView;
 import com.justtennis.listener.ok.OnClickPlayerCreateListenerOk;
 import com.justtennis.manager.TypeManager;
-import com.justtennis.manager.TypeManager.TYPE;
 import com.justtennis.notifier.NotifierMessageLogger;
 import com.justtennis.parser.PlayerParser;
 
-public class PlayerActivity extends Activity {
+public class PlayerActivity extends GenericActivity {
 
 	public enum MODE {
 		CREATE,

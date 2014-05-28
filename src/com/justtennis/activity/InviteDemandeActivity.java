@@ -7,7 +7,6 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -40,7 +39,7 @@ import com.justtennis.manager.ContactManager;
 import com.justtennis.manager.TypeManager;
 import com.justtennis.notifier.NotifierMessageLogger;
 
-public class InviteDemandeActivity extends Activity {
+public class InviteDemandeActivity extends GenericActivity {
 
 	@SuppressWarnings("unused")
 	private static final String TAG = InviteDemandeActivity.class.getSimpleName();

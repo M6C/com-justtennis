@@ -1,6 +1,5 @@
 package com.justtennis.activity;
 
-import android.app.Activity;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.util.Log;
@@ -13,7 +12,7 @@ import com.justtennis.R;
 import com.justtennis.manager.TypeManager;
 import com.justtennis.tool.QRCodeTool;
 
-public class QRCodeActivity extends Activity {
+public class QRCodeActivity extends GenericActivity {
 
 	private static final String TAG = QRCodeActivity.class.getSimpleName();
 

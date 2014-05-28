@@ -1,13 +1,12 @@
 package com.justtennis.activity;
 
-import android.app.Activity;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.SeekBar;
 
 import com.justtennis.R;
 
-public class RotatingButtons extends Activity {
+public class RotatingButtons extends GenericActivity {
 	 
     /** Called when the activity is first created. */
     @Override

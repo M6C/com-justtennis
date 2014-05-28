@@ -24,6 +24,7 @@ Saisie de Message
 
 ********************* DONE *****************************
 Common
+[20140528] - Changement du style dynamiquement en fonction du type selectionné.
 [20140526] - Initialise le fond des activity en fonction du type de match selectionné.
 [20140525] - Rend parametrable les requêtes en fonction du type de match selectionné sur l'accueil
 [20140309] - Creation d'un custom spinner pour armoniser le design avec les champs de saisie

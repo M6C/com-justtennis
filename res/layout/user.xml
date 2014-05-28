@@ -97,8 +97,6 @@
 		    android:layout_height="wrap_content"
 		    android:layout_weight=".5"
 	    	android:layout_marginRight="5dp"
-	        android:background="@color/button_background_color"
-	        android:textColor="@color/button_text_color"
 	        android:text="@string/button_text_submit"
 	        android:onClick="onClickCreate"
 	    />
@@ -107,8 +105,6 @@
 		    android:layout_width="wrap_content"
 		    android:layout_height="wrap_content"
 		    android:layout_weight=".5"
-	        android:background="@color/button_background_color"
-	        android:textColor="@color/button_text_color"
 	        android:text="@string/button_text_import"
 	        android:onClick="onClickImport"
 	    />
@@ -126,8 +122,6 @@
 		    android:layout_height="wrap_content"
 		    android:layout_weight=".5"
 	    	android:layout_marginRight="5dp"
-	        android:background="@color/button_background_color"
-	        android:textColor="@color/button_text_color"
 	        android:text="@string/button_text_submit"
 	        android:onClick="onClickModify"
 	    />
@@ -136,9 +130,7 @@
 		    android:layout_width="wrap_content"
 		    android:layout_height="wrap_content"
 		    android:layout_weight=".5"
-	        android:background="@color/button_background_color"
 	        android:text="@string/button_text_qrcode"
-	        android:textColor="@color/button_text_color"
 	        android:onClick="onClickQRCode"
 	    />
 	</LinearLayout>
@@ -156,8 +148,6 @@
 		    android:layout_height="wrap_content"
 		    android:layout_weight=".5"
 	    	android:layout_marginRight="5dp"
-	        android:background="@color/button_background_color"
-	        android:textColor="@color/button_text_color"
 	        android:text="@string/button_text_yes"
 	        android:onClick="onClickDemandeAddYes"
 	    />
@@ -166,8 +156,6 @@
 		    android:layout_width="wrap_content"
 		    android:layout_height="wrap_content"
 		    android:layout_weight=".5"
-	        android:background="@color/button_background_color"
-	        android:textColor="@color/button_text_color"
 	        android:text="@string/button_text_no"
 	        android:onClick="onClickDemandeAddNo"
 	    />

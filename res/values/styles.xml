@@ -1,4 +1,4 @@
-<resources>
+<resources xmlns:android="http://schemas.android.com/apk/res/android">
 
     <!--
         Base application theme, dependent on API level. This theme is replaced
@@ -20,8 +20,13 @@
 	    <item name="android:spinnerItemStyle">@style/SpinnerItem</item>
 	    <item name="android:spinnerDropDownItemStyle">@style/SpinnerDropDownItem</item> -->
  -->
+	    <item name="android:buttonStyle">@style/StyleButton</item>
     </style>
 
+    <style name="AppTheme.Competition" parent="AppBaseTheme">
+	    <item name="android:buttonStyle">@style/StyleButton.Competition</item>
+	</style>
+    
     <!-- Application theme. -->
     <style name="SpinnerStyleNormal">
         <!-- All customizations that are NOT specific to a particular API-level can go here. -->
@@ -30,4 +35,13 @@
 	    <item name="android:spinnerDropDownItemStyle">@style/SpinnerDropDownItem</item> -->
     </style>
 
+	<style name="StyleButton" parent="android:style/Widget.Button">
+		<item name="android:textSize">19sp</item>
+        <item name="android:background">@color/button_background_color</item>
+        <item name="android:textColor">@color/button_text_color</item>
+	</style>
+
+	<style name="StyleButton.Competition">
+        <item name="android:background">@color/button_background_color_orange</item>
+	</style>
 </resources>

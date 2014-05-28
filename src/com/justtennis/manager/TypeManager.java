@@ -45,4 +45,18 @@ public class TypeManager {
 			break;
 		}
 	}
+
+	public int getThemeResource() {
+		switch(getType()) {
+			case MATCH: {
+				return R.style.AppTheme_Competition;
+			}
+	
+			default:
+			case ENTRAINEMENT: {
+				return R.style.AppTheme;
+			}
+		}
+		
+	}
 }

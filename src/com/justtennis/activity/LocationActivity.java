@@ -24,7 +24,7 @@ import com.justtennis.domain.Tournament;
 import com.justtennis.manager.TypeManager;
 import com.justtennis.notifier.NotifierMessageLogger;
 
-public class LocationActivity extends Activity {
+public class LocationActivity extends GenericActivity {
 
 	@SuppressWarnings("unused")
 	private static final String TAG = LocationActivity.class.getSimpleName();

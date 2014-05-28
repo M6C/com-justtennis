@@ -9,7 +9,6 @@ import org.achartengine.model.SeriesSelection;
 import org.achartengine.renderer.DefaultRenderer;
 import org.achartengine.renderer.SimpleSeriesRenderer;
 
-import android.app.Activity;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
@@ -29,7 +28,7 @@ import com.justtennis.manager.TypeManager;
 import com.justtennis.notifier.NotifierMessageLogger;
 
 //http://code.google.com/p/achartengine/source/browse/trunk/achartengine/
-public class PieChartActivity extends Activity {
+public class PieChartActivity extends GenericActivity {
 	public static final String EXTRA_DATA = "EXTRA_DATA";
 
 	/** Colors to be used for the pie slices. */

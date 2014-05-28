@@ -1,6 +1,5 @@
 package com.justtennis.activity;
 
-import android.app.Activity;
 import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.widget.EditText;
@@ -14,7 +13,7 @@ import com.justtennis.listener.itemclick.OnItemClickListPerson;
 import com.justtennis.manager.TypeManager;
 import com.justtennis.notifier.NotifierMessageLogger;
 
-public class ListPersonActivity extends Activity {
+public class ListPersonActivity extends GenericActivity {
 
 	@SuppressWarnings("unused")
 	private static final String TAG = ListPersonActivity.class.getSimpleName();

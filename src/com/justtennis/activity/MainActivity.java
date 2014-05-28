@@ -2,7 +2,6 @@ package com.justtennis.activity;
 
 import org.gdocument.gtracergps.launcher.log.Logger;
 
-import android.app.Activity;
 import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
@@ -23,7 +22,7 @@ import com.justtennis.listener.ok.OnClickSendApkListenerOk;
 import com.justtennis.manager.TypeManager;
 import com.justtennis.manager.TypeManager.TYPE;
 
-public class MainActivity extends Activity implements INotifierMessage {
+public class MainActivity extends GenericActivity implements INotifierMessage {
 
 	private static final String TAG = MainActivity.class.getSimpleName();
 	private static final int RESULT_CODE_QRCODE_SCAN = 0;
@@ -32,10 +31,9 @@ public class MainActivity extends Activity implements INotifierMessage {
 
 	private RelativeLayout layoutMain;
 	private LinearLayout llTypeEntrainement;
-//	private LinearLayout llTypeEntrainementCursor;
 	private LinearLayout llTypeMatch;
-//	private LinearLayout llTypeMatchCursor;
 	private TypeManager typeManager;
+	private View menuOverFlowContent;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -44,9 +42,8 @@ public class MainActivity extends Activity implements INotifierMessage {
 
 		layoutMain = (RelativeLayout)findViewById(R.id.layout_main);
 		llTypeEntrainement = (LinearLayout)findViewById(R.id.ll_type_entrainement);
-//		llTypeEntrainementCursor = (LinearLayout)findViewById(R.id.ll_type_entrainement_cursor);
 		llTypeMatch = (LinearLayout)findViewById(R.id.ll_type_match);
-//		llTypeMatchCursor = (LinearLayout)findViewById(R.id.ll_type_match_cursor);
+		menuOverFlowContent = findViewById(R.id.ll_menu_overflow_content);
 
 		business = new MainBusiness(this, this);
 		typeManager = TypeManager.getInstance();
@@ -78,9 +75,7 @@ public class MainActivity extends Activity implements INotifierMessage {
 			case MATCH: {
 				layoutMain.setBackgroundResource(R.drawable.background_01_orange);
 				llTypeMatch.setAlpha(1f);
-//				llTypeMatchCursor.setVisibility(View.VISIBLE);
 				llTypeEntrainement.setAlpha(.2f);
-//				llTypeEntrainementCursor.setVisibility(View.INVISIBLE);
 			}
 			break;
 
@@ -88,9 +83,7 @@ public class MainActivity extends Activity implements INotifierMessage {
 			default: {
 				layoutMain.setBackgroundResource(R.drawable.background_01);
 				llTypeEntrainement.setAlpha(1f);
-//				llTypeEntrainementCursor.setVisibility(View.VISIBLE);
 				llTypeMatch.setAlpha(.2f);
-//				llTypeMatchCursor.setVisibility(View.INVISIBLE);
 			}
 			break;
 		}
@@ -209,7 +202,6 @@ public class MainActivity extends Activity implements INotifierMessage {
 	}
 
 	public void onClickMenuOverFlow(View view) {
-		View menuOverFlowContent = findViewById(R.id.ll_menu_overflow_content);
 		int visibility = (menuOverFlowContent.getVisibility()==View.GONE) ? View.VISIBLE : View.GONE;
 		menuOverFlowContent.setVisibility(visibility);
 	}

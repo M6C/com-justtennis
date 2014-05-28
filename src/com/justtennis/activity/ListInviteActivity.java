@@ -1,6 +1,5 @@
 package com.justtennis.activity;
 
-import android.app.Activity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
@@ -22,7 +21,7 @@ import com.justtennis.listener.ok.OnClickInviteDeleteListenerOk;
 import com.justtennis.manager.TypeManager;
 import com.justtennis.notifier.NotifierMessageLogger;
 
-public class ListInviteActivity extends Activity {
+public class ListInviteActivity extends GenericActivity {
 
 	@SuppressWarnings("unused")
 	private static final String TAG = ListInviteActivity.class.getSimpleName();

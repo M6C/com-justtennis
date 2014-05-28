@@ -1,6 +1,5 @@
 package com.justtennis.activity;
 
-import android.app.Activity;
 import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
@@ -17,7 +16,7 @@ import com.justtennis.manager.TypeManager;
 import com.justtennis.notifier.NotifierMessageLogger;
 import com.justtennis.parser.SmsParser;
 
-public class MessageActivity extends Activity {
+public class MessageActivity extends GenericActivity {
 
 	private static final String TAG = MessageActivity.class.getSimpleName();
 

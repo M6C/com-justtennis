@@ -28,7 +28,7 @@ import com.justtennis.manager.TypeManager;
 import com.justtennis.notifier.NotifierMessageLogger;
 import com.justtennis.parser.PlayerParser;
 
-public class ListPlayerActivity extends Activity {
+public class ListPlayerActivity extends GenericActivity {
 
 	private static final String TAG = ListPlayerActivity.class.getSimpleName();
 	public static final String EXTRA_MODE = "MODE";
