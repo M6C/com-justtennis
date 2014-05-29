@@ -212,7 +212,7 @@
 		    android:layout_marginLeft="66dp"
 		    android:rotation="68"
 	        android:src="@drawable/menu_match"
-	        android:onClick="onClickListMatchInvite"
+	        android:onClick="onClickMatch"
 	    />
 	</LinearLayout>
 </RelativeLayout>

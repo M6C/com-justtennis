@@ -24,6 +24,7 @@ Saisie de Message
 
 ********************* DONE *****************************
 Common
+[20140529] - Remplace le type 'MATCH' par 'COMPETITION' Fix
 [20140529] - Remplace le type 'ENTRAINEMENT' par 'TRAINING'
 [20140529] - Remplace le type 'MATCH' par 'COMPETITION'
 [20140528] - Changement du style dynamiquement en fonction du type selectionné.
