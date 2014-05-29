@@ -7,12 +7,12 @@ import android.view.View;
 public class TypeManager {
 
 	public enum TYPE {
-		ENTRAINEMENT,
+		TRAINING,
 		COMPETITION
 	}
 
 	private static TypeManager instance;
-	private TYPE type = TYPE.ENTRAINEMENT;
+	private TYPE type = TYPE.TRAINING;
 
 	private TypeManager() {
 	}
@@ -39,7 +39,7 @@ public class TypeManager {
 			}
 			break;
 			default:
-			case ENTRAINEMENT: {
+			case TRAINING: {
 				view.setBackgroundResource(main ? R.drawable.background_01 : R.drawable.background_02);
 			}
 			break;
@@ -53,7 +53,7 @@ public class TypeManager {
 			}
 	
 			default:
-			case ENTRAINEMENT: {
+			case TRAINING: {
 				return R.style.AppTheme;
 			}
 		}

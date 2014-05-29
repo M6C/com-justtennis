@@ -27,7 +27,7 @@ public class Invite extends GenericDBPojo<Long> implements Serializable {
 	private STATUS status = STATUS.UNKNOW;
 	private Long idExternal;
 	private Long idCalendar;
-	private TypeManager.TYPE type = TypeManager.TYPE.ENTRAINEMENT;
+	private TypeManager.TYPE type = TypeManager.TYPE.TRAINING;
 	private Long idRanking;
 	private SCORE_RESULT scoreResult = SCORE_RESULT.UNFINISHED;
 	private List<ScoreSet> listScoreSet = null;

@@ -14,6 +14,6 @@
     <string name="dialog_send_apk_title">Share APK</string>
     <string name="dialog_send_apk_message">Share ?</string>
     <string name="button_competition">Competition</string>
-    <string name="button_entrainement">Entrainement</string>
+    <string name="button_training">Training</string>
     
 </resources>

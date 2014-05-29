@@ -275,10 +275,10 @@ public class InviteActivity extends GenericActivity {
 	public void onClickPlayer(View view) {
 		Intent intent = new Intent(this, ListPlayerActivity.class);
 		intent.putExtra(ListPlayerActivity.EXTRA_MODE, ListPlayerActivity.MODE.FOR_RESULT);
-		TypeManager.TYPE playerType = TypeManager.TYPE.ENTRAINEMENT;
+		TypeManager.TYPE playerType = TypeManager.TYPE.TRAINING;
 		switch(business.getType()) {
-			case ENTRAINEMENT:
-				playerType = TypeManager.TYPE.ENTRAINEMENT;
+			case TRAINING:
+				playerType = TypeManager.TYPE.TRAINING;
 				break;
 			case COMPETITION:
 				playerType = TypeManager.TYPE.COMPETITION;
@@ -292,7 +292,7 @@ public class InviteActivity extends GenericActivity {
 	public void onClickLocation(View view) {
 		Intent intent = null;
 		switch(business.getType()) {
-			case ENTRAINEMENT:
+			case TRAINING:
 				intent = new Intent(this, LocationClubActivity.class);
 				if (business.getInvite().getClub() != null) {
 					intent.putExtra(GenericSpinnerFormActivity.EXTRA_DATA, business.getInvite().getClub());
@@ -492,7 +492,7 @@ public class InviteActivity extends GenericActivity {
 	private void initializeDataLocation() {
 		Log.d(TAG, "initializeDataLocation");
 		String[] location = business.getLocationLine();
-		if (business.getType() == TypeManager.TYPE.ENTRAINEMENT) {
+		if (business.getType() == TypeManager.TYPE.TRAINING) {
 			tvLocation.setText(getString(R.string.txt_club));
 			tvLocationEmpty.setText(getString(R.string.txt_club));
 		} else {
@@ -550,7 +550,7 @@ public class InviteActivity extends GenericActivity {
 			
 			@Override
 			public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-				business.setType(isChecked ? TypeManager.TYPE.ENTRAINEMENT : TypeManager.TYPE.COMPETITION);
+				business.setType(isChecked ? TypeManager.TYPE.TRAINING : TypeManager.TYPE.COMPETITION);
 			}
 		});
 
@@ -570,7 +570,7 @@ public class InviteActivity extends GenericActivity {
 	
 	private int getTypePosition() {
 		switch(business.getInvite().getType()) {
-			case ENTRAINEMENT:
+			case TRAINING:
 				return 0;
 			case COMPETITION:
 			default:

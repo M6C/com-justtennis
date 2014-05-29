@@ -275,7 +275,7 @@ public class PlayerActivity extends GenericActivity {
 	public void onClickLocation(View view) {
 		Intent intent = null;
 		switch(business.getPlayer().getType()) {
-			case ENTRAINEMENT:
+			case TRAINING:
 				intent = new Intent(this, LocationClubActivity.class);
 				if (business.getPlayer().getIdClub() != null) {
 					intent.putExtra(GenericSpinnerFormActivity.EXTRA_DATA, new Club(business.getPlayer().getIdClub()));
@@ -505,7 +505,7 @@ public class PlayerActivity extends GenericActivity {
 		
 	private int getTypePosition() {
 		switch(business.getPlayerType()) {
-			case ENTRAINEMENT:
+			case TRAINING:
 				return 0;
 			case COMPETITION:
 			default:
@@ -520,7 +520,7 @@ public class PlayerActivity extends GenericActivity {
 	private TypeManager.TYPE getType(Integer position) {
 		switch(position) {
 		case 0:
-			return TypeManager.TYPE.ENTRAINEMENT;
+			return TypeManager.TYPE.TRAINING;
 		case 1:
 		default:
 			return TypeManager.TYPE.COMPETITION;

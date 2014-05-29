@@ -124,7 +124,7 @@ public class DBInviteDataSource extends GenericDBDataSourceByType<Invite> {
 		String date = cursor.getString(col++);
 		invite.setDate(date==null || "null".equals(date.toLowerCase(Locale.FRANCE)) ? null : new Date(Long.parseLong(date)));
 		invite.setStatus(STATUS.valueOf(DbTool.getInstance().toString(cursor, col++, STATUS.UNKNOW.toString())));
-		invite.setType(TypeManager.TYPE.valueOf(DbTool.getInstance().toString(cursor, col++, TypeManager.TYPE.ENTRAINEMENT.toString())));
+		invite.setType(TypeManager.TYPE.valueOf(DbTool.getInstance().toString(cursor, col++, TypeManager.TYPE.TRAINING.toString())));
 		invite.setIdExternal(DbTool.getInstance().toLong(cursor, col++));
 		invite.setIdCalendar(DbTool.getInstance().toLong(cursor, col++));
 		invite.setIdRanking(DbTool.getInstance().toLong(cursor, col++));

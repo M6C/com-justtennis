@@ -16,7 +16,7 @@ public class Player extends Person {
 	private Long idExternal;
 	private Long idGoogle;
 	private Bitmap photo;
-	private TypeManager.TYPE type = TypeManager.TYPE.ENTRAINEMENT;
+	private TypeManager.TYPE type = TypeManager.TYPE.TRAINING;
 
 	public Player() {
 		super();

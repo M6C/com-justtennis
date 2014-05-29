@@ -136,17 +136,17 @@
 		>
 <!-- 		    android:alpha=".5" -->
 			<LinearLayout
-			    android:id="@+id/ll_type_entrainement"
+			    android:id="@+id/ll_type_training"
 			    android:layout_width="match_parent"
 			    android:layout_height="match_parent"
 			    android:layout_weight=".5"
 			    android:gravity="center_horizontal"
-			    android:onClick="onClickTypeEntrainement"
+			    android:onClick="onClickTypeTraining"
 			    android:orientation="vertical"
 			    android:background="@color/bleu_transparent_3"
 			>
 				<LinearLayout
-				    android:id="@+id/ll_type_entrainement_cursor"
+				    android:id="@+id/ll_type_training_cursor"
 				    android:layout_width="match_parent"
 				    android:layout_height="5dp"
 				    android:background="@color/bleu_transparent_5"
@@ -156,7 +156,7 @@
 				    android:layout_height="0dp"
 				    android:layout_weight="1"
 				    android:gravity="center_vertical|center_horizontal"
-				    android:text="@string/button_entrainement"
+				    android:text="@string/button_training"
 					android:textStyle="bold"
 					android:textColor="@color/white"
 				/>
@@ -195,13 +195,24 @@
 	    android:gravity="bottom"
 	>
 	    <ImageView
+	        android:id="@+id/iv_play"
 	        android:layout_width="107dp"
 	        android:layout_height="32dp"
 		    android:layout_marginBottom="125dp"
-		    android:layout_marginLeft="90dp"
-		    android:rotation="65"
+		    android:layout_marginLeft="89dp"
+		    android:rotation="68"
 	        android:src="@drawable/menu_play"
 	        android:onClick="onClickListPlayerInvite"
+	    />
+	    <ImageView
+	        android:id="@+id/iv_match"
+	        android:layout_width="140dp"
+	        android:layout_height="32dp"
+		    android:layout_marginBottom="140dp"
+		    android:layout_marginLeft="66dp"
+		    android:rotation="68"
+	        android:src="@drawable/menu_match"
+	        android:onClick="onClickListMatchInvite"
 	    />
 	</LinearLayout>
 </RelativeLayout>

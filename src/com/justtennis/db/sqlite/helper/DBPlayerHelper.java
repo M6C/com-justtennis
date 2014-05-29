@@ -29,7 +29,7 @@ public class DBPlayerHelper extends GenericDBHelper {
 	public static final String COLUMN_TYPE = "TYPE";
 
 	private static final String DATABASE_NAME = "Player.db";
-	private static final int DATABASE_VERSION = 10;
+	private static final int DATABASE_VERSION = 11;
 
 	// Database creation sql statement
 	private static final String DATABASE_CREATE = "CREATE TABLE " + TABLE_NAME + "(" + 
@@ -61,7 +61,7 @@ public class DBPlayerHelper extends GenericDBHelper {
 				addColumn(database, COLUMN_ID_GOOGLE, " INTEGER NULL ");
 			}
 			if (oldVersion <= 6) {
-				addColumn(database, COLUMN_TYPE, " INTEGER NULL ", TypeManager.TYPE.ENTRAINEMENT.toString());
+				addColumn(database, COLUMN_TYPE, " INTEGER NULL ", TypeManager.TYPE.TRAINING.toString());
 			}
 			if (oldVersion <= 7) {
 				addColumn(database, COLUMN_ID_TOURNAMENT, " INTEGER NULL ");
@@ -71,6 +71,9 @@ public class DBPlayerHelper extends GenericDBHelper {
 			}
 			if (oldVersion <= 9) {
 				updateColumn(database, COLUMN_TYPE, ""+TYPE.COMPETITION, COLUMN_TYPE + " = 'MATCH'");
+			}
+			if (oldVersion <= 10) {
+				updateColumn(database, COLUMN_TYPE, ""+TYPE.TRAINING, COLUMN_TYPE + " = 'ENTRAINEMENT'");
 			}
 		}
 		else {

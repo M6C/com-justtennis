@@ -22,7 +22,7 @@ public class PieChartBusiness {
 
 	public enum CHART_DATA_TYPE {
 		ALL(null, R.string.chart_type_all), 
-		ENTRAINEMENT(TypeManager.TYPE.ENTRAINEMENT, R.string.chart_type_entrainement),
+		ENTRAINEMENT(TypeManager.TYPE.TRAINING, R.string.chart_type_entrainement),
 		MATCH(TypeManager.TYPE.COMPETITION, R.string.chart_type_match);
 
 		public TypeManager.TYPE type;

@@ -78,7 +78,7 @@ public class DBPlayerDataSource extends GenericDBDataSourceByType<Player> {
 		player.setLocality(cursor.getString(col++));
 		player.setIdExternal(DbTool.getInstance().toLong(cursor, col++));
 		player.setIdGoogle(DbTool.getInstance().toLong(cursor, col++));
-		player.setType(TypeManager.TYPE.valueOf(DbTool.getInstance().toString(cursor, col++, TypeManager.TYPE.ENTRAINEMENT.toString())));
+		player.setType(TypeManager.TYPE.valueOf(DbTool.getInstance().toString(cursor, col++, TypeManager.TYPE.TRAINING.toString())));
 		return player;
 	}
 	

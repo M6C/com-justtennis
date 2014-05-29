@@ -94,8 +94,8 @@ public class InviteDemandeBusiness {
 					setIdRanking(getPlayer().getIdRanking());
 					switch (getPlayer().getType()) {
 						default:
-						case ENTRAINEMENT:
-							setType(TypeManager.TYPE.ENTRAINEMENT);
+						case TRAINING:
+							setType(TypeManager.TYPE.TRAINING);
 							break;
 						case COMPETITION:
 							setType(TypeManager.TYPE.COMPETITION);
@@ -170,7 +170,7 @@ public class InviteDemandeBusiness {
 			invite.setId(this.invite.getId());
 		}
 
-		if (invite.getType() == TypeManager.TYPE.ENTRAINEMENT) {
+		if (invite.getType() == TypeManager.TYPE.TRAINING) {
 			if (invite.getPlayer().getIdClub() != null) {
 				invite.setClub(new Club(invite.getPlayer().getIdClub()));
 			}

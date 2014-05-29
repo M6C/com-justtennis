@@ -25,7 +25,7 @@ public class DBInviteHelper extends GenericDBHelper {
 	public static final String COLUMN_ID_TOURNAMENT = "ID_TOURNAMENT";
 
 	public static final String DATABASE_NAME = "Invite.db";
-	public static final int DATABASE_VERSION = 11;
+	public static final int DATABASE_VERSION = 12;
 
 	// Database creation sql statement
 	private static final String DATABASE_CREATE = "CREATE TABLE " + TABLE_NAME + "(" + 
@@ -70,6 +70,9 @@ public class DBInviteHelper extends GenericDBHelper {
 			}
 			if (oldVersion <= 10) {
 				updateColumn(database, COLUMN_TYPE, ""+TYPE.COMPETITION, COLUMN_TYPE + " = 'MATCH'");
+			}
+			if (oldVersion <= 11) {
+				updateColumn(database, COLUMN_TYPE, ""+TYPE.TRAINING, COLUMN_TYPE + " = 'ENTRAINEMENT'");
 			}
 		}
 		else {

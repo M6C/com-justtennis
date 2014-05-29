@@ -157,7 +157,7 @@ public class ListInviteAdapter extends ArrayAdapter<Invite> {
 		}
 
 		switch(v.getType()) {
-			case ENTRAINEMENT:
+			case TRAINING:
 				vTypeEntrainement.setVisibility(View.VISIBLE);
 				vTypeMatch.setVisibility(View.GONE);
 				break;

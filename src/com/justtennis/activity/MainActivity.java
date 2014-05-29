@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
@@ -34,6 +35,8 @@ public class MainActivity extends GenericActivity implements INotifierMessage {
 	private LinearLayout llTypeMatch;
 	private TypeManager typeManager;
 	private View menuOverFlowContent;
+	private ImageView ivPlay;
+	private ImageView ivMatch;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -41,8 +44,10 @@ public class MainActivity extends GenericActivity implements INotifierMessage {
 		setContentView(R.layout.main_01);
 
 		layoutMain = (RelativeLayout)findViewById(R.id.layout_main);
-		llTypeEntrainement = (LinearLayout)findViewById(R.id.ll_type_entrainement);
+		llTypeEntrainement = (LinearLayout)findViewById(R.id.ll_type_training);
 		llTypeMatch = (LinearLayout)findViewById(R.id.ll_type_match);
+		ivPlay = (ImageView)findViewById(R.id.iv_play);
+		ivMatch = (ImageView)findViewById(R.id.iv_match);
 		menuOverFlowContent = findViewById(R.id.ll_menu_overflow_content);
 
 		business = new MainBusiness(this, this);
@@ -76,14 +81,18 @@ public class MainActivity extends GenericActivity implements INotifierMessage {
 				layoutMain.setBackgroundResource(R.drawable.background_01_orange);
 				llTypeMatch.setAlpha(1f);
 				llTypeEntrainement.setAlpha(.2f);
+				ivMatch.setVisibility(View.VISIBLE);
+				ivPlay.setVisibility(View.GONE);
 			}
 			break;
 
-			case ENTRAINEMENT:
+			case TRAINING:
 			default: {
 				layoutMain.setBackgroundResource(R.drawable.background_01);
 				llTypeEntrainement.setAlpha(1f);
 				llTypeMatch.setAlpha(.2f);
+				ivPlay.setVisibility(View.VISIBLE);
+				ivMatch.setVisibility(View.GONE);
 			}
 			break;
 		}
@@ -165,6 +174,12 @@ public class MainActivity extends GenericActivity implements INotifierMessage {
 		startActivity(intent);
 	}
 	
+	public void onClickMatch(View view) {
+		Intent intent = new Intent(getApplicationContext(), ListPlayerActivity.class);
+		intent.putExtra(ListPlayerActivity.EXTRA_MODE, MODE.INVITE);
+		startActivity(intent);
+	}
+	
 	public void onClickListInvite(View view) {
 		Intent intent = new Intent(getApplicationContext(), ListInviteActivity.class);
 		startActivity(intent);
@@ -206,8 +221,8 @@ public class MainActivity extends GenericActivity implements INotifierMessage {
 		menuOverFlowContent.setVisibility(visibility);
 	}
 	
-	public void onClickTypeEntrainement(View view) {
-		typeManager.setType(TYPE.ENTRAINEMENT);
+	public void onClickTypeTraining(View view) {
+		typeManager.setType(TYPE.TRAINING);
 		initializeLayoutType();
 	}
 	

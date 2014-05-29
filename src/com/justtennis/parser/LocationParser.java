@@ -39,7 +39,7 @@ public class LocationParser extends GenericParser {
 	public String[] toAddress(Invite invite) {
 		String[] ret = null;
 		if (invite != null) {
-			if (invite.getType() == TypeManager.TYPE.ENTRAINEMENT) {
+			if (invite.getType() == TypeManager.TYPE.TRAINING) {
 				if (invite.getClub() != null && invite.getClub().getId() != null) {
 					ret = getAddress(new Club(invite.getClub().getId()));
 				}
@@ -73,7 +73,7 @@ public class LocationParser extends GenericParser {
 		String[] ret = null;
 		if (player != null) {
 			switch (player.getType()) {
-				case ENTRAINEMENT:
+				case TRAINING:
 					if (player.getIdClub() != null) {
 						ret = getAddress(new Club(player.getIdClub()));
 					}
@@ -135,7 +135,7 @@ public class LocationParser extends GenericParser {
 
 	private String[] getLocationLine(Invite invite) {
 		if (invite != null) {
-			if (invite.getType() == TypeManager.TYPE.ENTRAINEMENT) {
+			if (invite.getType() == TypeManager.TYPE.TRAINING) {
 				if (invite.getClub() != null && invite.getClub().getId() != null) {
 					return getAddress(new Club(invite.getClub().getId()));
 				}

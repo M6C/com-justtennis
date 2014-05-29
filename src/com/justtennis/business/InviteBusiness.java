@@ -309,8 +309,8 @@ public class InviteBusiness {
 			setIdRanking(getPlayer().getIdRanking());
 			switch (getPlayer().getType()) {
 			default:
-			case ENTRAINEMENT:
-				setType(TypeManager.TYPE.ENTRAINEMENT);
+			case TRAINING:
+				setType(TypeManager.TYPE.TRAINING);
 				break;
 			case COMPETITION:
 				setType(TypeManager.TYPE.COMPETITION);
