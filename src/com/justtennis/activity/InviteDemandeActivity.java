@@ -286,7 +286,7 @@ public class InviteDemandeActivity extends GenericActivity {
 			
 			@Override
 			public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-				business.setType(isChecked ? TypeManager.TYPE.ENTRAINEMENT : TypeManager.TYPE.MATCH);
+				business.setType(isChecked ? TypeManager.TYPE.ENTRAINEMENT : TypeManager.TYPE.COMPETITION);
 			}
 		});
 	}
@@ -403,7 +403,7 @@ public class InviteDemandeActivity extends GenericActivity {
 		switch(business.getInvite().getType()) {
 			case ENTRAINEMENT:
 				return 0;
-			case MATCH:
+			case COMPETITION:
 			default:
 				return 1;
 		}

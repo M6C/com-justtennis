@@ -5,6 +5,7 @@ import android.database.sqlite.SQLiteDatabase;
 
 import com.cameleon.common.android.inotifier.INotifierMessage;
 import com.justtennis.manager.TypeManager;
+import com.justtennis.manager.TypeManager.TYPE;
 
 public class DBPlayerHelper extends GenericDBHelper {
 
@@ -28,7 +29,7 @@ public class DBPlayerHelper extends GenericDBHelper {
 	public static final String COLUMN_TYPE = "TYPE";
 
 	private static final String DATABASE_NAME = "Player.db";
-	private static final int DATABASE_VERSION = 9;
+	private static final int DATABASE_VERSION = 10;
 
 	// Database creation sql statement
 	private static final String DATABASE_CREATE = "CREATE TABLE " + TABLE_NAME + "(" + 
@@ -67,6 +68,9 @@ public class DBPlayerHelper extends GenericDBHelper {
 			}
 			if (oldVersion <= 8) {
 				addColumn(database, COLUMN_ID_ADDRESS, " INTEGER NULL ");
+			}
+			if (oldVersion <= 9) {
+				updateColumn(database, COLUMN_TYPE, ""+TYPE.COMPETITION, COLUMN_TYPE + " = 'MATCH'");
 			}
 		}
 		else {

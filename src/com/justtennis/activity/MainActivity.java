@@ -72,7 +72,7 @@ public class MainActivity extends GenericActivity implements INotifierMessage {
 
 	private void initializeLayoutType() {
 		switch(typeManager.getType()) {
-			case MATCH: {
+			case COMPETITION: {
 				layoutMain.setBackgroundResource(R.drawable.background_01_orange);
 				llTypeMatch.setAlpha(1f);
 				llTypeEntrainement.setAlpha(.2f);
@@ -212,7 +212,7 @@ public class MainActivity extends GenericActivity implements INotifierMessage {
 	}
 	
 	public void onClickTypeMatch(View view) {
-		typeManager.setType(TYPE.MATCH);
+		typeManager.setType(TYPE.COMPETITION);
 		initializeLayoutType();
 	}
 }

@@ -284,7 +284,7 @@ public class InviteBusiness {
 	}
 
 	public void setLocation(Serializable location) {
-		if (getType() == TypeManager.TYPE.MATCH) {
+		if (getType() == TypeManager.TYPE.COMPETITION) {
 			setTournament((Tournament)location);
 		} else {
 			setClub((Club)location);
@@ -304,7 +304,7 @@ public class InviteBusiness {
 
 		if (isUnknownPlayer()) {
 			setIdRanking(getListRanking().get(0).getId());
-			setType(TypeManager.TYPE.MATCH);
+			setType(TypeManager.TYPE.COMPETITION);
 		} else {
 			setIdRanking(getPlayer().getIdRanking());
 			switch (getPlayer().getType()) {
@@ -312,8 +312,8 @@ public class InviteBusiness {
 			case ENTRAINEMENT:
 				setType(TypeManager.TYPE.ENTRAINEMENT);
 				break;
-			case MATCH:
-				setType(TypeManager.TYPE.MATCH);
+			case COMPETITION:
+				setType(TypeManager.TYPE.COMPETITION);
 				break;
 			}
 		}
@@ -369,7 +369,7 @@ public class InviteBusiness {
 			text += " [invite:" + invite.getId() + "|user:" + invite.getUser().getId() + "|player:" + invite.getPlayer().getId() + "|calendar:" + invite.getIdCalendar() + "]";
 		}
 		String title = null;
-		if (getType()==TypeManager.TYPE.MATCH) {
+		if (getType()==TypeManager.TYPE.COMPETITION) {
 			title = "Just Tennis Match vs " + player.getFirstName() + " " + player.getLastName();
 		} else {
 			title = "Just Tennis Entrainement vs " + player.getFirstName() + " " + player.getLastName();

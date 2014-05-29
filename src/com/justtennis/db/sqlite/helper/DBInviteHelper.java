@@ -4,6 +4,7 @@ import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 
 import com.cameleon.common.android.inotifier.INotifierMessage;
+import com.justtennis.manager.TypeManager.TYPE;
 
 public class DBInviteHelper extends GenericDBHelper {
 
@@ -24,7 +25,7 @@ public class DBInviteHelper extends GenericDBHelper {
 	public static final String COLUMN_ID_TOURNAMENT = "ID_TOURNAMENT";
 
 	public static final String DATABASE_NAME = "Invite.db";
-	public static final int DATABASE_VERSION = 10;
+	public static final int DATABASE_VERSION = 11;
 
 	// Database creation sql statement
 	private static final String DATABASE_CREATE = "CREATE TABLE " + TABLE_NAME + "(" + 
@@ -66,6 +67,9 @@ public class DBInviteHelper extends GenericDBHelper {
 				addColumn(database, COLUMN_ID_ADDRESS, "INTEGER NULL");
 				addColumn(database, COLUMN_ID_CLUB, "INTEGER NULL");
 				addColumn(database, COLUMN_ID_TOURNAMENT, "INTEGER NULL");
+			}
+			if (oldVersion <= 10) {
+				updateColumn(database, COLUMN_TYPE, ""+TYPE.COMPETITION, COLUMN_TYPE + " = 'MATCH'");
 			}
 		}
 		else {

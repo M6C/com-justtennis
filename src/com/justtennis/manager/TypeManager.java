@@ -8,7 +8,7 @@ public class TypeManager {
 
 	public enum TYPE {
 		ENTRAINEMENT,
-		MATCH
+		COMPETITION
 	}
 
 	private static TypeManager instance;
@@ -34,7 +34,7 @@ public class TypeManager {
 
 	public void initializeActivity(View view, boolean main) {
 		switch(type) {
-			case MATCH: {
+			case COMPETITION: {
 				view.setBackgroundResource(main ? R.drawable.background_01_orange : R.drawable.background_03_orange);
 			}
 			break;
@@ -48,7 +48,7 @@ public class TypeManager {
 
 	public int getThemeResource() {
 		switch(getType()) {
-			case MATCH: {
+			case COMPETITION: {
 				return R.style.AppTheme_Competition;
 			}
 	

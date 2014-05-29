@@ -281,7 +281,7 @@ public class PlayerActivity extends GenericActivity {
 					intent.putExtra(GenericSpinnerFormActivity.EXTRA_DATA, new Club(business.getPlayer().getIdClub()));
 				}
 				break;
-			case MATCH:
+			case COMPETITION:
 				intent = new Intent(this, LocationTournamentActivity.class);
 				if (business.getPlayer().getIdTournament() != null) {
 					intent.putExtra(GenericSpinnerFormActivity.EXTRA_DATA, new Tournament(business.getPlayer().getIdTournament()));
@@ -377,7 +377,7 @@ public class PlayerActivity extends GenericActivity {
 		}
 		
 		String[] location = business.getLocationLine();
-		if (getType() == TypeManager.TYPE.MATCH) {
+		if (getType() == TypeManager.TYPE.COMPETITION) {
 			tvLocation.setText(getString(R.string.txt_tournament));
 			tvLocationEmpty.setText(getString(R.string.txt_tournament));
 		} else {
@@ -507,7 +507,7 @@ public class PlayerActivity extends GenericActivity {
 		switch(business.getPlayerType()) {
 			case ENTRAINEMENT:
 				return 0;
-			case MATCH:
+			case COMPETITION:
 			default:
 				return 1;
 		}
@@ -523,7 +523,7 @@ public class PlayerActivity extends GenericActivity {
 			return TypeManager.TYPE.ENTRAINEMENT;
 		case 1:
 		default:
-			return TypeManager.TYPE.MATCH;
+			return TypeManager.TYPE.COMPETITION;
 		}
 	}
 }

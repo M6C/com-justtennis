@@ -280,8 +280,8 @@ public class InviteActivity extends GenericActivity {
 			case ENTRAINEMENT:
 				playerType = TypeManager.TYPE.ENTRAINEMENT;
 				break;
-			case MATCH:
-				playerType = TypeManager.TYPE.MATCH;
+			case COMPETITION:
+				playerType = TypeManager.TYPE.COMPETITION;
 				break;
 		}
 		intent.putExtra(PlayerActivity.EXTRA_TYPE, playerType);
@@ -298,7 +298,7 @@ public class InviteActivity extends GenericActivity {
 					intent.putExtra(GenericSpinnerFormActivity.EXTRA_DATA, business.getInvite().getClub());
 				}
 				break;
-			case MATCH:
+			case COMPETITION:
 				intent = new Intent(this, LocationTournamentActivity.class);
 				if (business.getInvite().getTournament() != null) {
 					intent.putExtra(GenericSpinnerFormActivity.EXTRA_DATA, business.getInvite().getTournament());
@@ -310,7 +310,7 @@ public class InviteActivity extends GenericActivity {
 	}
 
 	public void onClickLocationDetail(View view) {
-		if (business.getType() == TypeManager.TYPE.MATCH) {
+		if (business.getType() == TypeManager.TYPE.COMPETITION) {
 			Intent intent = new Intent(this, LocationClubActivity.class);
 			if (business.getInvite().getClub() != null) {
 				intent.putExtra(GenericSpinnerFormActivity.EXTRA_DATA, business.getInvite().getClub());
@@ -550,7 +550,7 @@ public class InviteActivity extends GenericActivity {
 			
 			@Override
 			public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-				business.setType(isChecked ? TypeManager.TYPE.ENTRAINEMENT : TypeManager.TYPE.MATCH);
+				business.setType(isChecked ? TypeManager.TYPE.ENTRAINEMENT : TypeManager.TYPE.COMPETITION);
 			}
 		});
 
@@ -572,7 +572,7 @@ public class InviteActivity extends GenericActivity {
 		switch(business.getInvite().getType()) {
 			case ENTRAINEMENT:
 				return 0;
-			case MATCH:
+			case COMPETITION:
 			default:
 				return 1;
 		}

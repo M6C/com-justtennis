@@ -78,7 +78,7 @@ public class LocationParser extends GenericParser {
 						ret = getAddress(new Club(player.getIdClub()));
 					}
 					break;
-				case MATCH:
+				case COMPETITION:
 					if (player.getIdClub() != null) {
 						ret = getAddress(new Club(player.getIdClub()));
 					} else if (player.getIdTournament() != null) {

@@ -156,7 +156,7 @@
 				    android:layout_height="0dp"
 				    android:layout_weight="1"
 				    android:gravity="center_vertical|center_horizontal"
-				    android:text="Entrainement"
+				    android:text="@string/button_entrainement"
 					android:textStyle="bold"
 					android:textColor="@color/white"
 				/>
@@ -182,7 +182,7 @@
 				    android:layout_height="0dp"
 				    android:layout_weight="1"
 				    android:gravity="center_vertical|center_horizontal"
-				    android:text="Match"
+				    android:text="@string/button_competition"
 					android:textStyle="bold"
 					android:textColor="@color/white"
 				/>

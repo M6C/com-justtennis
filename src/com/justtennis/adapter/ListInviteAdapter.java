@@ -161,7 +161,7 @@ public class ListInviteAdapter extends ArrayAdapter<Invite> {
 				vTypeEntrainement.setVisibility(View.VISIBLE);
 				vTypeMatch.setVisibility(View.GONE);
 				break;
-			case MATCH:
+			case COMPETITION:
 			default:
 				vTypeEntrainement.setVisibility(View.GONE);
 				vTypeMatch.setVisibility(View.VISIBLE);

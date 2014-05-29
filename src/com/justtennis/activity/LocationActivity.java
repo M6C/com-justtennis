@@ -131,8 +131,8 @@ public class LocationActivity extends GenericActivity {
 		super.onResume();
 		initializeData();
 
-		visibilityTournamentCollapser = (business.getType() == TypeManager.TYPE.MATCH) ? View.VISIBLE : View.GONE;
-		visibilityClubCollapser = (business.getType() == TypeManager.TYPE.MATCH) ? View.GONE : View.VISIBLE;
+		visibilityTournamentCollapser = (business.getType() == TypeManager.TYPE.COMPETITION) ? View.VISIBLE : View.GONE;
+		visibilityClubCollapser = (business.getType() == TypeManager.TYPE.COMPETITION) ? View.GONE : View.VISIBLE;
 
 		llAddressCollapser.setVisibility(visibilityAddressCollapser);
 		llAddressContent.setVisibility(visibilityAddressContent);
@@ -164,7 +164,7 @@ public class LocationActivity extends GenericActivity {
 
 	private void returnResult() {
 		Serializable out = null;
-		if (business.getType() == TypeManager.TYPE.MATCH) {
+		if (business.getType() == TypeManager.TYPE.COMPETITION) {
 			out = business.getTournament();
 		} else {
 			out = business.getClub();
@@ -307,7 +307,7 @@ public class LocationActivity extends GenericActivity {
 		Club club = business.addClub(getText(etClubName), business.getAddress().getId());
 		business.setClub(club);
 
-		if (business.getType() == TypeManager.TYPE.MATCH) {
+		if (business.getType() == TypeManager.TYPE.COMPETITION) {
 			business.initializeDataClub();
 			adapterClub.notifyDataSetChanged();
 			adapterTournamentClub.notifyDataSetChanged();
@@ -333,7 +333,7 @@ public class LocationActivity extends GenericActivity {
 		Tournament tournament = business.addTournament(getText(etTournamentName), business.getClub().getId());
 		business.setTournament(tournament);
 
-		if (business.getType() == TypeManager.TYPE.MATCH) {
+		if (business.getType() == TypeManager.TYPE.COMPETITION) {
 			business.initializeDataTournament();
 			adapterTournament.notifyDataSetChanged();
 			manageVisibility(true, false, false, false, false, false);

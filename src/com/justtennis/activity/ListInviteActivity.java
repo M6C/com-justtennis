@@ -126,7 +126,7 @@ public class ListInviteActivity extends GenericActivity {
 	}
 
 	private void initializeTypeList() {
-		String[] listTypeName = new String[]{"", TypeManager.TYPE.ENTRAINEMENT.toString(), TypeManager.TYPE.MATCH.toString()};
+		String[] listTypeName = new String[]{"", TypeManager.TYPE.ENTRAINEMENT.toString(), TypeManager.TYPE.COMPETITION.toString()};
 		ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, listTypeName);
 		dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		spFilterType.setAdapter(dataAdapter);
@@ -144,7 +144,7 @@ public class ListInviteActivity extends GenericActivity {
 							filterTypeValue = TypeManager.TYPE.ENTRAINEMENT;
 							break;
 						case 2:
-							filterTypeValue = TypeManager.TYPE.MATCH;
+							filterTypeValue = TypeManager.TYPE.COMPETITION;
 							break;
 					}
 

@@ -214,7 +214,7 @@ public class PlayerBusiness {
 	}
 
 	public void setLocation(Serializable location) {
-		if (player.getType() == TypeManager.TYPE.MATCH) {
+		if (player.getType() == TypeManager.TYPE.COMPETITION) {
 			player.setIdTournament(((Tournament)location).getId());
 		} else {
 			player.setIdClub(((Club)location).getId());
