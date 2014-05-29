@@ -173,13 +173,13 @@ public class MainActivity extends GenericActivity implements INotifierMessage {
 		intent.putExtra(ListPlayerActivity.EXTRA_MODE, MODE.INVITE);
 		startActivity(intent);
 	}
-	
+
 	public void onClickMatch(View view) {
-		Intent intent = new Intent(getApplicationContext(), ListPlayerActivity.class);
-		intent.putExtra(ListPlayerActivity.EXTRA_MODE, MODE.INVITE);
+		Intent intent = new Intent(getApplicationContext(), InviteDemandeActivity.class);
+		intent.putExtra(InviteActivity.EXTRA_PLAYER_ID, business.getUnknownPlayerId());
 		startActivity(intent);
 	}
-	
+
 	public void onClickListInvite(View view) {
 		Intent intent = new Intent(getApplicationContext(), ListInviteActivity.class);
 		startActivity(intent);
