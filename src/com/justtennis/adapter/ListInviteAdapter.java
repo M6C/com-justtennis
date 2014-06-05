@@ -19,6 +19,7 @@ import android.widget.TextView;
 import com.justtennis.ApplicationConfig;
 import com.justtennis.R;
 import com.justtennis.db.service.RankingService;
+import com.justtennis.db.service.ScoreSetService;
 import com.justtennis.domain.Invite;
 import com.justtennis.domain.Ranking;
 import com.justtennis.domain.ScoreSet;
@@ -39,7 +40,8 @@ public class ListInviteAdapter extends ArrayAdapter<Invite> {
 	private final static SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm");
 	private ADAPTER_INVITE_MODE mode;
 	private Filter filter = null;
-	private HashMap<Long, Ranking> rankingService;
+	private HashMap<Long, Ranking> mapRanking;
+	private ScoreSetService scoreSetService;
 	private LocationParser locationParser;
 
 	public ListInviteAdapter(Activity activity, List<Invite> value) {
@@ -63,8 +65,9 @@ public class ListInviteAdapter extends ArrayAdapter<Invite> {
 			}
 		}, valueOld);
 		NotifierMessageLogger notifier = NotifierMessageLogger.getInstance();
-		rankingService = new RankingService(activity, notifier).getMapById();
+		mapRanking = new RankingService(activity, notifier).getMapById();
 		locationParser = LocationParser.getInstance(activity, notifier);
+		scoreSetService = new ScoreSetService(activity, notifier);
 	}
 
 	@Override
@@ -107,7 +110,7 @@ public class ListInviteAdapter extends ArrayAdapter<Invite> {
 		View vTypeEntrainement = rowView.findViewById(R.id.tv_type_entrainement);
 		View vTypeMatch = rowView.findViewById(R.id.tv_type_match);
 
-		Ranking r = rankingService.get(v.getIdRanking()); 
+		Ranking r = mapRanking.get(v.getIdRanking()); 
 		tvPlayer.setText(v.getPlayer()==null ? "" : Html.fromHtml("<b>" + v.getPlayer().getFirstName() + "</b> " + v.getPlayer().getLastName()));
 		tvRanking.setText(r == null ? "" : r.getRanking());
 		tvDate.setText(v.getDate()==null ? "" : sdf.format(v.getDate()));
@@ -120,7 +123,7 @@ public class ListInviteAdapter extends ArrayAdapter<Invite> {
 
 		initializeLocation(v, tvClubName);
 
-		String textScore = buildTextScore(v);
+		String textScore = scoreSetService.buildTextScore(v);
 		if (textScore != null) {
 			tvScore.setVisibility(View.VISIBLE);
 			tvScore.setText(Html.fromHtml(textScore));
@@ -157,14 +160,14 @@ public class ListInviteAdapter extends ArrayAdapter<Invite> {
 		}
 
 		switch(v.getType()) {
-			case TRAINING:
-				vTypeEntrainement.setVisibility(View.VISIBLE);
-				vTypeMatch.setVisibility(View.GONE);
-				break;
 			case COMPETITION:
-			default:
 				vTypeEntrainement.setVisibility(View.GONE);
 				vTypeMatch.setVisibility(View.VISIBLE);
+				break;
+			case TRAINING:
+			default:
+				vTypeEntrainement.setVisibility(View.VISIBLE);
+				vTypeMatch.setVisibility(View.GONE);
 				break;
 		}
 	    return rowView;
@@ -185,24 +188,6 @@ public class ListInviteAdapter extends ArrayAdapter<Invite> {
 
 		valueOld.clear();
 		valueOld.addAll(this.value);
-	}
-	
-	private String buildTextScore(Invite invite) {
-		String ret = null;
-		if (invite.getListScoreSet()!=null && invite.getListScoreSet().size() > 0) {
-			for(ScoreSet score : invite.getListScoreSet()) {
-				if (score.getValue1() > 0 || score.getValue2() > 0) {
-					String score1 = (score.getValue1() > score.getValue2() ? "<b>" + score.getValue1() + "</b>": score.getValue1().toString());
-					String score2 = (score.getValue2() > score.getValue1() ? "<b>" + score.getValue2() + "</b>": score.getValue2().toString());
-					if (ret == null) {
-						ret = score1 + "-" + score2;
-					} else {
-						ret += " / " + score1 + "-" + score2;
-					}
-				}
-			}
-		}
-		return ret;
 	}
 
 	private void initializeLocation(final Invite v, TextView clubName) {

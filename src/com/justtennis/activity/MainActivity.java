@@ -181,7 +181,16 @@ public class MainActivity extends GenericActivity implements INotifierMessage {
 	}
 
 	public void onClickListInvite(View view) {
-		Intent intent = new Intent(getApplicationContext(), ListInviteActivity.class);
+		Intent intent = null;
+		switch(TypeManager.getInstance().getType()) {
+			case COMPETITION:
+				intent = new Intent(getApplicationContext(), ListCompetitionActivity.class);
+			break;
+			case TRAINING:
+			default:
+				intent = new Intent(getApplicationContext(), ListInviteActivity.class);
+				break;
+		}
 		startActivity(intent);
 	}
 

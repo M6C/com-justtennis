@@ -23,6 +23,9 @@ Saisie de Message
 
 
 ********************* DONE *****************************
+Ecran List Competition
+[20140605] - Creation de l'écran
+
 Ecran Accueil
 [20140529] - Comportement specifique pour le bouton Match
 [20140525] - Change le background en fonction du type

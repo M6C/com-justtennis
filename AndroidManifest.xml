@@ -64,6 +64,9 @@
         <activity android:name=".activity.ListInviteActivity"
    		   android:screenOrientation="portrait"
          />
+        <activity android:name=".activity.ListCompetitionActivity"
+   		   android:screenOrientation="portrait"
+         />
         <activity android:name=".activity.PlayerActivity"
    		   android:windowSoftInputMode="stateHidden"
    		   android:screenOrientation="portrait"

@@ -6,6 +6,7 @@ import android.content.Context;
 
 import com.cameleon.common.android.inotifier.INotifierMessage;
 import com.justtennis.db.sqlite.datasource.DBScoreSetDataSource;
+import com.justtennis.domain.Invite;
 import com.justtennis.domain.ScoreSet;
 
 public class ScoreSetService extends GenericService<ScoreSet> {
@@ -57,5 +58,23 @@ public class ScoreSetService extends GenericService<ScoreSet> {
 		finally {
 			dbDataSource.close();
 		}
+	}
+
+	public String buildTextScore(Invite invite) {
+		String ret = null;
+		if (invite.getListScoreSet()!=null && invite.getListScoreSet().size() > 0) {
+			for(ScoreSet score : invite.getListScoreSet()) {
+				if (score.getValue1() > 0 || score.getValue2() > 0) {
+					String score1 = (score.getValue1() > score.getValue2() ? "<b>" + score.getValue1() + "</b>": score.getValue1().toString());
+					String score2 = (score.getValue2() > score.getValue1() ? "<b>" + score.getValue2() + "</b>": score.getValue2().toString());
+					if (ret == null) {
+						ret = score1 + "-" + score2;
+					} else {
+						ret += " / " + score1 + "-" + score2;
+					}
+				}
+			}
+		}
+		return ret;
 	}
 }

@@ -1,5 +1,6 @@
 package com.justtennis.db.service;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -25,6 +26,16 @@ public class InviteService extends GenericService<Invite> {
     		dbDataSource.close();
     	}
 	}
+	
+	public List<Invite> getByIdTournament(long idTournament) {
+		try {
+			dbDataSource.open();
+			return ((DBInviteDataSource)dbDataSource).getByIdTournament(idTournament);
+		}
+		finally {
+			dbDataSource.close();
+		}
+	}
 
 	public int countByIdPlayer(long idPlayer) {
     	try {
@@ -44,5 +55,28 @@ public class InviteService extends GenericService<Invite> {
 		finally {
 			dbDataSource.close();
 		}
+	}
+
+	public HashMap<Long, List<Invite>> getGroupByIdTournament() {
+		HashMap<Long, List<Invite>> ret = new HashMap<Long, List<Invite>>();
+		List<Invite> listInvite = null;
+		try {
+			dbDataSource.open();
+			listInvite = ((DBInviteDataSource)dbDataSource).getAll();
+		}
+		finally {
+			dbDataSource.close();
+		}
+		if (listInvite != null) {
+			for(Invite invite : listInvite) {
+				List<Invite> list = ret.get(invite.getIdTournament());
+				if (list == null) {
+					list = new ArrayList<Invite>();
+					ret.put(invite.getIdTournament(), list);
+				}
+				list.add(invite);
+			}
+		}
+		return ret;
 	}
 }
