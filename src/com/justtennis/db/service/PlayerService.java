@@ -1,5 +1,9 @@
 package com.justtennis.db.service;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+
 import android.content.Context;
 
 import com.cameleon.common.android.inotifier.INotifierMessage;
@@ -39,6 +43,30 @@ public class PlayerService extends GenericService<Player> {
 	
 	public boolean isEmptyPlayer(Player player) {
 		return player.getId()!=null && ID_EMPTY_PLAYER==player.getId();
+	}
+
+	public HashMap<Long, List<Player>> getGroupByIdRanking() {
+		HashMap<Long, List<Player>> ret = new HashMap<Long, List<Player>>();
+		List<Player> listPlayer = null;
+		try {
+			dbDataSource.open();
+			listPlayer = ((DBPlayerDataSource)dbDataSource).getAll();
+		}
+		finally {
+			dbDataSource.close();
+		}
+		if (listPlayer != null) {
+			for(Player invite : listPlayer) {
+				Long key = invite.getIdRanking();
+				List<Player> list = ret.get(key);
+				if (list == null) {
+					list = new ArrayList<Player>();
+					ret.put(key, list);
+				}
+				list.add(invite);
+			}
+		}
+		return ret;
 	}
 	
 	@Override

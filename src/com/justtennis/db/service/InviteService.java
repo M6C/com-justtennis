@@ -8,7 +8,9 @@ import android.content.Context;
 
 import com.cameleon.common.android.inotifier.INotifierMessage;
 import com.justtennis.db.sqlite.datasource.DBInviteDataSource;
+import com.justtennis.db.sqlite.datasource.DBPlayerDataSource;
 import com.justtennis.domain.Invite;
+import com.justtennis.domain.Player;
 import com.justtennis.manager.TypeManager;
 
 public class InviteService extends GenericService<Invite> {
@@ -69,10 +71,35 @@ public class InviteService extends GenericService<Invite> {
 		}
 		if (listInvite != null) {
 			for(Invite invite : listInvite) {
-				List<Invite> list = ret.get(invite.getIdTournament());
+				Long key = invite.getIdTournament();
+				List<Invite> list = ret.get(key);
 				if (list == null) {
 					list = new ArrayList<Invite>();
-					ret.put(invite.getIdTournament(), list);
+					ret.put(key, list);
+				}
+				list.add(invite);
+			}
+		}
+		return ret;
+	}
+
+	public HashMap<Long, List<Invite>> getGroupByIdRanking(Invite.SCORE_RESULT scoreResult) {
+		HashMap<Long, List<Invite>> ret = new HashMap<Long, List<Invite>>();
+		List<Invite> listPlayer = null;
+		try {
+			dbDataSource.open();
+			listPlayer = ((DBInviteDataSource)dbDataSource).getByScoreResult(scoreResult);
+		}
+		finally {
+			dbDataSource.close();
+		}
+		if (listPlayer != null) {
+			for(Invite invite : listPlayer) {
+				Long key = invite.getIdRanking();
+				List<Invite> list = ret.get(key);
+				if (list == null) {
+					list = new ArrayList<Invite>();
+					ret.put(key, list);
 				}
 				list.add(invite);
 			}

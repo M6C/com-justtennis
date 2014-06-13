@@ -479,7 +479,10 @@ public class PlayerActivity extends GenericActivity {
 	}
 
 	private void initializeRanking() {
-		spRanking.setSelection(getRankingPosition(), true);
+		int rankingPosition = getRankingPosition();
+		if (rankingPosition < business.getListRanking().size()) {
+			spRanking.setSelection(rankingPosition, true);
+		}
 	}
 
 	private void initializeType() {

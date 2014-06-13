@@ -20,7 +20,11 @@ public class DBRankingDataSource extends GenericDBDataSource<Ranking> {
 		DBRankingHelper.COLUMN_ID,
 		DBRankingHelper.COLUMN_RANKING,
 		DBRankingHelper.COLUMN_SERIE,
-		DBRankingHelper.COLUMN_POSITION
+		DBRankingHelper.COLUMN_POSITION,
+		DBRankingHelper.COLUMN_RANK_POINT_MAN,
+		DBRankingHelper.COLUMN_RANK_POINT_WOMAN,
+		DBRankingHelper.COLUMN_VICTORY_MAN,
+		DBRankingHelper.COLUMN_VICTORY_WOMAN
 	};
 
 	public DBRankingDataSource(Context context, INotifierMessage notificationMessage) {
@@ -45,6 +49,10 @@ public class DBRankingDataSource extends GenericDBDataSource<Ranking> {
 		values.put(DBRankingHelper.COLUMN_RANKING, ranking.getRanking());
 		values.put(DBRankingHelper.COLUMN_SERIE, ranking.getSerie());
 		values.put(DBRankingHelper.COLUMN_POSITION, ranking.getOrder());
+		values.put(DBRankingHelper.COLUMN_RANK_POINT_MAN, ranking.getRankingPointMan());
+		values.put(DBRankingHelper.COLUMN_RANK_POINT_WOMAN, ranking.getRankingPointWoman());
+		values.put(DBRankingHelper.COLUMN_VICTORY_MAN, ranking.getVictoryMan());
+		values.put(DBRankingHelper.COLUMN_VICTORY_WOMAN, ranking.getVictoryWoman());
 	}
 
 	@Override
@@ -55,6 +63,10 @@ public class DBRankingDataSource extends GenericDBDataSource<Ranking> {
 		ranking.setRanking(cursor.getString(col++));
 		ranking.setSerie(DbTool.getInstance().toInteger(cursor, col++));
 		ranking.setOrder(DbTool.getInstance().toInteger(cursor, col++));
+		ranking.setRankingPointMan(DbTool.getInstance().toInteger(cursor, col++));
+		ranking.setRankingPointWoman(DbTool.getInstance().toInteger(cursor, col++));
+		ranking.setVictoryMan(DbTool.getInstance().toInteger(cursor, col++));
+		ranking.setVictoryWoman(DbTool.getInstance().toInteger(cursor, col++));
 		return ranking;
 	}
 	

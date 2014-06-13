@@ -49,6 +49,7 @@ public class DBUserHelper extends GenericDBHelper {
 	@Override
 	public void onUpgrade(SQLiteDatabase database, int oldVersion, int newVersion) {
 		if (newVersion>oldVersion) {
+			logMe("UPGRADE DATABASE VERSION:" + oldVersion + " TO " + newVersion);
 			if (oldVersion <= 5) {
 				addColumn(database, COLUMN_ID_TOURNAMENT, " INTEGER NULL ");
 			}

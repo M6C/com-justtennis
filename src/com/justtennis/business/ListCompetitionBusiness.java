@@ -9,6 +9,7 @@ import android.content.Context;
 
 import com.cameleon.common.android.inotifier.INotifierMessage;
 import com.justtennis.activity.ListCompetitionActivity;
+import com.justtennis.db.service.ComputeRankService;
 import com.justtennis.db.service.InviteService;
 import com.justtennis.db.service.PlayerService;
 import com.justtennis.db.service.ScoreSetService;
@@ -18,10 +19,10 @@ import com.justtennis.domain.Tournament;
 import com.justtennis.domain.comparator.InviteComparatorByDate;
 import com.justtennis.domain.comparator.TournamentComparatorByDate;
 
-public class ListComptetionBusiness {
+public class ListCompetitionBusiness {
 
 	@SuppressWarnings("unused")
-	private static final String TAG = ListComptetionBusiness.class.getSimpleName();
+	private static final String TAG = ListCompetitionBusiness.class.getSimpleName();
 	
 	private ListCompetitionActivity context;
 
@@ -29,20 +30,24 @@ public class ListComptetionBusiness {
 	private ScoreSetService scoreService;
 	private PlayerService playerService;
 	private TournamentService tournamentService;
+	private ComputeRankService computeRankService;
 
 	private List<Tournament> listTournament;
 	private HashMap<Tournament, List<Invite>> tableInviteByTournament;
 
-	public ListComptetionBusiness(ListCompetitionActivity context, INotifierMessage notificationMessage) {
+	public ListCompetitionBusiness(ListCompetitionActivity context, INotifierMessage notificationMessage) {
 		this.context = context;
 		playerService = new PlayerService(context, notificationMessage);
 		tournamentService = new TournamentService(context, notificationMessage);
 		inviteService = new InviteService(context, notificationMessage);
 		scoreService = new ScoreSetService(context, notificationMessage);
+		computeRankService = new ComputeRankService(context, notificationMessage);
 	}
 
 	public void onCreate() {
 		refreshData();
+
+		computeRankService.compute();
 	}
 
 	public void onResume() {

@@ -6,7 +6,7 @@ import android.widget.ExpandableListView;
 
 import com.justtennis.R;
 import com.justtennis.adapter.ListCompetitionAdapter;
-import com.justtennis.business.ListComptetionBusiness;
+import com.justtennis.business.ListCompetitionBusiness;
 import com.justtennis.listener.itemclick.OnItemClickListCompetition;
 import com.justtennis.manager.TypeManager;
 import com.justtennis.notifier.NotifierMessageLogger;
@@ -16,7 +16,7 @@ public class ListCompetitionActivity extends GenericActivity {
 	@SuppressWarnings("unused")
 	private static final String TAG = ListCompetitionActivity.class.getSimpleName();
 
-	private ListComptetionBusiness business;
+	private ListCompetitionBusiness business;
 
 	private ExpandableListView list;
 	private ListCompetitionAdapter adapter;
@@ -27,7 +27,7 @@ public class ListCompetitionActivity extends GenericActivity {
 
 		setContentView(R.layout.list_competition);
 
-		business = new ListComptetionBusiness(this, NotifierMessageLogger.getInstance());
+		business = new ListCompetitionBusiness(this, NotifierMessageLogger.getInstance());
 		business.onCreate();
 
 		adapter = new ListCompetitionAdapter(this, business.getListTournament(), business.getTableInviteByTournament());

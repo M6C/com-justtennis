@@ -57,6 +57,7 @@ public class DBPlayerHelper extends GenericDBHelper {
 	@Override
 	public void onUpgrade(SQLiteDatabase database, int oldVersion, int newVersion) {
 		if (newVersion>oldVersion) {
+			logMe("UPGRADE DATABASE VERSION:" + oldVersion + " TO " + newVersion);
 			if (oldVersion <= 5) {
 				addColumn(database, COLUMN_ID_GOOGLE, " INTEGER NULL ");
 			}
