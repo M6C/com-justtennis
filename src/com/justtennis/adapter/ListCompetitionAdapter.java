@@ -69,11 +69,13 @@ public class ListCompetitionAdapter extends BaseExpandableListAdapter {
 		TextView tvDate = (TextView) convertView.findViewById(R.id.tv_date);
 		TextView tvScore = (TextView) convertView.findViewById(R.id.tv_score);
 		TextView tvRanking = (TextView) convertView.findViewById(R.id.tv_ranking);
+		TextView tvPoint = (TextView) convertView.findViewById(R.id.tv_point);
 
 		Ranking r = mapRanking.get(invite.getIdRanking()); 
 		tvPlayer.setText(invite.getPlayer()==null ? "" : Html.fromHtml("<b>" + invite.getPlayer().getFirstName() + "</b> " + invite.getPlayer().getLastName()));
 		tvRanking.setText(r == null ? "" : r.getRanking());
 		tvDate.setText(invite.getDate()==null ? "" : sdf.format(invite.getDate()));
+		tvPoint.setText(invite.getPoint() > 0 ? ""+invite.getPoint() : "");
 
 		if (ApplicationConfig.SHOW_ID) {
 			tvPlayer.setText(tvPlayer.getText() + " [" + invite.getPlayer().getId() + "|" + invite.getPlayer().getIdExternal() + "]");

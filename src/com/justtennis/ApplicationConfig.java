@@ -9,6 +9,7 @@ public class ApplicationConfig {
 	public static final boolean SHOW_LOG_TRACE_MAPPER = false;
 	public static final boolean SHOW_LOG_SMS_PROCESS = true;
 	public static final boolean SHOW_LOG_CURSOR_PROCESS = false;
+	public static final boolean SHOW_LOG_COMPUTER_RANK = true;
 	public static final boolean CALENDAR_ADD_EVENT_CONFIRMED = true;
 	public static final boolean CALENDAR_ADD_EVENT_CANCELED = true;
 

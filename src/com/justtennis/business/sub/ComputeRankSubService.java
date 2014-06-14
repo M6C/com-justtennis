@@ -1,5 +1,6 @@
-package com.justtennis.db.service;
+package com.justtennis.business.sub;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Set;
@@ -9,33 +10,35 @@ import org.gdocument.gtracergps.launcher.log.Logger;
 import android.content.Context;
 
 import com.cameleon.common.android.inotifier.INotifierMessage;
+import com.justtennis.ApplicationConfig;
+import com.justtennis.db.service.InviteService;
+import com.justtennis.db.service.RankingService;
+import com.justtennis.db.service.UserService;
 import com.justtennis.domain.Invite;
-import com.justtennis.domain.Player;
 import com.justtennis.domain.Ranking;
 import com.justtennis.domain.User;
 import com.justtennis.notifier.NotifierMessageLogger;
 
-public class ComputeRankService {
+public class ComputeRankSubService {
 
-	private static final String TAG = ComputeRankService.class.getCanonicalName();
+	private static final String TAG = ComputeRankSubService.class.getCanonicalName();
 
 	private static final int NB_RANKING_ORDER_LOWER = 3;
 	protected Context context;
-	private PlayerService playerService;
 	private InviteService inviteService;
 	private UserService userService;
 	private RankingService rankingService;
 
-	public ComputeRankService(Context context, INotifierMessage notificationMessage) {
+	public ComputeRankSubService(Context context, INotifierMessage notificationMessage) {
 		this.context = context;
-		playerService = new PlayerService(context, notificationMessage);
 		inviteService = new InviteService(context, notificationMessage);
 		userService = new UserService(context, NotifierMessageLogger.getInstance());
 		rankingService = new RankingService(context, NotifierMessageLogger.getInstance());
 	}
 
-	public int compute() {
-		int ret = 0, nbVictory = 0;
+	public HashMap<Long,List<Invite>> getListInvite() {
+		List<Invite> listInvite = new ArrayList<Invite>();
+		int sumPoint = 0, nbVictory = 0;
 		User user = userService.find();
 		Ranking userRanking = rankingService.find(user.getIdRanking());
 //		HashMap<Long,List<Player>> mapPlayer = playerService.getGroupByIdRanking();
@@ -52,32 +55,42 @@ public class ComputeRankService {
 			for(Long id : keySet) {
 				keyArray[idx++] = id.toString();
 			}
+			boolean doBreak = false;
 			List<Ranking> listKeyRanking = rankingService.getList(keyArray);
 			rankingService.order(listKeyRanking, true);
 			nbVictory = userRanking.getVictoryMan();
 			logMe("USER RANKING " + userRanking.getRanking() + " NB VICTORY:" + nbVictory);
 			for(Ranking ranking : listKeyRanking) {
-				int nb = mapPlayer.get(ranking.getId()).size();
+				List<Invite> list = mapPlayer.get(ranking.getId());
+				int nb = list.size();
 				if (ranking.getOrder() >= rankingPositionMin) {
 					int rankingDif = ranking.getOrder() - userRanking.getOrder();
 					int point = rankingService.getNbPointDifference(rankingDif);
-					if (nbVictory > nb) {
-						ret += point * nb;
-						nbVictory -= nb;
-						logMe("RANKING " + ranking.getRanking() + " NB:" + nb + " POINT:" + point + " TOTAL:" + ret + " NB VICTORY:" + nbVictory);
-					} else {
-						ret += point * nbVictory;
-						logMe("RANKING " + ranking.getRanking() + " NB:" + nbVictory + " [" + nb + "] POINT:" + point + " TOTAL:" + ret);
+					if (nbVictory <= nb) {
+						list = list.subList(0, nbVictory);
+						nb = nbVictory;
+						doBreak = true;
+					}
+					for(Invite inv : inviteService.sortInviteByDate(list)) {
+						inv.setPoint(point);
+						listInvite.add(inv);
+					}
+					sumPoint += point * nb;
+					nbVictory -= nb;
+					logMe("RANKING " + ranking.getRanking() + " NB:" + nb + " POINT:" + point + " SUM:" + sumPoint + " NB VICTORY:" + nbVictory);
+					if (doBreak) {
 						break;
 					}
 				}
 			}
-			logMe("USER RANKING " + userRanking.getRanking() + " TOTAL:" + ret);
+			logMe("USER RANKING " + userRanking.getRanking() + " TOTAL:" + sumPoint);
 		}
-		return ret;
+		return inviteService.groupByIdTournament(listInvite);
 	}
 
 	private void logMe(String msg) {
-		Logger.logMe(TAG, "COMPUTE RANKING - " + msg);
+		if (ApplicationConfig.SHOW_LOG_COMPUTER_RANK) {
+			Logger.logMe(TAG, "COMPUTE RANKING - " + msg);
+		}
     }
 }

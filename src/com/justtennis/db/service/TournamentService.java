@@ -1,10 +1,15 @@
 package com.justtennis.db.service;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 import android.content.Context;
 
 import com.cameleon.common.android.inotifier.INotifierMessage;
 import com.justtennis.db.sqlite.datasource.DBTournamentDataSource;
 import com.justtennis.domain.Tournament;
+import com.justtennis.domain.comparator.TournamentComparatorByDate;
 
 public class TournamentService extends GenericService<Tournament> {
 
@@ -26,5 +31,11 @@ public class TournamentService extends GenericService<Tournament> {
 	
 	public boolean isRealTournament(Tournament tournament) {
 		return tournament.getId()!=null && tournament.getId() > 0;
+	}
+	
+	public List<Tournament> sortTournamentByDate(List<Tournament> listTournament) {
+		Tournament[] arrayTournament = listTournament.toArray(new Tournament[0]);
+		Arrays.sort(arrayTournament, new TournamentComparatorByDate(true));
+		return new ArrayList<Tournament>(Arrays.asList(arrayTournament));
 	}
 }

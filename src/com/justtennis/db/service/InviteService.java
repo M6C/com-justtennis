@@ -1,6 +1,7 @@
 package com.justtennis.db.service;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
@@ -8,9 +9,9 @@ import android.content.Context;
 
 import com.cameleon.common.android.inotifier.INotifierMessage;
 import com.justtennis.db.sqlite.datasource.DBInviteDataSource;
-import com.justtennis.db.sqlite.datasource.DBPlayerDataSource;
 import com.justtennis.domain.Invite;
-import com.justtennis.domain.Player;
+import com.justtennis.domain.Tournament;
+import com.justtennis.domain.comparator.InviteComparatorByDate;
 import com.justtennis.manager.TypeManager;
 
 public class InviteService extends GenericService<Invite> {
@@ -60,7 +61,6 @@ public class InviteService extends GenericService<Invite> {
 	}
 
 	public HashMap<Long, List<Invite>> getGroupByIdTournament() {
-		HashMap<Long, List<Invite>> ret = new HashMap<Long, List<Invite>>();
 		List<Invite> listInvite = null;
 		try {
 			dbDataSource.open();
@@ -69,18 +69,7 @@ public class InviteService extends GenericService<Invite> {
 		finally {
 			dbDataSource.close();
 		}
-		if (listInvite != null) {
-			for(Invite invite : listInvite) {
-				Long key = invite.getIdTournament();
-				List<Invite> list = ret.get(key);
-				if (list == null) {
-					list = new ArrayList<Invite>();
-					ret.put(key, list);
-				}
-				list.add(invite);
-			}
-		}
-		return ret;
+		return groupByIdTournament(listInvite);
 	}
 
 	public HashMap<Long, List<Invite>> getGroupByIdRanking(Invite.SCORE_RESULT scoreResult) {
@@ -105,5 +94,27 @@ public class InviteService extends GenericService<Invite> {
 			}
 		}
 		return ret;
+	}
+
+	public HashMap<Long, List<Invite>> groupByIdTournament(List<Invite> listInvite) {
+		HashMap<Long, List<Invite>> ret = new HashMap<Long, List<Invite>>();
+		if (listInvite != null) {
+			for(Invite invite : listInvite) {
+				Long key = invite.getIdTournament();
+				List<Invite> list = ret.get(key);
+				if (list == null) {
+					list = new ArrayList<Invite>();
+					ret.put(key, list);
+				}
+				list.add(invite);
+			}
+		}
+		return ret;
+	}
+
+	public List<Invite> sortInviteByDate(List<Invite> listInvite) {
+		Invite[] arrayInvite = listInvite.toArray(new Invite[0]);
+		Arrays.sort(arrayInvite, new InviteComparatorByDate(true));
+		return Arrays.asList(arrayInvite);
 	}
 }

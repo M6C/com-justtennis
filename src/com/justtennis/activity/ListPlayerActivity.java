@@ -30,6 +30,7 @@ import com.justtennis.parser.PlayerParser;
 
 public class ListPlayerActivity extends GenericActivity {
 
+	@SuppressWarnings("unused")
 	private static final String TAG = ListPlayerActivity.class.getSimpleName();
 	public static final String EXTRA_MODE = "MODE";
 	public static final String EXTRA_PLAYER_ID = "EXTRA_PLAYER_ID";

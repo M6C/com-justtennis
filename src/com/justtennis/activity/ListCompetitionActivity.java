@@ -3,10 +3,12 @@ package com.justtennis.activity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ExpandableListView;
+import android.widget.TextView;
 
 import com.justtennis.R;
 import com.justtennis.adapter.ListCompetitionAdapter;
 import com.justtennis.business.ListCompetitionBusiness;
+import com.justtennis.business.ListCompetitionBusiness.TYPE;
 import com.justtennis.listener.itemclick.OnItemClickListCompetition;
 import com.justtennis.manager.TypeManager;
 import com.justtennis.notifier.NotifierMessageLogger;
@@ -20,6 +22,7 @@ public class ListCompetitionActivity extends GenericActivity {
 
 	private ExpandableListView list;
 	private ListCompetitionAdapter adapter;
+	private TextView tvSumPoint;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -32,6 +35,7 @@ public class ListCompetitionActivity extends GenericActivity {
 
 		adapter = new ListCompetitionAdapter(this, business.getListTournament(), business.getTableInviteByTournament());
 
+		tvSumPoint = (TextView) findViewById(R.id.tv_sum_point);
 		list = (ExpandableListView) findViewById(R.id.list);
 		list.setOnChildClickListener(new OnItemClickListCompetition(this));
 		list.setAdapter(adapter);
@@ -44,6 +48,8 @@ public class ListCompetitionActivity extends GenericActivity {
 		super.onResume();
 		business.onResume();
 
+		initializePalmaresPoint();
+
 		expandAll();
 	}
 
@@ -51,6 +57,14 @@ public class ListCompetitionActivity extends GenericActivity {
 		finish();
 	}
 
+	public void onClickInviteAll(View view) {
+		updateInviteType(TYPE.ALL);
+	}
+	
+	public void onClickInvitePalmares(View view) {
+		updateInviteType(TYPE.PALMARES);
+	}
+	
 	private void expandAll() {
 		int count = adapter.getGroupCount();
 		for (int i = 0; i < count; i++) {
@@ -63,6 +77,23 @@ public class ListCompetitionActivity extends GenericActivity {
 		int count = adapter.getGroupCount();
 		for (int i = 0; i < count; i++) {
 			list.collapseGroup(i);
+		}
+	}
+
+	private void updateInviteType(TYPE type) {
+		business.setType(type);
+		business.refreshData();
+		adapter.notifyDataSetChanged();
+		expandAll();
+		initializePalmaresPoint();
+	}
+
+	private void initializePalmaresPoint() {
+		if (business.getType() == TYPE.PALMARES) {
+			tvSumPoint.setText(business.getSumPoint() + "/" + business.getRankingPoint());
+			tvSumPoint.setVisibility(View.VISIBLE);
+		} else {
+			tvSumPoint.setVisibility(View.GONE);
 		}
 	}
 }

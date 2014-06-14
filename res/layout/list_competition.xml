@@ -21,18 +21,29 @@
 	    android:visibility="visible"
 	    android:orientation="horizontal"
     >
-        <Spinner
-            android:id="@+id/sp_filter_player"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-     	/>
-        <Spinner
-            android:id="@+id/sp_filter_type"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-     	/>
-    </LinearLayout>
+	    <Button
+		    android:layout_width="match_parent"
+		    android:layout_height="35dp"
+		    android:layout_weight=".5"
+	        android:text="@string/button_text_all"
+	        android:onClick="onClickInviteAll"
+	    />
+	    <Button
+		    android:layout_width="match_parent"
+		    android:layout_height="35dp"
+		    android:layout_weight=".5"
+	        android:text="@string/button_text_palmares"
+	        android:onClick="onClickInvitePalmares"
+	    />
+		<TextView
+		    android:id="@+id/tv_sum_point"
+		    android:layout_width="wrap_content"
+		    android:layout_height="wrap_content"
+		    android:layout_marginLeft="2sp"
+		    android:visibility="gone"
+		/>
+
+	</LinearLayout>
 	<ExpandableListView
 		android:id="@+id/list"
 		android:layout_width="match_parent"
