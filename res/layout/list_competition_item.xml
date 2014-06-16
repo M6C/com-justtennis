@@ -1,22 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
-    android:layout_height="wrap_content"
-    android:gravity="center_vertical" >
-<!--  
-    <TextView
-        android:id="@+id/text"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:background="#FFF"
-        android:gravity="center_vertical"
-        android:padding="5dp"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:textColor="#FF000000" />
- --> 
+    android:layout_height="fill_parent"
+    android:gravity="top"
+	android:orientation="horizontal"
+>
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+	    android:layout_marginLeft="2sp"
+	    android:layout_marginRight="8sp"
+    >
+		<TextView
+		    android:id="@+id/tv_point"
+		    android:layout_width="wrap_content"
+		    android:layout_height="wrap_content"
+		    android:textStyle="bold"
+		    android:textSize="16sp"
+		    android:gravity="right"
+		/>
+	</LinearLayout>
     <LinearLayout
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
 	    android:layout_weight="1"
         android:orientation="vertical"
         android:layout_gravity="center_vertical"
@@ -34,14 +41,6 @@
 			    android:textColor="@color/gris_1"
 			    android:textSize="16sp"
 			/>
-			<TextView
-			    android:id="@+id/tv_point"
-			    android:layout_width="match_parent"
-			    android:layout_height="wrap_content"
-			    android:textStyle="bold"
-			    android:textSize="16sp"
-			    android:gravity="right"
-			/>
 		</LinearLayout>
 
 	    <LinearLayout
@@ -55,15 +54,6 @@
 			    android:layout_height="wrap_content"
 			    android:layout_weight="1"
 			    android:textSize="16sp"
-			/>
-
-			<TextView
-			    android:id="@+id/tv_ranking"
-			    android:layout_width="wrap_content"
-			    android:layout_height="wrap_content"
-			    android:textSize="14sp"
-			    android:layout_marginLeft="2sp"
-			    android:layout_marginRight="2sp"
 			/>
 		</LinearLayout>
 
@@ -83,5 +73,26 @@
 			/>
 		</LinearLayout>
 		
+	</LinearLayout>
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+	    android:layout_marginLeft="2sp"
+	    android:layout_marginRight="2sp"
+    >
+		<TextView
+		    android:id="@+id/tv_ranking"
+		    android:layout_width="wrap_content"
+		    android:layout_height="wrap_content"
+		    android:textSize="14sp"
+		/>
+		<TextView
+		    android:id="@+id/tv_ranking_estimate"
+		    android:layout_width="wrap_content"
+		    android:layout_height="wrap_content"
+		    android:textSize="14sp"
+		    android:textStyle="bold"
+		/>
 	</LinearLayout>
 </LinearLayout>

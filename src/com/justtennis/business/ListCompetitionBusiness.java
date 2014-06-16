@@ -75,7 +75,8 @@ public class ListCompetitionBusiness {
 		listTournament.clear();
 		tableInviteByTournament.clear();
 		if (type == TYPE.PALMARES) {
-			mapInviteByTournament = computeRankService.getListInvite();
+//			mapInviteByTournament = computeRankService.getListInvite();
+			mapInviteByTournament = computeRankService.getListInvite(true);
 		}
 
 		List<Tournament> list = tournamentService.sortTournamentByDate(tournamentService.getList());

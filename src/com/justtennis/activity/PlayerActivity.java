@@ -69,11 +69,13 @@ public class PlayerActivity extends GenericActivity {
 	private EditText etPhonenumber;
 	private BaseViewAdapter adapterType;
 	private Spinner spRanking;
+	private Spinner spRankingEstimate;
 	private Spinner spType;
 	private LinearLayout llLastname;
 	private LinearLayout llBirthday;
 	private LinearLayout llPhonenumber;
 	private LinearLayout llRanking;
+	private LinearLayout llRankingEstimate;
 	private LinearLayout llType;
 	private LinearLayout llCreate;
 	private LinearLayout llModify;
@@ -116,11 +118,13 @@ public class PlayerActivity extends GenericActivity {
 		etBirthday = (EditText)findViewById(R.id.et_birthday);
 		etPhonenumber = (EditText)findViewById(R.id.et_phonenumber);
 		spRanking = (Spinner)findViewById(R.id.sp_ranking);
+		spRankingEstimate = (Spinner)findViewById(R.id.sp_ranking_estimate);
 		spType = (Spinner)findViewById(R.id.sp_type);
 		llLastname = (LinearLayout)findViewById(R.id.ll_lastname);
 		llBirthday = (LinearLayout)findViewById(R.id.ll_birthday);
 		llPhonenumber = (LinearLayout)findViewById(R.id.ll_phonenumber);
 		llRanking = (LinearLayout)findViewById(R.id.ll_ranking);
+		llRankingEstimate = (LinearLayout)findViewById(R.id.ll_ranking_estimate);
 		llType = (LinearLayout)findViewById(R.id.ll_type);
 		llCreate = (LinearLayout)findViewById(R.id.ll_create);
 		llModify = (LinearLayout)findViewById(R.id.ll_modify);
@@ -139,9 +143,11 @@ public class PlayerActivity extends GenericActivity {
 		initializeView();
 
 		initializeRankingList();
+		initializeRankingEstimateList();
 		initializeListType();
 
 		initializeRanking();
+		initializeRankingEstimate();
 		initializeType();
 
 		initializeListenerListType();
@@ -438,6 +444,7 @@ public class PlayerActivity extends GenericActivity {
 		llBirthday.setVisibility(iVisibility);
 		llPhonenumber.setVisibility(iVisibility);
 		llRanking.setVisibility(iVisibility);
+		llRankingEstimate.setVisibility(iVisibility);
 		llType.setVisibility(iVisibility);
 
 		etFirstname.setText(firstname);
@@ -477,11 +484,37 @@ public class PlayerActivity extends GenericActivity {
 			}
 		});
 	}
+	
+	private void initializeRankingEstimateList() {
+		ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, business.getListTxtRankings());
+		dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+		spRankingEstimate.setAdapter(dataAdapter);
+		
+		spRankingEstimate.setOnItemSelectedListener(new OnItemSelectedListener() {
+			@Override
+			public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+				Ranking ranking = business.getListRanking().get(position);
+				Player player = business.buildPlayer();
+				player.setIdRankingEstimate(ranking.getId());
+			}
+			
+			@Override
+			public void onNothingSelected(AdapterView<?> arg0) {
+			}
+		});
+	}
 
 	private void initializeRanking() {
-		int rankingPosition = getRankingPosition();
+		int rankingPosition = getRankingPosition(false);
 		if (rankingPosition < business.getListRanking().size()) {
 			spRanking.setSelection(rankingPosition, true);
+		}
+	}
+	
+	private void initializeRankingEstimate() {
+		int rankingPosition = getRankingPosition(true);
+		if (rankingPosition < business.getListRanking().size()) {
+			spRankingEstimate.setSelection(rankingPosition, true);
 		}
 	}
 
@@ -489,11 +522,11 @@ public class PlayerActivity extends GenericActivity {
 		spType.setSelection(getTypePosition(), true);
 	}
 
-	private int getRankingPosition() {
+	private int getRankingPosition(boolean estimate) {
 		int position = 0;
 		Player player = business.getPlayer();
 		if (player!=null) {
-			Long id = player.getIdRanking();
+			Long id = estimate ? player.getIdRankingEstimate() : player.getIdRanking();
 			List<Ranking> listRanking = business.getListRanking();
 			for(Ranking ranking : listRanking) {
 				if (ranking.getId().equals(id)) {

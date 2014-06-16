@@ -136,11 +136,8 @@ public class DBInviteDataSource extends GenericDBDataSourceByType<Invite> {
 	@Override
 	protected Invite cursorToPojo(Cursor cursor) {
 		int col = 0;
-		Invite invite = new Invite();
-		invite.setId(DbTool.getInstance().toLong(cursor, col++));
-		Player player = new Player();
-		player.setId(DbTool.getInstance().toLong(cursor, col++));
-		invite.setPlayer(player);
+		Invite invite = new Invite(DbTool.getInstance().toLong(cursor, col++));
+		invite.setPlayer(new Player(DbTool.getInstance().toLong(cursor, col++)));
 		String date = cursor.getString(col++);
 		invite.setDate(date==null || "null".equals(date.toLowerCase(Locale.FRANCE)) ? null : new Date(Long.parseLong(date)));
 		invite.setStatus(STATUS.valueOf(DbTool.getInstance().toString(cursor, col++, STATUS.UNKNOW.toString())));

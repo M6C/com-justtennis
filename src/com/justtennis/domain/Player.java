@@ -13,6 +13,7 @@ public class Player extends Person {
 	private Long idClub;
 	private Long idAddress;
 	private Long idRanking;
+	private Long idRankingEstimate;
 	private Long idExternal;
 	private Long idGoogle;
 	private Bitmap photo;
@@ -52,6 +53,14 @@ public class Player extends Person {
 	public void setIdRanking(Long idRanking) {
 		this.idRanking = idRanking;
 	}
+	public Long getIdRankingEstimate() {
+		return idRankingEstimate;
+	}
+
+	public void setIdRankingEstimate(Long idRankingEstimate) {
+		this.idRankingEstimate = idRankingEstimate;
+	}
+
 	public Long getIdExternal() {
 		return idExternal;
 	}

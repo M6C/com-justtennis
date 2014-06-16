@@ -21,6 +21,7 @@ public class DBPlayerDataSource extends GenericDBDataSourceByType<Player> {
 		DBPlayerHelper.COLUMN_ID_CLUB,
 		DBPlayerHelper.COLUMN_ID_ADDRESS,
 		DBPlayerHelper.COLUMN_ID_RANKING,
+		DBPlayerHelper.COLUMN_ID_RANKING_ESTIMAGE,
 		DBPlayerHelper.COLUMN_FIRSTNAME,
 		DBPlayerHelper.COLUMN_LASTNAME,
 		DBPlayerHelper.COLUMN_BIRTHDAY,
@@ -48,6 +49,7 @@ public class DBPlayerDataSource extends GenericDBDataSourceByType<Player> {
 		values.put(DBPlayerHelper.COLUMN_ID_CLUB, player.getIdClub());
 		values.put(DBPlayerHelper.COLUMN_ID_ADDRESS, player.getIdAddress());
 		values.put(DBPlayerHelper.COLUMN_ID_RANKING, player.getIdRanking());
+		values.put(DBPlayerHelper.COLUMN_ID_RANKING_ESTIMAGE, player.getIdRankingEstimate());
 		values.put(DBPlayerHelper.COLUMN_FIRSTNAME, player.getFirstName());
 		values.put(DBPlayerHelper.COLUMN_LASTNAME, player.getLastName());
 		values.put(DBPlayerHelper.COLUMN_BIRTHDAY, player.getBirthday());
@@ -69,6 +71,7 @@ public class DBPlayerDataSource extends GenericDBDataSourceByType<Player> {
 		player.setIdClub(DbTool.getInstance().toLong(cursor, col++));
 		player.setIdAddress(DbTool.getInstance().toLong(cursor, col++));
 		player.setIdRanking(DbTool.getInstance().toLong(cursor, col++));
+		player.setIdRankingEstimate(DbTool.getInstance().toLong(cursor, col++));
 		player.setFirstName(cursor.getString(col++));
 		player.setLastName(cursor.getString(col++));
 		player.setBirthday(cursor.getString(col++));

@@ -27,6 +27,7 @@ public class ListCompetitionAdapter extends BaseExpandableListAdapter {
 
 	private HashMap<Long, Ranking> mapRanking;
 	private ScoreSetService scoreSetService;
+	private RankingService rankingService;
 
 	private Context context;
 	private List<Tournament> listTournament; // header titles
@@ -41,6 +42,7 @@ public class ListCompetitionAdapter extends BaseExpandableListAdapter {
 		NotifierMessageLogger notifier = NotifierMessageLogger.getInstance();
 		mapRanking = new RankingService(context, notifier).getMapById();
 		scoreSetService = new ScoreSetService(context, notifier);
+		rankingService = new RankingService(context, notifier);
 	}
 
 	@Override
@@ -69,11 +71,25 @@ public class ListCompetitionAdapter extends BaseExpandableListAdapter {
 		TextView tvDate = (TextView) convertView.findViewById(R.id.tv_date);
 		TextView tvScore = (TextView) convertView.findViewById(R.id.tv_score);
 		TextView tvRanking = (TextView) convertView.findViewById(R.id.tv_ranking);
+		TextView tvRankingEstimate = (TextView) convertView.findViewById(R.id.tv_ranking_estimate);
 		TextView tvPoint = (TextView) convertView.findViewById(R.id.tv_point);
 
-		Ranking r = mapRanking.get(invite.getIdRanking()); 
+		if (invite.getPlayer() != null) {
+			Ranking ranking = rankingService.getRanking(invite.getPlayer(), false);
+			Ranking rankingEstimate = rankingService.getRanking(invite.getPlayer(), true);
+			tvRanking.setText(ranking.getRanking());
+
+			if (ranking.getId() != rankingEstimate.getId()) {
+				tvRankingEstimate.setText(rankingEstimate.getRanking());
+				tvRankingEstimate.setVisibility(View.VISIBLE);
+			} else {
+				tvRankingEstimate.setVisibility(View.GONE);
+			}
+		} else {
+			Ranking r = mapRanking.get(invite.getIdRanking());
+			tvRanking.setText(r == null ? "" : r.getRanking());
+		}
 		tvPlayer.setText(invite.getPlayer()==null ? "" : Html.fromHtml("<b>" + invite.getPlayer().getFirstName() + "</b> " + invite.getPlayer().getLastName()));
-		tvRanking.setText(r == null ? "" : r.getRanking());
 		tvDate.setText(invite.getDate()==null ? "" : sdf.format(invite.getDate()));
 		tvPoint.setText(invite.getPoint() > 0 ? ""+invite.getPoint() : "");
 

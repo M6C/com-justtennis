@@ -20,6 +20,8 @@ public class DBRankingHelper extends GenericDBHelper {
 	public static final String COLUMN_VICTORY_MAN = "RANK_VICTORY_MAN";
 	public static final String COLUMN_VICTORY_WOMAN = "RANK_VICTORY_WOMAN";
 
+	public static final String RANKING_NC = "NC";
+
 	private static final String DATABASE_NAME = "Ranking.db";
 	private static final int DATABASE_VERSION = 3;
 
@@ -83,7 +85,7 @@ public class DBRankingHelper extends GenericDBHelper {
 
 	private void feed(SQLiteDatabase database) {
 		String[][] rows = new String[][] {
-			{"NC", "4", "0", "0", "0", "6", "6"},
+			{RANKING_NC, "4", "0", "0", "0", "6", "6"},
 			{"40", "4", "1", "0", "0", "6", "6"},
 			{"30/5", "4", "2", "6", "6", "6", "6"},
 			{"30/4", "4", "3", "70", "70", "6", "6"},

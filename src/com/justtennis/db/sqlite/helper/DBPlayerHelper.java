@@ -16,6 +16,7 @@ public class DBPlayerHelper extends GenericDBHelper {
 	public static final String COLUMN_ID_TOURNAMENT = "ID_TOURNAMENT";
 	public static final String COLUMN_ID_CLUB = "ID_CLUB";
 	public static final String COLUMN_ID_RANKING = "ID_RANKING";
+	public static final String COLUMN_ID_RANKING_ESTIMAGE = "ID_RANKING_ESTIMAGE";
 	public static final String COLUMN_ID_ADDRESS = "ID_ADDRESS";
 	public static final String COLUMN_FIRSTNAME = "FIRSTNAME";
 	public static final String COLUMN_LASTNAME = "LASTNAME";
@@ -29,7 +30,7 @@ public class DBPlayerHelper extends GenericDBHelper {
 	public static final String COLUMN_TYPE = "TYPE";
 
 	private static final String DATABASE_NAME = "Player.db";
-	private static final int DATABASE_VERSION = 11;
+	private static final int DATABASE_VERSION = 12;
 
 	// Database creation sql statement
 	private static final String DATABASE_CREATE = "CREATE TABLE " + TABLE_NAME + "(" + 
@@ -38,6 +39,7 @@ public class DBPlayerHelper extends GenericDBHelper {
 		COLUMN_ID_CLUB + " INTEGER NULL, " + 
 		COLUMN_ID_ADDRESS + " INTEGER NULL, " + 
 		COLUMN_ID_RANKING + " INTEGER NULL, " + 
+		COLUMN_ID_RANKING_ESTIMAGE + " INTEGER NULL, " + 
 		COLUMN_FIRSTNAME + " TEXT NULL, " + 
 		COLUMN_LASTNAME + " TEXT NULL, " + 
 		COLUMN_BIRTHDAY + " INTEGER NULL, " + 
@@ -75,6 +77,9 @@ public class DBPlayerHelper extends GenericDBHelper {
 			}
 			if (oldVersion <= 10) {
 				updateColumn(database, COLUMN_TYPE, ""+TYPE.TRAINING, COLUMN_TYPE + " = 'ENTRAINEMENT'");
+			}
+			if (oldVersion <= 11) {
+				addColumn(database, COLUMN_ID_RANKING_ESTIMAGE, " INTEGER NULL ");
 			}
 		}
 		else {

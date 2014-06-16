@@ -10,7 +10,6 @@ import android.content.Context;
 import com.cameleon.common.android.inotifier.INotifierMessage;
 import com.justtennis.db.sqlite.datasource.DBInviteDataSource;
 import com.justtennis.domain.Invite;
-import com.justtennis.domain.Tournament;
 import com.justtennis.domain.comparator.InviteComparatorByDate;
 import com.justtennis.manager.TypeManager;
 
@@ -72,28 +71,24 @@ public class InviteService extends GenericService<Invite> {
 		return groupByIdTournament(listInvite);
 	}
 
-	public HashMap<Long, List<Invite>> getGroupByIdRanking(Invite.SCORE_RESULT scoreResult) {
-		HashMap<Long, List<Invite>> ret = new HashMap<Long, List<Invite>>();
-		List<Invite> listPlayer = null;
+	public List<Invite> getByScoreResult(Invite.SCORE_RESULT scoreResult) {
+		List<Invite> listInvite = null;
 		try {
 			dbDataSource.open();
-			listPlayer = ((DBInviteDataSource)dbDataSource).getByScoreResult(scoreResult);
+			listInvite = ((DBInviteDataSource)dbDataSource).getByScoreResult(scoreResult);
 		}
 		finally {
 			dbDataSource.close();
 		}
+		return listInvite;
+	}
+
+	public HashMap<Long, List<Invite>> getGroupByIdRanking(Invite.SCORE_RESULT scoreResult) {
+		List<Invite> listPlayer = getByScoreResult(scoreResult);
 		if (listPlayer != null) {
-			for(Invite invite : listPlayer) {
-				Long key = invite.getIdRanking();
-				List<Invite> list = ret.get(key);
-				if (list == null) {
-					list = new ArrayList<Invite>();
-					ret.put(key, list);
-				}
-				list.add(invite);
-			}
+			return groupByIdRanking(listPlayer);
 		}
-		return ret;
+		return null;
 	}
 
 	public HashMap<Long, List<Invite>> groupByIdTournament(List<Invite> listInvite) {
@@ -116,5 +111,19 @@ public class InviteService extends GenericService<Invite> {
 		Invite[] arrayInvite = listInvite.toArray(new Invite[0]);
 		Arrays.sort(arrayInvite, new InviteComparatorByDate(true));
 		return Arrays.asList(arrayInvite);
+	}
+
+	private HashMap<Long,List<Invite>> groupByIdRanking(List<Invite> listPlayer) {
+		HashMap<Long, List<Invite>> ret = new HashMap<Long, List<Invite>>();
+		for(Invite invite : listPlayer) {
+			Long key = invite.getIdRanking();
+			List<Invite> list = ret.get(key);
+			if (list == null) {
+				list = new ArrayList<Invite>();
+				ret.put(key, list);
+			}
+			list.add(invite);
+		}
+		return ret;
 	}
 }

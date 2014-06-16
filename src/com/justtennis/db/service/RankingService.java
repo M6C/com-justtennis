@@ -10,6 +10,7 @@ import android.util.SparseIntArray;
 
 import com.cameleon.common.android.inotifier.INotifierMessage;
 import com.justtennis.db.sqlite.datasource.DBRankingDataSource;
+import com.justtennis.domain.Player;
 import com.justtennis.domain.Ranking;
 import com.justtennis.domain.comparator.RankingComparatorByOrder;
 
@@ -25,6 +26,33 @@ public class RankingService extends GenericService<Ranking> {
 		order(listRanking, false);
 	}
 
+	public Ranking getNC() {
+		try {
+			dbDataSource.open();
+			return ((DBRankingDataSource)dbDataSource).getNC();
+		}
+		finally {
+			dbDataSource.close();
+		}
+	}
+
+	public Ranking getRanking(Player player, boolean estimate) {
+		Ranking ret = null;
+		Long idRanking = null;
+		if (estimate) {
+			idRanking = (player.getIdRankingEstimate() != null ? player.getIdRankingEstimate() : player.getIdRanking());
+		} else {
+			idRanking = (player.getIdRanking() != null ? player.getIdRanking() : player.getIdRankingEstimate());
+		}
+		if (idRanking != null) {
+			ret = find(idRanking);
+		}
+		if (idRanking == null) {
+			ret = getNC();
+		}
+		return ret;
+	}
+	
 	public void order(List<Ranking> listRanking, boolean inverse) {
 		SortedSet<Ranking> setRanking = new TreeSet<Ranking>(new RankingComparatorByOrder(inverse));
 		setRanking.addAll(listRanking);

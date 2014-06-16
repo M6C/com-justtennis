@@ -24,6 +24,7 @@ Saisie de Message
 
 ********************* DONE *****************************
 Common
+[20140616] - Calcul des points par match par rapport au classement estimer
 [20140615] - Affichage du palmares avec le calcul des points par match par rapport au classement
 [20140614] - Calcul de des points par match pour le classement
 [20140529] - Remplace le type 'MATCH' par 'COMPETITION' Fix
