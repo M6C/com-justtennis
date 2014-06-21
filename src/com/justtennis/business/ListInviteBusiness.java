@@ -15,7 +15,6 @@ import com.justtennis.db.service.PlayerService;
 import com.justtennis.db.service.ScoreSetService;
 import com.justtennis.domain.Invite;
 import com.justtennis.domain.Player;
-import com.justtennis.domain.comparator.InviteComparatorByDate;
 import com.justtennis.domain.comparator.PlayerComparatorByName;
 import com.justtennis.helper.GCalendarHelper;
 
@@ -76,7 +75,7 @@ public class ListInviteBusiness {
 	}
 
 	private void refreshInvite() {
-		List<Invite> listInvite = sortInvite(inviteService.getList());
+		List<Invite> listInvite = inviteService.sortInviteByDate(inviteService.getList());
 
 		for (Invite invite : listInvite) {
 			invite.setPlayer(playerService.find(invite.getPlayer().getId()));
@@ -98,12 +97,6 @@ public class ListInviteBusiness {
 			Player player = listPlayer.get(i);
 			listPlayerName[i] = player.getFullName();
 		}
-	}
-
-	private List<Invite> sortInvite(List<Invite> listInvite) {
-		Invite[] arrayInvite = listInvite.toArray(new Invite[0]);
-		Arrays.sort(arrayInvite, new InviteComparatorByDate(true));
-		return Arrays.asList(arrayInvite);
 	}
 
 	private List<Player> sortPlayer(List<Player> listPlayer) {

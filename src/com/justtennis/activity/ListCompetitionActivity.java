@@ -1,5 +1,6 @@
 package com.justtennis.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ExpandableListView;
@@ -30,13 +31,14 @@ public class ListCompetitionActivity extends GenericActivity {
 
 		setContentView(R.layout.list_competition);
 
+		tvSumPoint = (TextView) findViewById(R.id.tv_sum_point);
+		list = (ExpandableListView) findViewById(R.id.list);
+
 		business = new ListCompetitionBusiness(this, NotifierMessageLogger.getInstance());
 		business.onCreate();
 
 		adapter = new ListCompetitionAdapter(this, business.getListTournament(), business.getTableInviteByTournament());
 
-		tvSumPoint = (TextView) findViewById(R.id.tv_sum_point);
-		list = (ExpandableListView) findViewById(R.id.list);
 		list.setOnChildClickListener(new OnItemClickListCompetition(this));
 		list.setAdapter(adapter);
 
@@ -62,7 +64,10 @@ public class ListCompetitionActivity extends GenericActivity {
 	}
 	
 	public void onClickInvitePalmares(View view) {
-		updateInviteType(TYPE.PALMARES);
+//		updateInviteType(TYPE.PALMARES);
+		Intent intent = new Intent(getApplicationContext(), ComputeRankingActivity.class);
+		startActivity(intent);
+		finish();
 	}
 	
 	private void expandAll() {

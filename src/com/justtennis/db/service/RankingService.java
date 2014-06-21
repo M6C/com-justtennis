@@ -36,6 +36,20 @@ public class RankingService extends GenericService<Ranking> {
 		}
 	}
 
+	/**
+	 * @param position
+	 * @return
+	 */
+	public List<Ranking> getWithPostionEqualUpper(int position) {
+		try {
+			dbDataSource.open();
+			return ((DBRankingDataSource)dbDataSource).getWithPostionEqualUpper(position);
+		}
+		finally {
+			dbDataSource.close();
+		}
+	}
+
 	public Ranking getRanking(Player player, boolean estimate) {
 		Ranking ret = null;
 		Long idRanking = null;
@@ -52,7 +66,7 @@ public class RankingService extends GenericService<Ranking> {
 		}
 		return ret;
 	}
-	
+
 	public void order(List<Ranking> listRanking, boolean inverse) {
 		SortedSet<Ranking> setRanking = new TreeSet<Ranking>(new RankingComparatorByOrder(inverse));
 		setRanking.addAll(listRanking);

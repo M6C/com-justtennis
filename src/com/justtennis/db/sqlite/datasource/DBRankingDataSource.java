@@ -38,7 +38,7 @@ public class DBRankingDataSource extends GenericDBDataSource<Ranking> {
 	public List<Ranking> getAll() {
 		return query(null);
 	}
-	
+
 	/**
 	 * Return NC Ranking
 	 * @return Ranking
@@ -46,6 +46,14 @@ public class DBRankingDataSource extends GenericDBDataSource<Ranking> {
 	public Ranking getNC() {
 		List<Ranking> list = query(DBRankingHelper.COLUMN_RANKING + " = ?", new String[]{DBRankingHelper.RANKING_NC});
 		return (list!=null && list.size()>0 ? list.get(0) : null);
+	}
+
+	/**
+	 * @param position
+	 * @return
+	 */
+	public List<Ranking> getWithPostionEqualUpper(int position) {
+		return query(DBRankingHelper.COLUMN_POSITION + " >= ?", new String[]{DBRankingHelper.RANKING_NC});
 	}
 
 	@Override

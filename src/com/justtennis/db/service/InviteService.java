@@ -2,6 +2,7 @@ package com.justtennis.db.service;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 
@@ -11,6 +12,7 @@ import com.cameleon.common.android.inotifier.INotifierMessage;
 import com.justtennis.db.sqlite.datasource.DBInviteDataSource;
 import com.justtennis.domain.Invite;
 import com.justtennis.domain.comparator.InviteComparatorByDate;
+import com.justtennis.domain.comparator.InviteComparatorByPoint;
 import com.justtennis.manager.TypeManager;
 
 public class InviteService extends GenericService<Invite> {
@@ -108,8 +110,16 @@ public class InviteService extends GenericService<Invite> {
 	}
 
 	public List<Invite> sortInviteByDate(List<Invite> listInvite) {
+		return sortInvite(listInvite, new InviteComparatorByDate(true));
+	}
+	
+	public List<Invite> sortInviteByPoint(List<Invite> listInvite) {
+		return sortInvite(listInvite, new InviteComparatorByPoint(true));
+	}
+
+	private List<Invite> sortInvite(List<Invite> listInvite, Comparator<Invite> comparator) {
 		Invite[] arrayInvite = listInvite.toArray(new Invite[0]);
-		Arrays.sort(arrayInvite, new InviteComparatorByDate(true));
+		Arrays.sort(arrayInvite, comparator);
 		return Arrays.asList(arrayInvite);
 	}
 

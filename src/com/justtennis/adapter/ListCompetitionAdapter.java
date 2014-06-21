@@ -4,6 +4,7 @@ import java.text.SimpleDateFormat;
 import java.util.HashMap;
 import java.util.List;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Typeface;
 import android.text.Html;
@@ -11,28 +12,26 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.justtennis.ApplicationConfig;
 import com.justtennis.R;
-import com.justtennis.db.service.RankingService;
+import com.justtennis.adapter.manager.RankingViewManager;
 import com.justtennis.db.service.ScoreSetService;
 import com.justtennis.domain.Invite;
-import com.justtennis.domain.Ranking;
 import com.justtennis.domain.Tournament;
 import com.justtennis.notifier.NotifierMessageLogger;
 
 public class ListCompetitionAdapter extends BaseExpandableListAdapter {
 
-	private HashMap<Long, Ranking> mapRanking;
 	private ScoreSetService scoreSetService;
-	private RankingService rankingService;
+	private RankingViewManager rankingViewManager;
 
 	private Context context;
 	private List<Tournament> listTournament; // header titles
 	// child data in format of header title, child title
 	private HashMap<Tournament, List<Invite>> listInviteByTournament;
+	@SuppressLint("SimpleDateFormat")
 	private final static SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm");
 
 	public ListCompetitionAdapter(Context context, List<Tournament> listTournament, HashMap<Tournament, List<Invite>> listInviteByTournament) {
@@ -40,9 +39,8 @@ public class ListCompetitionAdapter extends BaseExpandableListAdapter {
 		this.listTournament = listTournament;
 		this.listInviteByTournament = listInviteByTournament;
 		NotifierMessageLogger notifier = NotifierMessageLogger.getInstance();
-		mapRanking = new RankingService(context, notifier).getMapById();
 		scoreSetService = new ScoreSetService(context, notifier);
-		rankingService = new RankingService(context, notifier);
+		rankingViewManager = RankingViewManager.getInstance(context, notifier);
 	}
 
 	@Override
@@ -70,25 +68,10 @@ public class ListCompetitionAdapter extends BaseExpandableListAdapter {
 		TextView tvPlayer = (TextView) convertView.findViewById(R.id.tv_player);
 		TextView tvDate = (TextView) convertView.findViewById(R.id.tv_date);
 		TextView tvScore = (TextView) convertView.findViewById(R.id.tv_score);
-		TextView tvRanking = (TextView) convertView.findViewById(R.id.tv_ranking);
-		TextView tvRankingEstimate = (TextView) convertView.findViewById(R.id.tv_ranking_estimate);
 		TextView tvPoint = (TextView) convertView.findViewById(R.id.tv_point);
 
-		if (invite.getPlayer() != null) {
-			Ranking ranking = rankingService.getRanking(invite.getPlayer(), false);
-			Ranking rankingEstimate = rankingService.getRanking(invite.getPlayer(), true);
-			tvRanking.setText(ranking.getRanking());
+		rankingViewManager.manageRanking(convertView, invite, true);
 
-			if (ranking.getId() != rankingEstimate.getId()) {
-				tvRankingEstimate.setText(rankingEstimate.getRanking());
-				tvRankingEstimate.setVisibility(View.VISIBLE);
-			} else {
-				tvRankingEstimate.setVisibility(View.GONE);
-			}
-		} else {
-			Ranking r = mapRanking.get(invite.getIdRanking());
-			tvRanking.setText(r == null ? "" : r.getRanking());
-		}
 		tvPlayer.setText(invite.getPlayer()==null ? "" : Html.fromHtml("<b>" + invite.getPlayer().getFirstName() + "</b> " + invite.getPlayer().getLastName()));
 		tvDate.setText(invite.getDate()==null ? "" : sdf.format(invite.getDate()));
 		tvPoint.setText(invite.getPoint() > 0 ? ""+invite.getPoint() : "");
