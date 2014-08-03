@@ -39,7 +39,8 @@ public class DBInviteDataSource extends GenericDBDataSourceByType<Invite> {
 		DBInviteHelper.COLUMN_SCORE_RESULT,
 		DBInviteHelper.COLUMN_ID_ADDRESS,
 		DBInviteHelper.COLUMN_ID_CLUB,
-		DBInviteHelper.COLUMN_ID_TOURNAMENT
+		DBInviteHelper.COLUMN_ID_TOURNAMENT,
+		DBInviteHelper.COLUMN_BONUS_POINT
 	};
 
 	public DBInviteDataSource(Context context, INotifierMessage notificationMessage) {
@@ -131,6 +132,7 @@ public class DBInviteDataSource extends GenericDBDataSourceByType<Invite> {
 		values.put(DBInviteHelper.COLUMN_ID_ADDRESS, invite.getIdAddress());
 		values.put(DBInviteHelper.COLUMN_ID_CLUB, invite.getIdClub());
 		values.put(DBInviteHelper.COLUMN_ID_TOURNAMENT, invite.getIdTournament());
+		values.put(DBInviteHelper.COLUMN_BONUS_POINT, invite.getBonusPoint());
 	}
 
 	@Override
@@ -149,6 +151,7 @@ public class DBInviteDataSource extends GenericDBDataSourceByType<Invite> {
 		invite.setAddress(DbTool.getInstance().toPojo(cursor, col++, Address.class));
 		invite.setClub(DbTool.getInstance().toPojo(cursor, col++, Club.class));
 		invite.setTournament(DbTool.getInstance().toPojo(cursor, col++, Tournament.class));
+		invite.setBonusPoint(DbTool.getInstance().toInteger(cursor, col++));
 		return invite;
 	}
 	

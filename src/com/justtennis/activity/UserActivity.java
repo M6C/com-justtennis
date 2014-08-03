@@ -62,8 +62,6 @@ public class UserActivity extends PlayerActivity {
 		super.initializeViewById();
 		tvMessage = (TextView)findViewById(R.id.tv_message);
 		etMessage = (EditText)findViewById(R.id.et_message);
-
-		findViewById(R.id.ll_type).setVisibility(View.GONE);
 	}
 
 	@Override

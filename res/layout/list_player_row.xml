@@ -23,15 +23,28 @@
         android:layout_weight="1"
         android:orientation="horizontal"
     >
-		<TextView
-		    android:id="@+id/tv_ranking"
-		    android:layout_width="30dp"
-		    android:layout_height="wrap_content"
-		    android:textSize="14sp"
+	    <LinearLayout
+	        android:layout_width="30dp"
+	        android:layout_height="wrap_content"
+	        android:orientation="vertical"
 		    android:layout_marginLeft="2sp"
 		    android:layout_marginRight="2sp"
-		/>
-
+	    >
+			<TextView
+			    android:id="@+id/tv_ranking"
+			    android:layout_width="wrap_content"
+			    android:layout_height="wrap_content"
+			    android:textSize="14sp"
+			/>
+			<TextView
+			    android:id="@+id/tv_ranking_estimate"
+			    android:layout_width="wrap_content"
+			    android:layout_height="wrap_content"
+			    android:visibility="gone"
+			    android:textSize="14sp"
+			    android:textStyle="bold"
+			/>
+		</LinearLayout>
 	    <LinearLayout
 		    android:layout_width="0dp"
 	        android:layout_height="wrap_content"

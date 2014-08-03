@@ -11,6 +11,7 @@ import com.justtennis.business.sub.ComputeRankSubService;
 import com.justtennis.db.service.InviteService;
 import com.justtennis.db.service.PlayerService;
 import com.justtennis.db.service.ScoreSetService;
+import com.justtennis.db.service.UserService;
 import com.justtennis.domain.ComputeDataRanking;
 import com.justtennis.domain.Invite;
 
@@ -23,21 +24,26 @@ public class ComputeRankingBusiness {
 
 	private ComputeRankSubService computeRankService;
 
+	private UserService userService;
 	private InviteService inviteService;
 	private ScoreSetService scoreService;
 	private PlayerService playerService;
 
-	private List<Invite> list = new ArrayList<Invite>();
-
 	private ComputeDataRanking computeDataRanking;
+
+	private List<Invite> list = new ArrayList<Invite>();
+	private Long idRanking;
 
 	public ComputeRankingBusiness(ComputeRankingActivity context, INotifierMessage notificationMessage) {
 		this.context = context;
 		computeRankService = new ComputeRankSubService(context, notificationMessage);
 
+		userService = new UserService(context, notificationMessage);
 		playerService = new PlayerService(context, notificationMessage);
 		inviteService = new InviteService(context, notificationMessage);
 		scoreService = new ScoreSetService(context, notificationMessage);
+	
+		idRanking = userService.find().getIdRanking();
 	}
 
 	public void onCreate() {
@@ -56,13 +62,13 @@ public class ComputeRankingBusiness {
 		return context;
 	}
 
-	private void refreshData() {
+	public void refreshData() {
 		refreshComputeDataRanking();
 		refreshInvite();
 	}
 
 	private void refreshComputeDataRanking() {
-		computeDataRanking = computeRankService.computeDataRanking(true);
+		computeDataRanking = computeRankService.computeDataRanking(idRanking, true);
 
 		computeDataRanking.setListInviteCalculed(inviteService.sortInviteByPoint(computeDataRanking.getListInviteCalculed()));
 		computeDataRanking.setListInviteNotUsed(inviteService.sortInviteByDate(computeDataRanking.getListInviteNotUsed()));
@@ -79,11 +85,27 @@ public class ComputeRankingBusiness {
 		}
 	}
 
+	public void setIdRanking(Long idRanking) {
+		this.idRanking = idRanking;
+	}
+
+	public Long getIdRanking() {
+		return idRanking;
+	}
+
 	public int getPointCalculate() {
 		return computeDataRanking.getPointCalculate();
 	}
 
 	public int getPointObjectif() {
 		return computeDataRanking.getPointObjectif();
+	}
+
+	public int getNbVictoryCalculate() {
+		return computeDataRanking.getNbVictoryCalculate();
+	}
+
+	public int getNbVictorySum() {
+		return computeDataRanking.getNbVictoryCalculate() + computeDataRanking.getNbVictory();
 	}
 }

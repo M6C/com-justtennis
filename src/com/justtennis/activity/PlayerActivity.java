@@ -2,7 +2,6 @@
 package com.justtennis.activity;
 
 import java.io.Serializable;
-import java.util.List;
 
 import org.gdocument.gtracergps.launcher.log.Logger;
 
@@ -14,7 +13,6 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.AdapterView.OnItemSelectedListener;
-import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
@@ -23,10 +21,10 @@ import android.widget.TextView;
 import com.cameleon.common.android.adapter.BaseViewAdapter;
 import com.cameleon.common.android.factory.FactoryDialog;
 import com.justtennis.R;
+import com.justtennis.adapter.manager.RankingListManager;
 import com.justtennis.business.PlayerBusiness;
 import com.justtennis.domain.Club;
 import com.justtennis.domain.Player;
-import com.justtennis.domain.Ranking;
 import com.justtennis.domain.Tournament;
 import com.justtennis.listener.action.TextWatcherFieldEnableView;
 import com.justtennis.listener.ok.OnClickPlayerCreateListenerOk;
@@ -58,6 +56,7 @@ public class PlayerActivity extends GenericActivity {
 
 	private Bundle savedInstanceState;
 	private PlayerBusiness business;
+	private RankingListManager rankingListManager;
 
 	private TextView tvFirstname;
 	private TextView tvLastname;
@@ -68,8 +67,6 @@ public class PlayerActivity extends GenericActivity {
 	private EditText etBirthday;
 	private EditText etPhonenumber;
 	private BaseViewAdapter adapterType;
-	private Spinner spRanking;
-	private Spinner spRankingEstimate;
 	private Spinner spType;
 	private LinearLayout llLastname;
 	private LinearLayout llBirthday;
@@ -102,52 +99,24 @@ public class PlayerActivity extends GenericActivity {
 		initializeViewById();
 		
 		business = createBusiness();
+		NotifierMessageLogger notifier = NotifierMessageLogger.getInstance();
+		rankingListManager = RankingListManager.getInstance(this, notifier);
 
 		initializeListener();
 		initialize();
-		TypeManager.getInstance().initializeActivity(findViewById(R.id.layout_main), false);
-	}
 
-	protected void initializeViewById() {
-		tvFirstname = (TextView)findViewById(R.id.tv_firstname);
-		tvLastname = (TextView)findViewById(R.id.tv_lastname);
-		tvBirthday = (TextView)findViewById(R.id.tv_birthday);
-		tvPhonenumber = (TextView)findViewById(R.id.tv_phonenumber);
-		etFirstname = (EditText)findViewById(R.id.et_firstname);
-		etLastname = (EditText)findViewById(R.id.et_lastname);
-		etBirthday = (EditText)findViewById(R.id.et_birthday);
-		etPhonenumber = (EditText)findViewById(R.id.et_phonenumber);
-		spRanking = (Spinner)findViewById(R.id.sp_ranking);
-		spRankingEstimate = (Spinner)findViewById(R.id.sp_ranking_estimate);
-		spType = (Spinner)findViewById(R.id.sp_type);
-		llLastname = (LinearLayout)findViewById(R.id.ll_lastname);
-		llBirthday = (LinearLayout)findViewById(R.id.ll_birthday);
-		llPhonenumber = (LinearLayout)findViewById(R.id.ll_phonenumber);
-		llRanking = (LinearLayout)findViewById(R.id.ll_ranking);
-		llRankingEstimate = (LinearLayout)findViewById(R.id.ll_ranking_estimate);
-		llType = (LinearLayout)findViewById(R.id.ll_type);
-		llCreate = (LinearLayout)findViewById(R.id.ll_create);
-		llModify = (LinearLayout)findViewById(R.id.ll_modify);
-		llAddDemande = (LinearLayout)findViewById(R.id.ll_add_demande);
-		tvLocation = ((TextView)findViewById(R.id.tv_location));
-		tvLocationEmpty = ((TextView)findViewById(R.id.et_location));
-		llLocationDetail = (LinearLayout)findViewById(R.id.ll_location_detail);
-		tvLocationName = ((TextView)findViewById(R.id.tv_location_name));
-		tvLocationLine1 = ((TextView)findViewById(R.id.tv_location_line1));
-		tvLocationLine2 = ((TextView)findViewById(R.id.tv_location_line2));
+		initializeView();
+		initializeRankingList();
+		initializeRankingEstimateList();
+		initializeListType();
+
+		TypeManager.getInstance().initializeActivity(findViewById(R.id.layout_main), false);
 	}
 
 	@Override
 	protected void onResume() {
 		super.onResume();
-		initializeView();
 
-		initializeRankingList();
-		initializeRankingEstimateList();
-		initializeListType();
-
-		initializeRanking();
-		initializeRankingEstimate();
 		initializeType();
 
 		initializeListenerListType();
@@ -165,7 +134,7 @@ public class PlayerActivity extends GenericActivity {
 		super.onActivityResult(requestCode, resultCode, data);
 		
 		if (requestCode==RESULT_CODE_QRCODE_SCAN) {
-			if (resultCode == RESULT_OK) {
+			if (resultCode == RESULT_OK && data != null) {
 				String qrcodeData = data.getStringExtra("SCAN_RESULT");
 //				String format = data.getStringExtra("SCAN_RESULT_FORMAT");
 				// Handle successful scan
@@ -179,7 +148,7 @@ public class PlayerActivity extends GenericActivity {
 				// Handle cancel
 			}
 		} else if (requestCode==RESULT_CODE_GOOGLE) {
-			if (resultCode == RESULT_OK) {
+			if (resultCode == RESULT_OK && data != null) {
 				Player player = (Player) data.getSerializableExtra(ListPersonActivity.EXTRA_PLAYER);
 
 				business.setPlayer(player);
@@ -189,7 +158,7 @@ public class PlayerActivity extends GenericActivity {
 				// Handle cancel
 			}
 		} else if (requestCode==RESULT_LOCATION) {
-			if (data != null) {
+			if (resultCode == RESULT_OK && data != null) {
 				locationFromResult = data.getSerializableExtra(LocationActivity.EXTRA_OUT_LOCATION);
 			}
 		}
@@ -200,6 +169,33 @@ public class PlayerActivity extends GenericActivity {
 		buildPlayer();
 		business.onSaveInstanceState(outState);
 		super.onSaveInstanceState(outState);
+	}
+
+	protected void initializeViewById() {
+		tvFirstname = (TextView)findViewById(R.id.tv_firstname);
+		tvLastname = (TextView)findViewById(R.id.tv_lastname);
+		tvBirthday = (TextView)findViewById(R.id.tv_birthday);
+		tvPhonenumber = (TextView)findViewById(R.id.tv_phonenumber);
+		etFirstname = (EditText)findViewById(R.id.et_firstname);
+		etLastname = (EditText)findViewById(R.id.et_lastname);
+		etBirthday = (EditText)findViewById(R.id.et_birthday);
+		etPhonenumber = (EditText)findViewById(R.id.et_phonenumber);
+		spType = (Spinner)findViewById(R.id.sp_type);
+		llLastname = (LinearLayout)findViewById(R.id.ll_lastname);
+		llBirthday = (LinearLayout)findViewById(R.id.ll_birthday);
+		llPhonenumber = (LinearLayout)findViewById(R.id.ll_phonenumber);
+		llRanking = (LinearLayout)findViewById(R.id.ll_ranking);
+		llRankingEstimate = (LinearLayout)findViewById(R.id.ll_ranking_estimate);
+		llType = (LinearLayout)findViewById(R.id.ll_type);
+		llCreate = (LinearLayout)findViewById(R.id.ll_create);
+		llModify = (LinearLayout)findViewById(R.id.ll_modify);
+		llAddDemande = (LinearLayout)findViewById(R.id.ll_add_demande);
+		tvLocation = ((TextView)findViewById(R.id.tv_location));
+		tvLocationEmpty = ((TextView)findViewById(R.id.et_location));
+		llLocationDetail = (LinearLayout)findViewById(R.id.ll_location_detail);
+		tvLocationName = ((TextView)findViewById(R.id.tv_location_name));
+		tvLocationLine1 = ((TextView)findViewById(R.id.tv_location_line1));
+		tvLocationLine2 = ((TextView)findViewById(R.id.tv_location_line2));
 	}
 
 	public void onClickCreate(View view) {
@@ -424,7 +420,7 @@ public class PlayerActivity extends GenericActivity {
 		});
 	}
 
-	private void initializeView() {
+	protected void initializeView() {
 		Player player = business.getPlayer();
 		boolean bEditable = true;
 		int iVisibility = View.VISIBLE;
@@ -467,76 +463,15 @@ public class PlayerActivity extends GenericActivity {
 	}
 
 	private void initializeRankingList() {
-		ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, business.getListTxtRankings());
-		dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-		spRanking.setAdapter(dataAdapter);
-
-		spRanking.setOnItemSelectedListener(new OnItemSelectedListener() {
-			@Override
-			public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-				Ranking ranking = business.getListRanking().get(position);
-				Player player = business.buildPlayer();
-				player.setIdRanking(ranking.getId());
-			}
-
-			@Override
-			public void onNothingSelected(AdapterView<?> arg0) {
-			}
-		});
+		rankingListManager.manageRanking(this, business.buildPlayer(), false);
 	}
 	
 	private void initializeRankingEstimateList() {
-		ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, business.getListTxtRankings());
-		dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-		spRankingEstimate.setAdapter(dataAdapter);
-		
-		spRankingEstimate.setOnItemSelectedListener(new OnItemSelectedListener() {
-			@Override
-			public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-				Ranking ranking = business.getListRanking().get(position);
-				Player player = business.buildPlayer();
-				player.setIdRankingEstimate(ranking.getId());
-			}
-			
-			@Override
-			public void onNothingSelected(AdapterView<?> arg0) {
-			}
-		});
-	}
-
-	private void initializeRanking() {
-		int rankingPosition = getRankingPosition(false);
-		if (rankingPosition < business.getListRanking().size()) {
-			spRanking.setSelection(rankingPosition, true);
-		}
-	}
-	
-	private void initializeRankingEstimate() {
-		int rankingPosition = getRankingPosition(true);
-		if (rankingPosition < business.getListRanking().size()) {
-			spRankingEstimate.setSelection(rankingPosition, true);
-		}
+		rankingListManager.manageRanking(this, business.buildPlayer(), true);
 	}
 
 	private void initializeType() {
-		spType.setSelection(getTypePosition(), true);
-	}
-
-	private int getRankingPosition(boolean estimate) {
-		int position = 0;
-		Player player = business.getPlayer();
-		if (player!=null) {
-			Long id = estimate ? player.getIdRankingEstimate() : player.getIdRanking();
-			List<Ranking> listRanking = business.getListRanking();
-			for(Ranking ranking : listRanking) {
-				if (ranking.getId().equals(id)) {
-					break;
-				} else {
-					position++;
-				}
-			}
-		}
-		return position;
+		spType.setSelection(getTypePosition(), false);
 	}
 		
 	private int getTypePosition() {

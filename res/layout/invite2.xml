@@ -272,7 +272,33 @@
        				    android:onClick="onClickScoreCollapser"  >
                         <include layout="@layout/element_score_collapser" />
                     </LinearLayout>
-                </LinearLayout>
+
+				      <LinearLayout
+				          android:id="@+id/ll_bonus_point"
+				          android:layout_width="match_parent"
+				          android:layout_height="wrap_content"
+				          android:layout_marginBottom="@dimen/player_layout_field_marging_bottom"
+				          android:background="@color/player_form_field_background_color"
+				          android:orientation="vertical"
+				          android:padding="@dimen/player_layout_field_padding" >
+				
+				          <TextView
+				              android:layout_width="match_parent"
+				              android:layout_height="wrap_content"
+				              android:text="@string/txt_bonus_point"
+				              android:textSize="@dimen/player_text_size"
+				              android:textColor="@android:color/secondary_text_light_nodisable"
+				              android:textStyle="bold" />
+				
+				          <Spinner
+				              android:id="@+id/sp_bonus_point"
+				              android:layout_width="match_parent"
+				              android:layout_height="wrap_content"
+				              android:layout_marginLeft="@dimen/player_field_margin_left"
+				              android:gravity="center_horizontal"
+				              android:textSize="@dimen/player_field_size" />
+				      </LinearLayout>
+                    </LinearLayout>
             </ScrollView>
         </LinearLayout>
     </LinearLayout>

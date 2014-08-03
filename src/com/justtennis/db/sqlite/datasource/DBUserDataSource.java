@@ -5,6 +5,7 @@ import android.content.Context;
 import android.database.Cursor;
 
 import com.cameleon.common.android.inotifier.INotifierMessage;
+import com.justtennis.db.sqlite.helper.DBPlayerHelper;
 import com.justtennis.db.sqlite.helper.DBUserHelper;
 import com.justtennis.domain.User;
 import com.justtennis.tool.DbTool;
@@ -20,6 +21,7 @@ public class DBUserDataSource extends GenericDBDataSource<User> {
 		DBUserHelper.COLUMN_ID_CLUB,
 		DBUserHelper.COLUMN_ID_ADDRESS,
 		DBUserHelper.COLUMN_ID_RANKING,
+		DBUserHelper.COLUMN_ID_RANKING_ESTIMAGE,
 		DBUserHelper.COLUMN_FIRSTNAME,
 		DBUserHelper.COLUMN_LASTNAME,
 		DBUserHelper.COLUMN_BIRTHDAY,
@@ -44,6 +46,7 @@ public class DBUserDataSource extends GenericDBDataSource<User> {
 		values.put(DBUserHelper.COLUMN_ID_CLUB, player.getIdClub());
 		values.put(DBUserHelper.COLUMN_ID_ADDRESS, player.getIdAddress());
 		values.put(DBUserHelper.COLUMN_ID_RANKING, player.getIdRanking());
+		values.put(DBUserHelper.COLUMN_ID_RANKING_ESTIMAGE, player.getIdRankingEstimate());
 		values.put(DBUserHelper.COLUMN_FIRSTNAME, player.getFirstName());
 		values.put(DBUserHelper.COLUMN_LASTNAME, player.getLastName());
 		values.put(DBUserHelper.COLUMN_BIRTHDAY, player.getBirthday());
@@ -62,6 +65,7 @@ public class DBUserDataSource extends GenericDBDataSource<User> {
 		player.setIdClub(DbTool.getInstance().toLong(cursor, col++));
 		player.setIdAddress(DbTool.getInstance().toLong(cursor, col++));
 		player.setIdRanking(DbTool.getInstance().toLong(cursor, col++));
+		player.setIdRankingEstimate(DbTool.getInstance().toLong(cursor, col++));
 		player.setFirstName(cursor.getString(col++));
 		player.setLastName(cursor.getString(col++));
 		player.setBirthday(cursor.getString(col++));

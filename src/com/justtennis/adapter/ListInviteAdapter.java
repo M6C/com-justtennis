@@ -18,6 +18,7 @@ import android.widget.TextView;
 
 import com.justtennis.ApplicationConfig;
 import com.justtennis.R;
+import com.justtennis.adapter.manager.RankingViewManager;
 import com.justtennis.db.service.RankingService;
 import com.justtennis.db.service.ScoreSetService;
 import com.justtennis.domain.Invite;
@@ -43,6 +44,7 @@ public class ListInviteAdapter extends ArrayAdapter<Invite> {
 	private HashMap<Long, Ranking> mapRanking;
 	private ScoreSetService scoreSetService;
 	private LocationParser locationParser;
+	private RankingViewManager rankingViewManager;
 
 	public ListInviteAdapter(Activity activity, List<Invite> value) {
 		this(activity, value, ADAPTER_INVITE_MODE.MODIFY);
@@ -68,6 +70,7 @@ public class ListInviteAdapter extends ArrayAdapter<Invite> {
 		mapRanking = new RankingService(activity, notifier).getMapById();
 		locationParser = LocationParser.getInstance(activity, notifier);
 		scoreSetService = new ScoreSetService(activity, notifier);
+		rankingViewManager = RankingViewManager.getInstance(activity, notifier);
 	}
 
 	@Override
@@ -104,17 +107,16 @@ public class ListInviteAdapter extends ArrayAdapter<Invite> {
 		TextView tvPlayer = (TextView) rowView.findViewById(R.id.tv_player);
 		TextView tvDate = (TextView) rowView.findViewById(R.id.tv_date);
 		TextView tvScore = (TextView) rowView.findViewById(R.id.tv_score);
-		TextView tvRanking = (TextView) rowView.findViewById(R.id.tv_ranking);
 		TextView tvClubName = (TextView) rowView.findViewById(R.id.tv_club_name);
 		ImageView imageDelete = (ImageView) rowView.findViewById(R.id.iv_delete);
 		View vTypeEntrainement = rowView.findViewById(R.id.tv_type_entrainement);
 		View vTypeMatch = rowView.findViewById(R.id.tv_type_match);
 
-		Ranking r = mapRanking.get(v.getIdRanking()); 
 		tvPlayer.setText(v.getPlayer()==null ? "" : Html.fromHtml("<b>" + v.getPlayer().getFirstName() + "</b> " + v.getPlayer().getLastName()));
-		tvRanking.setText(r == null ? "" : r.getRanking());
 		tvDate.setText(v.getDate()==null ? "" : sdf.format(v.getDate()));
 		imageDelete.setTag(v);
+
+		rankingViewManager.manageRanking(rowView, v, true);
 
 		if (ApplicationConfig.SHOW_ID) {
 			tvPlayer.setText(tvPlayer.getText() + " [" + v.getPlayer().getId() + "|" + v.getPlayer().getIdExternal() + "]");

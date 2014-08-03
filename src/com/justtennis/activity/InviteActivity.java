@@ -19,6 +19,7 @@ import android.view.View.OnFocusChangeListener;
 import android.widget.AdapterView;
 import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
+import android.widget.BaseAdapter;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -95,6 +96,7 @@ public class InviteActivity extends GenericActivity {
 	private EditText etScore24;
 	private EditText etScore15;
 	private EditText etScore25;
+	private Spinner spBonusPoint;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -119,6 +121,8 @@ public class InviteActivity extends GenericActivity {
 		tvLocationName = ((TextView)findViewById(R.id.tv_location_name));
 		tvLocationLine1 = ((TextView)findViewById(R.id.tv_location_line1));
 		tvLocationLine2 = ((TextView)findViewById(R.id.tv_location_line2));
+
+		spBonusPoint = (Spinner)findViewById(R.id.sp_bonus_point);
 
 		etScore11 = (EditText)findViewById(R.id.et_score1_1);
 		etScore21 = (EditText)findViewById(R.id.et_score2_1);
@@ -421,6 +425,10 @@ public class InviteActivity extends GenericActivity {
 			}
 		});
 	}
+
+//	private void initializeBonusPointList() {
+//		BaseAdapter dataAdapter = new BaseAdapter();
+//	}
 
 	private void initializeRanking() {
 		Log.d(TAG, "initializeRanking");

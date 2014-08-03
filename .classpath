@@ -4,7 +4,7 @@
 	<classpathentry kind="src" path="gen"/>
 	<classpathentry kind="src" path="test"/>
 	<classpathentry kind="con" path="com.android.ide.eclipse.adt.ANDROID_FRAMEWORK"/>
-	<classpathentry kind="con" path="com.android.ide.eclipse.adt.LIBRARIES"/>
+	<classpathentry exported="true" kind="con" path="com.android.ide.eclipse.adt.LIBRARIES"/>
 	<classpathentry kind="lib" path="D:/android-sdk/platforms/android-17/android.jar">
 		<attributes>
 			<attribute name="javadoc_location" value="file:/D:/android-sdk/docs/reference"/>
@@ -14,5 +14,7 @@
 		</accessrules>
 	</classpathentry>
 	<classpathentry kind="lib" path="libs/achartengine-1.1.0.jar"/>
+	<classpathentry kind="lib" path="/ZXing/android/libs/zxing-2.2.jar"/>
+	<classpathentry exported="true" kind="con" path="com.android.ide.eclipse.adt.DEPENDENCIES"/>
 	<classpathentry kind="output" path="bin/classes"/>
 </classpath>

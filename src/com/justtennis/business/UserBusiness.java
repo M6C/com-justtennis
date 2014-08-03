@@ -10,6 +10,7 @@ import com.justtennis.db.service.MessageService;
 import com.justtennis.db.service.UserService;
 import com.justtennis.domain.Message;
 import com.justtennis.domain.Player;
+import com.justtennis.domain.User;
 
 public class UserBusiness extends PlayerBusiness {
 
@@ -41,6 +42,14 @@ public class UserBusiness extends PlayerBusiness {
 	@Override
 	public boolean isUnknownPlayer(Player player) {
 		return false;
+	}
+
+	@Override
+	public Player buildPlayer() {
+		if (player==null) {
+			player = new User();
+		}
+		return player;
 	}
 
 	public void saveMessage(String message) {

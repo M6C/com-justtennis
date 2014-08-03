@@ -6,5 +6,6 @@
     <string name="txt_address">Address</string>
     <string name="txt_club">Club</string>
     <string name="txt_tournament">Tournament</string>
- 
+    <string name="txt_bonus_point">Bonus point</string>
+    
 </resources>

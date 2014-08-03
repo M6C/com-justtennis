@@ -12,27 +12,93 @@
     android:orientation="vertical"
     tools:context=".ListPlayerActivity"
 >
-
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
+        android:layout_weight=".5"
 	    android:background="@color/list_background_color"
 	    android:visibility="visible"
 	    android:orientation="vertical"
     >
-		<TextView
-		    android:id="@+id/tv_sum_point"
-		    android:layout_width="wrap_content"
-		    android:layout_height="wrap_content"
-		    android:layout_marginLeft="2sp"
-		/>
+      <LinearLayout
+          android:id="@+id/ll_ranking"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:layout_marginBottom="@dimen/player_layout_field_marging_bottom"
+          android:background="@color/player_form_field_background_color"
+          android:orientation="vertical"
+          android:padding="@dimen/player_layout_field_padding" >
 
+          <TextView
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:text="@string/txt_ranking"
+              android:textSize="@dimen/player_text_size"
+              android:textColor="@android:color/secondary_text_light_nodisable"
+              android:textStyle="bold" />
+
+          <Spinner
+              android:id="@+id/sp_ranking"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:layout_marginLeft="@dimen/player_field_margin_left"
+              android:gravity="center_horizontal"
+              android:textSize="@dimen/player_field_size" />
+      </LinearLayout>
+      <LinearLayout
+          android:id="@+id/ll_sum_point"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:layout_marginBottom="@dimen/player_layout_field_marging_bottom"
+          android:background="@color/player_form_field_background_color"
+          android:orientation="vertical"
+          android:padding="@dimen/player_layout_field_padding" >
+
+          <TextView
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:text="@string/txt_sum_point"
+              android:textSize="@dimen/player_text_size"
+              android:textColor="@android:color/secondary_text_light_nodisable"
+              android:textStyle="bold" />
+		  <TextView
+		      android:id="@+id/tv_sum_point"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:layout_marginLeft="@dimen/player_field_margin_left"
+              android:gravity="center_horizontal"
+              android:textSize="@dimen/player_field_size" />
+      </LinearLayout>
+      <LinearLayout
+          android:id="@+id/ll_nb_victory"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:layout_marginBottom="@dimen/player_layout_field_marging_bottom"
+          android:background="@color/player_form_field_background_color"
+          android:orientation="vertical"
+          android:padding="@dimen/player_layout_field_padding" >
+
+          <TextView
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:text="@string/txt_nb_victory"
+              android:textSize="@dimen/player_text_size"
+              android:textColor="@android:color/secondary_text_light_nodisable"
+              android:textStyle="bold" />
+		  <TextView
+		      android:id="@+id/tv_nb_victory"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:layout_marginLeft="@dimen/player_field_margin_left"
+              android:gravity="center_horizontal"
+              android:textSize="@dimen/player_field_size" />
+      </LinearLayout>
 	</LinearLayout>
 	<ListView
 		android:id="@+id/list"
 		android:layout_width="match_parent"
 	    android:layout_height="0dp"
-	    android:layout_weight="1"
+	    android:layout_weight=".5"
     	android:layout_marginBottom="5dp"
 	    android:background="@color/list_background_color"
 	/>

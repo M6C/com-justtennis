@@ -16,6 +16,7 @@ import android.widget.TextView;
 import com.justtennis.ApplicationConfig;
 import com.justtennis.R;
 import com.justtennis.activity.ListPlayerActivity;
+import com.justtennis.adapter.manager.RankingViewManager;
 import com.justtennis.business.ListPlayerBusiness;
 import com.justtennis.db.service.RankingService;
 import com.justtennis.domain.Player;
@@ -33,6 +34,7 @@ public class ListPlayerAdapter extends ArrayAdapter<Player> {
 	private ArrayList<Player> valueOld;
 	private HashMap<Long, Ranking> rankingService;
 	private LocationParser locationParser;
+	private RankingViewManager rankingViewManager;
 
 	public ListPlayerAdapter(ListPlayerActivity activity, List<Player> value) {
 		super(activity, R.layout.list_player_row, android.R.id.text1, value);
@@ -52,6 +54,7 @@ public class ListPlayerAdapter extends ArrayAdapter<Player> {
 		NotifierMessageLogger notifier = NotifierMessageLogger.getInstance();
 		rankingService = new RankingService(activity, notifier).getMapById();
 		locationParser = LocationParser.getInstance(activity, notifier);
+		rankingViewManager = RankingViewManager.getInstance(activity, notifier);
 	}
 
 	@Override
@@ -92,7 +95,6 @@ public class ListPlayerAdapter extends ArrayAdapter<Player> {
 		ImageView imagePlayer = (ImageView) rowView.findViewById(R.id.iv_player);
 //		ImageView imageSend = (ImageView) rowView.findViewById(R.id.iv_send);
 		ImageView imageDelete = (ImageView) rowView.findViewById(R.id.iv_delete);
-		TextView ranking = (TextView) rowView.findViewById(R.id.tv_ranking);
 		TextView name = (TextView) rowView.findViewById(R.id.tv_name);
 		TextView clubName = (TextView) rowView.findViewById(R.id.tv_club_name);
 
@@ -102,8 +104,9 @@ public class ListPlayerAdapter extends ArrayAdapter<Player> {
 		imagePlayer.setTag(v);
 //		imageSend.setTag(v);
 		imageDelete.setTag(v);
-		ranking.setText(r == null ? "" : r.getRanking());
 		name.setText(Html.fromHtml("<b>" + v.getFirstName() + "</b> " + v.getLastName()));
+
+		rankingViewManager.manageRanking(rowView, v, true);
 
 		initializeLocation(v, clubName);
 
