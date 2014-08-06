@@ -40,11 +40,15 @@ public class RankingListManager {
 		return instance;
 	}
 
-	public void manageRanking(Activity context, final Player player, boolean estimate) {
+	public void manageRanking(Activity context, final Player player, final boolean estimate) {
 		IRankingListListener listener = new IRankingListListener() {
 			@Override
 			public void onRankingSelected(Ranking ranking) {
-				player.setIdRanking(ranking.getId());
+				if (estimate) {
+					player.setIdRankingEstimate(ranking.getId());
+				} else {
+					player.setIdRanking(ranking.getId());
+				}
 			}
 		};
 		Long idRanking = estimate ? player.getIdRankingEstimate() : player.getIdRanking();
