@@ -105,9 +105,6 @@ public class PlayerActivity extends GenericActivity {
 		initializeListener();
 		initialize();
 
-		initializeView();
-		initializeRankingList();
-		initializeRankingEstimateList();
 		initializeListType();
 
 		TypeManager.getInstance().initializeActivity(findViewById(R.id.layout_main), false);
@@ -116,6 +113,10 @@ public class PlayerActivity extends GenericActivity {
 	@Override
 	protected void onResume() {
 		super.onResume();
+
+		initializeView();
+		initializeRankingList();
+		initializeRankingEstimateList();
 
 		initializeType();
 
