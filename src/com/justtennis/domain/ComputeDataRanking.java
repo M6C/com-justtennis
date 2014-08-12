@@ -8,6 +8,7 @@ public class ComputeDataRanking {
 	private int nbVictoryCalculate;
 	private int pointObjectif;
 	private int pointCalculate;
+	private int pointBonus;
 	private List<Invite> listInviteCalculed;
 	private List<Invite> listInviteNotUsed;
 
@@ -52,6 +53,14 @@ public class ComputeDataRanking {
 
 	public void setPointCalculate(int pointCalculate) {
 		this.pointCalculate = pointCalculate;
+	}
+
+	public int getPointBonus() {
+		return pointBonus;
+	}
+
+	public void setPointBonus(int pointBonus) {
+		this.pointBonus = pointBonus;
 	}
 
 	public List<Invite> getListInviteCalculed() {

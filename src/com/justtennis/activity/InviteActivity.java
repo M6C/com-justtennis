@@ -19,7 +19,6 @@ import android.view.View.OnFocusChangeListener;
 import android.widget.AdapterView;
 import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
-import android.widget.BaseAdapter;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -34,6 +33,7 @@ import com.cameleon.common.android.factory.listener.OnClickViewListener;
 import com.justtennis.ApplicationConfig;
 import com.justtennis.R;
 import com.justtennis.adapter.CustomArrayAdapter;
+import com.justtennis.adapter.manager.BonusListManager;
 import com.justtennis.business.InviteBusiness;
 import com.justtennis.db.service.PlayerService;
 import com.justtennis.domain.Player;
@@ -96,7 +96,7 @@ public class InviteActivity extends GenericActivity {
 	private EditText etScore24;
 	private EditText etScore15;
 	private EditText etScore25;
-	private Spinner spBonusPoint;
+	private BonusListManager bonusListManager;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -122,8 +122,6 @@ public class InviteActivity extends GenericActivity {
 		tvLocationLine1 = ((TextView)findViewById(R.id.tv_location_line1));
 		tvLocationLine2 = ((TextView)findViewById(R.id.tv_location_line2));
 
-		spBonusPoint = (Spinner)findViewById(R.id.sp_bonus_point);
-
 		etScore11 = (EditText)findViewById(R.id.et_score1_1);
 		etScore21 = (EditText)findViewById(R.id.et_score2_1);
 		etScore12 = (EditText)findViewById(R.id.et_score1_2);
@@ -148,9 +146,11 @@ public class InviteActivity extends GenericActivity {
 
 		llScoreContent = (LinearLayout)findViewById(R.id.ll_score_content);
 
-		business = new InviteBusiness(this, NotifierMessageLogger.getInstance());
+		NotifierMessageLogger notifier = NotifierMessageLogger.getInstance();
+		business = new InviteBusiness(this, notifier);
 
 		TypeManager.getInstance().initializeActivity(findViewById(R.id.layout_main), false);
+		bonusListManager = BonusListManager.getInstance(this, notifier);
 	}
 
 	@Override
@@ -373,6 +373,7 @@ public class InviteActivity extends GenericActivity {
 		initializeRankingList();
 		initializeRanking();
 		initializeDataLocation();
+		initializeBonus();
 	}
 
 	private void initializeDataPlayer() {
@@ -426,9 +427,9 @@ public class InviteActivity extends GenericActivity {
 		});
 	}
 
-//	private void initializeBonusPointList() {
-//		BaseAdapter dataAdapter = new BaseAdapter();
-//	}
+	private void initializeBonus() {
+		bonusListManager.manage(this, business.getInvite());
+	}
 
 	private void initializeRanking() {
 		Log.d(TAG, "initializeRanking");

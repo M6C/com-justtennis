@@ -101,6 +101,10 @@ public class ComputeRankingBusiness {
 		return computeDataRanking.getPointObjectif();
 	}
 
+	public int getPointBonus() {
+		return computeDataRanking.getPointBonus();
+	}
+
 	public int getNbVictoryCalculate() {
 		return computeDataRanking.getNbVictoryCalculate();
 	}

@@ -86,7 +86,12 @@ public class ComputeRankingActivity extends GenericActivity {
 	}
 
 	private void initializePalmaresPoint() {
-		tvSumPoint.setText(business.getPointCalculate() + "/" + business.getPointObjectif());
+		int point = business.getPointCalculate() + business.getPointBonus();
+		String text = point + "/" + business.getPointObjectif();
+		if (business.getPointBonus() > 0) {
+			text += " [bonus:" + business.getPointBonus() + "]";
+		}
+		tvSumPoint.setText(text);
 		tvSumPoint.setVisibility(View.VISIBLE);
 	}
 

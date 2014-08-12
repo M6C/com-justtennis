@@ -35,7 +35,7 @@ public class Invite extends GenericDBPojo<Long> implements Serializable {
 	private Club club;
 	private Tournament tournament;
 	private int point;
-	private Integer bonusPoint;
+	private int bonusPoint;
 
 	public Invite() {
 	}
@@ -180,11 +180,11 @@ public class Invite extends GenericDBPojo<Long> implements Serializable {
 		this.point = point;
 	}
 
-	public Integer getBonusPoint() {
+	public int getBonusPoint() {
 		return bonusPoint;
 	}
 
-	public void setBonusPoint(Integer bonusPoint) {
+	public void setBonusPoint(int bonusPoint) {
 		this.bonusPoint = bonusPoint;
 	}
 }

@@ -17,10 +17,10 @@ import com.justtennis.db.service.RankingService;
 import com.justtennis.db.service.UserService;
 import com.justtennis.domain.ComputeDataRanking;
 import com.justtennis.domain.Invite;
+import com.justtennis.domain.Invite.SCORE_RESULT;
 import com.justtennis.domain.Player;
 import com.justtennis.domain.Ranking;
 import com.justtennis.domain.User;
-import com.justtennis.domain.Invite.SCORE_RESULT;
 import com.justtennis.notifier.NotifierMessageLogger;
 
 public class ComputeRankSubService {
@@ -177,6 +177,7 @@ public class ComputeRankSubService {
 		List<Invite> listInviteNotUsed = new ArrayList<Invite>();
 		int nbVictory = 0, nbVictoryCalculate = 0;
 		int sumPoint = 0, pointObjectif = 0;
+		int sumPointBonus = 0;
 		Ranking userRanking = rankingService.find(idRanking);
 		if (userRanking != null && listInvite.size() > 0) {
 			int rankingPositionMin = userRanking.getOrder() - NB_RANKING_ORDER_LOWER;
@@ -198,6 +199,7 @@ public class ComputeRankSubService {
 					int point = rankingService.getNbPointDifference(rankingDif);
 					invite.setPoint(point);
 					sumPoint += point;
+					sumPointBonus += invite.getBonusPoint();
 					nbVictory--;
 					logMe("RANKING " + ranking.getRanking() + " POINT:" + point + " SUM:" + sumPoint + " NB VICTORY:" + nbVictory);
 				} else {
@@ -215,6 +217,7 @@ public class ComputeRankSubService {
 		data.setNbVictoryCalculate(nbVictoryCalculate);
 		data.setPointObjectif(pointObjectif);
 		data.setPointCalculate(sumPoint);
+		data.setPointBonus(sumPointBonus);
 		data.setListInviteCalculed(listInviteCalculed);
 		data.setListInviteNotUsed(listInviteNotUsed);
 

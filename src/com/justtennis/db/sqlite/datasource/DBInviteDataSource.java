@@ -151,7 +151,8 @@ public class DBInviteDataSource extends GenericDBDataSourceByType<Invite> {
 		invite.setAddress(DbTool.getInstance().toPojo(cursor, col++, Address.class));
 		invite.setClub(DbTool.getInstance().toPojo(cursor, col++, Club.class));
 		invite.setTournament(DbTool.getInstance().toPojo(cursor, col++, Tournament.class));
-		invite.setBonusPoint(DbTool.getInstance().toInteger(cursor, col++));
+		Integer bonusPoint  = DbTool.getInstance().toInteger(cursor, col++);
+		invite.setBonusPoint(bonusPoint == null ? 0 : bonusPoint.intValue());
 		return invite;
 	}
 	

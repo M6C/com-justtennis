@@ -24,6 +24,7 @@ Saisie de Message
 
 ********************* DONE *****************************
 Ecran Calcul Classement
+[20140812] - Classement de simulation paramètrable + divers fix
 [20140622] - Creation de l'écran
 
 Common

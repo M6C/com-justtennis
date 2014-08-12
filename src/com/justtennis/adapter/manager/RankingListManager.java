@@ -27,6 +27,7 @@ public class RankingListManager {
 	private RankingService rankingService;
 	private List<Ranking> listRanking;
 	private String[] listTxtRankings;
+	private Ranking rankingNC;
 
 	private RankingListManager(Context context, NotifierMessageLogger notifier) {
 		rankingService = new RankingService(context, notifier);
@@ -45,9 +46,17 @@ public class RankingListManager {
 			@Override
 			public void onRankingSelected(Ranking ranking) {
 				if (estimate) {
-					player.setIdRankingEstimate(ranking.getId());
+					if (ranking.equals(rankingNC)) {
+						player.setIdRankingEstimate(null);
+					} else {
+						player.setIdRankingEstimate(ranking.getId());
+					}
 				} else {
-					player.setIdRanking(ranking.getId());
+					if (ranking.equals(rankingNC)) {
+						player.setIdRanking(null);
+					} else {
+						player.setIdRanking(ranking.getId());
+					}
 				}
 			}
 		};
@@ -113,6 +122,8 @@ public class RankingListManager {
 		for(Ranking ranking : setRanking) {
 			listTxtRankings[i++] = ranking.getRanking();
 		}
+
+		rankingNC = rankingService.getNC();
 	}
 
 	/**
