@@ -2,6 +2,8 @@ package com.justtennis.domain;
 
 import java.io.Serializable;
 
+import com.cameleon.common.android.model.GenericDBPojo;
+
 public class ScoreSet extends GenericDBPojo<Long> implements Serializable {
 	
 	private static final long serialVersionUID = 1L;

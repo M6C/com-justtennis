@@ -47,18 +47,28 @@ public class ListInviteByPlayerFilter extends Filter {
 		int filterLength = filterValue.length();
 		String idPlayer = null;
 		String type = null;
-		int idx = filterValue.indexOf(";");
-		if (idx > 0) {
-			idPlayer = filterValue.substring(0, idx);
-		}
-		if (idx < (filterLength - 1)) {
-			type = filterValue.substring(idx+1, filterLength);
+		String player = null;
+		int idx1 = filterValue.indexOf(";");
+		if (idx1 >= 0) {
+			idPlayer = filterValue.substring(0, idx1);
+			idPlayer = (idPlayer.trim().equals("") ? null : idPlayer.trim());
+
+			int idx2 = filterValue.indexOf(";", idx1 + 1);
+			if (idx2 > idx1) {
+				type = filterValue.substring(idx1+1, idx2);
+				type = (type.trim().equals("") ? null : type.trim());
+				if (idx2 < (filterLength - 1)) {
+					player = filterValue.substring(idx2 + 1);
+					player = (player.trim().equals("") ? null : player.trim());
+				}
+			}
 		}
 		List<Invite> result = new ArrayList<Invite>();
 		for(Invite person : valueOld) {
 			if (
 				(idPlayer == null || idPlayer.equals(person.getPlayer().getId().toString())) &&
-				(type == null || type.equals(person.getPlayer().getType().toString()))
+				(type == null || type.equals(person.getPlayer().getType().toString())) &&
+				(player == null || person.getPlayer().getFullName().toUpperCase().contains(player.toUpperCase()))
 			) {
 				result.add(person);
 			}

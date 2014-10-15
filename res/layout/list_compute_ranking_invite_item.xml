@@ -40,6 +40,7 @@
 		    android:textStyle="bold"
 		    android:textSize="16sp"
 		    android:gravity="right"
+		    android:onClick="onClickPoint"
 		/>
 <!-- 	</LinearLayout> -->
 </LinearLayout>

@@ -71,15 +71,22 @@ public class ComputeRankingActivity extends GenericActivity {
 		finish();
 	}
 
+	public void onClickPoint(View view) {
+	}
+
+	public void refreshData() {
+		business.refreshData();
+
+		adapter.notifyDataSetChanged();
+		refresh();
+	}
+
 	private void initializeRankingList() {
 		IRankingListListener listener = new IRankingListListener() {
 			@Override
 			public void onRankingSelected(Ranking ranking) {
 				business.setIdRanking(ranking.getId());
-				business.refreshData();
-
-				adapter.notifyDataSetChanged();
-				refresh();
+				refreshData();
 			}
 		};
 		rankingListManager.manageRanking(this, listener, business.getIdRanking(), false);

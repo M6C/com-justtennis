@@ -13,10 +13,10 @@ import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 
 import com.cameleon.common.android.inotifier.INotifierMessage;
+import com.cameleon.common.android.model.GenericDBPojo;
 import com.justtennis.db.sqlite.helper.DBInviteHelper;
 import com.justtennis.db.sqlite.helper.DBPlayerHelper;
 import com.justtennis.db.sqlite.helper.GenericDBHelper;
-import com.justtennis.domain.GenericDBPojo;
 import com.justtennis.tool.DbTool;
 
 public abstract class GenericDBDataSource<POJO extends GenericDBPojo<Long>> {

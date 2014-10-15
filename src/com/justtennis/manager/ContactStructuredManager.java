@@ -3,10 +3,12 @@ package com.justtennis.manager;
 import java.util.List;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.CursorLoader;
 import android.net.Uri;
 import android.provider.ContactsContract;
 
+import com.cameleon.common.android.manager.GenericCursorManager;
 import com.justtennis.domain.Contact;
 import com.justtennis.manager.mapper.ContactStructuredMapper;
 
@@ -41,7 +43,7 @@ public class ContactStructuredManager extends GenericCursorManager<Contact, Cont
 	}
 
 	@Override
-	protected CursorLoader buildCursorLoader(Activity context, String where, String[] whereParameters) {
+	protected CursorLoader buildCursorLoader(Context context, String where, String[] whereParameters) {
 		Uri uri = ContactsContract.Data.CONTENT_URI;
 		String[] projection = ContactStructuredMapper.getInstance().getListColumn();
 		String sortOrder = null;

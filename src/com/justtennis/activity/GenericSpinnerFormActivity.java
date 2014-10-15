@@ -17,12 +17,12 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.cameleon.common.android.factory.FactoryDialog;
+import com.cameleon.common.android.model.GenericDBPojo;
+import com.cameleon.common.android.model.GenericDBPojoNamedSubId;
 import com.justtennis.R;
 import com.justtennis.adapter.CustomArrayAdapter;
 import com.justtennis.business.GenericSpinnerFormBusiness;
 import com.justtennis.domain.Address;
-import com.justtennis.domain.GenericDBPojo;
-import com.justtennis.domain.GenericDBPojoNamedSubId;
 
 public abstract class GenericSpinnerFormActivity <DATA extends GenericDBPojoNamedSubId> extends GenericActivity {
 

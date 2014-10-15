@@ -1,21 +1,19 @@
 package com.justtennis.activity;
 
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemSelectedListener;
-import android.widget.ArrayAdapter;
+import android.widget.EditText;
 import android.widget.Filter;
 import android.widget.LinearLayout;
 import android.widget.ListView;
-import android.widget.Spinner;
 
 import com.cameleon.common.android.factory.FactoryDialog;
 import com.justtennis.R;
 import com.justtennis.adapter.ListInviteAdapter;
 import com.justtennis.business.ListInviteBusiness;
 import com.justtennis.domain.Invite;
-import com.justtennis.domain.Player;
 import com.justtennis.listener.itemclick.OnItemClickListInvite;
 import com.justtennis.listener.ok.OnClickInviteDeleteListenerOk;
 import com.justtennis.manager.TypeManager;
@@ -32,11 +30,11 @@ public class ListInviteActivity extends GenericActivity {
 	private ListInviteAdapter adapter;
 
 	private LinearLayout llFilterPlayer;
-	private Spinner spFilterPlayer;
-	private Spinner spFilterType;
+	private EditText tvFilterPlayer;
 	private Filter filter;
-	private CharSequence filterPlayerValue = null;
+	private CharSequence filterIdPlayerValue = null;
 	private TypeManager.TYPE filterTypeValue;
+	private CharSequence filterPlayerValue = null;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -50,9 +48,8 @@ public class ListInviteActivity extends GenericActivity {
 		adapter = new ListInviteAdapter(this, business.getList());
 
 		filter = adapter.getFilter();
-		spFilterPlayer = (Spinner)findViewById(R.id.sp_filter_player);
+		tvFilterPlayer = (EditText)findViewById(R.id.et_filter_player);
 		llFilterPlayer = (LinearLayout)findViewById(R.id.ll_filter_player);
-		spFilterType = (Spinner)findViewById(R.id.sp_filter_type);
 		
 		list = (ListView)findViewById(R.id.list);
 		list.setOnItemClickListener(new OnItemClickListInvite(this));
@@ -61,8 +58,7 @@ public class ListInviteActivity extends GenericActivity {
 		
 		business.onCreate();
 		
-		initializePlayerList();
-		initializeTypeList();
+		initializePlayerFilter();
 		TypeManager.getInstance().initializeActivity(findViewById(R.id.layout_main), false);
 	}
 
@@ -75,7 +71,7 @@ public class ListInviteActivity extends GenericActivity {
 
 	public void refresh() {
 		adapter.setValue(business.getList());
-		filter.filter(filterPlayerValue);
+		filter.filter(filterIdPlayerValue);
 	}
 
 	public void onClickClose(View view) {
@@ -87,8 +83,8 @@ public class ListInviteActivity extends GenericActivity {
 			llFilterPlayer.setVisibility(View.VISIBLE);
 		} else {
 			llFilterPlayer.setVisibility(View.GONE);
-			filterPlayerValue = null;
-			filter.filter(filterPlayerValue);
+			filterIdPlayerValue = null;
+			filter.filter(filterIdPlayerValue);
 		}
 	}
 
@@ -100,72 +96,41 @@ public class ListInviteActivity extends GenericActivity {
 			.show();
 	}
 
-	private void initializePlayerList() {
-		ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, business.getListPlayerName());
-		dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-		spFilterPlayer.setAdapter(dataAdapter);
-		spFilterPlayer.setOnItemSelectedListener(new OnItemSelectedListener() {
+	private void initializePlayerFilter() {
+		tvFilterPlayer.addTextChangedListener(new TextWatcher() {
+			
 			@Override
-			public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+			public void onTextChanged(CharSequence s, int start, int before, int count) {
 				if (filter!=null) {
-					Player player = business.getPlayerNotEmpty(position);
-					if (player != null) {
-						filterPlayerValue = player.getId().toString();
-					} else {
-						filterPlayerValue = null;
-					}
+					filterPlayerValue = s;
 
 					filter();
 				}
 			}
-
+			
 			@Override
-			public void onNothingSelected(AdapterView<?> arg0) {
+			public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+				
+			}
+			
+			@Override
+			public void afterTextChanged(Editable s) {
 			}
 		});
 	}
 
-	private void initializeTypeList() {
-		String[] listTypeName = new String[]{"", TypeManager.TYPE.TRAINING.toString(), TypeManager.TYPE.COMPETITION.toString()};
-		ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, listTypeName);
-		dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-		spFilterType.setAdapter(dataAdapter);
-		spFilterType.setOnItemSelectedListener(new OnItemSelectedListener() {
-
-			@Override
-			public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-				if (filter!=null) {
-					switch(position) {
-						case 0:
-						default:
-							filterTypeValue = null;
-							break;
-						case 1:
-							filterTypeValue = TypeManager.TYPE.TRAINING;
-							break;
-						case 2:
-							filterTypeValue = TypeManager.TYPE.COMPETITION;
-							break;
-					}
-
-					filter();
-				}
-			}
-
-			@Override
-			public void onNothingSelected(AdapterView<?> arg0) {
-			}
-		});
-	}
-	
 	private void filter() {
 		String filterValue = "";
-		if (filterPlayerValue != null) {
-			filterValue += filterPlayerValue;
+		if (filterIdPlayerValue != null) {
+			filterValue += filterIdPlayerValue;
 		}
 		filterValue += ";";
 		if (filterTypeValue != null) {
 			filterValue += filterTypeValue.toString();
+		}
+		filterValue += ";";
+		if (filterPlayerValue != null) {
+			filterValue += filterPlayerValue;
 		}
 		filter.filter(";".equals(filterValue) ? null : filterValue);
 	}

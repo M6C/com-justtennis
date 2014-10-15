@@ -1,5 +1,7 @@
 package com.justtennis.domain;
 
+import com.cameleon.common.android.model.GenericDBPojoNamedSubId;
+
 
 
 public class Address extends GenericDBPojoNamedSubId {

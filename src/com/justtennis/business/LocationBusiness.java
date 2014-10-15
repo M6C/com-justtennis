@@ -7,16 +7,16 @@ import android.content.Context;
 import android.content.Intent;
 
 import com.cameleon.common.android.inotifier.INotifierMessage;
+import com.cameleon.common.android.model.GenericDBPojo;
+import com.cameleon.common.android.service.PojoNamedService;
 import com.justtennis.R;
 import com.justtennis.activity.LocationActivity;
 import com.justtennis.db.service.AddressService;
 import com.justtennis.db.service.ClubService;
 import com.justtennis.db.service.InviteService;
-import com.justtennis.db.service.PojoNamedService;
 import com.justtennis.db.service.TournamentService;
 import com.justtennis.domain.Address;
 import com.justtennis.domain.Club;
-import com.justtennis.domain.GenericDBPojo;
 import com.justtennis.domain.Invite;
 import com.justtennis.domain.Tournament;
 import com.justtennis.manager.TypeManager;

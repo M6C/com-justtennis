@@ -23,7 +23,6 @@ import com.justtennis.db.service.RankingService;
 import com.justtennis.db.service.ScoreSetService;
 import com.justtennis.domain.Invite;
 import com.justtennis.domain.Ranking;
-import com.justtennis.domain.ScoreSet;
 import com.justtennis.filter.ListInviteByPlayerFilter;
 import com.justtennis.notifier.NotifierMessageLogger;
 import com.justtennis.parser.LocationParser;

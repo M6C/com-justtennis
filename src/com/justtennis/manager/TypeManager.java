@@ -1,8 +1,8 @@
 package com.justtennis.manager;
 
-import com.justtennis.R;
-
 import android.view.View;
+
+import com.justtennis.R;
 
 public class TypeManager {
 

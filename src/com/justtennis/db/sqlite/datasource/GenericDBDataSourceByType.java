@@ -1,10 +1,8 @@
 package com.justtennis.db.sqlite.datasource;
 
-import java.util.Locale;
-
 import com.cameleon.common.android.inotifier.INotifierMessage;
+import com.cameleon.common.android.model.GenericDBPojo;
 import com.justtennis.db.sqlite.helper.GenericDBHelper;
-import com.justtennis.domain.GenericDBPojo;
 import com.justtennis.manager.TypeManager;
 
 public abstract class GenericDBDataSourceByType<POJO extends GenericDBPojo<Long>> extends GenericDBDataSource<POJO> {

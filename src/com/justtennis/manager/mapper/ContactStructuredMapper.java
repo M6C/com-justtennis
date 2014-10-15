@@ -3,6 +3,7 @@ package com.justtennis.manager.mapper;
 import android.database.Cursor;
 import android.provider.ContactsContract;
 
+import com.cameleon.common.android.mapper.GenericMapper;
 import com.justtennis.domain.Contact;
 
 

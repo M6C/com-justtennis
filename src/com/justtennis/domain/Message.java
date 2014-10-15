@@ -1,5 +1,7 @@
 package com.justtennis.domain;
 
+import com.cameleon.common.android.model.GenericDBPojo;
+
 
 public class Message extends GenericDBPojo<Long> {
 	

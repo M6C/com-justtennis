@@ -7,9 +7,9 @@ import java.util.TreeSet;
 import android.content.Context;
 
 import com.cameleon.common.android.inotifier.INotifierMessage;
+import com.cameleon.common.android.model.comparator.PojoNamedComparator;
 import com.justtennis.db.sqlite.datasource.DBAddressDataSource;
 import com.justtennis.domain.Address;
-import com.justtennis.domain.comparator.PojoNamedComparator;
 
 public class AddressService extends GenericService<Address> {
 

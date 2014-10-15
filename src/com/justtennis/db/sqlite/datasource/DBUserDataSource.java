@@ -5,7 +5,6 @@ import android.content.Context;
 import android.database.Cursor;
 
 import com.cameleon.common.android.inotifier.INotifierMessage;
-import com.justtennis.db.sqlite.helper.DBPlayerHelper;
 import com.justtennis.db.sqlite.helper.DBUserHelper;
 import com.justtennis.domain.User;
 import com.justtennis.tool.DbTool;

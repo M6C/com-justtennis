@@ -14,6 +14,7 @@ import android.net.Uri;
 import android.provider.ContactsContract;
 import android.provider.ContactsContract.Contacts;
 
+import com.cameleon.common.android.manager.GenericCursorManager;
 import com.justtennis.domain.Contact;
 import com.justtennis.manager.mapper.ContactMapper;
 
@@ -48,7 +49,7 @@ public class ContactManager extends GenericCursorManager<Contact, ContactMapper>
 	}
 
 	@Override
-	protected CursorLoader buildCursorLoader(Activity context, String where, String[] whereParameters) {
+	protected CursorLoader buildCursorLoader(Context context, String where, String[] whereParameters) {
 		// Run query
 		Uri uri = ContactsContract.Contacts.CONTENT_URI;
 		String[] projection = ContactMapper.getInstance().getListColumn();

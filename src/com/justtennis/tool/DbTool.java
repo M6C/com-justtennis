@@ -2,7 +2,7 @@ package com.justtennis.tool;
 
 import android.database.Cursor;
 
-import com.justtennis.domain.GenericDBPojo;
+import com.cameleon.common.android.model.GenericDBPojo;
 
 
 public class DbTool {

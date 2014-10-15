@@ -92,18 +92,8 @@ public class ListCompetitionBusiness {
 				tableInviteByTournament.put(tournament, listInvite);
 			}
 		}
-	}
 
-	private List<Invite> findInvite(Tournament tournament) {
-		switch(type) {
-			case PALMARES: {
-				return mapInviteByTournament.get(tournament.getId());
-			}
-			case ALL:
-			default: {
-				return inviteService.getByIdTournament(tournament.getId());
-			}
-		}
+		addInviteNoTournament();
 	}
 
 	public int getSumPoint() {
@@ -143,5 +133,32 @@ public class ListCompetitionBusiness {
 
 	public void setType(TYPE type) {
 		this.type = type;
+	}
+
+	private void addInviteNoTournament() {
+		List<Invite> listInvite = inviteService.getByNoTournament();
+		if (listInvite != null && !listInvite.isEmpty()) {
+			Tournament tournament = new Tournament();
+			tournament.setName("UNKNOW");
+			listTournament.add(tournament );
+
+			for(Invite invite : listInvite) {
+				invite.setPlayer(playerService.find(invite.getPlayer().getId()));
+				invite.setListScoreSet(scoreService.getByIdInvite(invite.getId()));
+			}
+			tableInviteByTournament.put(tournament, listInvite);
+		}
+	}
+
+	private List<Invite> findInvite(Tournament tournament) {
+		switch(type) {
+			case PALMARES: {
+				return mapInviteByTournament.get(tournament.getId());
+			}
+			case ALL:
+			default: {
+				return inviteService.getByIdTournament(tournament.getId());
+			}
+		}
 	}
 }

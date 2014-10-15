@@ -1,5 +1,7 @@
 package com.justtennis.domain;
 
+import com.cameleon.common.android.model.GenericDBPojo;
+
 public class Person extends GenericDBPojo<Long> {
 
 	private static final long serialVersionUID = 1L;

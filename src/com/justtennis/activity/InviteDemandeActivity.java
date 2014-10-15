@@ -116,7 +116,8 @@ public class InviteDemandeActivity extends GenericActivity {
 		switch (requestCode) {
 			case RESULT_PLAYER:
 				if (data!=null) {
-					long id = data.getLongExtra(PlayerActivity.EXTRA_PLAYER_ID, PlayerService.ID_EMPTY_PLAYER);
+//					long id = data.getLongExtra(PlayerActivity.EXTRA_PLAYER_ID, PlayerService.ID_EMPTY_PLAYER);
+					long id = data.getLongExtra(ListPlayerActivity.EXTRA_PLAYER_ID, PlayerService.ID_EMPTY_PLAYER);
 					if (id != PlayerService.ID_EMPTY_PLAYER) {
 						idPlayerForResult  = Long.valueOf(id);
 					}
@@ -248,10 +249,10 @@ public class InviteDemandeActivity extends GenericActivity {
 	
 	public void onClickPlayer(View view) {
 		if (business.isUnknownPlayer()) {
-//			Intent intent = new Intent(this, ListPlayerActivity.class);
-//			intent.putExtra(ListPlayerActivity.EXTRA_MODE, ListPlayerActivity.MODE.FOR_RESULT);
-			Intent intent = new Intent(this, PlayerActivity.class);
-			intent.putExtra(PlayerActivity.EXTRA_MODE, PlayerActivity.MODE.FOR_RESULT);
+			Intent intent = new Intent(this, ListPlayerActivity.class);
+			intent.putExtra(ListPlayerActivity.EXTRA_MODE, ListPlayerActivity.MODE.FOR_RESULT);
+//			Intent intent = new Intent(this, PlayerActivity.class);
+//			intent.putExtra(PlayerActivity.EXTRA_MODE, PlayerActivity.MODE.FOR_RESULT);
 			startActivityForResult(intent, RESULT_PLAYER);
 		}
 	}

@@ -30,11 +30,21 @@ public class InviteService extends GenericService<Invite> {
     		dbDataSource.close();
     	}
 	}
-	
+
 	public List<Invite> getByIdTournament(long idTournament) {
 		try {
 			dbDataSource.open();
 			return ((DBInviteDataSource)dbDataSource).getByIdTournament(idTournament);
+		}
+		finally {
+			dbDataSource.close();
+		}
+	}
+
+	public List<Invite> getByNoTournament() {
+		try {
+			dbDataSource.open();
+			return ((DBInviteDataSource)dbDataSource).getByNoTournament();
 		}
 		finally {
 			dbDataSource.close();

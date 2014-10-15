@@ -24,6 +24,15 @@ Saisie de Message
 
 ********************* DONE *****************************
 Ecran Calcul Classement
+[20140914] - Modification du classement estimé d'une invite et recalcul du classement
+[20140812] - Classement de simulation paramètrable + divers fix
+[20140622] - Creation de l'écran
+
+Ecran List Competition
+* [20140907] - Affichage des competitions sans Tournament
+[20140605] - Creation de l'écran
+
+Ecran Calcul Classement
 [20140812] - Classement de simulation paramètrable + divers fix
 [20140622] - Creation de l'écran
 
@@ -38,9 +47,6 @@ Common
 [20140526] - Initialise le fond des activity en fonction du type de match selectionné.
 [20140525] - Rend parametrable les requêtes en fonction du type de match selectionné sur l'accueil
 [20140309] - Creation d'un custom spinner pour armoniser le design avec les champs de saisie
-
-Ecran List Competition
-[20140605] - Creation de l'écran
 
 Ecran Accueil
 [20140529] - Comportement specifique pour le bouton Match

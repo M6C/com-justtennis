@@ -277,7 +277,7 @@ public class PlayerActivity extends GenericActivity {
 	
 	public void onClickLocation(View view) {
 		Intent intent = null;
-		switch(business.getPlayer().getType()) {
+		switch(getType()) {
 			case TRAINING:
 				intent = new Intent(this, LocationClubActivity.class);
 				if (business.getPlayer().getIdClub() != null) {
@@ -476,7 +476,7 @@ public class PlayerActivity extends GenericActivity {
 	}
 		
 	private int getTypePosition() {
-		switch(business.getPlayerType()) {
+		switch(getType()) {
 			case TRAINING:
 				return 0;
 			case COMPETITION:
@@ -486,7 +486,8 @@ public class PlayerActivity extends GenericActivity {
 	}
 
 	private TypeManager.TYPE getType() {
-		return business.getPlayer() != null ? business.getPlayer().getType() : null;
+//		return business.getPlayer() != null ? business.getPlayer().getType() : null;
+		return business.getPlayerType();
 	}
 	
 	private TypeManager.TYPE getType(Integer position) {

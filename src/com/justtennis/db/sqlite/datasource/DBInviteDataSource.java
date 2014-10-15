@@ -66,6 +66,15 @@ public class DBInviteDataSource extends GenericDBDataSourceByType<Invite> {
 		String sqlWhere = DBInviteHelper.COLUMN_ID_TOURNAMENT + " = " + idTournament;
 		return query(sqlWhere);
 	}
+
+	/**
+	 * Return all Invite with no Tournament
+	 * @return Invite list
+	 */
+	public List<Invite> getByNoTournament() {
+		String sqlWhere = DBInviteHelper.COLUMN_ID_TOURNAMENT + " IS NULL ";
+		return query(sqlWhere);
+	}
 	
 	/**
 	 * Return all Invite for a Tournament

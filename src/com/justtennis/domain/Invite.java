@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
+import com.cameleon.common.android.model.GenericDBPojo;
 import com.justtennis.manager.TypeManager;
 
 public class Invite extends GenericDBPojo<Long> implements Serializable {

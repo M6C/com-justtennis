@@ -4,6 +4,7 @@ import android.database.Cursor;
 import android.provider.ContactsContract.CommonDataKinds.StructuredName;
 import android.provider.ContactsContract.Contacts;
 
+import com.cameleon.common.android.mapper.GenericMapper;
 import com.justtennis.domain.Contact;
 
 

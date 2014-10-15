@@ -8,11 +8,13 @@ import java.util.TreeSet;
 import android.app.Activity;
 import android.content.Context;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 
+import com.cameleon.common.android.factory.FactoryDialog;
 import com.justtennis.R;
 import com.justtennis.db.service.RankingService;
 import com.justtennis.domain.Player;
@@ -86,6 +88,25 @@ public class RankingListManager {
 		if (idRanking != null) {
 			initializeRanking(spRanking, idRanking);
 		}
+	}
+
+	public void manageRankingTextViewDialog(final Activity context, View view, final IRankingListListener listener, boolean estimate) {
+		View vwRanking = view.findViewById(estimate ? R.id.tv_ranking_estimate : R.id.tv_ranking);
+		vwRanking.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				AdapterView.OnItemClickListener onClickListener = new AdapterView.OnItemClickListener() {
+
+					@Override
+					public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+						Ranking ranking = listRanking.get(position);
+						listener.onRankingSelected(ranking);
+					}
+				};
+				FactoryDialog.getInstance().buildListView(context, 0, listTxtRankings, onClickListener).show();
+			}
+		});
 	}
 	
 	private void initializeRanking(Spinner spRanking, Long idRanking) {

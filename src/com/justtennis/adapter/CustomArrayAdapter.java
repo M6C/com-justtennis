@@ -8,8 +8,8 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
+import com.cameleon.common.android.model.GenericDBPojo;
 import com.justtennis.R;
-import com.justtennis.domain.GenericDBPojo;
 
 public class CustomArrayAdapter<T> extends ArrayAdapter<T> {
 
