@@ -2,6 +2,8 @@ package com.justtennis.db.service;
 
 import java.util.List;
 
+import org.gdocument.gtracergps.launcher.log.Logger;
+
 import android.content.Context;
 
 import com.cameleon.common.android.inotifier.INotifierMessage;
@@ -9,6 +11,8 @@ import com.cameleon.common.android.model.GenericDBPojo;
 import com.justtennis.db.sqlite.datasource.GenericDBDataSource;
 
 public class GenericService<POJO extends GenericDBPojo<Long>> {
+
+	private static final String TAG = GenericService.class.getName();
 
 	protected GenericDBDataSource<POJO> dbDataSource;
 	protected Context context;
@@ -90,4 +94,8 @@ public class GenericService<POJO extends GenericDBPojo<Long>> {
     		dbDataSource.close();
     	}
 	}
+
+	protected void logMe(String msg) {
+		Logger.logMe(TAG, msg);
+    }
 }

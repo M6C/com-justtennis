@@ -22,6 +22,7 @@ import com.justtennis.db.service.InviteService;
 import com.justtennis.db.service.MessageService;
 import com.justtennis.db.service.PlayerService;
 import com.justtennis.db.service.RankingService;
+import com.justtennis.db.service.SaisonService;
 import com.justtennis.db.service.ScoreSetService;
 import com.justtennis.db.service.UserService;
 import com.justtennis.domain.Address;
@@ -30,6 +31,7 @@ import com.justtennis.domain.Invite;
 import com.justtennis.domain.Invite.STATUS;
 import com.justtennis.domain.Player;
 import com.justtennis.domain.Ranking;
+import com.justtennis.domain.Saison;
 import com.justtennis.domain.ScoreSet;
 import com.justtennis.domain.Tournament;
 import com.justtennis.domain.User;
@@ -51,6 +53,7 @@ public class InviteBusiness {
 	private PlayerService playerService;
 	private ScoreSetService scoreSetService;
 	private RankingService rankingService;
+	private SaisonService saisonService;
 	private GCalendarHelper gCalendarHelper;
 	private LocationParser locationParser;
 	private User user;
@@ -58,6 +61,8 @@ public class InviteBusiness {
 	private MODE mode = MODE.INVITE_MODIFY;
 	private List<Ranking> listRanking;
 	private List<String> listTxtRankings;
+	private List<Saison> listSaison = new ArrayList<Saison>();
+	private List<String> listTxtSaisons;
 	private String[][] scores;
 
 	public InviteBusiness(Context context, INotifierMessage notificationMessage) {
@@ -68,6 +73,7 @@ public class InviteBusiness {
 		userService = new UserService(context, notificationMessage);
 		rankingService = new RankingService(context, notificationMessage);
 		scoreSetService = new ScoreSetService(context, notificationMessage);
+		saisonService = new SaisonService(context, notificationMessage);
 		gCalendarHelper = GCalendarHelper.getInstance(context);
 		locationParser = LocationParser.getInstance(context, notificationMessage);
 	}
@@ -107,6 +113,7 @@ public class InviteBusiness {
 		invite = (Invite) savedInstanceState.getSerializable(InviteActivity.EXTRA_INVITE);
 
 		initializeDataRanking();
+		initializeDataSaison();
 	}
 
 	public void updateData() {
@@ -130,6 +137,7 @@ public class InviteBusiness {
 		}
 
 		initializeDataRanking();
+		initializeDataSaison();
 	}
 
 	public void initializeDataRanking() {
@@ -141,6 +149,14 @@ public class InviteBusiness {
 		for(Ranking ranking : listRanking) {
 			listTxtRankings.add(ranking.getRanking());
 		}
+	}
+
+	public void initializeDataSaison() {
+		listSaison.clear();
+		listSaison.add(saisonService.getEmpty());
+		listSaison.addAll(saisonService.getList());
+
+		listTxtSaisons = saisonService.getListName(listSaison);
 	}
 
 	public void onSaveInstanceState(Bundle outState) {
@@ -227,6 +243,10 @@ public class InviteBusiness {
 		return rankingService.isEmptyRanking(ranking);
 	}
 
+	public boolean isEmptySaison(Saison saison) {
+		return saisonService.isEmpty(saison);
+	}
+
 	public User getUser() {
 		return user;
 	}
@@ -238,13 +258,21 @@ public class InviteBusiness {
 	public Date getDate() {
 		return invite.getDate();
 	}
-	
+
 	public void setIdRanking(Long idRanking) {
 		invite.setIdRanking(idRanking);
 	}
 
 	public Long getIdRanking() {
 		return invite.getIdRanking();
+	}
+
+	public void setSaison(Saison saison) {
+		invite.setSaison(saison);
+	}
+
+	public Saison getSaison() {
+		return invite.getSaison();
 	}
 
 	public Address getAddress() {
@@ -341,6 +369,22 @@ public class InviteBusiness {
 
 	public void setListTxtRankings(List<String> listTxtRankings) {
 		this.listTxtRankings = listTxtRankings;
+	}
+
+	public List<Saison> getListSaison() {
+		return listSaison;
+	}
+
+	public void setListSaison(List<Saison> listSaison) {
+		this.listSaison = listSaison;
+	}
+
+	public List<String> getListTxtSaisons() {
+		return listTxtSaisons;
+	}
+
+	public void setListTxtSaisons(List<String> listTxtSaisons) {
+		this.listTxtSaisons = listTxtSaisons;
 	}
 
 	private Invite doConfirm(STATUS status) {

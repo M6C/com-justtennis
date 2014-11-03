@@ -18,6 +18,7 @@ import com.justtennis.domain.Invite;
 import com.justtennis.domain.Invite.SCORE_RESULT;
 import com.justtennis.domain.Invite.STATUS;
 import com.justtennis.domain.Player;
+import com.justtennis.domain.Saison;
 import com.justtennis.domain.Tournament;
 import com.justtennis.manager.TypeManager;
 import com.justtennis.tool.DbTool;
@@ -29,6 +30,7 @@ public class DBInviteDataSource extends GenericDBDataSourceByType<Invite> {
 	// Database fields
 	private String[] allColumns = {
 		DBInviteHelper.COLUMN_ID,
+		DBInviteHelper.COLUMN_ID_SAISON,
 		DBInviteHelper.COLUMN_ID_PLAYER,
 		DBInviteHelper.COLUMN_TIME,
 		DBInviteHelper.COLUMN_STATUS,
@@ -130,6 +132,7 @@ public class DBInviteDataSource extends GenericDBDataSourceByType<Invite> {
 
 	@Override
 	protected void putContentValue(ContentValues values, Invite invite) {
+		values.put(DBInviteHelper.COLUMN_ID_SAISON, invite.getPlayer().getId());
 		values.put(DBInviteHelper.COLUMN_ID_PLAYER, invite.getPlayer().getId());
 		values.put(DBInviteHelper.COLUMN_TIME, invite.getDate().getTime());
 		values.put(DBInviteHelper.COLUMN_STATUS, invite.getStatus().toString());
@@ -148,6 +151,7 @@ public class DBInviteDataSource extends GenericDBDataSourceByType<Invite> {
 	protected Invite cursorToPojo(Cursor cursor) {
 		int col = 0;
 		Invite invite = new Invite(DbTool.getInstance().toLong(cursor, col++));
+		invite.setSaison(new Saison(DbTool.getInstance().toLong(cursor, col++)));
 		invite.setPlayer(new Player(DbTool.getInstance().toLong(cursor, col++)));
 		String date = cursor.getString(col++);
 		invite.setDate(date==null || "null".equals(date.toLowerCase(Locale.FRANCE)) ? null : new Date(Long.parseLong(date)));

@@ -7,12 +7,13 @@ import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
 
 import com.justtennis.db.sqlite.helper.DBAddressHelper;
+import com.justtennis.db.sqlite.helper.DBBonusHelper;
 import com.justtennis.db.sqlite.helper.DBClubHelper;
 import com.justtennis.db.sqlite.helper.DBInviteHelper;
 import com.justtennis.db.sqlite.helper.DBMessageHelper;
 import com.justtennis.db.sqlite.helper.DBPlayerHelper;
 import com.justtennis.db.sqlite.helper.DBRankingHelper;
-import com.justtennis.db.sqlite.helper.DBScoreSetHelper;
+import com.justtennis.db.sqlite.helper.DBSaisonHelper;
 import com.justtennis.db.sqlite.helper.DBTournamentHelper;
 import com.justtennis.db.sqlite.helper.DBUserHelper;
 import com.justtennis.db.sqlite.helper.GenericDBHelper;
@@ -31,12 +32,14 @@ public class OnClickDBRestoreListenerOk implements OnClickListener {
 			NotifierMessageLogger notifier = NotifierMessageLogger.getInstance();
 			GenericDBHelper[] listHelper  = new GenericDBHelper[] {
 					new DBAddressHelper(context, notifier),
+					new DBBonusHelper(context, notifier),
 					new DBClubHelper(context, notifier),
 					new DBInviteHelper(context, notifier),
 					new DBMessageHelper(context, notifier),
 					new DBPlayerHelper(context, notifier),
 					new DBRankingHelper(context, notifier),
-					new DBScoreSetHelper(context, notifier),
+					new DBSaisonHelper(context, notifier),
+//					new DBScoreSetHelper(context, notifier), // Same as Invite DB
 					new DBTournamentHelper(context, notifier),
 					new DBUserHelper(context, notifier)
 			};

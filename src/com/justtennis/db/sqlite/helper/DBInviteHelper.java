@@ -4,6 +4,7 @@ import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 
 import com.cameleon.common.android.inotifier.INotifierMessage;
+import com.justtennis.db.service.InviteService;
 import com.justtennis.manager.TypeManager.TYPE;
 
 public class DBInviteHelper extends GenericDBHelper {
@@ -12,6 +13,7 @@ public class DBInviteHelper extends GenericDBHelper {
 
 	public static final String TABLE_NAME = "INVITE";
 
+	public static final String COLUMN_ID_SAISON = "ID_SAISON";
 	public static final String COLUMN_ID_PLAYER = "ID_PLAYER";
 	public static final String COLUMN_TIME = "TIME";
 	public static final String COLUMN_STATUS = "STATUS";
@@ -26,11 +28,12 @@ public class DBInviteHelper extends GenericDBHelper {
 	public static final String COLUMN_BONUS_POINT = "BONUS_POINT";
 
 	public static final String DATABASE_NAME = "Invite.db";
-	public static final int DATABASE_VERSION = 13;
+	public static final int DATABASE_VERSION = 14;
 
 	// Database creation sql statement
 	private static final String DATABASE_CREATE = "CREATE TABLE " + TABLE_NAME + "(" + 
 		COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " + 
+		COLUMN_ID_SAISON + " INTEGER NULL, " + 
 		COLUMN_ID_PLAYER + " INTEGER NULL, " + 
 		COLUMN_TIME + " INTEGER NULL, " + 
 		COLUMN_STATUS + " INTEGER NULL, " + 
@@ -79,6 +82,10 @@ public class DBInviteHelper extends GenericDBHelper {
 			if (oldVersion <= 12) {
 				addColumn(database, COLUMN_BONUS_POINT, "INTEGER NULL");
 			}
+			if (oldVersion <= 13) {
+				addColumn(database, COLUMN_ID_SAISON, "INTEGER NULL");
+				new InviteService(context, notificationMessage).updateInvite(database);
+			}
 		}
 		else {
 			super.onUpgrade(database, oldVersion, newVersion);
@@ -99,4 +106,36 @@ public class DBInviteHelper extends GenericDBHelper {
 	public String getDatabaseCreate() {
 		return DATABASE_CREATE;
 	}
+//
+//	public void updateInvite(SQLiteDatabase database) {
+//		SaisonService saisonService = new SaisonService(context, notificationMessage);
+//		DBSaisonDataSource saisonDataSource = new DBSaisonDataSource(context, notificationMessage);
+//		List<Saison> saisons = saisonDataSource.getAll();
+//		if (saisons != null && saisons.size() > 1) {
+//			// Just to be sure to create Invite Table before
+//			List<Invite> invites = new DBInviteDataSource(context, notificationMessage).getAll();
+//			if (invites != null && invites.size() > 0) {
+//				Long id = null;
+//				for(Saison saison : saisons) {
+//					if (saison.isActive()) {
+//						id = saison.getId();
+//						break;
+//					}
+//				}
+//				if (id == null) {
+//					id = saisons.get(0).getId();
+//				}
+//				String sql = 
+//					"UPDATE " + DBInviteHelper.TABLE_NAME + 
+//					" SET " + DBInviteHelper.COLUMN_ID_SAISON + " = '" + id + "'" +
+//					" WHERE " + DBInviteHelper.COLUMN_ID_SAISON + " IS NULL";
+//				logMe(sql);
+//				execSQL(database, sql);
+//			} else {
+//				logMe("NO INVITE TO UPDATE");
+//			}
+//		} else {
+//			logMe("NO SAISON !! NO INVITE UPDATED");
+//		}
+//	}
 }

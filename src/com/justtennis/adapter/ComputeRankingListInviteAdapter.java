@@ -183,6 +183,7 @@ public class ComputeRankingListInviteAdapter extends ArrayAdapter<Invite> {
 				}
 			}
 		};
+		rankingListManager.manageRankingTextViewDialog(activity, rowView, listener, false);
 		rankingListManager.manageRankingTextViewDialog(activity, rowView, listener, true);
 	}
 }

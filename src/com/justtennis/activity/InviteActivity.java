@@ -38,10 +38,12 @@ import com.justtennis.business.InviteBusiness;
 import com.justtennis.db.service.PlayerService;
 import com.justtennis.domain.Player;
 import com.justtennis.domain.Ranking;
+import com.justtennis.domain.Saison;
 import com.justtennis.listener.action.TextWatcherFieldEnableView;
 import com.justtennis.listener.action.TextWatcherFieldScoreSetBold;
 import com.justtennis.manager.ContactManager;
 import com.justtennis.manager.TypeManager;
+import com.justtennis.manager.TypeManager.TYPE;
 import com.justtennis.notifier.NotifierMessageLogger;
 
 public class InviteActivity extends GenericActivity {
@@ -77,6 +79,8 @@ public class InviteActivity extends GenericActivity {
 	private ImageView ivPhoto;
 	private Switch swType;
 	private Spinner spRanking;
+	private LinearLayout llSaison;
+	private Spinner spSaison;
 	private TextView tvLocation;
 	private TextView tvLocationEmpty;
 
@@ -97,6 +101,7 @@ public class InviteActivity extends GenericActivity {
 	private EditText etScore15;
 	private EditText etScore25;
 	private BonusListManager bonusListManager;
+	private TypeManager typeManager;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -115,6 +120,8 @@ public class InviteActivity extends GenericActivity {
 		ivPhoto = (ImageView)findViewById(R.id.iv_photo);
 		swType = (Switch)findViewById(R.id.sw_type);
 		spRanking = (Spinner)findViewById(R.id.sp_main_ranking);
+		spSaison = (Spinner)findViewById(R.id.sp_main_saison);
+		llSaison = (LinearLayout)findViewById(R.id.ll_main_saison);
 		tvLocation = ((TextView)findViewById(R.id.tv_location));
 		tvLocationEmpty = ((TextView)findViewById(R.id.et_location));
 		llLocationDetail = (LinearLayout)findViewById(R.id.ll_location_detail);
@@ -149,7 +156,8 @@ public class InviteActivity extends GenericActivity {
 		NotifierMessageLogger notifier = NotifierMessageLogger.getInstance();
 		business = new InviteBusiness(this, notifier);
 
-		TypeManager.getInstance().initializeActivity(findViewById(R.id.layout_main), false);
+		typeManager = TypeManager.getInstance();
+		typeManager.initializeActivity(findViewById(R.id.layout_main), false);
 		bonusListManager = BonusListManager.getInstance(this, notifier);
 	}
 
@@ -374,6 +382,8 @@ public class InviteActivity extends GenericActivity {
 		initializeRanking();
 		initializeDataLocation();
 		initializeBonus();
+		initializeSaisonList();
+		initializeSaison();
 	}
 
 	private void initializeDataPlayer() {
@@ -425,6 +435,45 @@ public class InviteActivity extends GenericActivity {
 				business.setIdRanking(item.getId());
 			}
 		});
+	}
+
+	private void initializeSaisonList() {
+		Log.d(TAG, "initializeSaisonList");
+		llSaison.setVisibility(View.VISIBLE);
+		CustomArrayAdapter<String> dataAdapter = new CustomArrayAdapter<String>(this, business.getListTxtSaisons());
+		spSaison.setAdapter(dataAdapter);
+
+		spSaison.setOnItemSelectedListener(dataAdapter.new OnItemSelectedListener<Saison>() {
+			@Override
+			public Saison getItem(int position) {
+				return business.getListSaison().get(position);
+			}
+
+			@Override
+			public boolean isHintItemSelected(Saison item) {
+				return business.isEmptySaison(item);
+			}
+
+			@Override
+			public void onItemSelected(AdapterView<?> parent, View view, int position, long id, Saison item) {
+				business.setSaison(business.getListSaison().get(position));
+			}
+		});
+	}
+
+	private void initializeSaison() {
+		Log.d(TAG, "initializeSaison");
+		Saison saison = business.getSaison();
+		int position = 0;
+		List<Saison> listSaison = business.getListSaison();
+		for(Saison item : listSaison) {
+			if (item.equals(saison)) {
+				spSaison.setSelection(position, true);
+				break;
+			} else {
+				position++;
+			}
+		}
 	}
 
 	private void initializeBonus() {

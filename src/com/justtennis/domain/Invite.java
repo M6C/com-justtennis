@@ -22,6 +22,7 @@ public class Invite extends GenericDBPojo<Long> implements Serializable {
 	public enum SCORE_RESULT {
 		VICTORY, DEFEAT, UNFINISHED
 	}
+	private Saison saison;
 	private Player player;
 	private User user;
 	private Date date;
@@ -75,6 +76,12 @@ public class Invite extends GenericDBPojo<Long> implements Serializable {
 	}
 	public void setUser(User user) {
 		this.user = user;
+	}
+	public Saison getSaison() {
+		return saison;
+	}
+	public void setSaison(Saison saison) {
+		this.saison = saison;
 	}
 	public Player getPlayer() {
 		return player;

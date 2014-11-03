@@ -107,7 +107,31 @@
                                 android:gravity="center_horizontal"
                                 android:textSize="@dimen/invite_field_size" />
                         </LinearLayout>
-                    </LinearLayout>
+
+                        <LinearLayout
+                            android:id="@+id/ll_main_saison"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="@dimen/invite_layout_field_marging_bottom"
+                            android:orientation="vertical" >
+
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="@string/txt_saison"
+                                android:textColor="@color/invite_text_color"
+                                android:textSize="@dimen/invite_text_size"
+                                android:textStyle="bold" />
+
+                            <Spinner
+                                android:id="@+id/sp_main_saison"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="@dimen/invite_field_margin_left"
+                                android:gravity="center_horizontal"
+                                android:textSize="@dimen/invite_field_size" />
+                        </LinearLayout>
+                     </LinearLayout>
                 </LinearLayout>
             </LinearLayout>
 

@@ -7,18 +7,24 @@ import java.util.HashMap;
 import java.util.List;
 
 import android.content.Context;
+import android.database.sqlite.SQLiteDatabase;
 
 import com.cameleon.common.android.inotifier.INotifierMessage;
 import com.justtennis.db.sqlite.datasource.DBInviteDataSource;
+import com.justtennis.db.sqlite.helper.DBInviteHelper;
 import com.justtennis.domain.Invite;
+import com.justtennis.domain.Saison;
 import com.justtennis.domain.comparator.InviteComparatorByDate;
 import com.justtennis.domain.comparator.InviteComparatorByPoint;
 import com.justtennis.manager.TypeManager;
 
 public class InviteService extends GenericService<Invite> {
 
+	private INotifierMessage notificationMessage;
+
 	public InviteService(Context context, INotifierMessage notificationMessage) {
 		super(context, new DBInviteDataSource(context, notificationMessage), notificationMessage);
+		this.notificationMessage = notificationMessage;
 	}
 
 	public List<Invite> getByIdPlayer(long idPlayer) {
@@ -125,6 +131,47 @@ public class InviteService extends GenericService<Invite> {
 	
 	public List<Invite> sortInviteByPoint(List<Invite> listInvite) {
 		return sortInvite(listInvite, new InviteComparatorByPoint(true));
+	}
+
+	public void updateInvite(SQLiteDatabase database) {
+		SaisonService saisonService = new SaisonService(context, notificationMessage);
+		List<Saison> saisons = saisonService.getList();
+		if (saisons != null && saisons.size() > 0) {
+			Long id = null;
+			for(Saison saison : saisons) {
+				if (saison.isActive()) {
+					id = saison.getId();
+					break;
+				}
+			}
+			if (id == null) {
+				id = saisons.get(0).getId();
+			}
+			if (database == null) {
+				// Just to be sure to create Invite Table before
+				List<Invite> invites = getList();
+				if (invites != null && invites.size() > 0) {
+					Saison saison = new Saison(id);
+					for(Invite invite : invites) {
+						if (invite.getSaison()==null || invite.getSaison().getId() == null) {
+		 					invite.setSaison(saison);
+							createOrUpdate(invite);
+						}
+					}
+				} else {
+					logMe("NO INVITE TO UPDATE");
+				}
+			} else {
+				String sql = 
+				"UPDATE " + DBInviteHelper.TABLE_NAME + 
+				" SET " + DBInviteHelper.COLUMN_ID_SAISON + " = '" + id + "'" +
+				" WHERE " + DBInviteHelper.COLUMN_ID_SAISON + " IS NULL";
+				logMe(sql);
+				database.execSQL(sql);
+			}
+		} else {
+			logMe("NO SAISON !! NO INVITE UPDATED");
+		}
 	}
 
 	private List<Invite> sortInvite(List<Invite> listInvite, Comparator<Invite> comparator) {
