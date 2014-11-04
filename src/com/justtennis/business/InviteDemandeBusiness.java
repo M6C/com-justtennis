@@ -48,13 +48,13 @@ public class InviteDemandeBusiness {
 	private UserService userService;
 	private PlayerService playerService;
 	private GCalendarHelper gCalendarHelper;
+	private RankingService rankingService;
+	private TypeManager typeManager;
 	private User user;
 	private Invite invite;
 	private MODE mode = MODE.INVITE_DEMANDE;
 	private List<Ranking> listRanking;
 	private List<String> listTxtRankings;
-
-	private RankingService rankingService;
 
 	public InviteDemandeBusiness(Context context, INotifierMessage notificationMessage) {
 		this.context = context;
@@ -63,6 +63,7 @@ public class InviteDemandeBusiness {
 		playerService = new PlayerService(context, notificationMessage);
 		userService = new UserService(context, notificationMessage);
 		gCalendarHelper = GCalendarHelper.getInstance(context);
+		typeManager = TypeManager.getInstance();
 	}
 
 	public void initializeData(Intent intent) {
@@ -159,13 +160,14 @@ public class InviteDemandeBusiness {
 	}
 
 	public boolean isUnknownPlayer() {
-		return getPlayer() != null && playerService.isUnknownPlayer(getPlayer());
+		return getPlayer() != null && PlayerService.isUnknownPlayer(getPlayer());
 	}
 	
 	public void send(String text, boolean addCalendar) {
 //		Date date = invite.getDate();
 //		Invite invite = new Invite(user, player, date, getType());
 		invite.setStatus(this.invite.getStatus());
+		invite.setSaison(typeManager.getSaison());
 		if (this.invite!=null) {
 			invite.setId(this.invite.getId());
 		}

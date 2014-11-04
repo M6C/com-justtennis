@@ -105,13 +105,13 @@
         <activity android:name=".activity.PieChartActivity"
    		   android:screenOrientation="portrait"
          />
-
+<!-- 
 	   <receiver android:name=".receiver.SmsReceiver">
 	      <intent-filter android:priority="999">
 	         <action android:name="android.provider.Telephony.SMS_RECEIVED" />
 	      </intent-filter>
-<!-- 	      <intent-filter android:priority="1000"/> -->
 	   </receiver>    
-</application>
+ -->
+ </application>
 
 </manifest>

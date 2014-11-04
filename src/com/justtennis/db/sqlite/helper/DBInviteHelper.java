@@ -106,36 +106,4 @@ public class DBInviteHelper extends GenericDBHelper {
 	public String getDatabaseCreate() {
 		return DATABASE_CREATE;
 	}
-//
-//	public void updateInvite(SQLiteDatabase database) {
-//		SaisonService saisonService = new SaisonService(context, notificationMessage);
-//		DBSaisonDataSource saisonDataSource = new DBSaisonDataSource(context, notificationMessage);
-//		List<Saison> saisons = saisonDataSource.getAll();
-//		if (saisons != null && saisons.size() > 1) {
-//			// Just to be sure to create Invite Table before
-//			List<Invite> invites = new DBInviteDataSource(context, notificationMessage).getAll();
-//			if (invites != null && invites.size() > 0) {
-//				Long id = null;
-//				for(Saison saison : saisons) {
-//					if (saison.isActive()) {
-//						id = saison.getId();
-//						break;
-//					}
-//				}
-//				if (id == null) {
-//					id = saisons.get(0).getId();
-//				}
-//				String sql = 
-//					"UPDATE " + DBInviteHelper.TABLE_NAME + 
-//					" SET " + DBInviteHelper.COLUMN_ID_SAISON + " = '" + id + "'" +
-//					" WHERE " + DBInviteHelper.COLUMN_ID_SAISON + " IS NULL";
-//				logMe(sql);
-//				execSQL(database, sql);
-//			} else {
-//				logMe("NO INVITE TO UPDATE");
-//			}
-//		} else {
-//			logMe("NO SAISON !! NO INVITE UPDATED");
-//		}
-//	}
 }

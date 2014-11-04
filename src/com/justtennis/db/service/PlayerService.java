@@ -3,9 +3,8 @@ package com.justtennis.db.service;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-
+import android.annotation.SuppressLint;
 import android.content.Context;
-
 import com.cameleon.common.android.inotifier.INotifierMessage;
 import com.justtennis.R;
 import com.justtennis.db.sqlite.datasource.DBPlayerDataSource;
@@ -37,14 +36,15 @@ public class PlayerService extends GenericService<Player> {
 		return ret;
 	}
 
-	public boolean isUnknownPlayer(Player player) {
+	public static boolean isUnknownPlayer(Player player) {
 		return player.getId()!=null && ID_UNKNOWN_PLAYER==player.getId();
 	}
 	
-	public boolean isEmptyPlayer(Player player) {
+	public static boolean isEmptyPlayer(Player player) {
 		return player.getId()!=null && ID_EMPTY_PLAYER==player.getId();
 	}
 
+	@SuppressLint("UseSparseArrays")
 	public HashMap<Long, List<Player>> getGroupByIdRanking() {
 		HashMap<Long, List<Player>> ret = new HashMap<Long, List<Player>>();
 		List<Player> listPlayer = null;

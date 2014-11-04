@@ -4,11 +4,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Set;
-
 import org.gdocument.gtracergps.launcher.log.Logger;
-
+import android.annotation.SuppressLint;
 import android.content.Context;
-
 import com.cameleon.common.android.inotifier.INotifierMessage;
 import com.justtennis.ApplicationConfig;
 import com.justtennis.db.service.InviteService;
@@ -192,7 +190,7 @@ public class ComputeRankSubService {
 			logMe("USER RANKING " + userRanking.getRanking() + " NB VICTORY:" + nbVictory);
 			for(Invite invite : listInvite) {
 				Player player = playerService.find(invite.getPlayer().getId());
-				Ranking ranking = rankingService.getRanking(player, estimate);
+				Ranking ranking = rankingService.getRanking(invite, player, estimate);
 				if (ranking.getOrder() >= rankingPositionMin) {
 					listInviteCalculed.add(invite);
 					int rankingDif = ranking.getOrder() - userRanking.getOrder();
@@ -224,6 +222,7 @@ public class ComputeRankSubService {
 		return data;
 	}
 	
+	@SuppressLint("UseSparseArrays")
 	private HashMap<Long,List<Invite>> getInviteGroupByPlayerRanking(boolean estimate) {
 		HashMap<Long, List<Invite>> ret = new HashMap<Long, List<Invite>>();
 		User user = userService.find();
@@ -237,7 +236,7 @@ public class ComputeRankSubService {
 
 			for(Invite victory : listVictory) {
 				Player player = playerService.find(victory.getPlayer().getId());
-				Long idRanking = rankingService.getRanking(player, estimate).getId();
+				Long idRanking = rankingService.getRanking(victory, player, estimate).getId();
 				List<Invite> listInvite = null;
 				if (ret.containsKey(idRanking)) {
 					listInvite = ret.get(idRanking);

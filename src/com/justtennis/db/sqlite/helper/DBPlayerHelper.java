@@ -13,6 +13,7 @@ public class DBPlayerHelper extends GenericDBHelper {
 
 	public static final String TABLE_NAME = "PLAYER";
 
+	public static final String COLUMN_ID_SAISON = "ID_SAISON";
 	public static final String COLUMN_ID_TOURNAMENT = "ID_TOURNAMENT";
 	public static final String COLUMN_ID_CLUB = "ID_CLUB";
 	public static final String COLUMN_ID_RANKING = "ID_RANKING";
@@ -30,11 +31,12 @@ public class DBPlayerHelper extends GenericDBHelper {
 	public static final String COLUMN_TYPE = "TYPE";
 
 	private static final String DATABASE_NAME = "Player.db";
-	private static final int DATABASE_VERSION = 12;
+	private static final int DATABASE_VERSION = 13;
 
 	// Database creation sql statement
 	private static final String DATABASE_CREATE = "CREATE TABLE " + TABLE_NAME + "(" + 
 		COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " + 
+		COLUMN_ID_SAISON + " INTEGER NULL, " + 
 		COLUMN_ID_TOURNAMENT + " INTEGER NULL, " + 
 		COLUMN_ID_CLUB + " INTEGER NULL, " + 
 		COLUMN_ID_ADDRESS + " INTEGER NULL, " + 
@@ -80,6 +82,9 @@ public class DBPlayerHelper extends GenericDBHelper {
 			}
 			if (oldVersion <= 11) {
 				addColumn(database, COLUMN_ID_RANKING_ESTIMAGE, " INTEGER NULL ");
+			}
+			if (oldVersion <= 12) {
+				addColumn(database, COLUMN_ID_SAISON, " INTEGER NULL ");
 			}
 		}
 		else {

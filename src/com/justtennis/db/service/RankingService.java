@@ -4,12 +4,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.SortedSet;
 import java.util.TreeSet;
-
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.util.SparseIntArray;
-
 import com.cameleon.common.android.inotifier.INotifierMessage;
 import com.justtennis.db.sqlite.datasource.DBRankingDataSource;
+import com.justtennis.domain.Invite;
 import com.justtennis.domain.Player;
 import com.justtennis.domain.Ranking;
 import com.justtennis.domain.comparator.RankingComparatorByOrder;
@@ -50,6 +50,22 @@ public class RankingService extends GenericService<Ranking> {
 		}
 	}
 
+	public Ranking getRanking(Invite invite, Player player, boolean estimate) {
+		Ranking ret = null;
+		if (PlayerService.isUnknownPlayer(player)) {
+			Long idRanking = invite.getIdRanking();
+			if (idRanking != null) {
+				ret = find(idRanking);
+			}
+			if (idRanking == null) {
+				ret = getNC();
+			}
+		} else {
+			ret = getRanking(player, estimate);
+		}
+		return ret;
+	}
+
 	public Ranking getRanking(Player player, boolean estimate) {
 		Ranking ret = null;
 		Long idRanking = null;
@@ -74,6 +90,7 @@ public class RankingService extends GenericService<Ranking> {
 		listRanking.addAll(setRanking);
 	}
 
+	@SuppressLint("UseSparseArrays")
 	public HashMap<Long, Ranking> getMapById() {
 		HashMap<Long, Ranking> ret = new HashMap<Long, Ranking>();
 		List<Ranking> lisRanking = getList();

@@ -40,6 +40,10 @@ public class UserBusiness extends PlayerBusiness {
 	}
 
 	@Override
+	protected void initializeDataSaison() {
+	}
+
+	@Override
 	public boolean isUnknownPlayer(Player player) {
 		return false;
 	}

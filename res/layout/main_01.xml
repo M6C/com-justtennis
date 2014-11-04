@@ -19,12 +19,54 @@
 	    android:orientation="vertical"
 	    android:gravity="right|top"
 	>
-	    <ImageView
-	        android:layout_width="48dp"
-	        android:layout_height="48dp"
-	        android:src="@drawable/menu_overflow_01"
-	        android:onClick="onClickMenuOverFlow"
-	    />
+
+		<LinearLayout
+		    android:layout_width="match_parent"
+		    android:layout_height="wrap_content"
+		    android:orientation="horizontal"
+		>
+			<LinearLayout
+	            android:layout_width="0dp"
+	            android:layout_height="wrap_content"
+	            android:layout_weight="1"
+			    android:orientation="horizontal"
+			    android:gravity="center_horizontal|center_vertical"
+			>
+			    <Spinner
+		            android:id="@+id/sp_saison"
+		            android:layout_width="wrap_content"
+		            android:layout_height="wrap_content"
+		            android:textSize="@dimen/invite_field_size"
+		        />
+				<LinearLayout
+		            android:layout_width="wrap_content"
+		            android:layout_height="match_parent"
+				    android:orientation="horizontal"
+				    android:gravity="center_vertical"
+				    android:layout_marginLeft="15dp"
+				>
+				    <ImageView
+				        android:layout_width="24dp"
+				        android:layout_height="24dp"
+				        android:src="@drawable/btn_add"
+				        android:onClick="onClickSaisonAdd"
+				    />
+				    <ImageView
+				        android:layout_width="24dp"
+				        android:layout_height="24dp"
+				        android:src="@drawable/btn_del"
+				        android:onClick="onClickSaisonDel"
+				    	android:layout_marginLeft="15dp"
+				    />
+				</LinearLayout>
+			</LinearLayout>
+		    <ImageView
+		        android:layout_width="48dp"
+		        android:layout_height="48dp"
+		        android:src="@drawable/menu_overflow_01"
+		        android:onClick="onClickMenuOverFlow"
+		    />
+		</LinearLayout>
 	    <LinearLayout
 	        android:id="@+id/ll_menu_overflow_content"
 		    android:layout_width="wrap_content"
@@ -149,6 +191,7 @@
 				    android:id="@+id/ll_type_training_cursor"
 				    android:layout_width="match_parent"
 				    android:layout_height="5dp"
+				    android:orientation="horizontal"
 				    android:background="@color/bleu_transparent_5"
 				/>
 				<TextView
@@ -175,6 +218,7 @@
 				    android:id="@+id/ll_type_match_cursor"
 				    android:layout_width="match_parent"
 				    android:layout_height="5dp"
+				    android:orientation="horizontal"
 				    android:background="@color/orange_tangelo"
 				/>
 				<TextView

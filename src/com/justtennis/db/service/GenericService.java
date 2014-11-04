@@ -95,7 +95,7 @@ public class GenericService<POJO extends GenericDBPojo<Long>> {
     	}
 	}
 
-	protected void logMe(String msg) {
+	protected static void logMe(String msg) {
 		Logger.logMe(TAG, msg);
     }
 }

@@ -10,6 +10,7 @@ import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.cameleon.common.android.factory.FactoryDialog;
@@ -29,6 +30,7 @@ public class UserActivity extends PlayerActivity {
 
 	private TextView tvMessage;
 	private EditText etMessage;
+	private LinearLayout llSaison;
 	private UserBusiness business;
 
 	private Serializable addressFromResult;
@@ -62,6 +64,13 @@ public class UserActivity extends PlayerActivity {
 		super.initializeViewById();
 		tvMessage = (TextView)findViewById(R.id.tv_message);
 		etMessage = (EditText)findViewById(R.id.et_message);
+		llSaison = (LinearLayout)findViewById(R.id.ll_saison);
+	}
+
+	@Override
+	protected void initialize() {
+		super.initialize();
+		llSaison.setVisibility(View.GONE);
 	}
 
 	@Override
@@ -72,6 +81,14 @@ public class UserActivity extends PlayerActivity {
 			user.setIdAddress(((Address)addressFromResult).getId());
 			addressFromResult = null;
 		}
+	}
+
+	@Override
+	protected void initializeSaisonList() {
+	}
+
+	@Override
+	protected void initializeSaison() {
 	}
 
 	@Override

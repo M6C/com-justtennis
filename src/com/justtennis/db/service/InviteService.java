@@ -5,13 +5,11 @@ import java.util.Arrays;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
-
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
-
 import com.cameleon.common.android.inotifier.INotifierMessage;
 import com.justtennis.db.sqlite.datasource.DBInviteDataSource;
-import com.justtennis.db.sqlite.helper.DBInviteHelper;
 import com.justtennis.domain.Invite;
 import com.justtennis.domain.Saison;
 import com.justtennis.domain.comparator.InviteComparatorByDate;
@@ -67,6 +65,16 @@ public class InviteService extends GenericService<Invite> {
     	}
 	}
 
+	public int countByIdSaison(long idSaison) {
+    	try {
+    		dbDataSource.open();
+    		return ((DBInviteDataSource)dbDataSource).countByIdSaison(idSaison);
+    	}
+    	finally {
+    		dbDataSource.close();
+    	}
+	}
+
 	public HashMap<String,Double> countByTypeGroupByRanking(TypeManager.TYPE type, Invite.SCORE_RESULT scoreResult) {
 		try {
 			dbDataSource.open();
@@ -109,6 +117,7 @@ public class InviteService extends GenericService<Invite> {
 		return null;
 	}
 
+	@SuppressLint("UseSparseArrays")
 	public HashMap<Long, List<Invite>> groupByIdTournament(List<Invite> listInvite) {
 		HashMap<Long, List<Invite>> ret = new HashMap<Long, List<Invite>>();
 		if (listInvite != null) {
@@ -135,23 +144,12 @@ public class InviteService extends GenericService<Invite> {
 
 	public void updateInvite(SQLiteDatabase database) {
 		SaisonService saisonService = new SaisonService(context, notificationMessage);
-		List<Saison> saisons = saisonService.getList();
-		if (saisons != null && saisons.size() > 0) {
-			Long id = null;
-			for(Saison saison : saisons) {
-				if (saison.isActive()) {
-					id = saison.getId();
-					break;
-				}
-			}
-			if (id == null) {
-				id = saisons.get(0).getId();
-			}
+		Saison saison = saisonService.getSaisonActiveOrFirst();
+		if (saison != null) {
 			if (database == null) {
 				// Just to be sure to create Invite Table before
 				List<Invite> invites = getList();
 				if (invites != null && invites.size() > 0) {
-					Saison saison = new Saison(id);
 					for(Invite invite : invites) {
 						if (invite.getSaison()==null || invite.getSaison().getId() == null) {
 		 					invite.setSaison(saison);
@@ -162,15 +160,20 @@ public class InviteService extends GenericService<Invite> {
 					logMe("NO INVITE TO UPDATE");
 				}
 			} else {
-				String sql = 
-				"UPDATE " + DBInviteHelper.TABLE_NAME + 
-				" SET " + DBInviteHelper.COLUMN_ID_SAISON + " = '" + id + "'" +
-				" WHERE " + DBInviteHelper.COLUMN_ID_SAISON + " IS NULL";
-				logMe(sql);
-				database.execSQL(sql);
+		    	setSaisonWhereIsNull(saison);
 			}
 		} else {
 			logMe("NO SAISON !! NO INVITE UPDATED");
+		}
+	}
+
+	public void setSaisonWhereIsNull(Saison saison) {
+		try {
+			dbDataSource.open();
+			((DBInviteDataSource)dbDataSource).setSaisonWhereIsNull(saison);
+		}
+		finally {
+			dbDataSource.close();
 		}
 	}
 
@@ -180,6 +183,7 @@ public class InviteService extends GenericService<Invite> {
 		return Arrays.asList(arrayInvite);
 	}
 
+	@SuppressLint("UseSparseArrays")
 	private HashMap<Long,List<Invite>> groupByIdRanking(List<Invite> listPlayer) {
 		HashMap<Long, List<Invite>> ret = new HashMap<Long, List<Invite>>();
 		for(Invite invite : listPlayer) {

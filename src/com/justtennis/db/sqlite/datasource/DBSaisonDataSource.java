@@ -8,6 +8,7 @@ import android.content.Context;
 import android.database.Cursor;
 
 import com.cameleon.common.android.inotifier.INotifierMessage;
+import com.justtennis.db.sqlite.helper.DBInviteHelper;
 import com.justtennis.db.sqlite.helper.DBSaisonHelper;
 import com.justtennis.domain.Saison;
 import com.justtennis.tool.DbTool;
@@ -27,8 +28,6 @@ public class DBSaisonDataSource extends GenericDBDataSource<Saison> {
 
 	public DBSaisonDataSource(Context context, INotifierMessage notificationMessage) {
 		super(new DBSaisonHelper(context, notificationMessage), notificationMessage);
-//		SQLiteDatabase database = ((DBSaisonHelper)dbHelper).getWritableDatabase();
-//		((DBSaisonHelper)dbHelper).updateInvite(database, getAll().toArray(new Saison[0]));
 	}
 
 	@Override
@@ -61,5 +60,14 @@ public class DBSaisonDataSource extends GenericDBDataSource<Saison> {
 	@Override
 	protected String getTag() {
 		return TAG;
+	}
+
+	public void desactiveExcept(Saison saison) {
+		String sql = 
+		"UPDATE " + DBSaisonHelper.TABLE_NAME + 
+		" SET " + DBSaisonHelper.COLUMN_ACTIVE + " = 0" +
+		" WHERE " + DBSaisonHelper.COLUMN_ID + " <> " + saison.getId();
+		logMe(sql);
+		db.execSQL(sql);
 	}
 }

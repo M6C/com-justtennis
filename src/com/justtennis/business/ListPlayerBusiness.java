@@ -91,7 +91,7 @@ public class ListPlayerBusiness {
 	}
 
 	public boolean isUnknownPlayer(Player player) {
-		return playerService.isUnknownPlayer(player);
+		return PlayerService.isUnknownPlayer(player);
 	}
 
 	public int getInviteCount(Player player) {

@@ -17,12 +17,14 @@ import com.justtennis.activity.PlayerActivity.MODE;
 import com.justtennis.db.service.GenericService;
 import com.justtennis.db.service.PlayerService;
 import com.justtennis.db.service.RankingService;
+import com.justtennis.db.service.SaisonService;
 import com.justtennis.db.service.UserService;
 import com.justtennis.domain.Address;
 import com.justtennis.domain.Club;
 import com.justtennis.domain.Invite;
 import com.justtennis.domain.Player;
 import com.justtennis.domain.Ranking;
+import com.justtennis.domain.Saison;
 import com.justtennis.domain.Tournament;
 import com.justtennis.domain.User;
 import com.justtennis.domain.comparator.RankingComparatorByOrder;
@@ -44,17 +46,21 @@ public class PlayerBusiness {
 	private UserService userService;
 	private PlayerParser playerParser;
 	private LocationParser locationParser;
+	private SaisonService saisonService;
 	private User user;
 	private Invite invite;
 	private List<Invite> list = new ArrayList<Invite>();
 	private List<Ranking> listRanking;
 	private String[] listTxtRankings;
 	private TypeManager typeManager;
+	private List<Saison> listSaison = new ArrayList<Saison>();
+	private List<String> listTxtSaisons = new ArrayList<String>();
 
 	public PlayerBusiness(Context context, INotifierMessage notificationMessage) {
 		this.context = context;
 		userService = new UserService(context, notificationMessage);
 		playerService = createPlayerService(context, notificationMessage);
+		saisonService = new SaisonService(context, notificationMessage);
 		playerParser = PlayerParser.getInstance();
 		locationParser = LocationParser.getInstance(context, notificationMessage);
 		typeManager = TypeManager.getInstance();
@@ -79,6 +85,7 @@ public class PlayerBusiness {
 		}
 		
 		initializeDataRanking();
+		initializeDataSaison();
 	}
 
 	public void initialize(Bundle savedInstanceState) {
@@ -87,9 +94,10 @@ public class PlayerBusiness {
 		player = (Player) savedInstanceState.getSerializable(PlayerActivity.EXTRA_PLAYER);
 
 		initializeDataRanking();
+		initializeDataSaison();
 	}
 
-	public void initializeDataRanking() {
+	protected void initializeDataRanking() {
 		SortedSet<Ranking> setRanking = new TreeSet<Ranking>(new RankingComparatorByOrder());
 
 		listRanking = new RankingService(context, NotifierMessageLogger.getInstance()).getList();
@@ -103,6 +111,15 @@ public class PlayerBusiness {
 		for(Ranking ranking : setRanking) {
 			listTxtRankings[i++] = ranking.getRanking();
 		}
+	}
+
+	protected void initializeDataSaison() {
+		listSaison.clear();
+		listSaison.add(SaisonService.getEmpty());
+		listSaison.addAll(saisonService.getList());
+
+		listTxtSaisons.clear();
+		listTxtSaisons.addAll(saisonService.getListName(listSaison));
 	}
 
 	public void onSaveInstanceState(Bundle outState) {
@@ -150,7 +167,19 @@ public class PlayerBusiness {
 	}
 
 	public boolean isUnknownPlayer(Player player) {
-		return ((PlayerService)playerService).isUnknownPlayer(player);
+		return PlayerService.isUnknownPlayer(player);
+	}
+
+	public boolean isEmptySaison(Saison saison) {
+		return SaisonService.isEmpty(saison);
+	}
+
+	public void setSaison(Saison saison) {
+		player.setIdSaison(saison == null || isEmptySaison(saison) ? null : saison.getId());
+	}
+
+	public Saison getSaison() {
+		return (player.getIdSaison() == null) ? null : new Saison(player.getIdSaison());
 	}
 
 	public MODE getMode() {
@@ -207,6 +236,22 @@ public class PlayerBusiness {
 
 	public List<Ranking> getListRanking() {
 		return listRanking;
+	}
+
+	public List<Saison> getListSaison() {
+		return listSaison;
+	}
+
+	public void setListSaison(List<Saison> listSaison) {
+		this.listSaison = listSaison;
+	}
+
+	public List<String> getListTxtSaisons() {
+		return listTxtSaisons;
+	}
+
+	public void setListTxtSaisons(List<String> listTxtSaisons) {
+		this.listTxtSaisons = listTxtSaisons;
 	}
 
 	public void setAddress(Address address) {

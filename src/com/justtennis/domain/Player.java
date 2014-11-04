@@ -9,6 +9,7 @@ public class Player extends Person {
 	
 	private static final long serialVersionUID = 1L;
 
+	private Long idSaison;
 	private Long idTournament;
 	private Long idClub;
 	private Long idAddress;
@@ -25,6 +26,14 @@ public class Player extends Person {
 
 	public Player(Long id) {
 		super(id);
+	}
+
+	public Long getIdSaison() {
+		return idSaison;
+	}
+
+	public void setIdSaison(Long idSaison) {
+		this.idSaison = idSaison;
 	}
 
 	public Long getIdTournament() {

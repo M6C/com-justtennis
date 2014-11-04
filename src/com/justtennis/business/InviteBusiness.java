@@ -62,7 +62,7 @@ public class InviteBusiness {
 	private List<Ranking> listRanking;
 	private List<String> listTxtRankings;
 	private List<Saison> listSaison = new ArrayList<Saison>();
-	private List<String> listTxtSaisons;
+	private List<String> listTxtSaisons = new ArrayList<String>();
 	private String[][] scores;
 
 	public InviteBusiness(Context context, INotifierMessage notificationMessage) {
@@ -153,10 +153,11 @@ public class InviteBusiness {
 
 	public void initializeDataSaison() {
 		listSaison.clear();
-		listSaison.add(saisonService.getEmpty());
+		listSaison.add(SaisonService.getEmpty());
 		listSaison.addAll(saisonService.getList());
 
-		listTxtSaisons = saisonService.getListName(listSaison);
+		listTxtSaisons.clear();
+		listTxtSaisons.addAll(saisonService.getListName(listSaison));
 	}
 
 	public void onSaveInstanceState(Bundle outState) {
@@ -183,7 +184,7 @@ public class InviteBusiness {
 	}
 
 	public boolean isUnknownPlayer() {
-		return getPlayer() != null && playerService.isUnknownPlayer(getPlayer());
+		return getPlayer() != null && PlayerService.isUnknownPlayer(getPlayer());
 	}
 	
 	public void send(String text) {
@@ -244,7 +245,7 @@ public class InviteBusiness {
 	}
 
 	public boolean isEmptySaison(Saison saison) {
-		return saisonService.isEmpty(saison);
+		return SaisonService.isEmpty(saison);
 	}
 
 	public User getUser() {

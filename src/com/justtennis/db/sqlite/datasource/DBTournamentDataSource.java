@@ -6,6 +6,7 @@ import android.database.Cursor;
 
 import com.cameleon.common.android.inotifier.INotifierMessage;
 import com.justtennis.db.sqlite.helper.DBTournamentHelper;
+import com.justtennis.domain.Saison;
 import com.justtennis.domain.Tournament;
 import com.justtennis.tool.DbTool;
 
@@ -17,7 +18,8 @@ public class DBTournamentDataSource extends GenericDBDataSource<Tournament> {
 	private String[] allColumns = {
 		DBTournamentHelper.COLUMN_ID,
 		DBTournamentHelper.COLUMN_NAME,
-		DBTournamentHelper.COLUMN_ID_CLUB
+		DBTournamentHelper.COLUMN_ID_CLUB,
+		DBTournamentHelper.COLUMN_ID_SAISON
 	};
 
 	public DBTournamentDataSource(Context context, INotifierMessage notificationMessage) {
@@ -33,6 +35,7 @@ public class DBTournamentDataSource extends GenericDBDataSource<Tournament> {
 	protected void putContentValue(ContentValues values, Tournament tournament) {
 		values.put(DBTournamentHelper.COLUMN_NAME, tournament.getName());
 		values.put(DBTournamentHelper.COLUMN_ID_CLUB, tournament.getSubId());
+		values.put(DBTournamentHelper.COLUMN_ID_SAISON, tournament.getSaison()==null ? null : tournament.getSaison().getId());
 	}
 
 	@Override
@@ -42,6 +45,8 @@ public class DBTournamentDataSource extends GenericDBDataSource<Tournament> {
 		tournament.setId(DbTool.getInstance().toLong(cursor, col++));
 		tournament.setName(cursor.getString(col++));
 		tournament.setSubId(DbTool.getInstance().toLong(cursor, col++));
+		Long idSaison = DbTool.getInstance().toLong(cursor, col++);
+		tournament.setSaison(idSaison==null ? null : new Saison(idSaison));
 		return tournament;
 	}
 	

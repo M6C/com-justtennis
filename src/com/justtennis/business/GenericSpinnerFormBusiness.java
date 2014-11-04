@@ -23,7 +23,7 @@ public abstract class GenericSpinnerFormBusiness <DATA extends GenericDBPojoName
 	private PojoNamedService pojoNamedService;
 	protected GenericSpinnerFormBusiness <SUB_DATA, ?> subBusiness;
 
-	private DATA data = null;
+	protected DATA data = null;
 	private List<DATA> listData = new ArrayList<DATA>();
 	private List<String> listDataTxt = new ArrayList<String>();
 

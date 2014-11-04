@@ -71,15 +71,7 @@ public abstract class GenericSpinnerFormActivity <DATA extends GenericDBPojoName
 
 		setContentView(R.layout.generic_spinner_form);
 
-		tvTitle = (TextView)findViewById(R.id.tv_title);
-		etName = (EditText)findViewById(R.id.et_name);
-		spList = (Spinner)findViewById(R.id.sp_list);
-		spListForm = (Spinner)findViewById(R.id.sp_list_form);
-		llSelection = findViewById(R.id.ll_selection);
-		llAdd = findViewById(R.id.ll_add);
-		llForm = (LinearLayout)findViewById(R.id.ll_form);
-		llListForm = (LinearLayout)findViewById(R.id.ll_list_form);
-		ivDelete = findViewById(R.id.iv_delete);
+		initializeViewById();
 
 		business = getBusiness();
 		resource = getResource();
@@ -139,6 +131,18 @@ public abstract class GenericSpinnerFormActivity <DATA extends GenericDBPojoName
 				}
 			}
 		}
+	}
+
+	protected void initializeViewById() {
+		tvTitle = (TextView)findViewById(R.id.tv_title);
+		etName = (EditText)findViewById(R.id.et_name);
+		spList = (Spinner)findViewById(R.id.sp_list);
+		spListForm = (Spinner)findViewById(R.id.sp_list_form);
+		llSelection = findViewById(R.id.ll_selection);
+		llAdd = findViewById(R.id.ll_add);
+		llForm = (LinearLayout)findViewById(R.id.ll_form);
+		llListForm = (LinearLayout)findViewById(R.id.ll_list_form);
+		ivDelete = findViewById(R.id.iv_delete);
 	}
 
 	public void onClickValidate(View view) {

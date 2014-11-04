@@ -5,8 +5,11 @@ import android.content.Context;
 import android.database.Cursor;
 
 import com.cameleon.common.android.inotifier.INotifierMessage;
+import com.justtennis.db.service.SaisonService;
+import com.justtennis.db.sqlite.helper.DBInviteHelper;
 import com.justtennis.db.sqlite.helper.DBPlayerHelper;
 import com.justtennis.domain.Player;
+import com.justtennis.domain.Saison;
 import com.justtennis.manager.TypeManager;
 import com.justtennis.tool.DbTool;
 
@@ -17,6 +20,7 @@ public class DBPlayerDataSource extends GenericDBDataSourceByType<Player> {
 	// Database fields
 	private String[] allColumns = {
 		DBPlayerHelper.COLUMN_ID,
+		DBPlayerHelper.COLUMN_ID_SAISON,
 		DBPlayerHelper.COLUMN_ID_TOURNAMENT,
 		DBPlayerHelper.COLUMN_ID_CLUB,
 		DBPlayerHelper.COLUMN_ID_ADDRESS,
@@ -45,6 +49,7 @@ public class DBPlayerDataSource extends GenericDBDataSourceByType<Player> {
 
 	@Override
 	protected void putContentValue(ContentValues values, Player player) {
+		values.put(DBPlayerHelper.COLUMN_ID_SAISON, player.getIdSaison());
 		values.put(DBPlayerHelper.COLUMN_ID_TOURNAMENT, player.getIdTournament());
 		values.put(DBPlayerHelper.COLUMN_ID_CLUB, player.getIdClub());
 		values.put(DBPlayerHelper.COLUMN_ID_ADDRESS, player.getIdAddress());
@@ -67,6 +72,7 @@ public class DBPlayerDataSource extends GenericDBDataSourceByType<Player> {
 		int col = 0;
 		Player player = new Player();
 		player.setId(DbTool.getInstance().toLong(cursor, col++));
+		player.setIdSaison(DbTool.getInstance().toLong(cursor, col++));
 		player.setIdTournament(DbTool.getInstance().toLong(cursor, col++));
 		player.setIdClub(DbTool.getInstance().toLong(cursor, col++));
 		player.setIdAddress(DbTool.getInstance().toLong(cursor, col++));
@@ -84,7 +90,18 @@ public class DBPlayerDataSource extends GenericDBDataSourceByType<Player> {
 		player.setType(TypeManager.TYPE.valueOf(DbTool.getInstance().toString(cursor, col++, TypeManager.TYPE.TRAINING.toString())));
 		return player;
 	}
-	
+
+	@Override
+	protected String customizeWhere(String where) {
+		where = super.customizeWhere(where);
+
+		Saison saison = TypeManager.getInstance().getSaison();
+		if (saison != null && saison.getId() != null && !SaisonService.isEmpty(saison)) {
+			where += " AND (" + DBPlayerHelper.COLUMN_ID_SAISON + " = " + saison.getId() + " OR " + DBPlayerHelper.COLUMN_ID_SAISON + " IS NULL)";
+		}
+		return where;
+	}
+
 	@Override
 	protected String getTag() {
 		return TAG;

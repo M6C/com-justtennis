@@ -250,11 +250,25 @@ public abstract class GenericDBDataSource<POJO extends GenericDBPojo<Long>> {
 		return (where == null) ? "" : where;
 	}
 
+	protected String customizeWhere(String where, String close) {
+		where = (where == null) ? "" : where;
+		if (!where.equals("")) {
+//			String WHERE_UP = " WHERE ";
+//			String whereUp = where.toUpperCase(Locale.FRANCE);
+//			int idx = whereUp.indexOf(WHERE_UP);
+//			if (idx >= 0) {
+//				where += " " + close + " ";
+//			}
+			where += " " + close + " ";
+		}
+		return where;
+	}
+
 	protected void logMe(String msg, Date dateStart) {
 		logMe("DB Execution time:" + (new Date().getTime() - dateStart.getTime()) + "millisecond - " + msg);
     }
 
-	private void logMe(String msg) {
+	protected void logMe(String msg) {
 		Logger.logMe(getTag(), msg);
     }
 }

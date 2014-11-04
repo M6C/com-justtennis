@@ -2,6 +2,7 @@
 package com.justtennis.activity;
 
 import java.io.Serializable;
+import java.util.List;
 
 import org.gdocument.gtracergps.launcher.log.Logger;
 
@@ -21,10 +22,12 @@ import android.widget.TextView;
 import com.cameleon.common.android.adapter.BaseViewAdapter;
 import com.cameleon.common.android.factory.FactoryDialog;
 import com.justtennis.R;
+import com.justtennis.adapter.CustomArrayAdapter;
 import com.justtennis.adapter.manager.RankingListManager;
 import com.justtennis.business.PlayerBusiness;
 import com.justtennis.domain.Club;
 import com.justtennis.domain.Player;
+import com.justtennis.domain.Saison;
 import com.justtennis.domain.Tournament;
 import com.justtennis.listener.action.TextWatcherFieldEnableView;
 import com.justtennis.listener.ok.OnClickPlayerCreateListenerOk;
@@ -68,6 +71,7 @@ public class PlayerActivity extends GenericActivity {
 	private EditText etPhonenumber;
 	private BaseViewAdapter adapterType;
 	private Spinner spType;
+	private Spinner spSaison;
 	private LinearLayout llLastname;
 	private LinearLayout llBirthday;
 	private LinearLayout llPhonenumber;
@@ -122,6 +126,9 @@ public class PlayerActivity extends GenericActivity {
 
 		initializeListenerListType();
 		initializeLocation();
+
+		initializeSaisonList();
+		initializeSaison();
 	}
 
 	@Override
@@ -182,6 +189,7 @@ public class PlayerActivity extends GenericActivity {
 		etBirthday = (EditText)findViewById(R.id.et_birthday);
 		etPhonenumber = (EditText)findViewById(R.id.et_phonenumber);
 		spType = (Spinner)findViewById(R.id.sp_type);
+		spSaison = (Spinner)findViewById(R.id.sp_saison);
 		llLastname = (LinearLayout)findViewById(R.id.ll_lastname);
 		llBirthday = (LinearLayout)findViewById(R.id.ll_birthday);
 		llPhonenumber = (LinearLayout)findViewById(R.id.ll_phonenumber);
@@ -334,7 +342,7 @@ public class PlayerActivity extends GenericActivity {
 		player.setPhonenumber(etPhonenumber.getText().toString());
 	}
 
-	private void initialize() {
+	protected void initialize() {
 		Intent intent = getIntent();
 		if (savedInstanceState!=null) {
 			business.initialize(savedInstanceState);
@@ -469,6 +477,46 @@ public class PlayerActivity extends GenericActivity {
 	
 	private void initializeRankingEstimateList() {
 		rankingListManager.manageRanking(this, business.buildPlayer(), true);
+	}
+
+	protected void initializeSaisonList() {
+		Log.d(TAG, "initializeSaisonList");
+		CustomArrayAdapter<String> dataAdapter = new CustomArrayAdapter<String>(this, business.getListTxtSaisons());
+		spSaison.setAdapter(dataAdapter);
+
+		spSaison.setOnItemSelectedListener(dataAdapter.new OnItemSelectedListener<Saison>() {
+			@Override
+			public Saison getItem(int position) {
+				return business.getListSaison().get(position);
+			}
+
+			@Override
+			public boolean isHintItemSelected(Saison item) {
+				return business.isEmptySaison(item);
+			}
+
+			@Override
+			public void onItemSelected(AdapterView<?> parent, View view, int position, long id, Saison item) {
+				business.setSaison(business.getListSaison().get(position));
+			}
+		});
+	}
+
+	protected void initializeSaison() {
+		Log.d(TAG, "initializeSaison");
+		Saison saison = business.getSaison();
+		if (saison != null) {
+			int position = 0;
+			List<Saison> listSaison = business.getListSaison();
+			for(Saison item : listSaison) {
+				if (item.equals(saison)) {
+					spSaison.setSelection(position, true);
+					break;
+				} else {
+					position++;
+				}
+			}
+		}
 	}
 
 	private void initializeType() {

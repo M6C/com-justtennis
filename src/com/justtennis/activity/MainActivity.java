@@ -1,21 +1,34 @@
 package com.justtennis.activity;
 
+import java.util.List;
+
 import org.gdocument.gtracergps.launcher.log.Logger;
 
 import android.app.Dialog;
+import android.content.DialogInterface;
+import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.CheckBox;
+import android.widget.DatePicker;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.Spinner;
+import android.widget.Toast;
 
 import com.cameleon.common.android.factory.FactoryDialog;
+import com.cameleon.common.android.factory.listener.OnClickViewListener;
 import com.cameleon.common.android.inotifier.INotifierMessage;
 import com.justtennis.R;
 import com.justtennis.activity.ListPlayerActivity.MODE;
+import com.justtennis.adapter.CustomArrayAdapter;
 import com.justtennis.business.MainBusiness;
+import com.justtennis.domain.Saison;
 import com.justtennis.listener.ok.OnClickDBBackupListenerOk;
 import com.justtennis.listener.ok.OnClickDBRestoreListenerOk;
 import com.justtennis.listener.ok.OnClickExitListenerOk;
@@ -37,6 +50,8 @@ public class MainActivity extends GenericActivity implements INotifierMessage {
 	private View menuOverFlowContent;
 	private ImageView ivPlay;
 	private ImageView ivMatch;
+	private Spinner spSaison;
+	private CustomArrayAdapter<String> adpSaison;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -49,9 +64,11 @@ public class MainActivity extends GenericActivity implements INotifierMessage {
 		ivPlay = (ImageView)findViewById(R.id.iv_play);
 		ivMatch = (ImageView)findViewById(R.id.iv_match);
 		menuOverFlowContent = findViewById(R.id.ll_menu_overflow_content);
+		spSaison = (Spinner)findViewById(R.id.sp_saison);
 
 		business = new MainBusiness(this, this);
 		typeManager = TypeManager.getInstance();
+		typeManager.initialize(this, this);
 
 		dialogExit = FactoryDialog.getInstance().buildYesNoDialog(
 			this, new OnClickExitListenerOk(this), R.string.dialog_exit_title, R.string.dialog_exit_message);
@@ -65,6 +82,7 @@ public class MainActivity extends GenericActivity implements INotifierMessage {
 
 		business.onResume();
 
+		initializeData();
 		initializeLayoutType();
 
 		if (business.getUserCount()==0) {
@@ -73,6 +91,11 @@ public class MainActivity extends GenericActivity implements INotifierMessage {
 			
 			finish();
 		}
+	}
+
+	private void initializeData() {
+		initializeSaisonList();
+		initializeSaison();
 	}
 
 	private void initializeLayoutType() {
@@ -95,6 +118,44 @@ public class MainActivity extends GenericActivity implements INotifierMessage {
 				ivMatch.setVisibility(View.GONE);
 			}
 			break;
+		}
+	}
+
+	private void initializeSaisonList() {
+		Log.d(TAG, "initializeSaisonList");
+		adpSaison = new CustomArrayAdapter<String>(this, business.getListTxtSaisons());
+		spSaison.setAdapter(adpSaison);
+
+		spSaison.setOnItemSelectedListener(adpSaison.new OnItemSelectedListener<Saison>() {
+			@Override
+			public Saison getItem(int position) {
+				return business.getListSaison().get(position);
+			}
+
+			@Override
+			public boolean isHintItemSelected(Saison item) {
+				return business.isEmptySaison(item);
+			}
+
+			@Override
+			public void onItemSelected(AdapterView<?> parent, View view, int position, long id, Saison item) {
+				typeManager.setSaison(business.getListSaison().get(position));
+			}
+		});
+	}
+
+	private void initializeSaison() {
+		Log.d(TAG, "initializeSaison");
+		Saison saison = typeManager.getSaison();
+		int position = 0;
+		List<Saison> listSaison = business.getListSaison();
+		for(Saison item : listSaison) {
+			if (item.equals(saison)) {
+				spSaison.setSelection(position, true);
+				break;
+			} else {
+				position++;
+			}
 		}
 	}
 
@@ -229,7 +290,59 @@ public class MainActivity extends GenericActivity implements INotifierMessage {
 		int visibility = (menuOverFlowContent.getVisibility()==View.GONE) ? View.VISIBLE : View.GONE;
 		menuOverFlowContent.setVisibility(visibility);
 	}
-	
+
+	public void onClickSaisonAdd(View view) {
+		OnClickViewListener onClickOkListener = new OnClickViewListener() {
+
+			@Override
+			public void onClick(DialogInterface dialog, View view, int which) {
+				CheckBox cbActivate = (CheckBox) view.findViewById(R.id.cb_activate);
+				DatePicker datePicker = (DatePicker) view.findViewById(R.id.dp_saison_year);
+				int year = datePicker.getYear();
+				if (!business.isExistSaison(year)) {
+					boolean active = cbActivate.isChecked();
+					Saison saison = business.createSaison(year, active);
+					typeManager.setSaison(saison);
+
+					business.initializeDataSaison();
+					adpSaison.notifyDataSetChanged();
+					initializeSaison();
+				} else {
+					Toast.makeText(MainActivity.this, R.string.error_message_saison_already_exist, Toast.LENGTH_LONG).show();
+				}
+			}
+		};
+
+		FactoryDialog.getInstance()
+			.buildLayoutDialog(this, onClickOkListener, null, R.string.dialog_saison_add_title, R.layout.dialog_saison_year_picker, R.id.ll_main)
+			.show();
+	}
+
+	public void onClickSaisonDel(View view) {
+		OnClickListener listener = new OnClickListener() {
+
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+				Saison saison = typeManager.getSaison();
+				if (!business.isEmptySaison(saison)) {
+					if (!business.isExistInviteSaison(saison)) {
+						business.deleteSaison(saison);
+						typeManager.initialize(MainActivity.this, MainActivity.this);
+
+						business.initializeDataSaison();
+						adpSaison.notifyDataSetChanged();
+						initializeSaison();
+					} else {
+						Toast.makeText(MainActivity.this, R.string.error_message_invite_exist_saison, Toast.LENGTH_LONG).show();
+					}
+				}
+			}
+		};
+		FactoryDialog.getInstance()
+			.buildOkCancelDialog(business.getContext(), listener , R.string.dialog_saison_add_title, R.string.dialog_saison_del_message)
+			.show();
+	}
+
 	public void onClickTypeTraining(View view) {
 		typeManager.setType(TYPE.TRAINING);
 		initializeLayoutType();

@@ -13,16 +13,8 @@ public abstract class GenericDBDataSourceByType<POJO extends GenericDBPojo<Long>
 	
 	@Override
 	protected String customizeWhere(String where) {
-		if (where == null) {
-			where = "";
-		} else {
-//			String WHERE_UP = " WHERE ";
-//			String whereUp = where.toUpperCase(Locale.FRANCE);
-//			int idx = whereUp.indexOf(WHERE_UP);
-//			if (idx >= 0) {
-				where += " AND ";
-//			}
-		}
+		where = super.customizeWhere(where, "AND");
+
 		where += " TYPE = '" + TypeManager.getInstance().getType() + "'";
 		return where;
 	}

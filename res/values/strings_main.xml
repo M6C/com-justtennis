@@ -15,5 +15,11 @@
     <string name="dialog_send_apk_message">Share ?</string>
     <string name="button_competition">Competition</string>
     <string name="button_training">Training</string>
+    <string name="dialog_saison_add_title">Saison Add</string>
+    <string name="dialog_saison_del_title">Saison Del</string>
+    <string name="dialog_saison_del_message">Delete Saison ?</string>
+    <string name="error_message_saison_already_exist">Saison already exist</string>
+    <string name="error_message_invite_exist_saison">Invite exist for this saison</string>
+    <string name="checkbox_saison_active">Active</string>
     
 </resources>

@@ -43,7 +43,6 @@ import com.justtennis.listener.action.TextWatcherFieldEnableView;
 import com.justtennis.listener.action.TextWatcherFieldScoreSetBold;
 import com.justtennis.manager.ContactManager;
 import com.justtennis.manager.TypeManager;
-import com.justtennis.manager.TypeManager.TYPE;
 import com.justtennis.notifier.NotifierMessageLogger;
 
 public class InviteActivity extends GenericActivity {
@@ -79,7 +78,6 @@ public class InviteActivity extends GenericActivity {
 	private ImageView ivPhoto;
 	private Switch swType;
 	private Spinner spRanking;
-	private LinearLayout llSaison;
 	private Spinner spSaison;
 	private TextView tvLocation;
 	private TextView tvLocationEmpty;
@@ -121,7 +119,6 @@ public class InviteActivity extends GenericActivity {
 		swType = (Switch)findViewById(R.id.sw_type);
 		spRanking = (Spinner)findViewById(R.id.sp_main_ranking);
 		spSaison = (Spinner)findViewById(R.id.sp_main_saison);
-		llSaison = (LinearLayout)findViewById(R.id.ll_main_saison);
 		tvLocation = ((TextView)findViewById(R.id.tv_location));
 		tvLocationEmpty = ((TextView)findViewById(R.id.et_location));
 		llLocationDetail = (LinearLayout)findViewById(R.id.ll_location_detail);
@@ -439,7 +436,6 @@ public class InviteActivity extends GenericActivity {
 
 	private void initializeSaisonList() {
 		Log.d(TAG, "initializeSaisonList");
-		llSaison.setVisibility(View.VISIBLE);
 		CustomArrayAdapter<String> dataAdapter = new CustomArrayAdapter<String>(this, business.getListTxtSaisons());
 		spSaison.setAdapter(dataAdapter);
 

@@ -1,17 +1,13 @@
 package com.justtennis.db.sqlite.helper;
 
 import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
 
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 
 import com.cameleon.common.android.inotifier.INotifierMessage;
-import com.justtennis.db.sqlite.datasource.DBInviteDataSource;
-import com.justtennis.db.sqlite.datasource.DBSaisonDataSource;
-import com.justtennis.domain.Invite;
+import com.justtennis.db.service.SaisonService;
 import com.justtennis.domain.Saison;
 
 public class DBSaisonHelper extends GenericDBHelper {
@@ -36,34 +32,17 @@ public class DBSaisonHelper extends GenericDBHelper {
 		COLUMN_END + " INTEGER NULL, " + 
 		COLUMN_ACTIVE + " INTEGER NULL " + 
 	");";
-//
-//	private Context context;
-//
-//	private INotifierMessage notificationMessage;
 
 	public DBSaisonHelper(Context context, INotifierMessage notificationMessage) {
 		super(context, notificationMessage, DATABASE_NAME, DATABASE_VERSION);
-//		this.context = context;
-//		this.notificationMessage = notificationMessage;
 	}
 
 	@Override
 	public void onCreate(SQLiteDatabase database) {
 		super.onCreate(database);
 
-		Saison[] saisons = feed(database);
-//
-//		updateInvite(database, saisons);
+		feed(database);
 	}
-//
-//	@Override
-//	public void onOpen(SQLiteDatabase db) {
-//		super.onOpen(db);
-//
-//		logMe("onOpen");
-//		DBSaisonDataSource saisonDataSource = new DBSaisonDataSource(context, notificationMessage);
-//		updateInvite(db, saisonDataSource.getAll().toArray(new Saison[0]));
-//	}
 
 	@Override
 	public String getTag() {
@@ -80,7 +59,7 @@ public class DBSaisonHelper extends GenericDBHelper {
 		return DATABASE_CREATE;
 	}
 
-	private Saison[] feed(SQLiteDatabase database) {
+	private void feed(SQLiteDatabase database) {
 		Saison[] rows = new Saison[] {
 			feedBuild()
 		};
@@ -105,66 +84,9 @@ public class DBSaisonHelper extends GenericDBHelper {
 		finally {
 			database.endTransaction();
 		}
-		return rows;
 	}
 
 	private Saison feedBuild() {
-		Saison ret = new Saison();
-
-		Calendar cal = Calendar.getInstance();
-		int year = cal.get(Calendar.YEAR);
-		int month = cal.get(Calendar.MONTH);
-
-		if (month < 10) {
-			year--;
-		}
-		cal.set(Calendar.DAY_OF_MONTH, 1);
-		cal.set(Calendar.MONTH, 10);
-		cal.set(Calendar.HOUR, 0);
-		cal.set(Calendar.MINUTE, 0);
-		cal.set(Calendar.SECOND, 0);
-		cal.set(Calendar.MILLISECOND, 0);
-
-		ret.setBegin(new Date(cal.getTimeInMillis()));
-
-		cal.set(Calendar.DAY_OF_MONTH, 30);
-		cal.set(Calendar.MONTH, 9);
-		cal.set(Calendar.YEAR, year + 1);
-
-		ret.setEnd(new Date(cal.getTimeInMillis()));
-
-		ret.setName(year + "/" + (year + 1));
-
-		ret.setActive(true);
-		return ret;
+		return SaisonService.build(Calendar.getInstance());
 	}
-//
-//	public void updateInvite(SQLiteDatabase database, Saison[] saisons) {
-//		if (saisons != null && saisons.length > 1) {
-//			// Just to be sure to create Invite Table before
-//			List<Invite> invites = new DBInviteDataSource(context, notificationMessage).getAll();
-//			if (invites != null && invites.size() > 0) {
-//				Long id = null;
-//				for(Saison saison : saisons) {
-//					if (saison.isActive()) {
-//						id = saison.getId();
-//						break;
-//					}
-//				}
-//				if (id == null) {
-//					id = saisons[0].getId();
-//				}
-//				String sql = 
-//					"UPDATE " + DBInviteHelper.TABLE_NAME + 
-//					" SET " + DBInviteHelper.COLUMN_ID_SAISON + " = '" + id + "'" +
-//					" WHERE " + DBInviteHelper.COLUMN_ID_SAISON + " IS NULL";
-//				logMe(sql);
-//				execSQL(database, sql);
-//			} else {
-//				logMe("NO INVITE TO UPDATE");
-//			}
-//		} else {
-//			logMe("NO SAISON !! NO INVITE UPDATED");
-//		}
-//	}
 }

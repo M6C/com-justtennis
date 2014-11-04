@@ -11,6 +11,7 @@ import android.content.Context;
 import android.database.Cursor;
 
 import com.cameleon.common.android.inotifier.INotifierMessage;
+import com.justtennis.db.service.SaisonService;
 import com.justtennis.db.sqlite.helper.DBInviteHelper;
 import com.justtennis.domain.Address;
 import com.justtennis.domain.Club;
@@ -93,15 +94,15 @@ public class DBInviteDataSource extends GenericDBDataSourceByType<Invite> {
 	 * @return Count Invite by Id Player
 	 */
 	public int countByIdPlayer(long idPlayer) {
-		String sql = "SELECT COUNT(1) NB FROM " + dbHelper.getTableName() + 
-			" WHERE " + DBInviteHelper.COLUMN_ID_PLAYER + " = " + idPlayer;
-		List<HashMap<String,Object>> result = rawQuery(sql);
-		
-		if (result==null || result.size() == 0 || !result.get(0).containsKey("NB")) {
-			return 0;
-		} else {
-			return Integer.valueOf(result.get(0).get("NB").toString());
-		}
+		return countById(DBInviteHelper.COLUMN_ID_PLAYER, idPlayer);
+	}
+
+	/**
+	 * Return Count Invite by Id Saison
+	 * @return Count Invite by Id Saison
+	 */
+	public int countByIdSaison(long idSaison) {
+		return countById(DBInviteHelper.COLUMN_ID_SAISON, idSaison);
 	}
 
 	/**
@@ -113,6 +114,7 @@ public class DBInviteDataSource extends GenericDBDataSourceByType<Invite> {
 		where += DBInviteHelper.COLUMN_TIME + " < " + Calendar.getInstance().getTimeInMillis();
 		if (type != null) {
 			where += " AND " + DBInviteHelper.COLUMN_TYPE + " = '" + type + "'";
+			where = customizeWhereSaison(where);
 		} else {
 			where = customizeWhere(where);
 		}
@@ -125,6 +127,15 @@ public class DBInviteDataSource extends GenericDBDataSourceByType<Invite> {
 		return rawQuerCount(sql);
 	}
 
+	public void setSaisonWhereIsNull(Saison saison) {
+		String sql = 
+			"UPDATE " + DBInviteHelper.TABLE_NAME + 
+			" SET " + DBInviteHelper.COLUMN_ID_SAISON + " = '" + saison.getId() + "'" +
+			" WHERE " + DBInviteHelper.COLUMN_ID_SAISON + " IS NULL";
+		logMe(sql);
+		db.execSQL(sql);
+	}
+
 	@Override
 	protected String[] getAllColumns() {
 		return allColumns;
@@ -132,7 +143,7 @@ public class DBInviteDataSource extends GenericDBDataSourceByType<Invite> {
 
 	@Override
 	protected void putContentValue(ContentValues values, Invite invite) {
-		values.put(DBInviteHelper.COLUMN_ID_SAISON, invite.getPlayer().getId());
+		values.put(DBInviteHelper.COLUMN_ID_SAISON, invite.getSaison().getId());
 		values.put(DBInviteHelper.COLUMN_ID_PLAYER, invite.getPlayer().getId());
 		values.put(DBInviteHelper.COLUMN_TIME, invite.getDate().getTime());
 		values.put(DBInviteHelper.COLUMN_STATUS, invite.getStatus().toString());
@@ -168,7 +179,24 @@ public class DBInviteDataSource extends GenericDBDataSourceByType<Invite> {
 		invite.setBonusPoint(bonusPoint == null ? 0 : bonusPoint.intValue());
 		return invite;
 	}
-	
+
+	@Override
+	protected String customizeWhere(String where) {
+		where = super.customizeWhere(where);
+
+		where = customizeWhereSaison(where);
+
+		return where;
+	}
+
+	protected String customizeWhereSaison(String where) {
+		Saison saison = TypeManager.getInstance().getSaison();
+		if (saison != null && saison.getId() != null && !SaisonService.isEmpty(saison)) {
+			where += " AND " + DBInviteHelper.COLUMN_ID_SAISON + " = " + saison.getId();
+		}
+		return where;
+	}
+
 	@Override
 	protected String getTag() {
 		return TAG;
@@ -182,5 +210,21 @@ public class DBInviteDataSource extends GenericDBDataSourceByType<Invite> {
 			ret.put(row.get("ID_RANKING").toString(), Double.parseDouble(row.get("NB").toString()));
 		}
 		return ret;
+	}
+
+	/**
+	 * Return Count Invite by Id
+	 * @return Count Invite by Id
+	 */
+	private int countById(String columnName, long idSaison) {
+		String sql = "SELECT COUNT(1) NB FROM " + dbHelper.getTableName() + 
+			" WHERE " + columnName + " = " + idSaison;
+		List<HashMap<String,Object>> result = rawQuery(sql);
+		
+		if (result==null || result.size() == 0 || !result.get(0).containsKey("NB")) {
+			return 0;
+		} else {
+			return Integer.valueOf(result.get(0).get("NB").toString());
+		}
 	}
 }

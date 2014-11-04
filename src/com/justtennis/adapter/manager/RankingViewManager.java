@@ -49,7 +49,7 @@ public class RankingViewManager {
 		TextView tvRankingEstimate = (TextView) convertView.findViewById(R.id.tv_ranking_estimate);
 
 		if (player != null) {
-			if (playerService.isUnknownPlayer(player)) {
+			if (PlayerService.isUnknownPlayer(player)) {
 				tvRanking.setVisibility(View.GONE);
 				tvRankingEstimate.setVisibility(View.GONE);
 			} else {
