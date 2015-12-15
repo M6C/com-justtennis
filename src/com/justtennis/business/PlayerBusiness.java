@@ -11,10 +11,10 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 
+import com.cameleon.common.android.db.sqlite.service.GenericService;
 import com.cameleon.common.android.inotifier.INotifierMessage;
 import com.justtennis.activity.PlayerActivity;
 import com.justtennis.activity.PlayerActivity.MODE;
-import com.justtennis.db.service.GenericService;
 import com.justtennis.db.service.PlayerService;
 import com.justtennis.db.service.RankingService;
 import com.justtennis.db.service.SaisonService;

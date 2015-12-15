@@ -100,7 +100,9 @@ public class ListPlayerBusiness {
 
 	private void refreshData() {
 		list.clear();
-		list.add(playerService.getUnknownPlayer());
+		if (!MODE.EDIT.equals(mode)) {
+			list.add(playerService.getUnknownPlayer());
+		}
 		list.addAll(sortPlayer(playerService.getList()));
 	}
 

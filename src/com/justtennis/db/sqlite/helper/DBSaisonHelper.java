@@ -10,7 +10,7 @@ import com.cameleon.common.android.inotifier.INotifierMessage;
 import com.justtennis.db.service.SaisonService;
 import com.justtennis.domain.Saison;
 
-public class DBSaisonHelper extends GenericDBHelper {
+public class DBSaisonHelper extends GenericJustTennisDBHelper {
 
 	private static final String TAG = DBSaisonHelper.class.getCanonicalName();
 
@@ -23,6 +23,8 @@ public class DBSaisonHelper extends GenericDBHelper {
 
 	private static final String DATABASE_NAME = "Saison.db";
 	private static final int DATABASE_VERSION = 1;
+
+	private static final Class<?> CLASS_TYPE = Saison.class;
 
 	// Database creation sql statement
 	private static final String DATABASE_CREATE = "CREATE TABLE " + TABLE_NAME + "(" + 
@@ -57,6 +59,11 @@ public class DBSaisonHelper extends GenericDBHelper {
 	@Override
 	public String getDatabaseCreate() {
 		return DATABASE_CREATE;
+	}
+	
+	@Override
+	public Class<?> getClassType() {
+		return CLASS_TYPE;
 	}
 
 	private void feed(SQLiteDatabase database) {

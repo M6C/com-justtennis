@@ -11,6 +11,7 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.cameleon.common.android.factory.FactoryDialog;
@@ -30,7 +31,8 @@ public class UserActivity extends PlayerActivity {
 
 	private TextView tvMessage;
 	private EditText etMessage;
-	private LinearLayout llSaison;
+	private LinearLayout llType;
+	private Spinner spSaison;
 	private UserBusiness business;
 
 	private Serializable addressFromResult;
@@ -64,13 +66,14 @@ public class UserActivity extends PlayerActivity {
 		super.initializeViewById();
 		tvMessage = (TextView)findViewById(R.id.tv_message);
 		etMessage = (EditText)findViewById(R.id.et_message);
-		llSaison = (LinearLayout)findViewById(R.id.ll_saison);
+		spSaison = (Spinner)findViewById(R.id.sp_saison);
+		llType = (LinearLayout)findViewById(R.id.ll_type);
 	}
 
 	@Override
-	protected void initialize() {
-		super.initialize();
-		llSaison.setVisibility(View.GONE);
+	protected void initializeView() {
+		super.initializeView();
+		llType.setVisibility(View.GONE);
 	}
 
 	@Override
@@ -85,11 +88,13 @@ public class UserActivity extends PlayerActivity {
 
 	@Override
 	protected void initializeSaisonList() {
+		super.initializeSaisonList();
+		spSaison.setOnItemSelectedListener(null);
 	}
 
-	@Override
-	protected void initializeSaison() {
-	}
+//	@Override
+//	protected void initializeSaison() {
+//	}
 
 	@Override
 	protected PlayerBusiness createBusiness() {

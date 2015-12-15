@@ -5,9 +5,10 @@ import android.database.sqlite.SQLiteDatabase;
 
 import com.cameleon.common.android.inotifier.INotifierMessage;
 import com.justtennis.db.service.InviteService;
+import com.justtennis.domain.Invite;
 import com.justtennis.manager.TypeManager.TYPE;
 
-public class DBInviteHelper extends GenericDBHelper {
+public class DBInviteHelper extends GenericJustTennisDBHelper {
 
 	private static final String TAG = DBInviteHelper.class.getCanonicalName();
 
@@ -29,6 +30,8 @@ public class DBInviteHelper extends GenericDBHelper {
 
 	public static final String DATABASE_NAME = "Invite.db";
 	public static final int DATABASE_VERSION = 14;
+
+	private static final Class<?> CLASS_TYPE = Invite.class;
 
 	// Database creation sql statement
 	private static final String DATABASE_CREATE = "CREATE TABLE " + TABLE_NAME + "(" + 
@@ -105,5 +108,10 @@ public class DBInviteHelper extends GenericDBHelper {
 	@Override
 	public String getDatabaseCreate() {
 		return DATABASE_CREATE;
+	}
+	
+	@Override
+	public Class<?> getClassType() {
+		return CLASS_TYPE;
 	}
 }

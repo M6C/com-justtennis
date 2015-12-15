@@ -5,9 +5,12 @@ import java.util.Arrays;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
+
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
+
+import com.cameleon.common.android.db.sqlite.service.GenericService;
 import com.cameleon.common.android.inotifier.INotifierMessage;
 import com.justtennis.db.sqlite.datasource.DBInviteDataSource;
 import com.justtennis.domain.Invite;

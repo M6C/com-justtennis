@@ -4,8 +4,10 @@ import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 
 import com.cameleon.common.android.inotifier.INotifierMessage;
+import com.justtennis.domain.Bonus;
+import com.justtennis.domain.Tournament;
 
-public class DBTournamentHelper extends GenericDBHelper {
+public class DBTournamentHelper extends GenericJustTennisDBHelper {
 
 	private static final String TAG = DBTournamentHelper.class.getCanonicalName();
 
@@ -17,6 +19,8 @@ public class DBTournamentHelper extends GenericDBHelper {
 
 	private static final String DATABASE_NAME = "Tournament.db";
 	private static final int DATABASE_VERSION = 2;
+
+	private static final Class<?> CLASS_TYPE = Tournament.class;
 
 	// Database creation sql statement
 	private static final String DATABASE_CREATE = "CREATE TABLE " + TABLE_NAME + "(" + 
@@ -56,5 +60,10 @@ public class DBTournamentHelper extends GenericDBHelper {
 	@Override
 	public String getDatabaseCreate() {
 		return DATABASE_CREATE;
+	}
+	
+	@Override
+	public Class<?> getClassType() {
+		return CLASS_TYPE;
 	}
 }

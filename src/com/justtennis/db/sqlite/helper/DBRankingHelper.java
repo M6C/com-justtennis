@@ -5,8 +5,9 @@ import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 
 import com.cameleon.common.android.inotifier.INotifierMessage;
+import com.justtennis.domain.Ranking;
 
-public class DBRankingHelper extends GenericDBHelper {
+public class DBRankingHelper extends GenericJustTennisDBHelper {
 
 	private static final String TAG = DBRankingHelper.class.getCanonicalName();
 
@@ -25,6 +26,7 @@ public class DBRankingHelper extends GenericDBHelper {
 	private static final String DATABASE_NAME = "Ranking.db";
 	private static final int DATABASE_VERSION = 3;
 
+	private static final Class<?> CLASS_TYPE = Ranking.class;
 
 	// Database creation sql statement
 	private static final String DATABASE_CREATE = "CREATE TABLE " + TABLE_NAME + "(" + 
@@ -81,6 +83,11 @@ public class DBRankingHelper extends GenericDBHelper {
 	@Override
 	public String getDatabaseCreate() {
 		return DATABASE_CREATE;
+	}
+	
+	@Override
+	public Class<?> getClassType() {
+		return CLASS_TYPE;
 	}
 
 	private void feed(SQLiteDatabase database) {

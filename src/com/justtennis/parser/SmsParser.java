@@ -5,8 +5,11 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
+import org.gdocument.gtracergps.launcher.log.Logger;
+
 import android.content.Context;
 
+import com.cameleon.common.tool.CryptoTool;
 import com.justtennis.ApplicationConfig;
 import com.justtennis.R;
 import com.justtennis.domain.Invite;
@@ -14,7 +17,6 @@ import com.justtennis.domain.Invite.STATUS;
 import com.justtennis.domain.Message;
 import com.justtennis.domain.Player;
 import com.justtennis.domain.User;
-import com.justtennis.tool.CryptoTool;
 
 public class SmsParser {
 	private static final String TAG = SmsParser.class.getSimpleName();
@@ -342,12 +344,11 @@ public class SmsParser {
 //	}
 	
 	private void logMe(String message) {
-//		System.err.println(message);
-		System.out.println(message);
+		Logger.logMe(TAG, message);
 	}
 	
 	private void logMe(Exception e) {
-		e.printStackTrace();
+		Logger.logMe(TAG, e);
 	}
 
 	private void logParser(String title, String data) {

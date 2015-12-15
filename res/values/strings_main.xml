@@ -4,6 +4,7 @@
     <string name="button_text_message">Message</string>
     <string name="button_text_rotating">Rotating</string>
     <string name="button_text_share_apk">Share Application</string>
+    <string name="button_text_share_db">Share Data</string>
     <string name="button_text_statistic">Statistic</string>
     <string name="button_text_db_backup">DB Backup</string>
     <string name="button_text_db_restore">DB Restore</string>
@@ -12,7 +13,9 @@
     <string name="dialog_restore_title">DB Restore</string>
     <string name="dialog_restore_message">Restore ?</string>
     <string name="dialog_send_apk_title">Share APK</string>
-    <string name="dialog_send_apk_message">Share ?</string>
+    <string name="dialog_send_apk_message">Share APK ?</string>
+    <string name="dialog_send_db_title">Share DB</string>
+    <string name="dialog_send_db_message">Share DB ?</string>
     <string name="button_competition">Competition</string>
     <string name="button_training">Training</string>
     <string name="dialog_saison_add_title">Saison Add</string>

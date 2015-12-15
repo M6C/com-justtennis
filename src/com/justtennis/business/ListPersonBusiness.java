@@ -35,7 +35,7 @@ public class ListPersonBusiness {
 	public ListPersonBusiness(ListPersonActivity listPersonActivity, INotifierMessage notificationMessage) {
 		this.context = listPersonActivity;
 //		contactManager = ContactManager.getInstance();
-		contactManager = ContactManager.getInstance();
+		contactManager = ContactManager.getInstance(context);
 		playerService = new PlayerService(context, notificationMessage);
 		userService = new UserService(listPersonActivity, NotifierMessageLogger.getInstance());
 		user = userService.find();
@@ -74,7 +74,7 @@ public class ListPersonBusiness {
 //		separator.setId(0l);
 //		separator.setFirstName("[ ** Contacts ** ]");
 //		list.add(separator);
-		list.addAll(contactManager.getListContact(context));
+		list.addAll(contactManager.getListContact());
 	}
 
 	public void send(Player player) {

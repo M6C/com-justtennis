@@ -16,9 +16,13 @@ public class ContactStructuredManager extends GenericCursorManager<Contact, Cont
 
 	private static ContactStructuredManager instance = null;
 
-	public static ContactStructuredManager getInstance() {
+	public ContactStructuredManager(Context context) {
+		super(context);
+	}
+
+	public static ContactStructuredManager getInstance(Context context) {
 		if (instance == null) {
-			instance = new ContactStructuredManager();
+			instance = new ContactStructuredManager(context.getApplicationContext());
 		}
 		return instance;
 	}
@@ -27,7 +31,7 @@ public class ContactStructuredManager extends GenericCursorManager<Contact, Cont
 //		String selection = ContactsContract.Contacts.IN_VISIBLE_GROUP + " = '" + ("1") + "'";
 	    String where = ContactsContract.CommonDataKinds.StructuredName.IN_VISIBLE_GROUP + " = ? AND " + ContactsContract.CommonDataKinds.StructuredName.MIMETYPE + " = ?"; 
 	    String[] whereParameters = new String[]{"1", ContactsContract.CommonDataKinds.StructuredName.CONTENT_ITEM_TYPE};
-		return getList(context, where, whereParameters);
+		return getList(where, whereParameters);
 	}
 
 	public Contact getContact(Activity context, long idContact) {
@@ -35,7 +39,7 @@ public class ContactStructuredManager extends GenericCursorManager<Contact, Cont
 //	    String where = ContactsContract.Data.RAW_CONTACT_ID + " = ? AND " + ContactsContract.Data.MIMETYPE + " = ?"; 
 	    String where = ContactsContract.CommonDataKinds.StructuredName.CONTACT_ID + " = ? AND " + ContactsContract.CommonDataKinds.StructuredName.MIMETYPE + " = ?"; 
 	    String[] whereParameters = new String[]{Long.toString(idContact), ContactsContract.CommonDataKinds.StructuredName.CONTENT_ITEM_TYPE};//new String[]{ContactsContract.CommonDataKinds.StructuredName.CONTENT_ITEM_TYPE};
-		List<Contact> list = getList(context, where, whereParameters);
+		List<Contact> list = getList(where, whereParameters);
 		if (list!=null && list.size()>0) {
 			ret = list.get(0);
 		}
@@ -43,12 +47,12 @@ public class ContactStructuredManager extends GenericCursorManager<Contact, Cont
 	}
 
 	@Override
-	protected CursorLoader buildCursorLoader(Context context, String where, String[] whereParameters) {
+	protected CursorLoader buildCursorLoader(Context context) {
 		Uri uri = ContactsContract.Data.CONTENT_URI;
 		String[] projection = ContactStructuredMapper.getInstance().getListColumn();
 		String sortOrder = null;
 
-		return new CursorLoader(context, uri, projection, where, whereParameters, sortOrder);
+		return new CursorLoader(context, uri, projection, null, null, sortOrder);
 	}
 
 	@Override

@@ -94,7 +94,7 @@ public class InviteBusiness {
 		if (intent.hasExtra(InviteActivity.EXTRA_INVITE)) {
 			invite = (Invite) intent.getSerializableExtra(InviteActivity.EXTRA_INVITE);
 			if (getIdRanking()==null) {
-				setIdRanking(getPlayer().getIdRanking());
+				setIdRanking(rankingService.getRanking(getPlayer(), true).getId());
 			}
 			initializeScores();
 		}
@@ -102,7 +102,7 @@ public class InviteBusiness {
 			long id = intent.getLongExtra(InviteActivity.EXTRA_PLAYER_ID, PlayerService.ID_EMPTY_PLAYER);
 			if (id != PlayerService.ID_EMPTY_PLAYER) {
 				invite.setPlayer(playerService.find(id));
-				setIdRanking(getPlayer().getIdRanking());
+				setIdRanking(rankingService.getRanking(getPlayer(), true).getId());
 			}
 		}
 		initializeData(invite);
@@ -335,7 +335,7 @@ public class InviteBusiness {
 			setIdRanking(getListRanking().get(0).getId());
 			setType(TypeManager.TYPE.COMPETITION);
 		} else {
-			setIdRanking(getPlayer().getIdRanking());
+			setIdRanking(rankingService.getRanking(getPlayer(), true).getId());
 			switch (getPlayer().getType()) {
 			default:
 			case TRAINING:

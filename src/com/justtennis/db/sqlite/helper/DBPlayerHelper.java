@@ -4,10 +4,11 @@ import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 
 import com.cameleon.common.android.inotifier.INotifierMessage;
+import com.justtennis.domain.Player;
 import com.justtennis.manager.TypeManager;
 import com.justtennis.manager.TypeManager.TYPE;
 
-public class DBPlayerHelper extends GenericDBHelper {
+public class DBPlayerHelper extends GenericJustTennisDBHelper {
 
 	private static final String TAG = DBPlayerHelper.class.getCanonicalName();
 
@@ -32,6 +33,8 @@ public class DBPlayerHelper extends GenericDBHelper {
 
 	private static final String DATABASE_NAME = "Player.db";
 	private static final int DATABASE_VERSION = 13;
+
+	private static final Class<?> CLASS_TYPE = Player.class;
 
 	// Database creation sql statement
 	private static final String DATABASE_CREATE = "CREATE TABLE " + TABLE_NAME + "(" + 
@@ -105,5 +108,10 @@ public class DBPlayerHelper extends GenericDBHelper {
 	@Override
 	public String getDatabaseCreate() {
 		return DATABASE_CREATE;
+	}
+	
+	@Override
+	public Class<?> getClassType() {
+		return CLASS_TYPE;
 	}
 }

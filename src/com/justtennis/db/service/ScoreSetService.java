@@ -4,6 +4,7 @@ import java.util.List;
 
 import android.content.Context;
 
+import com.cameleon.common.android.db.sqlite.service.GenericService;
 import com.cameleon.common.android.inotifier.INotifierMessage;
 import com.justtennis.db.sqlite.datasource.DBScoreSetDataSource;
 import com.justtennis.domain.Invite;

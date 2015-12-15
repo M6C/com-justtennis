@@ -14,13 +14,14 @@ import com.justtennis.domain.Saison;
 public class SaisonService extends GenericNamedService<Saison> {
 
 	public static final long ID_EMPTY = -1l;
+	public static final String NAME_EMPTY = "";
 
 	public SaisonService(Context context, INotifierMessage notificationMessage) {
 		super(context, new DBSaisonDataSource(context, notificationMessage), notificationMessage);
 	}
 	
 	public static Saison getEmpty() {
-		return new Saison(ID_EMPTY);
+		return new Saison(ID_EMPTY, NAME_EMPTY);
 	}
 
 	public static boolean isEmpty(Saison saison) {

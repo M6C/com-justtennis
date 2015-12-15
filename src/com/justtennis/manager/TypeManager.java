@@ -16,10 +16,16 @@ public class TypeManager {
 	}
 
 	private static TypeManager instance;
-	private TYPE type = TYPE.TRAINING;
+	private static TYPE type = TYPE.TRAINING;
 	private Saison saison;
+	private SaisonService saisonService;
 
 	private TypeManager() {
+	}
+
+	private TypeManager(Context context, INotifierMessage notificationMessage) {
+		this.saisonService = new SaisonService(context, notificationMessage);
+		reinitialize(context, notificationMessage);
 	}
 
 	public static TypeManager getInstance() {
@@ -29,8 +35,14 @@ public class TypeManager {
 		return instance;
 	}
 
-	public void initialize(Context context, INotifierMessage notificationMessage) {
-		SaisonService saisonService = new SaisonService(context, notificationMessage);
+	public static TypeManager getInstance(Context context, INotifierMessage notificationMessage) {
+		if (instance == null) {
+			instance = new TypeManager(context, notificationMessage);
+		}
+		return instance;
+	}
+
+	public void reinitialize(Context context, INotifierMessage notificationMessage) {
 		saison = saisonService.getSaisonActiveOrFirst();
 		if (saison == null) {
 			saison = SaisonService.getEmpty();
@@ -47,8 +59,8 @@ public class TypeManager {
 		return type;
 	}
 
-	public void setType(TYPE type) {
-		this.type = type;
+	public void setType(TYPE pType) {
+		type = pType;
 	}
 
 	public Saison getSaison() {
@@ -73,8 +85,8 @@ public class TypeManager {
 		}
 	}
 
-	public int getThemeResource() {
-		switch(getType()) {
+	public static int getThemeResource() {
+		switch(type) {
 			case COMPETITION: {
 				return R.style.AppTheme_Competition;
 			}

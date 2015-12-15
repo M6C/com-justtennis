@@ -20,6 +20,10 @@ public class Saison extends GenericDBPojoNamed {
 		super(id);
 	}
 
+	public Saison(Long id, String name) {
+		super(id, name);
+	}
+
 	public Date getBegin() {
 		return begin;
 	}

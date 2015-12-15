@@ -19,11 +19,8 @@ public class RankingViewManager {
 	private RankingService rankingService;
 	private Ranking rankingNC;
 
-	private PlayerService playerService;
-
 	private RankingViewManager(Context context, NotifierMessageLogger notifier) {
 		rankingService = new RankingService(context, notifier);
-		playerService = new PlayerService(context, notifier);
 		rankingNC = rankingService.getNC();
 	}
 
@@ -35,12 +32,24 @@ public class RankingViewManager {
 	}
 
 	public void manageRanking(View convertView, Invite invite, boolean estimate) {
-		if (invite.getPlayer() != null) {
-			manageRanking(convertView, invite.getPlayer(), estimate);
+		TextView tvRanking = (TextView) convertView.findViewById(R.id.tv_ranking);
+		TextView tvRankingEstimate = (TextView) convertView.findViewById(R.id.tv_ranking_estimate);
+
+		Ranking ranking = rankingService.getRanking(invite, false);
+		Ranking rankingEstimate = rankingService.getRanking(invite, true);
+
+		if (ranking != null) {
+			tvRanking.setText(ranking.getRanking());
+			tvRanking.setVisibility(View.VISIBLE);
 		} else {
-			TextView tvRanking = (TextView) convertView.findViewById(R.id.tv_ranking);
-			Ranking r = rankingService.find(invite.getIdRanking());
-			tvRanking.setText(r == null ? "" : r.getRanking());
+			tvRanking.setVisibility(View.GONE);
+		}
+
+		if (ranking != null && ranking.getId() != rankingEstimate.getId() && !rankingNC.equals(rankingEstimate)) {
+			tvRankingEstimate.setText(rankingEstimate.getRanking());
+			tvRankingEstimate.setVisibility(View.VISIBLE);
+		} else {
+			tvRankingEstimate.setVisibility(View.GONE);
 		}
 	}
 

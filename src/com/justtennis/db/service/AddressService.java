@@ -6,6 +6,7 @@ import java.util.TreeSet;
 
 import android.content.Context;
 
+import com.cameleon.common.android.db.sqlite.service.GenericService;
 import com.cameleon.common.android.inotifier.INotifierMessage;
 import com.cameleon.common.android.model.comparator.PojoNamedComparator;
 import com.justtennis.db.sqlite.datasource.DBAddressDataSource;

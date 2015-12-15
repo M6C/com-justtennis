@@ -40,6 +40,7 @@ import com.justtennis.parser.SmsParser;
 
 public class InviteDemandeBusiness {
 
+	@SuppressWarnings("unused")
 	private static final String TAG = InviteDemandeBusiness.class.getSimpleName();
 
 	private Context context;
@@ -81,7 +82,7 @@ public class InviteDemandeBusiness {
 		if (intent.hasExtra(InviteActivity.EXTRA_INVITE)) {
 			invite = (Invite) intent.getSerializableExtra(PlayerActivity.EXTRA_INVITE);
 			if (getIdRanking()==null) {
-				setIdRanking(getPlayer().getIdRanking());
+				setIdRanking(rankingService.getRanking(getPlayer(), true).getId());
 			}
 		}
 		if (intent.hasExtra(InviteActivity.EXTRA_PLAYER_ID)) {
@@ -92,7 +93,7 @@ public class InviteDemandeBusiness {
 					setIdRanking(getListRanking().get(0).getId());
 					setType(TypeManager.TYPE.COMPETITION);
 				} else {
-					setIdRanking(getPlayer().getIdRanking());
+					setIdRanking(rankingService.getRanking(getPlayer(), true).getId());
 					switch (getPlayer().getType()) {
 						default:
 						case TRAINING:
@@ -134,7 +135,6 @@ public class InviteDemandeBusiness {
 		listRanking.clear();
 		listRanking.addAll(setRanking);
 
-		int i=0;
 		listTxtRankings = new ArrayList<String>();
 		for(Ranking ranking : setRanking) {
 			listTxtRankings.add(ranking.getRanking());

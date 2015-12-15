@@ -6,9 +6,9 @@ import java.util.List;
 import android.content.Context;
 import android.content.Intent;
 
+import com.cameleon.common.android.db.sqlite.service.GenericService;
 import com.cameleon.common.android.inotifier.INotifierMessage;
 import com.justtennis.R;
-import com.justtennis.db.service.GenericService;
 import com.justtennis.db.service.SaisonService;
 import com.justtennis.db.service.TournamentService;
 import com.justtennis.domain.Club;

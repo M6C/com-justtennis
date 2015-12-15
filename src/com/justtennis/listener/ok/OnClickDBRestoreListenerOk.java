@@ -16,7 +16,7 @@ import com.justtennis.db.sqlite.helper.DBRankingHelper;
 import com.justtennis.db.sqlite.helper.DBSaisonHelper;
 import com.justtennis.db.sqlite.helper.DBTournamentHelper;
 import com.justtennis.db.sqlite.helper.DBUserHelper;
-import com.justtennis.db.sqlite.helper.GenericDBHelper;
+import com.cameleon.common.android.db.sqlite.helper.GenericDBHelper;
 import com.justtennis.notifier.NotifierMessageLogger;
 
 public class OnClickDBRestoreListenerOk implements OnClickListener {

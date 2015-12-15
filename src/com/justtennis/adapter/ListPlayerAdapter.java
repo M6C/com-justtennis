@@ -114,7 +114,7 @@ public class ListPlayerAdapter extends ArrayAdapter<Player> {
 //			imagePlayer.setImageBitmap(v.getPhoto());
 //		}
 		if (v.getIdGoogle()!=null && v.getIdGoogle().longValue()>0l) {
-			imagePlayer.setImageBitmap(ContactManager.getInstance().getPhoto(activity, v.getIdGoogle()));
+			imagePlayer.setImageBitmap(ContactManager.getInstance(activity).getPhoto(v.getIdGoogle()));
 		}
 		else {
 			imagePlayer.setImageResource(R.drawable.player_unknow_2);

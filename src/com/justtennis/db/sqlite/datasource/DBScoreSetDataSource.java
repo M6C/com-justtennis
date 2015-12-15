@@ -6,11 +6,12 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 
+import com.cameleon.common.android.db.sqlite.datasource.GenericDBDataSource;
 import com.cameleon.common.android.inotifier.INotifierMessage;
+import com.cameleon.common.tool.DbTool;
 import com.justtennis.db.sqlite.helper.DBScoreSetHelper;
 import com.justtennis.domain.Invite;
 import com.justtennis.domain.ScoreSet;
-import com.justtennis.tool.DbTool;
 
 public class DBScoreSetDataSource extends GenericDBDataSource<ScoreSet> {
 

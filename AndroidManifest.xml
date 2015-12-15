@@ -31,9 +31,21 @@
         >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.SEND" />
+                <data android:mimeType="application/justtennisdb" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.SEND_MULTIPLE" />
+                <data android:mimeType="application/justtennisdb" />
+            </intent-filter>
+		   	<intent-filter>
+				<action android:name="android.intent.action.VIEW" />
+				<category android:name="android.intent.category.DEFAULT" />
+				<data android:scheme="file"  android:host="*" android:pathPattern=".*\\.db" android:mimeType="*/*"  />
+			</intent-filter>
         </activity>
 
 		<activity android:name="com.google.zxing.client.android.CaptureActivity"

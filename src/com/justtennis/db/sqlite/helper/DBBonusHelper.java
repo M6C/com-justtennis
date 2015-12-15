@@ -5,8 +5,9 @@ import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 
 import com.cameleon.common.android.inotifier.INotifierMessage;
+import com.justtennis.domain.Bonus;
 
-public class DBBonusHelper extends GenericDBHelper {
+public class DBBonusHelper extends GenericJustTennisDBHelper {
 
 	private static final String TAG = DBBonusHelper.class.getCanonicalName();
 
@@ -17,6 +18,7 @@ public class DBBonusHelper extends GenericDBHelper {
 	private static final String DATABASE_NAME = "Bonus.db";
 	private static final int DATABASE_VERSION = 1;
 
+	private static final Class<?> CLASS_TYPE = Bonus.class;
 
 	// Database creation sql statement
 	private static final String DATABASE_CREATE = "CREATE TABLE " + TABLE_NAME + "(" + 
@@ -62,6 +64,11 @@ public class DBBonusHelper extends GenericDBHelper {
 		return DATABASE_CREATE;
 	}
 
+	@Override
+	public Class<?> getClassType() {
+		return CLASS_TYPE;
+	}
+	
 	private void feed(SQLiteDatabase database) {
 		String[][] rows = new String[][] {
 			{"0"},

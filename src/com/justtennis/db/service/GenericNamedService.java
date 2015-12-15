@@ -5,9 +5,10 @@ import java.util.List;
 
 import android.content.Context;
 
+import com.cameleon.common.android.db.sqlite.datasource.GenericDBDataSource;
+import com.cameleon.common.android.db.sqlite.service.GenericService;
 import com.cameleon.common.android.inotifier.INotifierMessage;
 import com.cameleon.common.android.model.GenericDBPojoNamed;
-import com.justtennis.db.sqlite.datasource.GenericDBDataSource;
 
 public class GenericNamedService<POJO extends GenericDBPojoNamed> extends GenericService<POJO> {
 

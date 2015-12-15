@@ -2,10 +2,10 @@ package com.justtennis.business;
 
 import android.content.Context;
 
+import com.cameleon.common.android.db.sqlite.service.GenericService;
 import com.cameleon.common.android.inotifier.INotifierMessage;
 import com.justtennis.R;
 import com.justtennis.db.service.ClubService;
-import com.justtennis.db.service.GenericService;
 import com.justtennis.domain.Address;
 import com.justtennis.domain.Club;
 

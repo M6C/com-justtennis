@@ -11,6 +11,7 @@ import android.content.Context;
 import android.database.Cursor;
 
 import com.cameleon.common.android.inotifier.INotifierMessage;
+import com.cameleon.common.tool.DbTool;
 import com.justtennis.db.service.SaisonService;
 import com.justtennis.db.sqlite.helper.DBInviteHelper;
 import com.justtennis.domain.Address;
@@ -22,7 +23,6 @@ import com.justtennis.domain.Player;
 import com.justtennis.domain.Saison;
 import com.justtennis.domain.Tournament;
 import com.justtennis.manager.TypeManager;
-import com.justtennis.tool.DbTool;
 
 public class DBInviteDataSource extends GenericDBDataSourceByType<Invite> {
 

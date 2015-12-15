@@ -6,11 +6,11 @@ import java.util.List;
 import android.content.Context;
 import android.content.Intent;
 
+import com.cameleon.common.android.db.sqlite.service.GenericService;
 import com.cameleon.common.android.inotifier.INotifierMessage;
 import com.cameleon.common.android.model.GenericDBPojoNamedSubId;
 import com.cameleon.common.android.service.PojoNamedService;
 import com.justtennis.activity.GenericSpinnerFormActivity;
-import com.justtennis.db.service.GenericService;
 
 public abstract class GenericSpinnerFormBusiness <DATA extends GenericDBPojoNamedSubId, SUB_DATA extends GenericDBPojoNamedSubId> {
 

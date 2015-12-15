@@ -32,7 +32,7 @@ public class OnItemClickListPerson implements OnItemClickListener {
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
     	final Person person = (Person)view.getTag();
 
-    	List<Phone> listPhone = PhoneManager.getInstance().getListPhone(context, person.getId());
+    	List<Phone> listPhone = PhoneManager.getInstance(context).getListPhone(context, person.getId());
 		if (listPhone!=null && listPhone.size()>0) {
 			if (listPhone.size()>1) {
 				int i=0;
@@ -76,7 +76,7 @@ public class OnItemClickListPerson implements OnItemClickListener {
     }
 
 	private void returnPlayer(Person person, String phonenumber) {
-		person = ContactStructuredManager.getInstance().getContact(context, person.getId());
+		person = ContactStructuredManager.getInstance(context).getContact(context, person.getId());
 		person.setPhonenumber(phonenumber);
 
 		Player player = PlayerParser.getInstance().fromPersonForCreate(person);

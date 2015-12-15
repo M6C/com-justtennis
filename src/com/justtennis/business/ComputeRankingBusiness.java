@@ -43,7 +43,10 @@ public class ComputeRankingBusiness {
 		inviteService = new InviteService(context, notificationMessage);
 		scoreService = new ScoreSetService(context, notificationMessage);
 	
-		idRanking = userService.find().getIdRanking();
+		idRanking = userService.find().getIdRankingEstimate();
+		if (idRanking == null) {
+			idRanking = userService.find().getIdRanking();
+		}
 	}
 
 	public void onCreate() {

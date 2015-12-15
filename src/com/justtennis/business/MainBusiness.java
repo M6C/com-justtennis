@@ -6,11 +6,14 @@ import java.util.List;
 import android.content.Context;
 
 import com.cameleon.common.android.inotifier.INotifierMessage;
+import com.justtennis.db.DBDictionary;
 import com.justtennis.db.service.InviteService;
 import com.justtennis.db.service.PlayerService;
 import com.justtennis.db.service.SaisonService;
 import com.justtennis.db.service.UserService;
+import com.justtennis.db.sqlite.helper.GenericJustTennisDBHelper;
 import com.justtennis.domain.Saison;
+import com.justtennis.notifier.NotifierMessageLogger;
 
 public class MainBusiness {
 
@@ -21,6 +24,7 @@ public class MainBusiness {
 	private PlayerService playerService;
 	private SaisonService saisonService;
 	private InviteService inviteService;
+	private DBDictionary dBDictionary;
 
 	private long userCount;
 	private Context context;
@@ -28,12 +32,14 @@ public class MainBusiness {
 	private List<Saison> listSaison = new ArrayList<Saison>();
 	private List<String> listTxtSaisons = new ArrayList<String>();
 
+
 	public MainBusiness(Context context, INotifierMessage notificationMessage) {
 		this.context = context;
 		userService = new UserService(context, notificationMessage);
 		playerService = new PlayerService(context, notificationMessage);
 		saisonService = new SaisonService(context, notificationMessage);
 		inviteService = new InviteService(context, notificationMessage);
+		dBDictionary = DBDictionary.getInstance(context, notificationMessage);
 	}
 
 	public void onResume() {
@@ -58,26 +64,6 @@ public class MainBusiness {
 		listTxtSaisons.addAll(saisonService.getListName(listSaison));
 	}
 
-	public long getUserCount() {
-		return userCount;
-	}
-	
-	public List<Saison> getListSaison() {
-		return listSaison;
-	}
-
-	public void setListSaison(List<Saison> listSaison) {
-		this.listSaison = listSaison;
-	}
-
-	public List<String> getListTxtSaisons() {
-		return listTxtSaisons;
-	}
-
-	public void setListTxtSaisons(List<String> listTxtSaisons) {
-		this.listTxtSaisons = listTxtSaisons;
-	}
-
 	public boolean isEmptySaison(Saison saison) {
 		return SaisonService.isEmpty(saison);
 	}
@@ -98,7 +84,31 @@ public class MainBusiness {
 		saisonService.delete(saison);
 	}
 
+	public GenericJustTennisDBHelper getDBHelper(String databaseName) {
+		return dBDictionary.getDBHelperFromDatabaseName(databaseName);
+	}
+
 	public Context getContext() {
 		return context;
+	}
+
+	public long getUserCount() {
+		return userCount;
+	}
+	
+	public List<Saison> getListSaison() {
+		return listSaison;
+	}
+
+	public void setListSaison(List<Saison> listSaison) {
+		this.listSaison = listSaison;
+	}
+
+	public List<String> getListTxtSaisons() {
+		return listTxtSaisons;
+	}
+
+	public void setListTxtSaisons(List<String> listTxtSaisons) {
+		this.listTxtSaisons = listTxtSaisons;
 	}
 }

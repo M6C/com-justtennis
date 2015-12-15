@@ -4,11 +4,12 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 
+import com.cameleon.common.android.db.sqlite.datasource.GenericDBDataSource;
 import com.cameleon.common.android.inotifier.INotifierMessage;
+import com.cameleon.common.tool.DbTool;
 import com.justtennis.db.sqlite.helper.DBTournamentHelper;
 import com.justtennis.domain.Saison;
 import com.justtennis.domain.Tournament;
-import com.justtennis.tool.DbTool;
 
 public class DBTournamentDataSource extends GenericDBDataSource<Tournament> {
 

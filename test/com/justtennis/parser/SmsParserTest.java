@@ -5,11 +5,11 @@ import java.util.Date;
 
 import android.test.AndroidTestCase;
 
+import com.cameleon.common.tool.CryptoTool;
 import com.justtennis.domain.Invite;
 import com.justtennis.domain.Player;
 import com.justtennis.domain.User;
 import com.justtennis.parser.SmsParser.MSG_TYPE;
-import com.justtennis.tool.CryptoTool;
 
 public class SmsParserTest extends AndroidTestCase {
 

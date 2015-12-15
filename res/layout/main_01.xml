@@ -32,7 +32,7 @@
 			    android:orientation="horizontal"
 			    android:gravity="center_horizontal|center_vertical"
 			>
-			    <Spinner
+ 			    <Spinner
 		            android:id="@+id/sp_saison"
 		            android:layout_width="wrap_content"
 		            android:layout_height="wrap_content"
@@ -100,6 +100,13 @@
 			    android:layout_height="wrap_content"
 		        android:text="@string/button_text_share_apk"
 		        android:onClick="onClickSendApk"
+		        android:visibility="visible"
+		    />
+		    <Button
+			    android:layout_width="wrap_content"
+			    android:layout_height="wrap_content"
+		        android:text="@string/button_text_share_db"
+		        android:onClick="onClickSendDb"
 		        android:visibility="visible"
 		    />
 		    <Button

@@ -335,7 +335,7 @@ public class InviteDemandeActivity extends GenericActivity {
 			tvFirstname.setText(player.getFirstName());
 			tvLastname.setText(player.getLastName());
 			if (player.getIdGoogle()!=null && player.getIdGoogle().longValue()>0l) {
-				ivPhoto.setImageBitmap(ContactManager.getInstance().getPhoto(this, player.getIdGoogle()));
+				ivPhoto.setImageBitmap(ContactManager.getInstance(this).getPhoto(player.getIdGoogle()));
 			}
 		}
 	}

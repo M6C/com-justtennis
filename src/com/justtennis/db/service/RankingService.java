@@ -4,9 +4,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.SortedSet;
 import java.util.TreeSet;
+
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.util.SparseIntArray;
+
+import com.cameleon.common.android.db.sqlite.service.GenericService;
 import com.cameleon.common.android.inotifier.INotifierMessage;
 import com.justtennis.db.sqlite.datasource.DBRankingDataSource;
 import com.justtennis.domain.Invite;
@@ -48,6 +51,10 @@ public class RankingService extends GenericService<Ranking> {
 		finally {
 			dbDataSource.close();
 		}
+	}
+
+	public Ranking getRanking(Invite invite, boolean estimate) {
+		return getRanking(invite, invite.getPlayer(), estimate);
 	}
 
 	public Ranking getRanking(Invite invite, Player player, boolean estimate) {

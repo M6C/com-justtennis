@@ -1,13 +1,16 @@
 package com.justtennis.db.sqlite.datasource;
 
+import java.util.List;
+
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 
+import com.cameleon.common.android.db.sqlite.datasource.GenericDBDataSource;
 import com.cameleon.common.android.inotifier.INotifierMessage;
+import com.cameleon.common.tool.DbTool;
 import com.justtennis.db.sqlite.helper.DBUserHelper;
 import com.justtennis.domain.User;
-import com.justtennis.tool.DbTool;
 
 public class DBUserDataSource extends GenericDBDataSource<User> {
 
@@ -16,6 +19,7 @@ public class DBUserDataSource extends GenericDBDataSource<User> {
 	// Database fields
 	private String[] allColumns = {
 		DBUserHelper.COLUMN_ID,
+		DBUserHelper.COLUMN_ID_SAISON,
 		DBUserHelper.COLUMN_ID_TOURNAMENT,
 		DBUserHelper.COLUMN_ID_CLUB,
 		DBUserHelper.COLUMN_ID_ADDRESS,
@@ -34,6 +38,21 @@ public class DBUserDataSource extends GenericDBDataSource<User> {
 		super(new DBUserHelper(context, notificationMessage), notificationMessage);
 	}
 
+	/**
+	 * Return an User for a Saison
+	 * @param idSaison Saison id
+	 * @return an User or null
+	 */
+	public User getByIdSaison(long idSaison) {
+		User ret = null;
+		String sqlWhere = DBUserHelper.COLUMN_ID_SAISON + " = " + idSaison;
+		List<User> list = query(sqlWhere);
+		if (list != null && list.size() > 0) {
+			ret = list.get(0);
+		}
+		return ret;
+	}
+
 	@Override
 	protected String[] getAllColumns() {
 		return allColumns;
@@ -41,7 +60,8 @@ public class DBUserDataSource extends GenericDBDataSource<User> {
 
 	@Override
 	protected void putContentValue(ContentValues values, User player) {
-		values.put(DBUserHelper.COLUMN_ID_TOURNAMENT, player.getIdClub());
+		values.put(DBUserHelper.COLUMN_ID_SAISON, player.getIdSaison());
+		values.put(DBUserHelper.COLUMN_ID_TOURNAMENT, player.getIdTournament());
 		values.put(DBUserHelper.COLUMN_ID_CLUB, player.getIdClub());
 		values.put(DBUserHelper.COLUMN_ID_ADDRESS, player.getIdAddress());
 		values.put(DBUserHelper.COLUMN_ID_RANKING, player.getIdRanking());
@@ -60,6 +80,7 @@ public class DBUserDataSource extends GenericDBDataSource<User> {
 		int col = 0;
 		User player = new User();
 		player.setId(DbTool.getInstance().toLong(cursor, col++));
+		player.setIdSaison(DbTool.getInstance().toLong(cursor, col++));
 		player.setIdTournament(DbTool.getInstance().toLong(cursor, col++));
 		player.setIdClub(DbTool.getInstance().toLong(cursor, col++));
 		player.setIdAddress(DbTool.getInstance().toLong(cursor, col++));

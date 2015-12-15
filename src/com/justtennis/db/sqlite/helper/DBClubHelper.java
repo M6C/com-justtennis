@@ -3,8 +3,9 @@ package com.justtennis.db.sqlite.helper;
 import android.content.Context;
 
 import com.cameleon.common.android.inotifier.INotifierMessage;
+import com.justtennis.domain.Club;
 
-public class DBClubHelper extends GenericDBHelper {
+public class DBClubHelper extends GenericJustTennisDBHelper {
 
 	private static final String TAG = DBClubHelper.class.getCanonicalName();
 
@@ -15,6 +16,8 @@ public class DBClubHelper extends GenericDBHelper {
 
 	private static final String DATABASE_NAME = "Club.db";
 	private static final int DATABASE_VERSION = 1;
+
+	private static final Class<?> CLASS_TYPE = Club.class;
 
 	// Database creation sql statement
 	private static final String DATABASE_CREATE = "CREATE TABLE " + TABLE_NAME + "(" + 
@@ -40,5 +43,10 @@ public class DBClubHelper extends GenericDBHelper {
 	@Override
 	public String getDatabaseCreate() {
 		return DATABASE_CREATE;
+	}
+	
+	@Override
+	public Class<?> getClassType() {
+		return CLASS_TYPE;
 	}
 }

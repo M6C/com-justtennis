@@ -12,7 +12,7 @@ public abstract class GenericActivity extends Activity {
 
 	@Override
 	protected void onApplyThemeResource(Theme theme, int resid, boolean first) {
-		resid = TypeManager.getInstance().getThemeResource();
+		resid = TypeManager.getThemeResource();
 
 		theme.applyStyle(resid, true);
 

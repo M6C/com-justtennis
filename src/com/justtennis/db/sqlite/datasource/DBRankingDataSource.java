@@ -6,10 +6,11 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 
+import com.cameleon.common.android.db.sqlite.datasource.GenericDBDataSource;
 import com.cameleon.common.android.inotifier.INotifierMessage;
+import com.cameleon.common.tool.DbTool;
 import com.justtennis.db.sqlite.helper.DBRankingHelper;
 import com.justtennis.domain.Ranking;
-import com.justtennis.tool.DbTool;
 
 public class DBRankingDataSource extends GenericDBDataSource<Ranking> {
 

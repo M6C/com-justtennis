@@ -84,7 +84,7 @@ public class ListPersonAdapter extends ArrayAdapter<Person> {
 
 		imagePerson.setImageResource(R.drawable.player_unknow_2);
 		if (v instanceof Contact) {
-			Bitmap photo = ContactManager.getInstance().getPhoto(activity, v.getId());
+			Bitmap photo = ContactManager.getInstance(activity).getPhoto(v.getId());
 			if (photo!=null) {
 				imagePerson.setImageBitmap(photo);
 			}

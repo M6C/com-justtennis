@@ -1,5 +1,8 @@
 package com.justtennis.activity;
 
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.gdocument.gtracergps.launcher.log.Logger;
@@ -8,6 +11,7 @@ import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -21,6 +25,7 @@ import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import com.cameleon.common.android.db.sqlite.helper.GenericDBHelper;
 import com.cameleon.common.android.factory.FactoryDialog;
 import com.cameleon.common.android.factory.listener.OnClickViewListener;
 import com.cameleon.common.android.inotifier.INotifierMessage;
@@ -33,6 +38,7 @@ import com.justtennis.listener.ok.OnClickDBBackupListenerOk;
 import com.justtennis.listener.ok.OnClickDBRestoreListenerOk;
 import com.justtennis.listener.ok.OnClickExitListenerOk;
 import com.justtennis.listener.ok.OnClickSendApkListenerOk;
+import com.justtennis.listener.ok.OnClickSendDBListenerOk;
 import com.justtennis.manager.TypeManager;
 import com.justtennis.manager.TypeManager.TYPE;
 
@@ -67,13 +73,19 @@ public class MainActivity extends GenericActivity implements INotifierMessage {
 		spSaison = (Spinner)findViewById(R.id.sp_saison);
 
 		business = new MainBusiness(this, this);
-		typeManager = TypeManager.getInstance();
-		typeManager.initialize(this, this);
+		typeManager = TypeManager.getInstance(this.getApplicationContext(), this);
 
 		dialogExit = FactoryDialog.getInstance().buildYesNoDialog(
 			this, new OnClickExitListenerOk(this), R.string.dialog_exit_title, R.string.dialog_exit_message);
 
 		typeManager.initializeActivity(layoutMain, true);
+
+		Intent intent = getIntent();
+		if (Intent.ACTION_SEND_MULTIPLE.equals(intent.getAction())) {
+			handleSendMultipleDb(intent);
+		} else if (intent.getData() != null && intent.getData().getEncodedPath() != null) {
+			handleSendDb(intent.getData().getEncodedPath());
+		}
 	}
 
 	@Override
@@ -271,6 +283,13 @@ public class MainActivity extends GenericActivity implements INotifierMessage {
 			.buildOkCancelDialog(business.getContext(), listener, R.string.dialog_send_apk_title, R.string.dialog_send_apk_message)
 			.show();
 	}
+
+	public void onClickSendDb(View view) {
+		OnClickSendDBListenerOk listener = new OnClickSendDBListenerOk(this);
+		FactoryDialog.getInstance()
+			.buildOkCancelDialog(business.getContext(), listener, R.string.dialog_send_db_title, R.string.dialog_send_db_message)
+			.show();
+	}
 	
 	public void onClickDBBackup(View view) {
 		OnClickDBBackupListenerOk listener = new OnClickDBBackupListenerOk(this);
@@ -327,7 +346,7 @@ public class MainActivity extends GenericActivity implements INotifierMessage {
 				if (!business.isEmptySaison(saison)) {
 					if (!business.isExistInviteSaison(saison)) {
 						business.deleteSaison(saison);
-						typeManager.initialize(MainActivity.this, MainActivity.this);
+						typeManager.reinitialize(MainActivity.this.getApplicationContext(), MainActivity.this);
 
 						business.initializeDataSaison();
 						adpSaison.notifyDataSetChanged();
@@ -351,5 +370,36 @@ public class MainActivity extends GenericActivity implements INotifierMessage {
 	public void onClickTypeMatch(View view) {
 		typeManager.setType(TYPE.COMPETITION);
 		initializeLayoutType();
+	}
+
+	private void handleSendMultipleDb(Intent intent) {
+		ArrayList<Uri> uriList = intent.getParcelableArrayListExtra(Intent.EXTRA_STREAM);
+		for(Uri uri : uriList) {
+			String filePath = uri.getPath();
+			Log.i(TAG, "handleSendMultipleDb filePath:'" + filePath + "'");
+			Toast.makeText(this, filePath, Toast.LENGTH_SHORT).show();
+			handleSendDb(filePath);
+		}
+	}
+
+	private void handleSendDb(String filePath) {
+		File file = new File(filePath);
+		String databaseName = file.getAbsolutePath();
+		int idx = databaseName.lastIndexOf(File.separatorChar);
+		if (idx >= 0) {
+			databaseName = databaseName.substring(idx + 1);
+		}
+		GenericDBHelper helper = business.getDBHelper(databaseName);
+		if (helper != null) {
+			Log.i(TAG, "handleSendDb DB Helper found for databaseName:'"+databaseName+"'");
+			try {
+				helper.restoreDbFromFile(file);
+				file.delete();
+			} catch (IOException e) {
+				Log.e(TAG, "Restore '"+filePath+"' error", e);
+			}
+		} else {
+			Log.w(TAG, "handleSendDb No DB Helper found for databaseName:'"+databaseName+"'");
+		}
 	}
 }

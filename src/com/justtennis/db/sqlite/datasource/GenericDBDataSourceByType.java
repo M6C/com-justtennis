@@ -1,8 +1,9 @@
 package com.justtennis.db.sqlite.datasource;
 
+import com.cameleon.common.android.db.sqlite.datasource.GenericDBDataSource;
+import com.cameleon.common.android.db.sqlite.helper.GenericDBHelper;
 import com.cameleon.common.android.inotifier.INotifierMessage;
 import com.cameleon.common.android.model.GenericDBPojo;
-import com.justtennis.db.sqlite.helper.GenericDBHelper;
 import com.justtennis.manager.TypeManager;
 
 public abstract class GenericDBDataSourceByType<POJO extends GenericDBPojo<Long>> extends GenericDBDataSource<POJO> {

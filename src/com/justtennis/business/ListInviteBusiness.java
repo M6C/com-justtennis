@@ -107,7 +107,7 @@ public class ListInviteBusiness {
 
 	public Player getPlayerNotEmpty(int position) {
 		Player player = listPlayer.get(position);
-		if (playerService.isEmptyPlayer(player)) {
+		if (PlayerService.isEmptyPlayer(player)) {
 			player = null;
 		}
 		return player;
