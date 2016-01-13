@@ -172,4 +172,14 @@ public class UserActivity extends PlayerActivity {
 		});
 		dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
 		dialog.show();
-	}}
+	}
+
+	@Override
+	public void onClickCreate(View view) {
+    	business.create(false);
+    	finish();
+
+    	Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+		startActivity(intent);
+	}
+}

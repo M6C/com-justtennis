@@ -32,6 +32,7 @@ import com.justtennis.domain.Tournament;
 import com.justtennis.listener.action.TextWatcherFieldEnableView;
 import com.justtennis.listener.ok.OnClickPlayerCreateListenerOk;
 import com.justtennis.manager.TypeManager;
+import com.justtennis.manager.TypeManager.TYPE;
 import com.justtennis.notifier.NotifierMessageLogger;
 import com.justtennis.parser.PlayerParser;
 
@@ -60,6 +61,7 @@ public class PlayerActivity extends GenericActivity {
 	private Bundle savedInstanceState;
 	private PlayerBusiness business;
 	private RankingListManager rankingListManager;
+	private TypeManager typeManager;
 
 	private TextView tvFirstname;
 	private TextView tvLastname;
@@ -105,6 +107,7 @@ public class PlayerActivity extends GenericActivity {
 		business = createBusiness();
 		NotifierMessageLogger notifier = NotifierMessageLogger.getInstance();
 		rankingListManager = RankingListManager.getInstance(this, notifier);
+		typeManager = TypeManager.getInstance();
 
 		initializeListener();
 		initialize();
@@ -225,10 +228,16 @@ public class PlayerActivity extends GenericActivity {
 					finish();
 				}
 				else {
-					OnClickPlayerCreateListenerOk listener = new OnClickPlayerCreateListenerOk(this, business);
-					FactoryDialog.getInstance()
-						.buildYesNoDialog(this, listener, R.string.dialog_player_create_confirmation_title, R.string.dialog_player_create_confirmation_message)
-						.show();
+					boolean sendMessageConfirmation = typeManager.getType() == TYPE.TRAINING;
+					if (sendMessageConfirmation) {
+						OnClickPlayerCreateListenerOk listener = new OnClickPlayerCreateListenerOk(this, business);
+						FactoryDialog.getInstance()
+							.buildYesNoDialog(this, listener, R.string.dialog_player_create_confirmation_title, R.string.dialog_player_create_confirmation_message)
+							.show();
+					} else {
+						business.create(false);
+						finish();
+					}
 				}
 			}
 	}
