@@ -3,7 +3,6 @@ package com.justtennis.manager;
 import java.io.InputStream;
 import java.util.List;
 
-import android.app.Activity;
 import android.content.ContentResolver;
 import android.content.ContentUris;
 import android.content.Context;
@@ -24,7 +23,6 @@ public class ContactManager extends GenericCursorManager<Contact, ContactMapper>
 	private Context context;
 
 	public ContactManager(Context context) {
-		super(context);
 		this.context = context;
 	}
 
@@ -39,7 +37,7 @@ public class ContactManager extends GenericCursorManager<Contact, ContactMapper>
 //		String selection = ContactsContract.Contacts.IN_VISIBLE_GROUP + " = '" + ("1") + "'";
 	    String where = ContactsContract.Contacts.IN_VISIBLE_GROUP + " = ?"; 
 	    String[] whereParameters = new String[]{"1"};
-		return getList(where, whereParameters);
+		return getList(context, where, whereParameters);
 	}
 
 	public Bitmap getPhoto(Long contactId) {
@@ -55,7 +53,7 @@ public class ContactManager extends GenericCursorManager<Contact, ContactMapper>
 	}
 
 	@Override
-	protected CursorLoader buildCursorLoader(Context context) {
+	protected CursorLoader buildCursorLoader(Context context, String where, String[] whereParameters) {
 		// Run query
 		Uri uri = ContactsContract.Contacts.CONTENT_URI;
 		String[] projection = ContactMapper.getInstance().getListColumn();

@@ -16,13 +16,9 @@ public class PhoneManager extends GenericCursorManager<Phone, PhoneMapper> {
 
 	private static PhoneManager instance = null;
 
-	public PhoneManager(Context context) {
-		super(context);
-	}
-
 	public static PhoneManager getInstance(Context context) {
 		if (instance == null) {
-			instance = new PhoneManager(context.getApplicationContext());
+			instance = new PhoneManager();
 		}
 		return instance;
 	}
@@ -30,11 +26,11 @@ public class PhoneManager extends GenericCursorManager<Phone, PhoneMapper> {
 	public List<Phone> getListPhone(Activity context, long idContact) {
 	    String where = CommonDataKinds.Phone.CONTACT_ID + " = ?"; 
 	    String[] whereParameters = new String[]{Long.toString(idContact)};
-		return getList(where, whereParameters);
+		return getList(context, where, whereParameters);
 	}
 	
 	@Override
-	protected CursorLoader buildCursorLoader(Context context) {
+	protected CursorLoader buildCursorLoader(Context context, String where, String[] whereParameters) {
 		Uri uri = CommonDataKinds.Phone.CONTENT_URI;
 		String[] projection = PhoneMapper.getInstance().getListColumn();
 		String sortOrder = null;
