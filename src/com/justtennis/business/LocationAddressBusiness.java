@@ -4,6 +4,7 @@ import android.content.Context;
 
 import com.cameleon.common.android.db.sqlite.service.GenericService;
 import com.cameleon.common.android.inotifier.INotifierMessage;
+import com.cameleon.common.tool.StringTool;
 import com.justtennis.R;
 import com.justtennis.db.service.AddressService;
 import com.justtennis.domain.Address;
@@ -47,5 +48,21 @@ public class LocationAddressBusiness extends GenericSpinnerFormBusiness<Address,
 	@Override
 	protected GenericSpinnerFormBusiness<Address, ?> initializeSubBusiness(Context context, INotifierMessage notificationMessage) {
 		return null;
+	}
+
+	public String formatAddressName(Address data) {
+		String ret = null;
+		ret = concat(ret, data.getLine1());
+		ret = concat(ret, data.getPostalCode());
+		ret = concat(ret, data.getCity());
+		return ret;
+	}
+
+	private String concat(String str1, String str2) {
+		String ret = (str1 == null) ? "" : str1 + " ";
+		if (!StringTool.getInstance().isEmpty(str2)) {
+			ret += str2;
+		}
+		return ret;
 	}
 }

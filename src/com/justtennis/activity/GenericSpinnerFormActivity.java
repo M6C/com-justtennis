@@ -51,7 +51,6 @@ public abstract class GenericSpinnerFormActivity <DATA extends GenericDBPojoName
 	private LinearLayout llForm;
 	private LinearLayout llListForm;
 	private View llSelection;
-	private View ivDelete;
 
 	private Spinner spList;
 	private Spinner spListForm;
@@ -144,7 +143,6 @@ public abstract class GenericSpinnerFormActivity <DATA extends GenericDBPojoName
 		llAdd = findViewById(R.id.ll_add);
 		llForm = (LinearLayout)findViewById(R.id.ll_form);
 		llListForm = (LinearLayout)findViewById(R.id.ll_list_form);
-		ivDelete = findViewById(R.id.iv_delete);
 	}
 
 	public void onClickValidate(View view) {
@@ -305,7 +303,11 @@ public abstract class GenericSpinnerFormActivity <DATA extends GenericDBPojoName
 		}
 	}
 
-	private void manageVisibility() {
+	protected EditText getNameEditText() {
+		return etName;
+	}
+
+	protected void manageVisibility() {
 		Log.i(TAG, "manageVisibility mode:" + mode);
 		visibilitySelection = (mode == MODE.SELECTION ? View.VISIBLE : View.GONE);
 		visibilityContent = (mode == MODE.SELECTION ? View.GONE : View.VISIBLE);

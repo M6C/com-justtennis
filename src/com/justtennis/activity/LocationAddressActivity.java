@@ -74,5 +74,12 @@ public class LocationAddressActivity extends GenericSpinnerFormActivity<Address>
 		data.setLine1(etAddressLine1.getText().toString());
 		data.setPostalCode(etAddressPostalCode.getText().toString());
 		data.setCity(etAddressCity.getText().toString());
+		data.setName(business.formatAddressName(data));
+	}
+
+	@Override
+	protected void manageVisibility() {
+		super.manageVisibility();
+		getNameEditText().setVisibility(View.GONE);
 	}
 }
