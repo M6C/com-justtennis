@@ -119,14 +119,16 @@ public abstract class GenericSpinnerFormActivity <DATA extends GenericDBPojoName
 			setMode(MODE.ADD);
 			if (resultCode == RESULT_OK) {
 				@SuppressWarnings("unchecked")
-				GenericDBPojo<Long>  pojo = (GenericDBPojo<Long>) data.getSerializableExtra(EXTRA_OUT_LOCATION);
+				DATA  pojo = (DATA) data.getSerializableExtra(EXTRA_OUT_LOCATION);
 				if (pojo != null) {
 					business.getData().setSubId(pojo.getId());
+					if (business.getSubBusiness() != null) {
+						business.getSubBusiness().addListData(pojo.getId());
+						business.getSubBusiness().setData(pojo.getId());
+						spListForm.setSelection(business.getSubBusiness().getPosition(), true);
+					}
 					if (adapterDataForm != null) {
 						adapterDataForm.notifyDataSetChanged();
-					}
-					if (business.getSubBusiness() != null) {
-						spListForm.setSelection(business.getSubBusiness().getPosition(pojo.getId()));
 					}
 				}
 			}

@@ -152,6 +152,10 @@ public abstract class GenericSpinnerFormBusiness <DATA extends GenericDBPojoName
 		}
 	}
 
+	public void setData(Long id) {
+		this.data = getService().find(id);
+	}
+
 	public void setSubDataById(Long subId) {
 		if (data != null) {
 			data.setSubId(subId);
@@ -159,6 +163,12 @@ public abstract class GenericSpinnerFormBusiness <DATA extends GenericDBPojoName
 		if (subBusiness != null) {
 			subBusiness.setData(subId == null ? null : subBusiness.getService().find(subId));
 		}
+	}
+
+	public void addListData(Long id) {
+		DATA d = getService().find(id);
+		listData.add(d);
+		listDataTxt.add(d.getName());
 	}
 
 	public List<DATA> getListData() {
