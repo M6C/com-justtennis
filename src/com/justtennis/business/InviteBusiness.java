@@ -167,7 +167,7 @@ public class InviteBusiness {
 	}
 
 	private void initializeScores() {
-		scores = scoreSetService.getTableByIdInvite(getInvite().getId());
+		scores = (getInvite().getId() == null) ? null : scoreSetService.getTableByIdInvite(getInvite().getId());
 	}
 
 	public String buildText() {

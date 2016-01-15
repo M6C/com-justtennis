@@ -22,7 +22,20 @@
 	>
 		<include layout="@layout/element_invite_player"/>
 		<include layout="@layout/element_invite_date"/>
-    </LinearLayout>
+		<LinearLayout
+		    android:layout_width="match_parent"
+		    android:layout_height="wrap_content"
+		    android:orientation="horizontal"
+		    android:gravity="right"
+		    android:background="@color/form_background_color">
+		    <Button 
+		    	android:layout_width="match_parent"
+		    	android:layout_height="wrap_content"
+		    	android:onClick="onClickDetail"
+		    	android:text="@string/txt_detail_invite"
+		    />
+		</LinearLayout>
+		</LinearLayout>
 
 	<include layout="@layout/element_invite_button_demande"/>
 	<include layout="@layout/element_invite_button_confirm"/>

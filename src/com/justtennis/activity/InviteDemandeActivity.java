@@ -154,8 +154,7 @@ public class InviteDemandeActivity extends GenericActivity {
 		} else {
 			String text = business.buildText();
 	
-			if (ApplicationConfig.SHOW_CONFIRM_DIALOG_TEXT_SMS && 
-				business.getPlayer().getIdExternal()==null) {
+			if (business.sendMessageConfirmation()) {
 				AlertDialog dialog = (AlertDialog) FactoryDialog.getInstance().buildEditTextDialog(this, new OnClickViewListener() {
 					
 					@Override
@@ -244,6 +243,14 @@ public class InviteDemandeActivity extends GenericActivity {
 	}
 	
 	public void onClickCancel(View view) {
+		finish();
+	}
+
+	public void onClickDetail(View view) {
+		Intent intent = new Intent(this, InviteActivity.class);
+		intent.putExtra(InviteActivity.EXTRA_MODE, InviteActivity.MODE.INVITE_MODIFY);
+		intent.putExtra(InviteActivity.EXTRA_INVITE, business.getInvite());
+		startActivityForResult(intent, RESULT_PLAYER);
 		finish();
 	}
 	

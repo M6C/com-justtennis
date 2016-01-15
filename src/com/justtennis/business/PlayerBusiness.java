@@ -174,6 +174,10 @@ public class PlayerBusiness {
 		return SaisonService.isEmpty(saison);
 	}
 
+	public boolean sendMessageConfirmation() {
+		return typeManager.getType() == TYPE.TRAINING;
+	}
+	
 	public void setSaison(Saison saison) {
 		player.setIdSaison(saison == null || isEmptySaison(saison) ? null : saison.getId());
 	}

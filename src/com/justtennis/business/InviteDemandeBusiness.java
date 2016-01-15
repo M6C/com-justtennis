@@ -209,6 +209,16 @@ public class InviteDemandeBusiness {
 		SmsManager.getInstance().send(context, this.invite.getUser().getPhonenumber(), message);
 	}
 
+	public boolean sendMessageConfirmation() {
+		boolean ret = ApplicationConfig.SHOW_CONFIRM_DIALOG_TEXT_SMS && 
+		getPlayer().getIdExternal()==null;
+		if (ret) {
+			Date date = invite.getDate();
+			ret = (date != null && date.after(new Date()));
+		}
+		return ret;
+	}
+
 	public boolean isEmptyRanking(Ranking ranking) {
 		return rankingService.isEmptyRanking(ranking);
 	}
