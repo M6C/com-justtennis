@@ -39,17 +39,18 @@ public class UserBusiness extends PlayerBusiness {
 		player = service.find();
 		if (player == null) {
 			player = service.findFirst();
-			if (player != null) {
-				Saison saison = TypeManager.getInstance().getSaison();
-				if (saison == null) {
-					saison = saisonService.getSaisonActiveOrFirst();
-				}
-				if (saison != null) {
-					player.setId(null);
-					player.setIdSaison(saison.getId());
-					service.createOrUpdate((User)player);
-				}
+			if (player == null) {
+				player = new User();
 			}
+		}
+		Saison saison = TypeManager.getInstance().getSaison();
+		if (saison == null) {
+			saison = saisonService.getSaisonActiveOrFirst();
+		}
+		if (saison != null) {
+			player.setId(null);
+			player.setIdSaison(saison.getId());
+			service.createOrUpdate((User)player);
 		}
 	}
 	
