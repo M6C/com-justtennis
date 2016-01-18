@@ -14,6 +14,7 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.cameleon.common.android.inotifier.INotifierMessage;
+import com.cameleon.common.tool.StringTool;
 import com.justtennis.ApplicationConfig;
 import com.justtennis.R;
 import com.justtennis.activity.InviteActivity;
@@ -213,17 +214,20 @@ public class InviteBusiness {
 	}
 
 	public void modify() {
-		Invite inv = inviteService.find(invite.getId());
+		if (invite.getId() != null) {
+			Invite inv = inviteService.find(invite.getId());
+			if (inv != null && inv.getIdCalendar() != null && 
+				inv.getIdCalendar() != GCalendarHelper.EVENT_ID_NO_CREATED) {
+				gCalendarHelper.deleteCalendarEntry(inv.getIdCalendar());
+			}
+		}
+
 		inviteService.createOrUpdate(invite);
 		
 		saveScoreSet();
 
-		if (inv != null && inv.getIdCalendar() != null && 
-			inv.getIdCalendar() != GCalendarHelper.EVENT_ID_NO_CREATED) {
-			EVENT_STATUS status = gCalendarHelper.toEventStatus(invite.getStatus());
-			calendarAddEvent(invite, status);
-			gCalendarHelper.deleteCalendarEntry(inv.getIdCalendar());
-		}
+		EVENT_STATUS status = gCalendarHelper.toEventStatus(invite.getStatus());
+		calendarAddEvent(invite, status);
 	}
 	
 	public void confirmYes() {
@@ -476,15 +480,23 @@ public class InviteBusiness {
 
 	private void saveScoreSet() {
 		String[][] scores = getScores();
-		scoreSetService.deleteByIdInvite(invite.getId());
+		if (invite.getId() != null) {
+			scoreSetService.deleteByIdInvite(invite.getId());
+		}
 
 		int len = scores.length;
 		String[] colLast = null;
 		for(int row = 1 ; row <= len ; row++) {
 			String[] col = scores[row-1];
 			addScoreSet(row, col[0], col[1], row==len);
-			if (col[0]!=null && !col[0].equals("") &&
-				col[1]!=null && !col[1].equals("")) {
+			if (!StringTool.getInstance().isEmpty(col[0]) ||
+				!StringTool.getInstance().isEmpty(col[1])) {
+				if (StringTool.getInstance().isEmpty(col[0])) {
+					col[0] = "0";
+				}
+				if (StringTool.getInstance().isEmpty(col[1])) {
+					col[1] = "0";
+				}
 				colLast = col;
 			}
 		}
@@ -503,11 +515,14 @@ public class InviteBusiness {
 				iCol1 = (col1==null || col1.equals("")) ? 0 : Integer.parseInt(col1);
 			} catch(NumberFormatException ex) {
 			}
-			int[] iCol = new int[]{iCol0, iCol1}; 
 
-			if (iCol[0] > iCol[1]) {
+			if (iCol0 == -1) {
+				scoreResult = Invite.SCORE_RESULT.WO_VICTORY;
+			} else if (iCol1 == -1) {
+				scoreResult = Invite.SCORE_RESULT.WO_DEFEAT;
+			} else if (iCol0 > iCol1) {
 				scoreResult = Invite.SCORE_RESULT.VICTORY;
-			} else if (iCol[0] < iCol[1]) {
+			} else if (iCol0 < iCol1) {
 				scoreResult = Invite.SCORE_RESULT.DEFEAT;
 			}
 		}

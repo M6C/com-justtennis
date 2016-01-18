@@ -6,14 +6,19 @@ import android.content.Context;
 
 import com.cameleon.common.android.db.sqlite.service.GenericService;
 import com.cameleon.common.android.inotifier.INotifierMessage;
+import com.justtennis.R;
 import com.justtennis.db.sqlite.datasource.DBScoreSetDataSource;
 import com.justtennis.domain.Invite;
+import com.justtennis.domain.Invite.SCORE_RESULT;
 import com.justtennis.domain.ScoreSet;
 
 public class ScoreSetService extends GenericService<ScoreSet> {
 
+	private Context context;
+
 	public ScoreSetService(Context context, INotifierMessage notificationMessage) {
 		super(context, new DBScoreSetDataSource(context, notificationMessage), notificationMessage);
+		this.context = context;
 	}
 
 	public List<ScoreSet> getByIdInvite(long idInvite) {
@@ -63,7 +68,13 @@ public class ScoreSetService extends GenericService<ScoreSet> {
 
 	public String buildTextScore(Invite invite) {
 		String ret = null;
-		if (invite.getListScoreSet()!=null && invite.getListScoreSet().size() > 0) {
+		if (SCORE_RESULT.WO_VICTORY.equals(invite.getScoreResult())) {
+			ret = context.getString(R.string.txt_wo_vitory);
+		}
+		else if (SCORE_RESULT.WO_DEFEAT.equals(invite.getScoreResult())) {
+			ret = context.getString(R.string.txt_wo_defeat);
+		}
+		else if (invite.getListScoreSet()!=null && invite.getListScoreSet().size() > 0) {
 			for(ScoreSet score : invite.getListScoreSet()) {
 				if (score.getValue1() > 0 || score.getValue2() > 0) {
 					String score1 = (score.getValue1() > score.getValue2() ? "<b>" + score.getValue1() + "</b>": score.getValue1().toString());
