@@ -13,6 +13,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.text.Html;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnFocusChangeListener;
@@ -30,6 +31,7 @@ import android.widget.TimePicker;
 
 import com.cameleon.common.android.factory.FactoryDialog;
 import com.cameleon.common.android.factory.listener.OnClickViewListener;
+import com.cameleon.common.tool.StringTool;
 import com.justtennis.ApplicationConfig;
 import com.justtennis.R;
 import com.justtennis.adapter.CustomArrayAdapter;
@@ -39,8 +41,8 @@ import com.justtennis.db.service.PlayerService;
 import com.justtennis.domain.Player;
 import com.justtennis.domain.Ranking;
 import com.justtennis.domain.Saison;
+import com.justtennis.domain.ScoreSet;
 import com.justtennis.listener.action.TextWatcherFieldEnableView;
-import com.justtennis.listener.action.TextWatcherFieldScoreSetBold;
 import com.justtennis.manager.ContactManager;
 import com.justtennis.manager.TypeManager;
 import com.justtennis.notifier.NotifierMessageLogger;
@@ -61,16 +63,15 @@ public class InviteActivity extends GenericActivity {
 	private static final int RESULT_PLAYER = 1;
 	private static final int RESULT_LOCATION = 2;
 	private static final int RESULT_LOCATION_DETAIL = 3;
+	private static final int RESULT_SCORE = 4;
 
 	private Bundle savedInstanceState;
 	private InviteBusiness business;
 	private Long idPlayerFromResult = null;
-	private int visibilityScoreContent = View.GONE;
 	private Serializable locationFromResult;
 	private Serializable locationClubFromResult;
 
 	private LinearLayout llInviteModify;
-	private LinearLayout llScoreContent;
 	private TextView tvFirstname;
 	private TextView tvLastname;
 	private TextView edDate;
@@ -86,18 +87,10 @@ public class InviteActivity extends GenericActivity {
 	private TextView tvLocationName;
 	private TextView tvLocationLine1;
 	private TextView tvLocationLine2;
-	
+
 	// SCORE
-	private EditText etScore11;
-	private EditText etScore21;
-	private EditText etScore12;
-	private EditText etScore22;
-	private EditText etScore13;
-	private EditText etScore23;
-	private EditText etScore14;
-	private EditText etScore24;
-	private EditText etScore15;
-	private EditText etScore25;
+	private TextView tvScore;
+	private EditText etScore;
 	private BonusListManager bonusListManager;
 	private TypeManager typeManager;
 
@@ -125,30 +118,8 @@ public class InviteActivity extends GenericActivity {
 		tvLocationName = ((TextView)findViewById(R.id.tv_location_name));
 		tvLocationLine1 = ((TextView)findViewById(R.id.tv_location_line1));
 		tvLocationLine2 = ((TextView)findViewById(R.id.tv_location_line2));
-
-		etScore11 = (EditText)findViewById(R.id.et_score1_1);
-		etScore21 = (EditText)findViewById(R.id.et_score2_1);
-		etScore12 = (EditText)findViewById(R.id.et_score1_2);
-		etScore22 = (EditText)findViewById(R.id.et_score2_2);
-		etScore13 = (EditText)findViewById(R.id.et_score1_3);
-		etScore23 = (EditText)findViewById(R.id.et_score2_3);
-		etScore14 = (EditText)findViewById(R.id.et_score1_4);
-		etScore24 = (EditText)findViewById(R.id.et_score2_4);
-		etScore15 = (EditText)findViewById(R.id.et_score1_5);
-		etScore25 = (EditText)findViewById(R.id.et_score2_5);
-
-		etScore11.addTextChangedListener(new TextWatcherFieldScoreSetBold(etScore11, etScore21));
-		etScore21.addTextChangedListener(new TextWatcherFieldScoreSetBold(etScore21, etScore11));
-		etScore12.addTextChangedListener(new TextWatcherFieldScoreSetBold(etScore12, etScore22));
-		etScore22.addTextChangedListener(new TextWatcherFieldScoreSetBold(etScore22, etScore12));
-		etScore13.addTextChangedListener(new TextWatcherFieldScoreSetBold(etScore13, etScore23));
-		etScore23.addTextChangedListener(new TextWatcherFieldScoreSetBold(etScore23, etScore13));
-		etScore14.addTextChangedListener(new TextWatcherFieldScoreSetBold(etScore14, etScore24));
-		etScore24.addTextChangedListener(new TextWatcherFieldScoreSetBold(etScore24, etScore14));
-		etScore15.addTextChangedListener(new TextWatcherFieldScoreSetBold(etScore15, etScore25));
-		etScore25.addTextChangedListener(new TextWatcherFieldScoreSetBold(etScore25, etScore15));
-
-		llScoreContent = (LinearLayout)findViewById(R.id.ll_score_content);
+		tvScore = (TextView)findViewById(R.id.tv_score);
+		etScore = (EditText)findViewById(R.id.et_score);
 
 		NotifierMessageLogger notifier = NotifierMessageLogger.getInstance();
 		business = new InviteBusiness(this, notifier);
@@ -156,6 +127,8 @@ public class InviteActivity extends GenericActivity {
 		typeManager = TypeManager.getInstance();
 		typeManager.initializeActivity(findViewById(R.id.layout_main), false);
 		bonusListManager = BonusListManager.getInstance(this, notifier);
+
+		etScore.addTextChangedListener(new TextWatcherFieldEnableView(tvScore, View.GONE));
 	}
 
 	@Override
@@ -186,9 +159,6 @@ public class InviteActivity extends GenericActivity {
 		}
 		initializeData();
 		initializeListener();
-
-		visibilityScoreContent = (business.getScores() != null && business.getScores().length>0 ? View.VISIBLE : View.GONE);
-		llScoreContent.setVisibility(visibilityScoreContent);
 	}
 
 	@Override
@@ -219,6 +189,20 @@ public class InviteActivity extends GenericActivity {
 				}
 				break;
 	
+			case RESULT_SCORE:
+				String[][] score = null;
+				if (resultCode == RESULT_OK) {
+					score = deSerializeScore(data);
+					business.setScores(score);
+				} else {
+					score = business.getScores();
+				}
+				List<ScoreSet> listScoreSet = business.computeScoreSet(score);
+				business.getInvite().setListScoreSet(listScoreSet);
+				business.getInvite().setScoreResult(business.computeScoreResult(listScoreSet));
+				initializeDataScore();
+				break;
+
 			default:
 				super.onActivityResult(requestCode, resultCode, data);
 				break;
@@ -232,8 +216,6 @@ public class InviteActivity extends GenericActivity {
 	}
 
 	public void onClickModify(View view) {
-		saveScores();
-
 		business.modify();
 		
 		finish();
@@ -276,7 +258,13 @@ public class InviteActivity extends GenericActivity {
 			}
 		}, -1, business.getDate()).show();
 	}
-	
+
+	public void onClickInviteScore(View view) {
+		Intent intent = new Intent(this,  ScoreActivity.class);
+		intent.putExtra(ScoreActivity.EXTRA_SCORE, business.getScores());
+		startActivityForResult(intent, RESULT_SCORE);
+	}
+
 	public void onClickCancel(View view) {
 		finish();
 	}
@@ -362,11 +350,6 @@ public class InviteActivity extends GenericActivity {
 			startActivity(intent);
 		}
 	}
-	
-	public void onClickScoreCollapser(View view) {
-		visibilityScoreContent = (visibilityScoreContent == View.GONE) ? View.VISIBLE : View.GONE;
-		llScoreContent.setVisibility(visibilityScoreContent);
-	}
 
 	private void initializeData() {
 		initializeDataMode();
@@ -377,7 +360,6 @@ public class InviteActivity extends GenericActivity {
 		initializeDataLocation();
 		initializeRankingList();
 		initializeRanking();
-		initializeDataLocation();
 		initializeBonus();
 		initializeSaisonList();
 		initializeSaison();
@@ -505,42 +487,8 @@ public class InviteActivity extends GenericActivity {
 
 	private void initializeDataScore() {
 		Log.d(TAG, "initializeDataScore");
-
-		String[][] scores = business.getScores();
-		if (scores!=null) {
-			int len = scores.length;
-			for(int row = 1 ; row <= len ; row++) {
-				String[] score = scores[row-1];
-				switch(row) {
-					case 1:
-					default: {
-						etScore11.setText(score[0]);
-						etScore21.setText(score[1]);
-					}
-					break;
-					case 2: {
-						etScore12.setText(score[0]);
-						etScore22.setText(score[1]);
-					}
-					break;
-					case 3: {
-						etScore13.setText(score[0]);
-						etScore23.setText(score[1]);
-					}
-					break;
-					case 4: {
-						etScore14.setText(score[0]);
-						etScore24.setText(score[1]);
-					}
-					break;
-					case 5: {
-						etScore15.setText(score[0]);
-						etScore25.setText(score[1]);
-					}
-					break;
-				}
-			}
-		}
+		String textScore = business.getScoresText();
+		etScore.setText(textScore == null ? "" : Html.fromHtml(textScore));
 	}
 
 	private void initializeDataLocation() {
@@ -553,23 +501,26 @@ public class InviteActivity extends GenericActivity {
 			tvLocation.setText(getString(R.string.txt_tournament));
 			tvLocationEmpty.setText(getString(R.string.txt_tournament));
 		}
+		((EditText)tvLocationEmpty).setTextColor(((EditText)tvLocationEmpty).getCurrentHintTextColor());
 
 		if (location != null) {
 			tvLocationName.setText(location[0]);
 			tvLocationLine1.setText(location[1]);
 			tvLocationLine2.setText(location[2]);
 
-			tvLocationName.setVisibility(location[0] != null ? View.VISIBLE : View.GONE);
-			tvLocationLine1.setVisibility(location[1] != null ? View.VISIBLE : View.GONE);
-			tvLocationLine2.setVisibility(location[2] != null ? View.VISIBLE : View.GONE);
+			tvLocationName.setVisibility(StringTool.getInstance().isEmpty(location[0]) ? View.GONE : View.VISIBLE);
+			tvLocationLine1.setVisibility(StringTool.getInstance().isEmpty(location[1]) ? View.GONE : View.VISIBLE);
+			tvLocationLine2.setVisibility(StringTool.getInstance().isEmpty(location[2]) ? View.GONE : View.VISIBLE);
 
 			tvLocation.setVisibility(View.VISIBLE);
 			llLocationDetail.setVisibility(View.VISIBLE);
-			tvLocationEmpty.setVisibility(View.GONE);
+			tvLocationEmpty.setText("");
+			tvLocationEmpty.setTextSize(2);
 		} else {
 			tvLocation.setVisibility(View.GONE);
 			llLocationDetail.setVisibility(View.GONE);
 			tvLocationEmpty.setVisibility(View.VISIBLE);
+			tvLocationEmpty.setTextSize(22);
 		}
 	}
 
@@ -607,19 +558,6 @@ public class InviteActivity extends GenericActivity {
 				business.setType(isChecked ? TypeManager.TYPE.TRAINING : TypeManager.TYPE.COMPETITION);
 			}
 		});
-
-		tvLocationEmpty.addTextChangedListener(new TextWatcherFieldEnableView(tvLocation, View.GONE));
-	}
-
-	private void saveScores() {
-		String[][] scores = new String[][]{
-				{etScore11.getText().toString(), etScore21.getText().toString()},
-				{etScore12.getText().toString(), etScore22.getText().toString()},
-				{etScore13.getText().toString(), etScore23.getText().toString()},
-				{etScore14.getText().toString(), etScore24.getText().toString()},
-				{etScore15.getText().toString(), etScore25.getText().toString()}
-			};
-		business.setScores(scores);
 	}
 	
 	private int getTypePosition() {
@@ -630,5 +568,19 @@ public class InviteActivity extends GenericActivity {
 			default:
 				return 1;
 		}
+	}
+
+	private String[][] deSerializeScore(Intent data) {
+		String[][] score = null;
+		if (data != null) {
+			Object[] d = (Object[]) data.getSerializableExtra(ScoreActivity.EXTRA_SCORE);
+			if (d != null && d.length > 0) {
+				score = new String[d.length][];
+				for(int i=0 ; i<d.length ; i++) {
+					score[i] = (String[]) d[i];
+				}
+			}
+		}
+		return score;
 	}
 }

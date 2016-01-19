@@ -74,18 +74,19 @@ public class PlayerBusiness {
 		initializeMode(intent);
 
 		if (intent.hasExtra(PlayerActivity.EXTRA_TYPE)) {
-			buildPlayer().setType((TypeManager.TYPE) intent.getSerializableExtra(PlayerActivity.EXTRA_TYPE));
+			player.setType((TypeManager.TYPE) intent.getSerializableExtra(PlayerActivity.EXTRA_TYPE));
 		}
 		
 		if (intent.hasExtra(PlayerActivity.EXTRA_RANKING)) {
 			long idRanking = intent.getLongExtra(PlayerActivity.EXTRA_RANKING, -1);
 			if (idRanking != -1)  {
-				buildPlayer().setIdRanking(idRanking);
+				player.setIdRanking(idRanking);
 			}
 		}
 		
 		initializeDataRanking();
 		initializeDataSaison();
+		initializePlayerSaison();
 	}
 
 	public void initialize(Bundle savedInstanceState) {
@@ -299,7 +300,6 @@ public class PlayerBusiness {
 	}
 
 	protected void initializePlayer(Intent intent) {
-		player = null;
 		if (intent.hasExtra(PlayerActivity.EXTRA_PLAYER_ID)) {
 			long playerId = intent.getLongExtra(PlayerActivity.EXTRA_PLAYER_ID, PlayerService.ID_EMPTY_PLAYER);
 			if (playerId != PlayerService.ID_EMPTY_PLAYER) {
@@ -308,6 +308,18 @@ public class PlayerBusiness {
 		}
 		if (intent.hasExtra(PlayerActivity.EXTRA_PLAYER)) {
 			player = (Player) intent.getSerializableExtra(PlayerActivity.EXTRA_PLAYER);
+		}
+		if (player == null) {
+			player = buildPlayer();
+		}
+	}
+
+	private void initializePlayerSaison() {
+		if (player != null && player.getId() == null && player.getIdSaison() == null) {
+			Saison saison = saisonService.getSaisonActiveOrFirst();
+			if (saison != null) {
+				player.setIdSaison(saison.getId());
+			}
 		}
 	}
 

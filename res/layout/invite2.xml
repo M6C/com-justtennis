@@ -151,7 +151,8 @@
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:gravity="center_horizontal" >
+                        android:gravity="center_horizontal"
+                        android:visibility="gone">
 
                         <Switch
                             android:id="@+id/sw_type"
@@ -172,7 +173,7 @@
                         <TextView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="date"
+                            android:text="@string/txt_date"
                             android:textColor="@color/invite_text_color"
                             android:textSize="@dimen/invite_text_size"
                             android:textStyle="bold" />
@@ -198,7 +199,7 @@
                         <TextView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="Time"
+                            android:text="@string/txt_time"
                             android:textColor="@color/invite_text_color"
                             android:textSize="@dimen/invite_text_size"
                             android:textStyle="bold" />
@@ -270,13 +271,17 @@
 				              android:layout_height="wrap_content"
 				              android:textSize="@dimen/invite_field_size_small_2" />
 			          </LinearLayout>			
-			          <TextView
-			              android:id="@+id/et_location"
-			              android:layout_width="match_parent"
-			              android:layout_height="wrap_content"
-			              android:layout_marginLeft="@dimen/invite_field_margin_left"
-			              android:gravity="center_horizontal"
-			              android:textSize="@dimen/invite_field_size" />
+						<EditText
+							android:id="@+id/et_location"
+							android:layout_width="match_parent"
+							android:layout_height="wrap_content"
+							android:layout_marginLeft="@dimen/player_field_margin_left"
+							android:gravity="center_horizontal"
+							android:editable="false"
+							android:textSize="@dimen/player_field_size"
+							android:textColor="@android:color/primary_text_light"
+							android:onClick="onClickLocation" />
+			          
 			      </LinearLayout>
                     <!--
  				<SlidingDrawer
@@ -291,37 +296,57 @@
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-					    android:layout_margin="5dp"
                         android:layout_marginBottom="@dimen/invite_layout_field_marging_bottom"
-       				    android:onClick="onClickScoreCollapser"  >
-                        <include layout="@layout/element_score_collapser" />
-                    </LinearLayout>
+                        android:orientation="vertical"
+                        android:padding="@dimen/invite_layout_field_padding" >
 
-				      <LinearLayout
-				          android:id="@+id/ll_bonus_point"
-				          android:layout_width="match_parent"
-				          android:layout_height="wrap_content"
-				          android:layout_marginBottom="@dimen/player_layout_field_marging_bottom"
-				          android:orientation="vertical"
-				          android:padding="@dimen/player_layout_field_padding" >
-				
-				          <TextView
-				              android:layout_width="match_parent"
-				              android:layout_height="wrap_content"
-				              android:text="@string/txt_bonus_point"
-				              android:textSize="@dimen/invite_text_size"
-	                          android:textColor="@color/invite_text_color"
-				              android:textStyle="bold" />
-				
-				          <Spinner
-				              android:id="@+id/sp_bonus_point"
-				              android:layout_width="match_parent"
-				              android:layout_height="wrap_content"
-				              android:layout_marginLeft="@dimen/player_field_margin_left"
-				              android:gravity="center_horizontal"
-				              android:textSize="@dimen/player_field_size" />
-				      </LinearLayout>
-                    </LinearLayout>
+						<TextView
+							android:id="@+id/tv_score"
+							android:layout_width="match_parent"
+							android:layout_height="wrap_content"
+							android:text="@string/txt_score"
+							android:textSize="@dimen/player_text_size"
+							android:textStyle="bold"
+							android:textColor="@android:color/secondary_text_light_nodisable"
+							android:visibility="gone" />
+
+						<EditText
+							android:id="@+id/et_score"
+							android:layout_width="match_parent"
+							android:layout_height="wrap_content"
+							android:layout_marginLeft="@dimen/player_field_margin_left"
+							android:gravity="center_horizontal"
+							android:editable="false"
+							android:onClick="onClickInviteScore"
+							android:textSize="@dimen/player_field_size"
+							android:hint="@string/txt_score" />
+					</LinearLayout>
+
+				    <LinearLayout
+			           android:id="@+id/ll_bonus_point"
+			           android:layout_width="match_parent"
+			           android:layout_height="wrap_content"
+			           android:layout_marginBottom="@dimen/player_layout_field_marging_bottom"
+			           android:orientation="vertical"
+			           android:padding="@dimen/player_layout_field_padding" >
+			
+			          <TextView
+			              android:layout_width="match_parent"
+			              android:layout_height="wrap_content"
+			              android:text="@string/txt_bonus_point"
+			              android:textSize="@dimen/invite_text_size"
+                          android:textColor="@color/invite_text_color"
+			              android:textStyle="bold" />
+			
+			          <Spinner
+			              android:id="@+id/sp_bonus_point"
+			              android:layout_width="match_parent"
+			              android:layout_height="wrap_content"
+			              android:layout_marginLeft="@dimen/player_field_margin_left"
+			              android:gravity="center_horizontal"
+			              android:textSize="@dimen/player_field_size" />
+				    </LinearLayout>
+                </LinearLayout>
             </ScrollView>
         </LinearLayout>
     </LinearLayout>
