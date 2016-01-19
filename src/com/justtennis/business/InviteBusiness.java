@@ -218,10 +218,10 @@ public class InviteBusiness {
 		
 		saveScoreSet();
 
-		EVENT_STATUS status = gCalendarHelper.toEventStatus(invite.getStatus());
-		calendarAddEvent(invite, status);
 		if (inv != null && inv.getIdCalendar() != null && 
 			inv.getIdCalendar() != GCalendarHelper.EVENT_ID_NO_CREATED) {
+			EVENT_STATUS status = gCalendarHelper.toEventStatus(invite.getStatus());
+			calendarAddEvent(invite, status);
 			gCalendarHelper.deleteCalendarEntry(inv.getIdCalendar());
 		}
 	}
@@ -503,14 +503,11 @@ public class InviteBusiness {
 				iCol1 = (col1==null || col1.equals("")) ? 0 : Integer.parseInt(col1);
 			} catch(NumberFormatException ex) {
 			}
+			int[] iCol = new int[]{iCol0, iCol1}; 
 
-			if (iCol0 == -1) {
-				scoreResult = Invite.SCORE_RESULT.WO_VICTORY;
-			} else if (iCol1 == -1) {
-				scoreResult = Invite.SCORE_RESULT.WO_DEFEAT;
-			} else if (iCol0 > iCol1) {
+			if (iCol[0] > iCol[1]) {
 				scoreResult = Invite.SCORE_RESULT.VICTORY;
-			} else if (iCol0 < iCol1) {
+			} else if (iCol[0] < iCol[1]) {
 				scoreResult = Invite.SCORE_RESULT.DEFEAT;
 			}
 		}

@@ -32,6 +32,9 @@ public class SaisonService extends GenericNamedService<Saison> {
 		int year = cal.get(Calendar.YEAR);
 		int month = cal.get(Calendar.MONTH);
 
+		if (month < 10) {
+			year--;
+		}
 		return build(year, month);
 	}
 

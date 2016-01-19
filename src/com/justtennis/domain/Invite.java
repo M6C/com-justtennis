@@ -20,7 +20,7 @@ public class Invite extends GenericDBPojo<Long> implements Serializable {
 	};
 
 	public enum SCORE_RESULT {
-		VICTORY, DEFEAT, UNFINISHED, WO_VICTORY, WO_DEFEAT
+		VICTORY, DEFEAT, UNFINISHED
 	}
 	private Saison saison;
 	private Player player;
