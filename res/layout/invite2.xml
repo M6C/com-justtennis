@@ -331,6 +331,7 @@
 			           android:padding="@dimen/player_layout_field_padding" >
 			
 			          <TextView
+			              android:id="@+id/tv_bonus_point"
 			              android:layout_width="match_parent"
 			              android:layout_height="wrap_content"
 			              android:text="@string/txt_bonus_point"
