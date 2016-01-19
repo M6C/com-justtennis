@@ -76,6 +76,7 @@ public class InviteDemandeBusiness {
 
 		invite = new Invite();
 		invite.setUser(getUser());
+		invite.setType(typeManager.getType());
 
 		if (intent.hasExtra(InviteActivity.EXTRA_MODE)) {
 			mode = (MODE) intent.getSerializableExtra(InviteActivity.EXTRA_MODE);
@@ -93,7 +94,6 @@ public class InviteDemandeBusiness {
 				invite.setPlayer(playerService.find(id));
 				if (isUnknownPlayer()) {
 					setIdRanking(getListRanking().get(0).getId());
-					setType(TypeManager.TYPE.COMPETITION);
 				} else {
 					setIdRanking(rankingService.getRanking(getPlayer(), true).getId());
 					switch (getPlayer().getType()) {

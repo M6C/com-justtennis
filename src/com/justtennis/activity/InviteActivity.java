@@ -562,11 +562,11 @@ public class InviteActivity extends GenericActivity {
 	
 	private int getTypePosition() {
 		switch(business.getInvite().getType()) {
-			case TRAINING:
-				return 0;
 			case COMPETITION:
-			default:
 				return 1;
+			case TRAINING:
+			default:
+				return 0;
 		}
 	}
 

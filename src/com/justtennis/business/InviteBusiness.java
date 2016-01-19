@@ -58,6 +58,7 @@ public class InviteBusiness {
 	private SaisonService saisonService;
 	private GCalendarHelper gCalendarHelper;
 	private LocationParser locationParser;
+	private TypeManager typeManager;
 	private User user;
 	private Invite invite;
 	private MODE mode = MODE.INVITE_MODIFY;
@@ -66,6 +67,7 @@ public class InviteBusiness {
 	private List<Saison> listSaison = new ArrayList<Saison>();
 	private List<String> listTxtSaisons = new ArrayList<String>();
 	private String[][] scores;
+
 
 	public InviteBusiness(Context context, INotifierMessage notificationMessage) {
 		this.context = context;
@@ -78,6 +80,7 @@ public class InviteBusiness {
 		saisonService = new SaisonService(context, notificationMessage);
 		gCalendarHelper = GCalendarHelper.getInstance(context);
 		locationParser = LocationParser.getInstance(context, notificationMessage);
+		typeManager = TypeManager.getInstance(context, notificationMessage);
 	}
 
 	public void initializeData(Intent intent) {
@@ -85,6 +88,7 @@ public class InviteBusiness {
 
 		invite = new Invite();
 		invite.setUser(getUser());
+		invite.setType(typeManager.getType());
 
 		if (intent.hasExtra(InviteActivity.EXTRA_MODE)) {
 			mode = (MODE) intent.getSerializableExtra(InviteActivity.EXTRA_MODE);
@@ -418,6 +422,7 @@ public class InviteBusiness {
 		invite.setId(this.invite.getId());
 		invite.setIdExternal(this.invite.getIdExternal());
 		invite.setIdCalendar(this.invite.getIdCalendar());
+		invite.setType(typeManager.getType());
 		return invite;
 	}
 

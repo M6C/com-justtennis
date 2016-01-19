@@ -11,14 +11,16 @@
     android:background="@drawable/background_03"
     android:orientation="vertical"
     android:gravity="center_vertical"
-    tools:context=".InviteDemandeActivity"
+    tools:context=".ScoreActivity"
 >
 	<LinearLayout
 		android:layout_width="match_parent"
 	    android:layout_height="wrap_content"
     	android:layout_marginBottom="5dp"
 	    android:orientation="vertical"
+	    android:background="@color/form_background_color"
 	    android:gravity="top"
+	    android:padding="2dp"
 	>
 		<include layout="@layout/element_score" />
 		<include layout="@layout/element_invite_button_demande"/>
