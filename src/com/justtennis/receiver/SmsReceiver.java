@@ -150,7 +150,7 @@ public class SmsReceiver extends BroadcastReceiver {
 				
 				inviteService.createOrUpdate(invite2);
 	
-				intent = new Intent(context, InviteDemandeActivity.class);
+				intent = new Intent(context, InviteActivity.class);
 				intent.putExtra(InviteActivity.EXTRA_MODE, MODE.INVITE_CONFIRM);
 				intent.putExtra(InviteActivity.EXTRA_INVITE, invite2);
 				break;

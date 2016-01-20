@@ -1,0 +1,25 @@
+<LinearLayout
+   	xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/ll_invite_modify"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:gravity="bottom" >
+
+    <Button
+        android:id="@+id/btn_invite_confirm_send"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="5dp"
+        android:layout_weight=".5"
+        android:onClick="onClickModify"
+        android:text="@string/button_text_modify"
+    />
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight=".5"
+        android:onClick="onClickCancel"
+        android:text="@string/button_text_cancel"
+    />
+</LinearLayout>

@@ -109,8 +109,9 @@ public class ListPlayerActivity extends GenericActivity {
 				if (data!=null) {
 					long id = data.getLongExtra(InviteDemandeActivity.EXTRA_PLAYER_ID, PlayerService.ID_EMPTY_PLAYER);
 					if (id != PlayerService.ID_EMPTY_PLAYER) {
-						Intent intent = new Intent(this, InviteDemandeActivity.class);
+						Intent intent = new Intent(this, InviteActivity.class);
 						intent.putExtra(InviteActivity.EXTRA_PLAYER_ID, id);
+						intent.putExtra(InviteActivity.EXTRA_MODE, InviteActivity.MODE.INVITE_MODIFY);
 						startActivity(intent);
 					}
 				}
@@ -184,6 +185,7 @@ public class ListPlayerActivity extends GenericActivity {
 
 		Intent intent = new Intent(getApplicationContext(), InviteActivity.class);
 		intent.putExtra(InviteActivity.EXTRA_PLAYER_ID, player.getId());
+		intent.putExtra(InviteActivity.EXTRA_MODE, InviteActivity.MODE.INVITE_CREATE);
 		startActivity(intent);
 		
 //		finish();

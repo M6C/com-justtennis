@@ -59,51 +59,11 @@
         android:layout_marginRight="10dp"
 	    android:gravity="center_vertical|center_horizontal"
 	>
-		<LinearLayout
-		    android:id="@+id/ll_status"
-		    android:layout_width="match_parent"
-		    android:layout_height="0dp"
-		    android:layout_weight=".5"
-		    android:orientation="vertical"
-		    android:gravity="center_vertical|center_horizontal"
-		>
-		    <Spinner
-		        android:id="@+id/sp_status"
-				android:layout_width="70dp"
-			    android:layout_height="45dp"
-			    android:visibility="gone"
-		    />
-		    <TextView
-		        android:id="@+id/tv_status"
-				android:layout_width="70dp"
-			    android:layout_height="45dp"
-			    android:text="@string/txt_status"
-		        android:textSize="18sp"
-			    android:gravity="center_vertical|center_horizontal"
-		    />
-		</LinearLayout>
-		<LinearLayout
-		    android:id="@+id/ll_ranking"
-		    android:layout_width="match_parent"
-		    android:layout_height="0dp"
-		    android:layout_weight=".5"
-		    android:orientation="vertical"
-		    android:gravity="center_vertical|center_horizontal"
-		>
-			<Spinner
-				android:id="@+id/sp_ranking"
-				android:layout_width="70dp"
-			    android:layout_height="45dp"
-			    android:visibility="gone"
-			/>
-			<TextView
-				android:id="@+id/tv_ranking"
-				android:layout_width="70dp"
-			    android:layout_height="45dp"
-			    android:text="@string/txt_ranking"
-		        android:textSize="16sp"
-			    android:gravity="center_vertical|center_horizontal"
-			/>
-		</LinearLayout>
+		<Spinner
+			android:id="@+id/sp_ranking"
+			android:layout_width="70dp"
+		    android:layout_height="45dp"
+		    android:visibility="gone"
+		/>
 	</LinearLayout>
 </LinearLayout>

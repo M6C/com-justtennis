@@ -18,8 +18,15 @@ public class OnItemClickListPlayerInvite implements OnItemClickListener {
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-		Intent intent = new Intent(context, InviteDemandeActivity.class);
-		intent.putExtra(InviteActivity.EXTRA_PLAYER_ID, ((Long)view.getTag()));
+		if (((Long)view.getTag()).intValue() == -1) {
+			Intent intent = new Intent(context, InviteDemandeActivity.class);
+			intent.putExtra(InviteDemandeActivity.EXTRA_PLAYER_ID, ((Long)view.getTag()));
 		context.startActivity(intent);
+		} else {
+			Intent intent = new Intent(context, InviteActivity.class);
+			intent.putExtra(InviteActivity.EXTRA_MODE, InviteActivity.MODE.INVITE_CREATE);
+			intent.putExtra(InviteActivity.EXTRA_PLAYER_ID, ((Long)view.getTag()));
+			context.startActivity(intent);
+		}
     }
 }

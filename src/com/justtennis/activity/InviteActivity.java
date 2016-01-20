@@ -15,6 +15,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.text.Html;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnFocusChangeListener;
 import android.widget.AdapterView;
@@ -54,7 +55,9 @@ public class InviteActivity extends GenericActivity {
 	private static final String KEY_LOCATION_FROM_RESULT = "KEY_LOCATION_FROM_RESULT";
 
 	public enum MODE {
-		INVITE_MODIFY
+		INVITE_CREATE,
+		INVITE_MODIFY,
+		INVITE_CONFIRM
 	};
 	public static final String EXTRA_MODE = "MODE";
 	public static final String EXTRA_INVITE = "INVITE";
@@ -65,13 +68,13 @@ public class InviteActivity extends GenericActivity {
 	private static final int RESULT_LOCATION_DETAIL = 3;
 	private static final int RESULT_SCORE = 4;
 
-	private Bundle savedInstanceState;
 	private InviteBusiness business;
 	private Long idPlayerFromResult = null;
 	private Serializable locationFromResult;
 	private Serializable locationClubFromResult;
 
-	private LinearLayout llInviteModify;
+	private LinearLayout llInviteDemande;
+	private LinearLayout llInviteConfirm;
 	private TextView tvFirstname;
 	private TextView tvLastname;
 	private TextView edDate;
@@ -83,65 +86,80 @@ public class InviteActivity extends GenericActivity {
 	private TextView tvLocation;
 	private TextView tvLocationEmpty;
 
+	private LinearLayout llLocation;
 	private LinearLayout llLocationDetail;
 	private TextView tvLocationName;
 	private TextView tvLocationLine1;
 	private TextView tvLocationLine2;
+	private LinearLayout llDetail;
+	private LinearLayout llBonusPoint;
 
 	// SCORE
+	private LinearLayout llScore;
 	private TextView tvScore;
 	private EditText etScore;
 	private BonusListManager bonusListManager;
 	private TypeManager typeManager;
+	private LinearLayout llPlayer;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		if (this.savedInstanceState==null) {
-			this.savedInstanceState = savedInstanceState;
-		}
+
+		NotifierMessageLogger notifier = NotifierMessageLogger.getInstance();
+		business = new InviteBusiness(this, notifier);
 
 		setContentView(R.layout.invite2);
 
-		llInviteModify = (LinearLayout)findViewById(R.id.ll_invite_modify);
-		tvFirstname = (TextView)findViewById(R.id.tv_firstname);
-		tvLastname = (TextView)findViewById(R.id.tv_lastname);
+		initializeContentPlayer();
+
+		initializeContentPlayerView();
+
+		llInviteDemande = (LinearLayout)findViewById(R.id.ll_invite_demande);
+		llInviteConfirm = (LinearLayout)findViewById(R.id.ll_invite_confirm);
 		edDate = ((TextView)findViewById(R.id.inviteDate));
 		edTime = ((TextView)findViewById(R.id.inviteTime));
-		ivPhoto = (ImageView)findViewById(R.id.iv_photo);
 		swType = (Switch)findViewById(R.id.sw_type);
-		spRanking = (Spinner)findViewById(R.id.sp_main_ranking);
-		spSaison = (Spinner)findViewById(R.id.sp_main_saison);
 		tvLocation = ((TextView)findViewById(R.id.tv_location));
 		tvLocationEmpty = ((TextView)findViewById(R.id.et_location));
+		llLocation = (LinearLayout)findViewById(R.id.ll_location);
 		llLocationDetail = (LinearLayout)findViewById(R.id.ll_location_detail);
 		tvLocationName = ((TextView)findViewById(R.id.tv_location_name));
 		tvLocationLine1 = ((TextView)findViewById(R.id.tv_location_line1));
 		tvLocationLine2 = ((TextView)findViewById(R.id.tv_location_line2));
+		llScore = (LinearLayout)findViewById(R.id.ll_score);
 		tvScore = (TextView)findViewById(R.id.tv_score);
 		etScore = (EditText)findViewById(R.id.et_score);
+		llDetail = (LinearLayout)findViewById(R.id.ll_detail);
+		llBonusPoint = (LinearLayout)findViewById(R.id.ll_bonus_point);
 
-		NotifierMessageLogger notifier = NotifierMessageLogger.getInstance();
-		business = new InviteBusiness(this, notifier);
+		if (savedInstanceState!=null) {
+			business.initializeData(savedInstanceState);
+		}
+		else {
+			business.initializeData(getIntent());
+		}
 
 		typeManager = TypeManager.getInstance();
 		typeManager.initializeActivity(findViewById(R.id.layout_main), false);
 		bonusListManager = BonusListManager.getInstance(this, notifier);
 
 		etScore.addTextChangedListener(new TextWatcherFieldEnableView(tvScore, View.GONE));
+
+		initializeVisibility();
 	}
 
 	@Override
 	protected void onResume() {
 		super.onResume();
-		Intent intent = getIntent();
-		if (savedInstanceState!=null) {
-			business.initializeData(savedInstanceState);
-			savedInstanceState = null;
-		}
-		else {
-			business.initializeData(intent);
-		}
+//		Intent intent = getIntent();
+//		if (savedInstanceState!=null) {
+//			business.initializeData(savedInstanceState);
+//			savedInstanceState = null;
+//		}
+//		else {
+//			business.initializeData(intent);
+//		}
 
 		if (idPlayerFromResult != null) {
 			business.setPlayer(idPlayerFromResult);
@@ -215,7 +233,7 @@ public class InviteActivity extends GenericActivity {
 		super.onSaveInstanceState(outState);
 	}
 
-	public void onClickModify(View view) {
+	public void onClickOk(View view) {
 		business.modify();
 		
 		finish();
@@ -351,18 +369,94 @@ public class InviteActivity extends GenericActivity {
 		}
 	}
 
-	private void initializeData() {
-		initializeDataMode();
-		initializeDataType();
-		initializeDataDateTime();
+	public void onClickDetail(View view) {
+		business.setMode(business.getMode() == MODE.INVITE_MODIFY ? MODE.INVITE_CREATE : MODE.INVITE_MODIFY);
+
+		initializeContentPlayer();
+		initializeContentPlayerView();
+		initializeVisibility();
+
 		initializeDataPlayer();
-		initializeDataScore();
-		initializeDataLocation();
 		initializeRankingList();
 		initializeRanking();
-		initializeBonus();
 		initializeSaisonList();
 		initializeSaison();
+	}
+
+	private void initializeContentPlayer() {
+		MODE mode = business.getMode();
+
+		if (MODE.INVITE_CREATE == mode) {
+			initializeContentViewPlayer(R.layout.element_invite_player);
+		} else {
+			initializeContentViewPlayer(R.layout.element_invite_player_detail);
+		}
+	}
+
+	private void initializeContentPlayerView() {
+		ivPhoto = (ImageView)llPlayer.findViewById(R.id.iv_photo);
+		tvFirstname = (TextView)llPlayer.findViewById(R.id.tv_firstname);
+		tvLastname = (TextView)llPlayer.findViewById(R.id.tv_lastname);
+		spRanking = (Spinner)llPlayer.findViewById(R.id.sp_ranking);
+		spSaison = (Spinner)llPlayer.findViewById(R.id.sp_saison);
+	}
+
+	private void initializeContentViewPlayer(int idLayout) {
+		LayoutInflater inflater = LayoutInflater.from(this);
+		View inflatedLayout = inflater.inflate(idLayout, null, false);
+
+		llPlayer = (LinearLayout)findViewById(R.id.ll_player);
+		llPlayer.removeAllViews();
+		llPlayer.addView(inflatedLayout);
+	}
+
+	private void initializeVisibility() {
+		MODE mode = business.getMode();
+
+		switch(mode) {
+			case INVITE_CONFIRM:
+			case INVITE_CREATE:
+				llDetail.setVisibility(View.VISIBLE);
+				llLocation.setVisibility(View.GONE);
+				llScore.setVisibility(View.GONE);
+				llBonusPoint.setVisibility(View.GONE);
+				break;
+			case INVITE_MODIFY:
+			default:
+				llDetail.setVisibility(View.GONE);
+				llLocation.setVisibility(View.VISIBLE);
+				llScore.setVisibility(View.VISIBLE);
+				llBonusPoint.setVisibility(View.VISIBLE);
+		}
+
+		switch(mode) {
+			case INVITE_CONFIRM:
+				llInviteDemande.setVisibility(View.GONE);
+				llInviteConfirm.setVisibility(View.VISIBLE);
+				edDate.setEnabled(false);
+				edTime.setEnabled(false);
+				break;
+			case INVITE_CREATE:
+			case INVITE_MODIFY:
+			default:
+				llInviteDemande.setVisibility(View.VISIBLE);
+				edDate.setEnabled(true);
+				edTime.setEnabled(true);
+				break;
+		}
+	}
+
+	private void initializeData() {
+		initializeDataPlayer();
+		initializeRankingList();
+		initializeRanking();
+		initializeSaisonList();
+		initializeSaison();
+		initializeDataType();
+		initializeDataDateTime();
+		initializeDataScore();
+		initializeDataLocation();
+		initializeBonus();
 	}
 
 	private void initializeDataPlayer() {
@@ -394,94 +488,91 @@ public class InviteActivity extends GenericActivity {
 
 	private void initializeRankingList() {
 		Log.d(TAG, "initializeRankingList");
-		spRanking.setVisibility(View.VISIBLE);
-		CustomArrayAdapter<String> dataAdapter = new CustomArrayAdapter<String>(this, business.getListTxtRankings());
-		spRanking.setAdapter(dataAdapter);
-
-		spRanking.setOnItemSelectedListener(dataAdapter.new OnItemSelectedListener<Ranking>() {
-			@Override
-			public Ranking getItem(int position) {
-				return business.getListRanking().get(position);
-			}
-
-			@Override
-			public boolean isHintItemSelected(Ranking item) {
-				return business.isEmptyRanking(item);
-			}
-
-			@Override
-			public void onItemSelected(AdapterView<?> parent, View view, int position, long id, Ranking item) {
-				business.setIdRanking(item.getId());
-			}
-		});
+		if (spRanking != null) {
+			spRanking.setVisibility(View.VISIBLE);
+			CustomArrayAdapter<String> dataAdapter = new CustomArrayAdapter<String>(this, business.getListTxtRankings());
+			spRanking.setAdapter(dataAdapter);
+	
+			spRanking.setOnItemSelectedListener(dataAdapter.new OnItemSelectedListener<Ranking>() {
+				@Override
+				public Ranking getItem(int position) {
+					return business.getListRanking().get(position);
+				}
+	
+				@Override
+				public boolean isHintItemSelected(Ranking item) {
+					return business.isEmptyRanking(item);
+				}
+	
+				@Override
+				public void onItemSelected(AdapterView<?> parent, View view, int position, long id, Ranking item) {
+					business.setIdRanking(item.getId());
+				}
+			});
+		}
 	}
 
 	private void initializeSaisonList() {
 		Log.d(TAG, "initializeSaisonList");
-		CustomArrayAdapter<String> dataAdapter = new CustomArrayAdapter<String>(this, business.getListTxtSaisons());
-		spSaison.setAdapter(dataAdapter);
-
-		spSaison.setOnItemSelectedListener(dataAdapter.new OnItemSelectedListener<Saison>() {
-			@Override
-			public Saison getItem(int position) {
-				return business.getListSaison().get(position);
-			}
-
-			@Override
-			public boolean isHintItemSelected(Saison item) {
-				return business.isEmptySaison(item);
-			}
-
-			@Override
-			public void onItemSelected(AdapterView<?> parent, View view, int position, long id, Saison item) {
-				business.setSaison(business.getListSaison().get(position));
-			}
-		});
+		if (spSaison != null) {
+			CustomArrayAdapter<String> dataAdapter = new CustomArrayAdapter<String>(this, business.getListTxtSaisons());
+			spSaison.setAdapter(dataAdapter);
+	
+			spSaison.setOnItemSelectedListener(dataAdapter.new OnItemSelectedListener<Saison>() {
+				@Override
+				public Saison getItem(int position) {
+					return business.getListSaison().get(position);
+				}
+	
+				@Override
+				public boolean isHintItemSelected(Saison item) {
+					return business.isEmptySaison(item);
+				}
+	
+				@Override
+				public void onItemSelected(AdapterView<?> parent, View view, int position, long id, Saison item) {
+					business.setSaison(business.getListSaison().get(position));
+				}
+			});
+		}
 	}
 
 	private void initializeSaison() {
 		Log.d(TAG, "initializeSaison");
-		Saison saison = business.getSaison();
-		int position = 0;
-		List<Saison> listSaison = business.getListSaison();
-		for(Saison item : listSaison) {
-			if (item.equals(saison)) {
-				spSaison.setSelection(position, true);
-				break;
-			} else {
-				position++;
+		if (spSaison != null) {
+			Saison saison = business.getSaison();
+			int position = 0;
+			List<Saison> listSaison = business.getListSaison();
+			for(Saison item : listSaison) {
+				if (item.equals(saison)) {
+					spSaison.setSelection(position, true);
+					break;
+				} else {
+					position++;
+				}
 			}
 		}
 	}
 
 	private void initializeBonus() {
+		Log.d(TAG, "initializeBonus");
 		bonusListManager.manage(this, business.getInvite());
 	}
 
 	private void initializeRanking() {
 		Log.d(TAG, "initializeRanking");
-		Long id = business.getIdRanking();
-		int position = 0;
-		List<Ranking> listRanking = business.getListRanking();
-		for(Ranking ranking : listRanking) {
-			if (ranking.getId().equals(id)) {
-				spRanking.setSelection(position, true);
-				break;
-			} else {
-				position++;
+		if (spRanking != null) {
+			Long id = business.getIdRanking();
+			int position = 0;
+			List<Ranking> listRanking = business.getListRanking();
+			for(Ranking ranking : listRanking) {
+				if (ranking.getId().equals(id)) {
+					spRanking.setSelection(position, true);
+					break;
+				} else {
+					position++;
+				}
 			}
-		}
-	}
-
-	private void initializeDataMode() {
-		Log.d(TAG, "initializeDataMode");
-		switch (business.getMode()) {
-			default:
-			case INVITE_MODIFY:
-				llInviteModify.setVisibility(View.VISIBLE);
-				edDate.setEnabled(true);
-				edTime.setEnabled(true);
-				break;
 		}
 	}
 

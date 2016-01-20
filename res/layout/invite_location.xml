@@ -20,6 +20,6 @@
 	    android:orientation="vertical"
 	    android:gravity="top"
 	>
-		<include layout="@layout/element_invite_location"/>
+		<include layout="@layout/element_invite_location_collapser"/>
     </LinearLayout>
 </LinearLayout>

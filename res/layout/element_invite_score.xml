@@ -1,0 +1,29 @@
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/ll_score"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="@dimen/invite_layout_field_marging_bottom"
+    android:orientation="vertical"
+    android:padding="@dimen/invite_layout_field_padding" >
+
+     <TextView
+         android:id="@+id/tv_score"
+         android:layout_width="match_parent"
+         android:layout_height="wrap_content"
+         android:text="@string/txt_score"
+         android:textSize="@dimen/invite_text_size"
+         android:textColor="@color/invite_text_color"
+         android:textStyle="bold"
+         android:visibility="gone" />
+
+	<EditText
+		android:id="@+id/et_score"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:gravity="center_horizontal"
+		android:editable="false"
+		android:onClick="onClickInviteScore"
+		android:textSize="@dimen/player_field_size"
+		android:hint="@string/txt_score" />
+</LinearLayout>

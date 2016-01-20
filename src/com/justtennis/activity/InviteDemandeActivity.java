@@ -64,10 +64,7 @@ public class InviteDemandeActivity extends GenericActivity {
 	private ImageView ivPhoto;
 	private Switch swType;
 	private Bundle savedInstanceState;
-	private Spinner spStatus;
 	private Spinner spRanking;
-	private TextView tvRanking;
-	private TextView tvStatus;
 	private Long idPlayerForResult = null;
 	
 	@Override
@@ -87,16 +84,9 @@ public class InviteDemandeActivity extends GenericActivity {
 		edTime = ((TextView)findViewById(R.id.inviteTime));
 		ivPhoto = (ImageView)findViewById(R.id.iv_photo);
 		swType = (Switch)findViewById(R.id.sw_type);
-		spStatus = (Spinner)findViewById(R.id.sp_status);
 		spRanking = (Spinner)findViewById(R.id.sp_ranking);
-		tvStatus = (TextView)findViewById(R.id.tv_status);
-		tvRanking = (TextView)findViewById(R.id.tv_ranking);
 
-		findViewById(R.id.ll_status).setVisibility(View.GONE);
-		spStatus.setVisibility(View.GONE);
 		spRanking.setVisibility(View.VISIBLE);
-		tvStatus.setVisibility(View.GONE);
-		tvRanking.setVisibility(View.GONE);
 
 		business = new InviteDemandeBusiness(this, NotifierMessageLogger.getInstance());
 

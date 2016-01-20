@@ -44,7 +44,7 @@ public class BonusListManager {
 				invite.setBonusPoint(bonus.getPoint());
 			}
 		};
-		manage(context, listener, 0);
+		manage(context, listener, invite.getBonusPoint());
 	}
 
 	public void manage(final Activity context, final IBonusListListener listener, int point) {

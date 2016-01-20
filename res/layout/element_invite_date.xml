@@ -3,7 +3,6 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginTop="5dp"
-    android:background="@color/form_background_color"
     android:orientation="vertical"
     android:gravity="center_vertical"
 >
@@ -37,7 +36,6 @@
 	        android:editable="false"
 	        android:gravity="center_vertical|center_horizontal"
 		    android:onClick="onClickInviteDate"
-		    
 		/>
 		<EditText
 		    android:id="@+id/inviteTime"
