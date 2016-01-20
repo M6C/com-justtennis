@@ -27,6 +27,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.Switch;
+import android.widget.TableLayout.LayoutParams;
 import android.widget.TextView;
 import android.widget.TimePicker;
 
@@ -420,6 +421,7 @@ public class InviteActivity extends GenericActivity {
 				llLocation.setVisibility(View.GONE);
 				llScore.setVisibility(View.GONE);
 				llBonusPoint.setVisibility(View.GONE);
+				findViewById(R.id.sv_content).setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT, 0));
 				break;
 			case INVITE_MODIFY:
 			default:
@@ -427,6 +429,7 @@ public class InviteActivity extends GenericActivity {
 				llLocation.setVisibility(View.VISIBLE);
 				llScore.setVisibility(View.VISIBLE);
 				llBonusPoint.setVisibility(View.VISIBLE);
+				findViewById(R.id.sv_content).setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, 0, 1));
 		}
 
 		switch(mode) {
