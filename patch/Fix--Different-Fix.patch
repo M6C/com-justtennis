@@ -1,0 +1,105 @@
+diff --git a/res/layout/score.xml b/res/layout/score.xml
+index 154d2bf..7dcf0ea 100644
+--- a/res/layout/score.xml
++++ b/res/layout/score.xml
+@@ -11,14 +11,16 @@
+     android:background="@drawable/background_03"
+     android:orientation="vertical"
+     android:gravity="center_vertical"
+-    tools:context=".InviteDemandeActivity"
++    tools:context=".ScoreActivity"
+ >
+ 	<LinearLayout
+ 		android:layout_width="match_parent"
+ 	    android:layout_height="wrap_content"
+     	android:layout_marginBottom="5dp"
+ 	    android:orientation="vertical"
++	    android:background="@color/form_background_color"
+ 	    android:gravity="top"
++	    android:padding="2dp"
+ 	>
+ 		<include layout="@layout/element_score" />
+ 		<include layout="@layout/element_invite_button_demande"/>
+diff --git a/src/com/justtennis/activity/InviteActivity.java b/src/com/justtennis/activity/InviteActivity.java
+index 1c2eb37..d2bc005 100644
+--- a/src/com/justtennis/activity/InviteActivity.java
++++ b/src/com/justtennis/activity/InviteActivity.java
+@@ -562,11 +562,11 @@
+ 	
+ 	private int getTypePosition() {
+ 		switch(business.getInvite().getType()) {
+-			case TRAINING:
+-				return 0;
+ 			case COMPETITION:
+-			default:
+ 				return 1;
++			case TRAINING:
++			default:
++				return 0;
+ 		}
+ 	}
+ 
+diff --git a/src/com/justtennis/business/InviteBusiness.java b/src/com/justtennis/business/InviteBusiness.java
+index 6c7f8b0..ad16380 100644
+--- a/src/com/justtennis/business/InviteBusiness.java
++++ b/src/com/justtennis/business/InviteBusiness.java
+@@ -58,6 +58,7 @@
+ 	private SaisonService saisonService;
+ 	private GCalendarHelper gCalendarHelper;
+ 	private LocationParser locationParser;
++	private TypeManager typeManager;
+ 	private User user;
+ 	private Invite invite;
+ 	private MODE mode = MODE.INVITE_MODIFY;
+@@ -66,6 +67,7 @@
+ 	private List<Saison> listSaison = new ArrayList<Saison>();
+ 	private List<String> listTxtSaisons = new ArrayList<String>();
+ 	private String[][] scores;
++
+ 
+ 	public InviteBusiness(Context context, INotifierMessage notificationMessage) {
+ 		this.context = context;
+@@ -78,6 +80,7 @@
+ 		saisonService = new SaisonService(context, notificationMessage);
+ 		gCalendarHelper = GCalendarHelper.getInstance(context);
+ 		locationParser = LocationParser.getInstance(context, notificationMessage);
++		typeManager = TypeManager.getInstance(context, notificationMessage);
+ 	}
+ 
+ 	public void initializeData(Intent intent) {
+@@ -85,6 +88,7 @@
+ 
+ 		invite = new Invite();
+ 		invite.setUser(getUser());
++		invite.setType(typeManager.getType());
+ 
+ 		if (intent.hasExtra(InviteActivity.EXTRA_MODE)) {
+ 			mode = (MODE) intent.getSerializableExtra(InviteActivity.EXTRA_MODE);
+@@ -418,6 +422,7 @@
+ 		invite.setId(this.invite.getId());
+ 		invite.setIdExternal(this.invite.getIdExternal());
+ 		invite.setIdCalendar(this.invite.getIdCalendar());
++		invite.setType(typeManager.getType());
+ 		return invite;
+ 	}
+ 
+diff --git a/src/com/justtennis/business/InviteDemandeBusiness.java b/src/com/justtennis/business/InviteDemandeBusiness.java
+index 62c619c..be25524 100644
+--- a/src/com/justtennis/business/InviteDemandeBusiness.java
++++ b/src/com/justtennis/business/InviteDemandeBusiness.java
+@@ -76,6 +76,7 @@
+ 
+ 		invite = new Invite();
+ 		invite.setUser(getUser());
++		invite.setType(typeManager.getType());
+ 
+ 		if (intent.hasExtra(InviteActivity.EXTRA_MODE)) {
+ 			mode = (MODE) intent.getSerializableExtra(InviteActivity.EXTRA_MODE);
+@@ -93,7 +94,6 @@
+ 				invite.setPlayer(playerService.find(id));
+ 				if (isUnknownPlayer()) {
+ 					setIdRanking(getListRanking().get(0).getId());
+-					setType(TypeManager.TYPE.COMPETITION);
+ 				} else {
+ 					setIdRanking(rankingService.getRanking(getPlayer(), true).getId());
+ 					switch (getPlayer().getType()) {

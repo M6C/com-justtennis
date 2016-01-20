@@ -1,0 +1,69 @@
+diff --git a/res/layout/list_invite.xml b/res/layout/list_invite.xml
+index 86f9561..e280b7c 100644
+--- a/res/layout/list_invite.xml
++++ b/res/layout/list_invite.xml
+@@ -30,21 +30,21 @@
+             android:maxLines="1" />
+     </LinearLayout>
+     <LinearLayout
+-	    android:layout_width="match_parent"
+-	    android:layout_height="24dp"
+-	    android:background="@color/list_divider_background_color"
+-    />
+-	<ListView
+-		android:id="@+id/list"
+-		android:layout_width="match_parent"
++        android:layout_width="match_parent"
+ 	    android:layout_height="0dp"
+ 	    android:layout_weight="1"
++    	android:paddingTop="5dp"
+     	android:layout_marginBottom="5dp"
+-	    android:divider="@color/list_divider_background_color"
+-	    android:dividerHeight="24dp"
+-	    
+-	/>
+-
++	    android:background="@color/list_background_color"
++    >
++    	<ListView
++			android:id="@+id/list"
++			android:layout_width="match_parent"
++		    android:layout_height="wrap_content"
++		    android:divider="@color/list_divider_background_color"
++		    android:dividerHeight="24dp"
++		/>
++	</LinearLayout>
+ 	<LinearLayout
+ 	    android:layout_width="match_parent"
+ 	    android:layout_height="wrap_content"
+diff --git a/res/layout/list_player.xml b/res/layout/list_player.xml
+index 355526c..11f4cf9 100644
+--- a/res/layout/list_player.xml
++++ b/res/layout/list_player.xml
+@@ -25,15 +25,21 @@
+             android:layout_height="wrap_content"
+      	/>
+     </LinearLayout>
+-    	<ListView
+-		android:id="@+id/list"
+-		android:layout_width="match_parent"
++    <LinearLayout
++        android:layout_width="match_parent"
+ 	    android:layout_height="0dp"
+ 	    android:layout_weight="1"
++    	android:paddingTop="5dp"
+     	android:layout_marginBottom="5dp"
+ 	    android:background="@color/list_background_color"
+-	/>
+-
++    >
++    	<ListView
++			android:id="@+id/list"
++			android:layout_width="match_parent"
++		    android:layout_height="wrap_content"
++		    android:divider="@color/list_divider_background_color"
++		/>
++	</LinearLayout>
+ 	<LinearLayout
+ 	    android:layout_width="match_parent"
+ 	    android:layout_height="wrap_content"

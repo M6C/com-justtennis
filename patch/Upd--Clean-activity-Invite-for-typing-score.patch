@@ -1,0 +1,1066 @@
+diff --git a/AndroidManifest.xml b/AndroidManifest.xml
+index 63dbd04..ec73589 100644
+--- a/AndroidManifest.xml
++++ b/AndroidManifest.xml
+@@ -96,6 +96,10 @@
+    		   android:windowSoftInputMode="stateHidden"
+    		   android:screenOrientation="portrait"
+          />
++        <activity android:name=".activity.ScoreActivity"
++   		   android:windowSoftInputMode="stateHidden"
++   		   android:screenOrientation="portrait"
++         />
+         <activity android:name=".activity.LocationTournamentActivity"
+    		   android:screenOrientation="portrait"
+    		   android:windowSoftInputMode="adjustResize"
+diff --git a/res/layout/element_invite_date.xml b/res/layout/element_invite_date.xml
+index 879090f..10fcdc5 100644
+--- a/res/layout/element_invite_date.xml
++++ b/res/layout/element_invite_date.xml
+@@ -13,6 +13,7 @@
+ 		android:gravity="center_horizontal"
+ 		android:layout_marginTop="10dp"
+ 		android:layout_marginBottom="10dp"
++		android:visibility="gone"
+ 	>
+ 		<Switch
+ 	        android:id="@+id/sw_type"
+diff --git a/res/layout/invite2.xml b/res/layout/invite2.xml
+index 3e50556..de6f616 100644
+--- a/res/layout/invite2.xml
++++ b/res/layout/invite2.xml
+@@ -151,7 +151,8 @@
+                     <LinearLayout
+                         android:layout_width="match_parent"
+                         android:layout_height="wrap_content"
+-                        android:gravity="center_horizontal" >
++                        android:gravity="center_horizontal"
++                        android:visibility="gone">
+ 
+                         <Switch
+                             android:id="@+id/sw_type"
+@@ -172,7 +173,7 @@
+                         <TextView
+                             android:layout_width="match_parent"
+                             android:layout_height="wrap_content"
+-                            android:text="date"
++                            android:text="@string/txt_date"
+                             android:textColor="@color/invite_text_color"
+                             android:textSize="@dimen/invite_text_size"
+                             android:textStyle="bold" />
+@@ -198,7 +199,7 @@
+                         <TextView
+                             android:layout_width="match_parent"
+                             android:layout_height="wrap_content"
+-                            android:text="Time"
++                            android:text="@string/txt_time"
+                             android:textColor="@color/invite_text_color"
+                             android:textSize="@dimen/invite_text_size"
+                             android:textStyle="bold" />
+@@ -270,13 +271,17 @@
+ 				              android:layout_height="wrap_content"
+ 				              android:textSize="@dimen/invite_field_size_small_2" />
+ 			          </LinearLayout>			
+-			          <TextView
+-			              android:id="@+id/et_location"
+-			              android:layout_width="match_parent"
+-			              android:layout_height="wrap_content"
+-			              android:layout_marginLeft="@dimen/invite_field_margin_left"
+-			              android:gravity="center_horizontal"
+-			              android:textSize="@dimen/invite_field_size" />
++						<EditText
++							android:id="@+id/et_location"
++							android:layout_width="match_parent"
++							android:layout_height="wrap_content"
++							android:layout_marginLeft="@dimen/player_field_margin_left"
++							android:gravity="center_horizontal"
++							android:editable="false"
++							android:textSize="@dimen/player_field_size"
++							android:textColor="@android:color/primary_text_light"
++							android:onClick="onClickLocation" />
++			          
+ 			      </LinearLayout>
+                     <!--
+  				<SlidingDrawer
+@@ -291,37 +296,57 @@
+                     <LinearLayout
+                         android:layout_width="match_parent"
+                         android:layout_height="wrap_content"
+-					    android:layout_margin="5dp"
+                         android:layout_marginBottom="@dimen/invite_layout_field_marging_bottom"
+-       				    android:onClick="onClickScoreCollapser"  >
+-                        <include layout="@layout/element_score_collapser" />
+-                    </LinearLayout>
++                        android:orientation="vertical"
++                        android:padding="@dimen/invite_layout_field_padding" >
+ 
+-				      <LinearLayout
+-				          android:id="@+id/ll_bonus_point"
+-				          android:layout_width="match_parent"
+-				          android:layout_height="wrap_content"
+-				          android:layout_marginBottom="@dimen/player_layout_field_marging_bottom"
+-				          android:orientation="vertical"
+-				          android:padding="@dimen/player_layout_field_padding" >
+-				
+-				          <TextView
+-				              android:layout_width="match_parent"
+-				              android:layout_height="wrap_content"
+-				              android:text="@string/txt_bonus_point"
+-				              android:textSize="@dimen/invite_text_size"
+-	                          android:textColor="@color/invite_text_color"
+-				              android:textStyle="bold" />
+-				
+-				          <Spinner
+-				              android:id="@+id/sp_bonus_point"
+-				              android:layout_width="match_parent"
+-				              android:layout_height="wrap_content"
+-				              android:layout_marginLeft="@dimen/player_field_margin_left"
+-				              android:gravity="center_horizontal"
+-				              android:textSize="@dimen/player_field_size" />
+-				      </LinearLayout>
+-                    </LinearLayout>
++						<TextView
++							android:id="@+id/tv_score"
++							android:layout_width="match_parent"
++							android:layout_height="wrap_content"
++							android:text="@string/txt_score"
++							android:textSize="@dimen/player_text_size"
++							android:textStyle="bold"
++							android:textColor="@android:color/secondary_text_light_nodisable"
++							android:visibility="gone" />
++
++						<EditText
++							android:id="@+id/et_score"
++							android:layout_width="match_parent"
++							android:layout_height="wrap_content"
++							android:layout_marginLeft="@dimen/player_field_margin_left"
++							android:gravity="center_horizontal"
++							android:editable="false"
++							android:onClick="onClickInviteScore"
++							android:textSize="@dimen/player_field_size"
++							android:hint="@string/txt_score" />
++					</LinearLayout>
++
++				    <LinearLayout
++			           android:id="@+id/ll_bonus_point"
++			           android:layout_width="match_parent"
++			           android:layout_height="wrap_content"
++			           android:layout_marginBottom="@dimen/player_layout_field_marging_bottom"
++			           android:orientation="vertical"
++			           android:padding="@dimen/player_layout_field_padding" >
++			
++			          <TextView
++			              android:layout_width="match_parent"
++			              android:layout_height="wrap_content"
++			              android:text="@string/txt_bonus_point"
++			              android:textSize="@dimen/invite_text_size"
++                          android:textColor="@color/invite_text_color"
++			              android:textStyle="bold" />
++			
++			          <Spinner
++			              android:id="@+id/sp_bonus_point"
++			              android:layout_width="match_parent"
++			              android:layout_height="wrap_content"
++			              android:layout_marginLeft="@dimen/player_field_margin_left"
++			              android:gravity="center_horizontal"
++			              android:textSize="@dimen/player_field_size" />
++				    </LinearLayout>
++                </LinearLayout>
+             </ScrollView>
+         </LinearLayout>
+     </LinearLayout>
+diff --git a/res/layout/score.xml b/res/layout/score.xml
+new file mode 100644
+index 0000000..154d2bf
+--- /dev/null
++++ b/res/layout/score.xml
+@@ -0,0 +1,26 @@
++<LinearLayout
++    xmlns:android="http://schemas.android.com/apk/res/android"
++    xmlns:tools="http://schemas.android.com/tools"
++    android:id="@+id/layout_main"
++    android:layout_width="match_parent"
++    android:layout_height="match_parent"
++    android:paddingBottom="@dimen/activity_vertical_margin"
++    android:paddingLeft="@dimen/activity_horizontal_margin"
++    android:paddingRight="@dimen/activity_horizontal_margin"
++    android:paddingTop="@dimen/activity_vertical_margin"
++    android:background="@drawable/background_03"
++    android:orientation="vertical"
++    android:gravity="center_vertical"
++    tools:context=".InviteDemandeActivity"
++>
++	<LinearLayout
++		android:layout_width="match_parent"
++	    android:layout_height="wrap_content"
++    	android:layout_marginBottom="5dp"
++	    android:orientation="vertical"
++	    android:gravity="top"
++	>
++		<include layout="@layout/element_score" />
++		<include layout="@layout/element_invite_button_demande"/>
++	</LinearLayout>
++</LinearLayout>
+\ No newline at end of file
+diff --git a/res/values/strings_invite.xml b/res/values/strings_invite.xml
+index 70a6aa6..1c5601c 100644
+--- a/res/values/strings_invite.xml
++++ b/res/values/strings_invite.xml
+@@ -1,6 +1,8 @@
+ <?xml version="1.0" encoding="utf-8"?>
+ <resources>
+ 
++    <string name="txt_date">Date</string>
++    <string name="txt_time">Time</string>
+     <string name="txt_status">Status</string>
+     <string name="txt_location">Location</string>
+     <string name="txt_address">Address</string>
+@@ -10,5 +12,6 @@
+     <string name="txt_detail_invite">Detail ></string>
+     <string name="txt_wo_vitory">WO Victory</string>
+     <string name="txt_wo_defeat">WO Defeat</string>
++    <string name="txt_score">Score</string>
+     
+ </resources>
+\ No newline at end of file
+diff --git a/src/com/justtennis/activity/InviteActivity.java b/src/com/justtennis/activity/InviteActivity.java
+index 946cfbc..1c2eb37 100644
+--- a/src/com/justtennis/activity/InviteActivity.java
++++ b/src/com/justtennis/activity/InviteActivity.java
+@@ -13,6 +13,7 @@
+ import android.content.Intent;
+ import android.net.Uri;
+ import android.os.Bundle;
++import android.text.Html;
+ import android.util.Log;
+ import android.view.View;
+ import android.view.View.OnFocusChangeListener;
+@@ -30,6 +31,7 @@
+ 
+ import com.cameleon.common.android.factory.FactoryDialog;
+ import com.cameleon.common.android.factory.listener.OnClickViewListener;
++import com.cameleon.common.tool.StringTool;
+ import com.justtennis.ApplicationConfig;
+ import com.justtennis.R;
+ import com.justtennis.adapter.CustomArrayAdapter;
+@@ -39,8 +41,8 @@
+ import com.justtennis.domain.Player;
+ import com.justtennis.domain.Ranking;
+ import com.justtennis.domain.Saison;
++import com.justtennis.domain.ScoreSet;
+ import com.justtennis.listener.action.TextWatcherFieldEnableView;
+-import com.justtennis.listener.action.TextWatcherFieldScoreSetBold;
+ import com.justtennis.manager.ContactManager;
+ import com.justtennis.manager.TypeManager;
+ import com.justtennis.notifier.NotifierMessageLogger;
+@@ -61,16 +63,15 @@
+ 	private static final int RESULT_PLAYER = 1;
+ 	private static final int RESULT_LOCATION = 2;
+ 	private static final int RESULT_LOCATION_DETAIL = 3;
++	private static final int RESULT_SCORE = 4;
+ 
+ 	private Bundle savedInstanceState;
+ 	private InviteBusiness business;
+ 	private Long idPlayerFromResult = null;
+-	private int visibilityScoreContent = View.GONE;
+ 	private Serializable locationFromResult;
+ 	private Serializable locationClubFromResult;
+ 
+ 	private LinearLayout llInviteModify;
+-	private LinearLayout llScoreContent;
+ 	private TextView tvFirstname;
+ 	private TextView tvLastname;
+ 	private TextView edDate;
+@@ -86,18 +87,10 @@
+ 	private TextView tvLocationName;
+ 	private TextView tvLocationLine1;
+ 	private TextView tvLocationLine2;
+-	
++
+ 	// SCORE
+-	private EditText etScore11;
+-	private EditText etScore21;
+-	private EditText etScore12;
+-	private EditText etScore22;
+-	private EditText etScore13;
+-	private EditText etScore23;
+-	private EditText etScore14;
+-	private EditText etScore24;
+-	private EditText etScore15;
+-	private EditText etScore25;
++	private TextView tvScore;
++	private EditText etScore;
+ 	private BonusListManager bonusListManager;
+ 	private TypeManager typeManager;
+ 
+@@ -125,30 +118,8 @@
+ 		tvLocationName = ((TextView)findViewById(R.id.tv_location_name));
+ 		tvLocationLine1 = ((TextView)findViewById(R.id.tv_location_line1));
+ 		tvLocationLine2 = ((TextView)findViewById(R.id.tv_location_line2));
+-
+-		etScore11 = (EditText)findViewById(R.id.et_score1_1);
+-		etScore21 = (EditText)findViewById(R.id.et_score2_1);
+-		etScore12 = (EditText)findViewById(R.id.et_score1_2);
+-		etScore22 = (EditText)findViewById(R.id.et_score2_2);
+-		etScore13 = (EditText)findViewById(R.id.et_score1_3);
+-		etScore23 = (EditText)findViewById(R.id.et_score2_3);
+-		etScore14 = (EditText)findViewById(R.id.et_score1_4);
+-		etScore24 = (EditText)findViewById(R.id.et_score2_4);
+-		etScore15 = (EditText)findViewById(R.id.et_score1_5);
+-		etScore25 = (EditText)findViewById(R.id.et_score2_5);
+-
+-		etScore11.addTextChangedListener(new TextWatcherFieldScoreSetBold(etScore11, etScore21));
+-		etScore21.addTextChangedListener(new TextWatcherFieldScoreSetBold(etScore21, etScore11));
+-		etScore12.addTextChangedListener(new TextWatcherFieldScoreSetBold(etScore12, etScore22));
+-		etScore22.addTextChangedListener(new TextWatcherFieldScoreSetBold(etScore22, etScore12));
+-		etScore13.addTextChangedListener(new TextWatcherFieldScoreSetBold(etScore13, etScore23));
+-		etScore23.addTextChangedListener(new TextWatcherFieldScoreSetBold(etScore23, etScore13));
+-		etScore14.addTextChangedListener(new TextWatcherFieldScoreSetBold(etScore14, etScore24));
+-		etScore24.addTextChangedListener(new TextWatcherFieldScoreSetBold(etScore24, etScore14));
+-		etScore15.addTextChangedListener(new TextWatcherFieldScoreSetBold(etScore15, etScore25));
+-		etScore25.addTextChangedListener(new TextWatcherFieldScoreSetBold(etScore25, etScore15));
+-
+-		llScoreContent = (LinearLayout)findViewById(R.id.ll_score_content);
++		tvScore = (TextView)findViewById(R.id.tv_score);
++		etScore = (EditText)findViewById(R.id.et_score);
+ 
+ 		NotifierMessageLogger notifier = NotifierMessageLogger.getInstance();
+ 		business = new InviteBusiness(this, notifier);
+@@ -156,6 +127,8 @@
+ 		typeManager = TypeManager.getInstance();
+ 		typeManager.initializeActivity(findViewById(R.id.layout_main), false);
+ 		bonusListManager = BonusListManager.getInstance(this, notifier);
++
++		etScore.addTextChangedListener(new TextWatcherFieldEnableView(tvScore, View.GONE));
+ 	}
+ 
+ 	@Override
+@@ -186,9 +159,6 @@
+ 		}
+ 		initializeData();
+ 		initializeListener();
+-
+-		visibilityScoreContent = (business.getScores() != null && business.getScores().length>0 ? View.VISIBLE : View.GONE);
+-		llScoreContent.setVisibility(visibilityScoreContent);
+ 	}
+ 
+ 	@Override
+@@ -219,6 +189,20 @@
+ 				}
+ 				break;
+ 	
++			case RESULT_SCORE:
++				String[][] score = null;
++				if (resultCode == RESULT_OK) {
++					score = deSerializeScore(data);
++					business.setScores(score);
++				} else {
++					score = business.getScores();
++				}
++				List<ScoreSet> listScoreSet = business.computeScoreSet(score);
++				business.getInvite().setListScoreSet(listScoreSet);
++				business.getInvite().setScoreResult(business.computeScoreResult(listScoreSet));
++				initializeDataScore();
++				break;
++
+ 			default:
+ 				super.onActivityResult(requestCode, resultCode, data);
+ 				break;
+@@ -232,8 +216,6 @@
+ 	}
+ 
+ 	public void onClickModify(View view) {
+-		saveScores();
+-
+ 		business.modify();
+ 		
+ 		finish();
+@@ -276,7 +258,13 @@
+ 			}
+ 		}, -1, business.getDate()).show();
+ 	}
+-	
++
++	public void onClickInviteScore(View view) {
++		Intent intent = new Intent(this,  ScoreActivity.class);
++		intent.putExtra(ScoreActivity.EXTRA_SCORE, business.getScores());
++		startActivityForResult(intent, RESULT_SCORE);
++	}
++
+ 	public void onClickCancel(View view) {
+ 		finish();
+ 	}
+@@ -362,11 +350,6 @@
+ 			startActivity(intent);
+ 		}
+ 	}
+-	
+-	public void onClickScoreCollapser(View view) {
+-		visibilityScoreContent = (visibilityScoreContent == View.GONE) ? View.VISIBLE : View.GONE;
+-		llScoreContent.setVisibility(visibilityScoreContent);
+-	}
+ 
+ 	private void initializeData() {
+ 		initializeDataMode();
+@@ -377,7 +360,6 @@
+ 		initializeDataLocation();
+ 		initializeRankingList();
+ 		initializeRanking();
+-		initializeDataLocation();
+ 		initializeBonus();
+ 		initializeSaisonList();
+ 		initializeSaison();
+@@ -505,42 +487,8 @@
+ 
+ 	private void initializeDataScore() {
+ 		Log.d(TAG, "initializeDataScore");
+-
+-		String[][] scores = business.getScores();
+-		if (scores!=null) {
+-			int len = scores.length;
+-			for(int row = 1 ; row <= len ; row++) {
+-				String[] score = scores[row-1];
+-				switch(row) {
+-					case 1:
+-					default: {
+-						etScore11.setText(score[0]);
+-						etScore21.setText(score[1]);
+-					}
+-					break;
+-					case 2: {
+-						etScore12.setText(score[0]);
+-						etScore22.setText(score[1]);
+-					}
+-					break;
+-					case 3: {
+-						etScore13.setText(score[0]);
+-						etScore23.setText(score[1]);
+-					}
+-					break;
+-					case 4: {
+-						etScore14.setText(score[0]);
+-						etScore24.setText(score[1]);
+-					}
+-					break;
+-					case 5: {
+-						etScore15.setText(score[0]);
+-						etScore25.setText(score[1]);
+-					}
+-					break;
+-				}
+-			}
+-		}
++		String textScore = business.getScoresText();
++		etScore.setText(textScore == null ? "" : Html.fromHtml(textScore));
+ 	}
+ 
+ 	private void initializeDataLocation() {
+@@ -553,23 +501,26 @@
+ 			tvLocation.setText(getString(R.string.txt_tournament));
+ 			tvLocationEmpty.setText(getString(R.string.txt_tournament));
+ 		}
++		((EditText)tvLocationEmpty).setTextColor(((EditText)tvLocationEmpty).getCurrentHintTextColor());
+ 
+ 		if (location != null) {
+ 			tvLocationName.setText(location[0]);
+ 			tvLocationLine1.setText(location[1]);
+ 			tvLocationLine2.setText(location[2]);
+ 
+-			tvLocationName.setVisibility(location[0] != null ? View.VISIBLE : View.GONE);
+-			tvLocationLine1.setVisibility(location[1] != null ? View.VISIBLE : View.GONE);
+-			tvLocationLine2.setVisibility(location[2] != null ? View.VISIBLE : View.GONE);
++			tvLocationName.setVisibility(StringTool.getInstance().isEmpty(location[0]) ? View.GONE : View.VISIBLE);
++			tvLocationLine1.setVisibility(StringTool.getInstance().isEmpty(location[1]) ? View.GONE : View.VISIBLE);
++			tvLocationLine2.setVisibility(StringTool.getInstance().isEmpty(location[2]) ? View.GONE : View.VISIBLE);
+ 
+ 			tvLocation.setVisibility(View.VISIBLE);
+ 			llLocationDetail.setVisibility(View.VISIBLE);
+-			tvLocationEmpty.setVisibility(View.GONE);
++			tvLocationEmpty.setText("");
++			tvLocationEmpty.setTextSize(2);
+ 		} else {
+ 			tvLocation.setVisibility(View.GONE);
+ 			llLocationDetail.setVisibility(View.GONE);
+ 			tvLocationEmpty.setVisibility(View.VISIBLE);
++			tvLocationEmpty.setTextSize(22);
+ 		}
+ 	}
+ 
+@@ -607,19 +558,6 @@
+ 				business.setType(isChecked ? TypeManager.TYPE.TRAINING : TypeManager.TYPE.COMPETITION);
+ 			}
+ 		});
+-
+-		tvLocationEmpty.addTextChangedListener(new TextWatcherFieldEnableView(tvLocation, View.GONE));
+-	}
+-
+-	private void saveScores() {
+-		String[][] scores = new String[][]{
+-				{etScore11.getText().toString(), etScore21.getText().toString()},
+-				{etScore12.getText().toString(), etScore22.getText().toString()},
+-				{etScore13.getText().toString(), etScore23.getText().toString()},
+-				{etScore14.getText().toString(), etScore24.getText().toString()},
+-				{etScore15.getText().toString(), etScore25.getText().toString()}
+-			};
+-		business.setScores(scores);
+ 	}
+ 	
+ 	private int getTypePosition() {
+@@ -631,4 +569,18 @@
+ 				return 1;
+ 		}
+ 	}
++
++	private String[][] deSerializeScore(Intent data) {
++		String[][] score = null;
++		if (data != null) {
++			Object[] d = (Object[]) data.getSerializableExtra(ScoreActivity.EXTRA_SCORE);
++			if (d != null && d.length > 0) {
++				score = new String[d.length][];
++				for(int i=0 ; i<d.length ; i++) {
++					score[i] = (String[]) d[i];
++				}
++			}
++		}
++		return score;
++	}
+ }
+\ No newline at end of file
+diff --git a/src/com/justtennis/activity/PlayerActivity.java b/src/com/justtennis/activity/PlayerActivity.java
+index 30b1451..d33af3d 100644
+--- a/src/com/justtennis/activity/PlayerActivity.java
++++ b/src/com/justtennis/activity/PlayerActivity.java
+@@ -174,7 +174,6 @@
+ 
+ 	@Override
+ 	protected void onSaveInstanceState(Bundle outState) {
+-		buildPlayer();
+ 		business.onSaveInstanceState(outState);
+ 		super.onSaveInstanceState(outState);
+ 	}
+@@ -208,7 +207,7 @@
+ 	}
+ 
+ 	public void onClickCreate(View view) {
+-		buildPlayer();
++		updatePlayerData();
+ 
+ 		MODE mode = business.getMode();
+ 		switch (mode) {
+@@ -239,7 +238,7 @@
+ 	}
+ 	
+ 	public void onClickModify(View view) {
+-		buildPlayer();
++		updatePlayerData();
+ 
+ 		business.modify();
+ 		
+@@ -247,7 +246,7 @@
+ 	}
+ 	
+ 	public void onClickQRCode(View view) {
+-		buildPlayer();
++		updatePlayerData();
+ 
+ 		String qrcodeData = business.toQRCode();
+ 
+@@ -289,6 +288,7 @@
+ 	}
+ 	
+ 	public void onClickLocation(View view) {
++		updatePlayerData();
+ 		Intent intent = null;
+ 		switch(getType()) {
+ 			case TRAINING:
+@@ -322,6 +322,7 @@
+ 	}
+ 
+ 	private void importScan() {
++		updatePlayerData();
+ 		Intent intent = new Intent("com.google.zxing.client.android.SCAN");
+ 		intent.putExtra("SCAN_MODE", "QR_CODE_MODE");
+ //		intent.putExtra("SCAN_MODE", "PRODUCT_MODE");
+@@ -334,12 +335,13 @@
+ 	}
+ 
+ 	private void importGoogle() {
++		updatePlayerData();
+ 		Intent intent = new Intent(getApplicationContext(), ListPersonActivity.class);
+ 		startActivityForResult(intent, RESULT_CODE_GOOGLE);
+ 	}
+ 
+-	private void buildPlayer() {
+-		Player player = business.buildPlayer();
++	private void updatePlayerData() {
++		Player player = business.getPlayer();
+ 
+ 		player.setFirstName(etFirstname.getText().toString());
+ 		player.setLastName(etLastname.getText().toString());
+@@ -420,7 +422,7 @@
+ 			@Override
+ 			public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+ 				if (view != null) {
+-					Player player = business.buildPlayer();
++					Player player = business.getPlayer();
+ 					player.setType((TypeManager.TYPE) view.getTag());
+ 					player.setIdClub(null);
+ 					player.setIdTournament(null);
+@@ -477,11 +479,11 @@
+ 	}
+ 
+ 	private void initializeRankingList() {
+-		rankingListManager.manageRanking(this, business.buildPlayer(), false);
++		rankingListManager.manageRanking(this, business.getPlayer(), false);
+ 	}
+ 	
+ 	private void initializeRankingEstimateList() {
+-		rankingListManager.manageRanking(this, business.buildPlayer(), true);
++		rankingListManager.manageRanking(this, business.getPlayer(), true);
+ 	}
+ 
+ 	protected void initializeSaisonList() {
+diff --git a/src/com/justtennis/activity/ScoreActivity.java b/src/com/justtennis/activity/ScoreActivity.java
+new file mode 100644
+index 0000000..f3bb273
+--- /dev/null
++++ b/src/com/justtennis/activity/ScoreActivity.java
+@@ -0,0 +1,171 @@
++package com.justtennis.activity;
++
++import java.io.Serializable;
++
++import android.content.Intent;
++import android.os.Bundle;
++import android.util.Log;
++import android.view.View;
++import android.widget.EditText;
++
++import com.justtennis.R;
++import com.justtennis.business.ScoreBusiness;
++import com.justtennis.listener.action.TextWatcherFieldScoreSetBold;
++import com.justtennis.manager.TypeManager;
++import com.justtennis.notifier.NotifierMessageLogger;
++
++public class ScoreActivity extends GenericActivity {
++
++	private static final String TAG = ScoreActivity.class.getSimpleName();
++
++	public enum MODE {
++		INVITE_DEMANDE,
++		INVITE_CONFIRM
++	};
++	public static final String EXTRA_SCORE = "SCORE";
++
++	private ScoreBusiness business;
++
++	private EditText etScore11;
++	private EditText etScore21;
++	private EditText etScore12;
++	private EditText etScore22;
++	private EditText etScore13;
++	private EditText etScore23;
++	private EditText etScore14;
++	private EditText etScore24;
++	private EditText etScore15;
++	private EditText etScore25;
++
++	private Bundle savedInstanceState;
++	
++	@Override
++	protected void onCreate(Bundle savedInstanceState) {
++		super.onCreate(savedInstanceState);
++		if (this.savedInstanceState==null) {
++			this.savedInstanceState = savedInstanceState;
++		}
++
++		setContentView(R.layout.score);
++
++		etScore11 = (EditText)findViewById(R.id.et_score1_1);
++		etScore21 = (EditText)findViewById(R.id.et_score2_1);
++		etScore12 = (EditText)findViewById(R.id.et_score1_2);
++		etScore22 = (EditText)findViewById(R.id.et_score2_2);
++		etScore13 = (EditText)findViewById(R.id.et_score1_3);
++		etScore23 = (EditText)findViewById(R.id.et_score2_3);
++		etScore14 = (EditText)findViewById(R.id.et_score1_4);
++		etScore24 = (EditText)findViewById(R.id.et_score2_4);
++		etScore15 = (EditText)findViewById(R.id.et_score1_5);
++		etScore25 = (EditText)findViewById(R.id.et_score2_5);
++
++		etScore11.addTextChangedListener(new TextWatcherFieldScoreSetBold(etScore11, etScore21));
++		etScore21.addTextChangedListener(new TextWatcherFieldScoreSetBold(etScore21, etScore11));
++		etScore12.addTextChangedListener(new TextWatcherFieldScoreSetBold(etScore12, etScore22));
++		etScore22.addTextChangedListener(new TextWatcherFieldScoreSetBold(etScore22, etScore12));
++		etScore13.addTextChangedListener(new TextWatcherFieldScoreSetBold(etScore13, etScore23));
++		etScore23.addTextChangedListener(new TextWatcherFieldScoreSetBold(etScore23, etScore13));
++		etScore14.addTextChangedListener(new TextWatcherFieldScoreSetBold(etScore14, etScore24));
++		etScore24.addTextChangedListener(new TextWatcherFieldScoreSetBold(etScore24, etScore14));
++		etScore15.addTextChangedListener(new TextWatcherFieldScoreSetBold(etScore15, etScore25));
++		etScore25.addTextChangedListener(new TextWatcherFieldScoreSetBold(etScore25, etScore15));
++
++		business = new ScoreBusiness(this, NotifierMessageLogger.getInstance());
++
++		TypeManager.getInstance().initializeActivity(findViewById(R.id.layout_main), false);
++	}
++
++	@Override
++	protected void onResume() {
++		super.onResume();
++		initializeData();
++	}
++
++	@Override
++	public void onBackPressed() {
++		onClickCancel(null);
++		super.onBackPressed();
++	}
++
++	@Override
++	protected void onSaveInstanceState(Bundle outState) {
++		business.onSaveInstanceState(outState);
++		super.onSaveInstanceState(outState);
++	}
++
++	public void onClickOk(View view) {
++		saveScores();
++		Intent intent = new Intent();
++		intent.putExtra(EXTRA_SCORE, (Serializable)business.getScores());
++		setResult(RESULT_OK, intent);
++		finish();
++	}
++	
++	public void onClickCancel(View view) {
++		setResult(RESULT_CANCELED);
++		finish();
++	}
++
++	private void initializeData() {
++		Intent intent = getIntent();
++		if (savedInstanceState!=null) {
++			business.initializeData(savedInstanceState);
++			savedInstanceState = null;
++		}
++		else {
++			business.initializeData(intent);
++		}
++		initializeDataScore();
++	}
++
++	private void initializeDataScore() {
++		Log.d(TAG, "initializeDataScore");
++
++		String[][] scores = business.getScores();
++		if (scores!=null) {
++			int len = scores.length;
++			for(int row = 1 ; row <= len ; row++) {
++				String[] score = scores[row-1];
++				switch(row) {
++					case 1:
++					default: {
++						etScore11.setText(score[0]);
++						etScore21.setText(score[1]);
++					}
++					break;
++					case 2: {
++						etScore12.setText(score[0]);
++						etScore22.setText(score[1]);
++					}
++					break;
++					case 3: {
++						etScore13.setText(score[0]);
++						etScore23.setText(score[1]);
++					}
++					break;
++					case 4: {
++						etScore14.setText(score[0]);
++						etScore24.setText(score[1]);
++					}
++					break;
++					case 5: {
++						etScore15.setText(score[0]);
++						etScore25.setText(score[1]);
++					}
++					break;
++				}
++			}
++		}
++	}
++
++	private void saveScores() {
++		String[][] scores = new String[][]{
++				{etScore11.getText().toString(), etScore21.getText().toString()},
++				{etScore12.getText().toString(), etScore22.getText().toString()},
++				{etScore13.getText().toString(), etScore23.getText().toString()},
++				{etScore14.getText().toString(), etScore24.getText().toString()},
++				{etScore15.getText().toString(), etScore25.getText().toString()}
++			};
++		business.setScores(scores);
++	}
++}
+\ No newline at end of file
+diff --git a/src/com/justtennis/business/InviteBusiness.java b/src/com/justtennis/business/InviteBusiness.java
+index 4102f80..6c7f8b0 100644
+--- a/src/com/justtennis/business/InviteBusiness.java
++++ b/src/com/justtennis/business/InviteBusiness.java
+@@ -29,6 +29,7 @@
+ import com.justtennis.domain.Address;
+ import com.justtennis.domain.Club;
+ import com.justtennis.domain.Invite;
++import com.justtennis.domain.Invite.SCORE_RESULT;
+ import com.justtennis.domain.Invite.STATUS;
+ import com.justtennis.domain.Player;
+ import com.justtennis.domain.Ranking;
+@@ -137,6 +138,10 @@
+ 			invite.setDate(calendar.getTime());
+ 		}
+ 
++		if (invite.getId() == null && invite.getSaison() == null) {
++			invite.setSaison(saisonService.getSaisonActiveOrFirst());
++		}
++
+ 		initializeDataRanking();
+ 		initializeDataSaison();
+ 	}
+@@ -168,7 +173,9 @@
+ 	}
+ 
+ 	private void initializeScores() {
+-		scores = (getInvite().getId() == null) ? null : scoreSetService.getTableByIdInvite(getInvite().getId());
++		if (getInvite().getId() != null && scores == null) {
++			scores = scoreSetService.getTableByIdInvite(getInvite().getId());
++		}
+ 	}
+ 
+ 	public String buildText() {
+@@ -352,6 +359,10 @@
+ 		}
+ 	}
+ 
++	public String getScoresText() {
++		return scoreSetService.buildTextScore(invite);
++	}
++
+ 	public String[][] getScores() {
+ 		return scores;
+ 	}
+@@ -467,28 +478,23 @@
+ 		return ret;
+ 	}
+ 	
+-	private void addScoreSet(Integer order, String score1, String score2, boolean last) {
++	private ScoreSet newScoreSet(Integer order, String score1, String score2, boolean last) {
++		ScoreSet ret = null;
+ 		if (checkScoreSet(score1, score2, last)) {
+-			ScoreSet pojo = new ScoreSet();
+-			pojo.setInvite(invite);
+-			pojo.setOrder(order);
+-			pojo.setValue1(Integer.parseInt(score1));
+-			pojo.setValue2(Integer.parseInt(score2));
+-			scoreSetService.createOrUpdate(pojo);
++			ret = new ScoreSet();
++			ret.setInvite(invite);
++			ret.setOrder(order);
++			ret.setValue1(Integer.parseInt(score1));
++			ret.setValue2(Integer.parseInt(score2));
+ 		}
++		return ret;
+ 	}
+ 
+-	private void saveScoreSet() {
+-		String[][] scores = getScores();
+-		if (invite.getId() != null) {
+-			scoreSetService.deleteByIdInvite(invite.getId());
+-		}
+-
+-		int len = scores.length;
+-		String[] colLast = null;
++	public List<ScoreSet> computeScoreSet(String[][] scores) {
++		List<ScoreSet> ret = new ArrayList<ScoreSet>();
++		int len = (scores == null) ? 0 : scores.length;
+ 		for(int row = 1 ; row <= len ; row++) {
+ 			String[] col = scores[row-1];
+-			addScoreSet(row, col[0], col[1], row==len);
+ 			if (!StringTool.getInstance().isEmpty(col[0]) ||
+ 				!StringTool.getInstance().isEmpty(col[1])) {
+ 				if (StringTool.getInstance().isEmpty(col[0])) {
+@@ -497,35 +503,50 @@
+ 				if (StringTool.getInstance().isEmpty(col[1])) {
+ 					col[1] = "0";
+ 				}
+-				colLast = col;
++				ScoreSet scoreSet = newScoreSet(row, col[0], col[1], row==len);
++				if (scoreSet != null) {
++					ret.add(scoreSet);
++				}
+ 			}
+ 		}
++		return ret;
++	}
+ 
+-		Invite.SCORE_RESULT scoreResult = Invite.SCORE_RESULT.UNFINISHED;
+-		if (colLast!=null && colLast.length==2) {
+-			String col0 = colLast[0];
+-			String col1 = colLast[1];
+-			int iCol0 = 0;
+-			int iCol1 = 0;
+-			try {
+-				iCol0 = (col0==null || col0.equals("")) ? 0 : Integer.parseInt(col0);
+-			} catch(NumberFormatException ex) {
+-			}
+-			try {
+-				iCol1 = (col1==null || col1.equals("")) ? 0 : Integer.parseInt(col1);
+-			} catch(NumberFormatException ex) {
+-			}
++	public SCORE_RESULT computeScoreResult(List<ScoreSet> listScoreSet) {
++		Invite.SCORE_RESULT ret = Invite.SCORE_RESULT.UNFINISHED;
++		int size = listScoreSet.size();
++		if (size > 0) {
++			ScoreSet scoreLast = listScoreSet.get(size-1);
+ 
++			int iCol0 = (scoreLast.getValue1() == null  ? 0 : scoreLast.getValue1().intValue());
++			int iCol1 = (scoreLast.getValue2() == null  ? 0 : scoreLast.getValue2().intValue());
+ 			if (iCol0 == -1) {
+-				scoreResult = Invite.SCORE_RESULT.WO_VICTORY;
++				ret = Invite.SCORE_RESULT.WO_VICTORY;
+ 			} else if (iCol1 == -1) {
+-				scoreResult = Invite.SCORE_RESULT.WO_DEFEAT;
++				ret = Invite.SCORE_RESULT.WO_DEFEAT;
+ 			} else if (iCol0 > iCol1) {
+-				scoreResult = Invite.SCORE_RESULT.VICTORY;
++				ret = Invite.SCORE_RESULT.VICTORY;
+ 			} else if (iCol0 < iCol1) {
+-				scoreResult = Invite.SCORE_RESULT.DEFEAT;
++				ret = Invite.SCORE_RESULT.DEFEAT;
+ 			}
+ 		}
++		return ret;
++	}
++
++	private void saveScoreSet() {
++		if (invite.getId() != null) {
++			scoreSetService.deleteByIdInvite(invite.getId());
++		}
++
++		List<ScoreSet> listScoreSet = computeScoreSet(getScores());
++		int size = listScoreSet.size();
++		if (size > 0) {
++			for(ScoreSet scoreSet : listScoreSet) {
++				scoreSetService.createOrUpdate(scoreSet);
++			}
++		}
++		Invite.SCORE_RESULT scoreResult = computeScoreResult(listScoreSet);
++
+ 		invite.setScoreResult(scoreResult);
+ 		inviteService.createOrUpdate(invite);
+ 	}
+diff --git a/src/com/justtennis/business/PlayerBusiness.java b/src/com/justtennis/business/PlayerBusiness.java
+index a55f0be..2bc550c 100644
+--- a/src/com/justtennis/business/PlayerBusiness.java
++++ b/src/com/justtennis/business/PlayerBusiness.java
+@@ -74,18 +74,19 @@
+ 		initializeMode(intent);
+ 
+ 		if (intent.hasExtra(PlayerActivity.EXTRA_TYPE)) {
+-			buildPlayer().setType((TypeManager.TYPE) intent.getSerializableExtra(PlayerActivity.EXTRA_TYPE));
++			player.setType((TypeManager.TYPE) intent.getSerializableExtra(PlayerActivity.EXTRA_TYPE));
+ 		}
+ 		
+ 		if (intent.hasExtra(PlayerActivity.EXTRA_RANKING)) {
+ 			long idRanking = intent.getLongExtra(PlayerActivity.EXTRA_RANKING, -1);
+ 			if (idRanking != -1)  {
+-				buildPlayer().setIdRanking(idRanking);
++				player.setIdRanking(idRanking);
+ 			}
+ 		}
+ 		
+ 		initializeDataRanking();
+ 		initializeDataSaison();
++		initializePlayerSaison();
+ 	}
+ 
+ 	public void initialize(Bundle savedInstanceState) {
+@@ -299,7 +300,6 @@
+ 	}
+ 
+ 	protected void initializePlayer(Intent intent) {
+-		player = null;
+ 		if (intent.hasExtra(PlayerActivity.EXTRA_PLAYER_ID)) {
+ 			long playerId = intent.getLongExtra(PlayerActivity.EXTRA_PLAYER_ID, PlayerService.ID_EMPTY_PLAYER);
+ 			if (playerId != PlayerService.ID_EMPTY_PLAYER) {
+@@ -309,6 +309,18 @@
+ 		if (intent.hasExtra(PlayerActivity.EXTRA_PLAYER)) {
+ 			player = (Player) intent.getSerializableExtra(PlayerActivity.EXTRA_PLAYER);
+ 		}
++		if (player == null) {
++			player = buildPlayer();
++		}
++	}
++
++	private void initializePlayerSaison() {
++		if (player != null && player.getId() == null && player.getIdSaison() == null) {
++			Saison saison = saisonService.getSaisonActiveOrFirst();
++			if (saison != null) {
++				player.setIdSaison(saison.getId());
++			}
++		}
+ 	}
+ 
+ //	private void initializeDataInvite() {
+diff --git a/src/com/justtennis/business/ScoreBusiness.java b/src/com/justtennis/business/ScoreBusiness.java
+new file mode 100644
+index 0000000..fb5e6bd
+--- /dev/null
++++ b/src/com/justtennis/business/ScoreBusiness.java
+@@ -0,0 +1,51 @@
++package com.justtennis.business;
++
++import android.content.Context;
++import android.content.Intent;
++import android.os.Bundle;
++
++import com.cameleon.common.android.inotifier.INotifierMessage;
++import com.justtennis.activity.ScoreActivity;
++
++public class ScoreBusiness {
++
++	@SuppressWarnings("unused")
++	private static final String TAG = ScoreBusiness.class.getSimpleName();
++
++	private String[][] scores;
++
++	public ScoreBusiness(Context context, INotifierMessage notificationMessage) {
++	}
++
++	public void initializeData(Intent intent) {
++		initializeDataScore(intent.getExtras());
++	}
++
++	public void initializeData(Bundle savedInstanceState) {
++		initializeDataScore(savedInstanceState);
++	}
++
++	public void onSaveInstanceState(Bundle outState) {
++		outState.putSerializable(ScoreActivity.EXTRA_SCORE, scores);
++	}
++
++	public String[][] getScores() {
++		return scores;
++	}
++
++	public void setScores(String[][] scores) {
++		this.scores = scores;
++	}
++
++	private void initializeDataScore(Bundle data) {
++		if (data != null && data.containsKey(ScoreActivity.EXTRA_SCORE)) {
++			Object[] d = (Object[]) data.getSerializable(ScoreActivity.EXTRA_SCORE);
++			if (d != null && d.length > 0) {
++				scores = new String[d.length][];
++				for(int i=0 ; i<d.length ; i++) {
++					scores[i] = (String[]) d[i];
++				}
++			}
++		}
++	}
++}
+\ No newline at end of file

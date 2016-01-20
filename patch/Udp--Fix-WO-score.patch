@@ -1,0 +1,376 @@
+diff --git a/project.properties b/project.properties
+index 1e90032..944c88c 100644
+--- a/project.properties
++++ b/project.properties
+@@ -12,5 +12,5 @@
+ 
+ # Project target.
+ target=Google Inc.:Google APIs:17
+-android.library.reference.1=..\\com.cameleon.common
+-android.library.reference.2=../android-tracer-gps-common
++android.library.reference.1=..\\android-tracer-gps-common
++android.library.reference.2=../com-cameleon-common
+diff --git a/res/layout/element_score.xml b/res/layout/element_score.xml
+index f4273e8..70ff242 100644
+--- a/res/layout/element_score.xml
++++ b/res/layout/element_score.xml
+@@ -32,9 +32,9 @@
+ 		    android:background="@color/invite_score_field_background_color_1"
+ 	        android:gravity="center_vertical|center_horizontal"
+ 	        android:textSize="32sp"
+-	        android:inputType="number"
++	        android:inputType="numberSigned"
+ 		    android:maxLines="1"
+-		    android:maxLength="1"
++		    android:maxLength="2"
+ 		/>
+ 		<EditText
+ 		    android:id="@+id/et_score1_2"
+@@ -102,9 +102,9 @@
+ 		    android:background="@color/invite_score_field_background_color_1"
+ 	        android:gravity="center_vertical|center_horizontal"
+ 	        android:textSize="32sp"
+-	        android:inputType="number"
++	        android:inputType="numberSigned"
+ 		    android:maxLines="1"
+-		    android:maxLength="1"
++		    android:maxLength="2"
+ 		/>
+ 		<EditText
+ 		    android:id="@+id/et_score2_2"
+diff --git a/res/values/strings_invite.xml b/res/values/strings_invite.xml
+index 26ac57c..70a6aa6 100644
+--- a/res/values/strings_invite.xml
++++ b/res/values/strings_invite.xml
+@@ -8,5 +8,7 @@
+     <string name="txt_tournament">Tournament</string>
+     <string name="txt_bonus_point">Bonus point</string>
+     <string name="txt_detail_invite">Detail ></string>
++    <string name="txt_wo_vitory">WO Victory</string>
++    <string name="txt_wo_defeat">WO Defeat</string>
+     
+ </resources>
+\ No newline at end of file
+diff --git a/src/com/justtennis/business/InviteBusiness.java b/src/com/justtennis/business/InviteBusiness.java
+index 9ebe3f2..4102f80 100644
+--- a/src/com/justtennis/business/InviteBusiness.java
++++ b/src/com/justtennis/business/InviteBusiness.java
+@@ -14,6 +14,7 @@
+ import android.widget.Toast;
+ 
+ import com.cameleon.common.android.inotifier.INotifierMessage;
++import com.cameleon.common.tool.StringTool;
+ import com.justtennis.ApplicationConfig;
+ import com.justtennis.R;
+ import com.justtennis.activity.InviteActivity;
+@@ -213,17 +214,20 @@
+ 	}
+ 
+ 	public void modify() {
+-		Invite inv = inviteService.find(invite.getId());
++		if (invite.getId() != null) {
++			Invite inv = inviteService.find(invite.getId());
++			if (inv != null && inv.getIdCalendar() != null && 
++				inv.getIdCalendar() != GCalendarHelper.EVENT_ID_NO_CREATED) {
++				gCalendarHelper.deleteCalendarEntry(inv.getIdCalendar());
++			}
++		}
++
+ 		inviteService.createOrUpdate(invite);
+ 		
+ 		saveScoreSet();
+ 
+-		if (inv != null && inv.getIdCalendar() != null && 
+-			inv.getIdCalendar() != GCalendarHelper.EVENT_ID_NO_CREATED) {
+-			EVENT_STATUS status = gCalendarHelper.toEventStatus(invite.getStatus());
+-			calendarAddEvent(invite, status);
+-			gCalendarHelper.deleteCalendarEntry(inv.getIdCalendar());
+-		}
++		EVENT_STATUS status = gCalendarHelper.toEventStatus(invite.getStatus());
++		calendarAddEvent(invite, status);
+ 	}
+ 	
+ 	public void confirmYes() {
+@@ -476,15 +480,23 @@
+ 
+ 	private void saveScoreSet() {
+ 		String[][] scores = getScores();
+-		scoreSetService.deleteByIdInvite(invite.getId());
++		if (invite.getId() != null) {
++			scoreSetService.deleteByIdInvite(invite.getId());
++		}
+ 
+ 		int len = scores.length;
+ 		String[] colLast = null;
+ 		for(int row = 1 ; row <= len ; row++) {
+ 			String[] col = scores[row-1];
+ 			addScoreSet(row, col[0], col[1], row==len);
+-			if (col[0]!=null && !col[0].equals("") &&
+-				col[1]!=null && !col[1].equals("")) {
++			if (!StringTool.getInstance().isEmpty(col[0]) ||
++				!StringTool.getInstance().isEmpty(col[1])) {
++				if (StringTool.getInstance().isEmpty(col[0])) {
++					col[0] = "0";
++				}
++				if (StringTool.getInstance().isEmpty(col[1])) {
++					col[1] = "0";
++				}
+ 				colLast = col;
+ 			}
+ 		}
+@@ -503,11 +515,14 @@
+ 				iCol1 = (col1==null || col1.equals("")) ? 0 : Integer.parseInt(col1);
+ 			} catch(NumberFormatException ex) {
+ 			}
+-			int[] iCol = new int[]{iCol0, iCol1}; 
+ 
+-			if (iCol[0] > iCol[1]) {
++			if (iCol0 == -1) {
++				scoreResult = Invite.SCORE_RESULT.WO_VICTORY;
++			} else if (iCol1 == -1) {
++				scoreResult = Invite.SCORE_RESULT.WO_DEFEAT;
++			} else if (iCol0 > iCol1) {
+ 				scoreResult = Invite.SCORE_RESULT.VICTORY;
+-			} else if (iCol[0] < iCol[1]) {
++			} else if (iCol0 < iCol1) {
+ 				scoreResult = Invite.SCORE_RESULT.DEFEAT;
+ 			}
+ 		}
+diff --git a/src/com/justtennis/business/InviteDemandeBusiness.java b/src/com/justtennis/business/InviteDemandeBusiness.java
+index c694498..62c619c 100644
+--- a/src/com/justtennis/business/InviteDemandeBusiness.java
++++ b/src/com/justtennis/business/InviteDemandeBusiness.java
+@@ -8,6 +8,8 @@
+ import java.util.SortedSet;
+ import java.util.TreeSet;
+ 
++import org.gdocument.gtracergps.launcher.log.Logger;
++
+ import android.content.Context;
+ import android.content.Intent;
+ import android.os.Bundle;
+@@ -314,29 +316,33 @@
+ 	}
+ 
+ 	private void calendarAddEvent(Invite invite, EVENT_STATUS status) {
+-		Date date = invite.getDate();
+-		Player player = invite.getPlayer();
+-		String text = "";
+-		if (ApplicationConfig.SHOW_ID) {
+-			text += " [invite:" + invite.getId() + "|user:" + invite.getUser().getId() + "|player:" + invite.getPlayer().getId() + "|calendar:" + invite.getIdCalendar() + "]";
++		try {
++			Date date = invite.getDate();
++			Player player = invite.getPlayer();
++			String text = "";
++			if (ApplicationConfig.SHOW_ID) {
++				text += " [invite:" + invite.getId() + "|user:" + invite.getUser().getId() + "|player:" + invite.getPlayer().getId() + "|calendar:" + invite.getIdCalendar() + "]";
++			}
++			String title = null;
++			if (getType()==TypeManager.TYPE.COMPETITION) {
++				title = "Just Tennis Match vs " + player.getFirstName() + " " + player.getLastName();
++			} else {
++				title = "Just Tennis Entrainement vs " + player.getFirstName() + " " + player.getLastName();
++			}
++	
++			boolean hasAlarm = (status != EVENT_STATUS.CANCELED);
++			long idEvent = gCalendarHelper.addEvent(
++				title, text, invite.getPlayer().getAddress(),
++				date.getTime(), date.getTime() + Invite.PLAY_DURATION_DEFAULT,
++				false, hasAlarm, GCalendarHelper.DEFAULT_CALENDAR_ID, 60,
++				status
++			);
++	
++			invite.setIdCalendar(idEvent);
++			inviteService.createOrUpdate(invite);
++		} catch (Exception ex) {
++			Logger.logMe("calendarAddEvent RuntimeException", ex);
+ 		}
+-		String title = null;
+-		if (getType()==TypeManager.TYPE.COMPETITION) {
+-			title = "Just Tennis Match vs " + player.getFirstName() + " " + player.getLastName();
+-		} else {
+-			title = "Just Tennis Entrainement vs " + player.getFirstName() + " " + player.getLastName();
+-		}
+-
+-		boolean hasAlarm = (status != EVENT_STATUS.CANCELED);
+-		long idEvent = gCalendarHelper.addEvent(
+-			title, text, invite.getPlayer().getAddress(),
+-			date.getTime(), date.getTime() + Invite.PLAY_DURATION_DEFAULT,
+-			false, hasAlarm, GCalendarHelper.DEFAULT_CALENDAR_ID, 60,
+-			status
+-		);
+-
+-		invite.setIdCalendar(idEvent);
+-		inviteService.createOrUpdate(invite);
+ 	}
+ 
+ 	private EVENT_STATUS toEventStatus(STATUS status) {
+diff --git a/src/com/justtennis/business/UserBusiness.java b/src/com/justtennis/business/UserBusiness.java
+index b841aa3..667e2e8 100644
+--- a/src/com/justtennis/business/UserBusiness.java
++++ b/src/com/justtennis/business/UserBusiness.java
+@@ -39,18 +39,19 @@
+ 		player = service.find();
+ 		if (player == null) {
+ 			player = service.findFirst();
+-			if (player != null) {
+-				Saison saison = TypeManager.getInstance().getSaison();
+-				if (saison == null) {
+-					saison = saisonService.getSaisonActiveOrFirst();
+-				}
+-				if (saison != null) {
+-					player.setId(null);
+-					player.setIdSaison(saison.getId());
+-					service.createOrUpdate((User)player);
+-				}
++			if (player == null) {
++				player = new User();
+ 			}
+ 		}
++		Saison saison = TypeManager.getInstance().getSaison();
++		if (saison == null) {
++			saison = saisonService.getSaisonActiveOrFirst();
++		}
++		if (saison != null) {
++			player.setId(null);
++			player.setIdSaison(saison.getId());
++			service.createOrUpdate((User)player);
++		}
+ 	}
+ 	
+ 	@Override
+diff --git a/src/com/justtennis/db/DBDictionary.java b/src/com/justtennis/db/DBDictionary.java
+index 92231cb..b5fc43a 100644
+--- a/src/com/justtennis/db/DBDictionary.java
++++ b/src/com/justtennis/db/DBDictionary.java
+@@ -77,4 +77,8 @@
+ 			}
+ 		}
+ 	}
++
++	public GenericJustTennisDBHelper[] getListHelper() {
++		return listHelper;
++	}
+ }
+diff --git a/src/com/justtennis/db/service/SaisonService.java b/src/com/justtennis/db/service/SaisonService.java
+index 1d9920c..bbbb9c7 100644
+--- a/src/com/justtennis/db/service/SaisonService.java
++++ b/src/com/justtennis/db/service/SaisonService.java
+@@ -32,9 +32,6 @@
+ 		int year = cal.get(Calendar.YEAR);
+ 		int month = cal.get(Calendar.MONTH);
+ 
+-		if (month < 10) {
+-			year--;
+-		}
+ 		return build(year, month);
+ 	}
+ 
+diff --git a/src/com/justtennis/db/service/ScoreSetService.java b/src/com/justtennis/db/service/ScoreSetService.java
+index 0005100..7d3a357 100644
+--- a/src/com/justtennis/db/service/ScoreSetService.java
++++ b/src/com/justtennis/db/service/ScoreSetService.java
+@@ -6,14 +6,19 @@
+ 
+ import com.cameleon.common.android.db.sqlite.service.GenericService;
+ import com.cameleon.common.android.inotifier.INotifierMessage;
++import com.justtennis.R;
+ import com.justtennis.db.sqlite.datasource.DBScoreSetDataSource;
+ import com.justtennis.domain.Invite;
++import com.justtennis.domain.Invite.SCORE_RESULT;
+ import com.justtennis.domain.ScoreSet;
+ 
+ public class ScoreSetService extends GenericService<ScoreSet> {
+ 
++	private Context context;
++
+ 	public ScoreSetService(Context context, INotifierMessage notificationMessage) {
+ 		super(context, new DBScoreSetDataSource(context, notificationMessage), notificationMessage);
++		this.context = context;
+ 	}
+ 
+ 	public List<ScoreSet> getByIdInvite(long idInvite) {
+@@ -63,7 +68,13 @@
+ 
+ 	public String buildTextScore(Invite invite) {
+ 		String ret = null;
+-		if (invite.getListScoreSet()!=null && invite.getListScoreSet().size() > 0) {
++		if (SCORE_RESULT.WO_VICTORY.equals(invite.getScoreResult())) {
++			ret = context.getString(R.string.txt_wo_vitory);
++		}
++		else if (SCORE_RESULT.WO_DEFEAT.equals(invite.getScoreResult())) {
++			ret = context.getString(R.string.txt_wo_defeat);
++		}
++		else if (invite.getListScoreSet()!=null && invite.getListScoreSet().size() > 0) {
+ 			for(ScoreSet score : invite.getListScoreSet()) {
+ 				if (score.getValue1() > 0 || score.getValue2() > 0) {
+ 					String score1 = (score.getValue1() > score.getValue2() ? "<b>" + score.getValue1() + "</b>": score.getValue1().toString());
+diff --git a/src/com/justtennis/db/sqlite/helper/DBInviteHelper.java b/src/com/justtennis/db/sqlite/helper/DBInviteHelper.java
+index a2d13ee..2c466df 100644
+--- a/src/com/justtennis/db/sqlite/helper/DBInviteHelper.java
++++ b/src/com/justtennis/db/sqlite/helper/DBInviteHelper.java
+@@ -33,6 +33,9 @@
+ 
+ 	private static final Class<?> CLASS_TYPE = Invite.class;
+ 
++	private Context context;
++	private INotifierMessage notificationMessage;
++	
+ 	// Database creation sql statement
+ 	private static final String DATABASE_CREATE = "CREATE TABLE " + TABLE_NAME + "(" + 
+ 		COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " + 
+@@ -53,6 +56,8 @@
+ 
+ 	public DBInviteHelper(Context context, INotifierMessage notificationMessage) {
+ 		super(context, notificationMessage, DATABASE_NAME, DATABASE_VERSION);
++		this.context = context;
++		this.notificationMessage = notificationMessage;
+ 	}
+ 
+ 	@Override
+diff --git a/src/com/justtennis/db/sqlite/helper/GenericJustTennisDBHelper.java b/src/com/justtennis/db/sqlite/helper/GenericJustTennisDBHelper.java
+index 301c7a0..4119e7e 100644
+--- a/src/com/justtennis/db/sqlite/helper/GenericJustTennisDBHelper.java
++++ b/src/com/justtennis/db/sqlite/helper/GenericJustTennisDBHelper.java
+@@ -1,16 +1,28 @@
+ package com.justtennis.db.sqlite.helper;
+ 
+ import android.content.Context;
++import android.database.sqlite.SQLiteDatabase;
+ 
+ import com.cameleon.common.android.db.sqlite.helper.GenericDBHelper;
+ import com.cameleon.common.android.inotifier.INotifierMessage;
++import com.justtennis.db.DBDictionary;
+ 
+ public abstract class GenericJustTennisDBHelper extends GenericDBHelper {
+ 
+ 	private static final String PACKAGE_NAME = "com.justtennis";
++	private Context context;
++	private INotifierMessage notificationMessage;
+ 
+ 	public GenericJustTennisDBHelper(Context context, INotifierMessage notificationMessage, String databaseName, int databaseVersion) {
+ 		super(context, notificationMessage, databaseName, databaseVersion);
++		this.context = context;
++		this.notificationMessage = notificationMessage;
++	}
++
++	@Override
++	public void onCreate(SQLiteDatabase database) {
++		super.onCreate(database);
++		createOtherTable(database, DBDictionary.getInstance(context, notificationMessage).getListHelper());
+ 	}
+ 
+ 	@Override
+diff --git a/src/com/justtennis/domain/Invite.java b/src/com/justtennis/domain/Invite.java
+index 51c21ca..911911c 100644
+--- a/src/com/justtennis/domain/Invite.java
++++ b/src/com/justtennis/domain/Invite.java
+@@ -20,7 +20,7 @@
+ 	};
+ 
+ 	public enum SCORE_RESULT {
+-		VICTORY, DEFEAT, UNFINISHED
++		VICTORY, DEFEAT, UNFINISHED, WO_VICTORY, WO_DEFEAT
+ 	}
+ 	private Saison saison;
+ 	private Player player;
