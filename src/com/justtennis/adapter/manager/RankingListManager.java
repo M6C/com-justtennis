@@ -13,6 +13,7 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
+import android.widget.TextView;
 
 import com.cameleon.common.android.factory.FactoryDialog;
 import com.justtennis.R;
@@ -66,16 +67,21 @@ public class RankingListManager {
 		manageRanking(context, listener, idRanking, estimate);
 	}
 
-	public void manageRanking(Activity context, final IRankingListListener listener, Long idRanking, boolean estimate) {
-		Spinner spRanking = (Spinner)context.findViewById(estimate ? R.id.sp_ranking_estimate : R.id.sp_ranking);
+	public void manageRanking(final Activity context, final IRankingListListener listener, Long idRanking, boolean estimate) {
+		final Spinner spRanking = (Spinner)context.findViewById(estimate ? R.id.sp_ranking_estimate : R.id.sp_ranking);
 
-		ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(context, android.R.layout.simple_spinner_item, listTxtRankings);
-		dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+//		ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(context, android.R.layout.simple_spinner_item, listTxtRankings);
+//		dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+		ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(context, R.layout.spinner_item_bonus, listTxtRankings);
+		dataAdapter.setDropDownViewResource(R.layout.spinner_item_bonus);
 		spRanking.setAdapter(dataAdapter);
 
 		spRanking.setOnItemSelectedListener(new OnItemSelectedListener() {
 			@Override
 			public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+				TextView tv = (TextView)spRanking.findViewById(android.R.id.text1);
+				tv.setTextColor(context.getResources().getColor(position == 0 ? R.color.spinner_color_hint : android.R.color.black));
+
 				Ranking ranking = listRanking.get(position);
 				listener.onRankingSelected(ranking);
 			}

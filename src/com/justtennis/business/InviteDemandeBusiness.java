@@ -8,6 +8,8 @@ import java.util.List;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
+import org.gdocument.gtracergps.launcher.log.Logger;
+
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -74,6 +76,7 @@ public class InviteDemandeBusiness {
 
 		invite = new Invite();
 		invite.setUser(getUser());
+		invite.setType(typeManager.getType());
 
 		if (intent.hasExtra(InviteActivity.EXTRA_MODE)) {
 			mode = (MODE) intent.getSerializableExtra(InviteActivity.EXTRA_MODE);
@@ -91,7 +94,6 @@ public class InviteDemandeBusiness {
 				invite.setPlayer(playerService.find(id));
 				if (isUnknownPlayer()) {
 					setIdRanking(getListRanking().get(0).getId());
-					setType(TypeManager.TYPE.COMPETITION);
 				} else {
 					setIdRanking(rankingService.getRanking(getPlayer(), true).getId());
 					switch (getPlayer().getType()) {
@@ -314,29 +316,33 @@ public class InviteDemandeBusiness {
 	}
 
 	private void calendarAddEvent(Invite invite, EVENT_STATUS status) {
-		Date date = invite.getDate();
-		Player player = invite.getPlayer();
-		String text = "";
-		if (ApplicationConfig.SHOW_ID) {
-			text += " [invite:" + invite.getId() + "|user:" + invite.getUser().getId() + "|player:" + invite.getPlayer().getId() + "|calendar:" + invite.getIdCalendar() + "]";
+		try {
+			Date date = invite.getDate();
+			Player player = invite.getPlayer();
+			String text = "";
+			if (ApplicationConfig.SHOW_ID) {
+				text += " [invite:" + invite.getId() + "|user:" + invite.getUser().getId() + "|player:" + invite.getPlayer().getId() + "|calendar:" + invite.getIdCalendar() + "]";
+			}
+			String title = null;
+			if (getType()==TypeManager.TYPE.COMPETITION) {
+				title = "Just Tennis Match vs " + player.getFirstName() + " " + player.getLastName();
+			} else {
+				title = "Just Tennis Entrainement vs " + player.getFirstName() + " " + player.getLastName();
+			}
+	
+			boolean hasAlarm = (status != EVENT_STATUS.CANCELED);
+			long idEvent = gCalendarHelper.addEvent(
+				title, text, invite.getPlayer().getAddress(),
+				date.getTime(), date.getTime() + Invite.PLAY_DURATION_DEFAULT,
+				false, hasAlarm, GCalendarHelper.DEFAULT_CALENDAR_ID, 60,
+				status
+			);
+	
+			invite.setIdCalendar(idEvent);
+			inviteService.createOrUpdate(invite);
+		} catch (Exception ex) {
+			Logger.logMe("calendarAddEvent RuntimeException", ex);
 		}
-		String title = null;
-		if (getType()==TypeManager.TYPE.COMPETITION) {
-			title = "Just Tennis Match vs " + player.getFirstName() + " " + player.getLastName();
-		} else {
-			title = "Just Tennis Entrainement vs " + player.getFirstName() + " " + player.getLastName();
-		}
-
-		boolean hasAlarm = (status != EVENT_STATUS.CANCELED);
-		long idEvent = gCalendarHelper.addEvent(
-			title, text, invite.getPlayer().getAddress(),
-			date.getTime(), date.getTime() + Invite.PLAY_DURATION_DEFAULT,
-			false, hasAlarm, GCalendarHelper.DEFAULT_CALENDAR_ID, 60,
-			status
-		);
-
-		invite.setIdCalendar(idEvent);
-		inviteService.createOrUpdate(invite);
 	}
 
 	private EVENT_STATUS toEventStatus(STATUS status) {

@@ -33,6 +33,9 @@ public class DBInviteHelper extends GenericJustTennisDBHelper {
 
 	private static final Class<?> CLASS_TYPE = Invite.class;
 
+	private Context context;
+	private INotifierMessage notificationMessage;
+	
 	// Database creation sql statement
 	private static final String DATABASE_CREATE = "CREATE TABLE " + TABLE_NAME + "(" + 
 		COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " + 
@@ -53,6 +56,8 @@ public class DBInviteHelper extends GenericJustTennisDBHelper {
 
 	public DBInviteHelper(Context context, INotifierMessage notificationMessage) {
 		super(context, notificationMessage, DATABASE_NAME, DATABASE_VERSION);
+		this.context = context;
+		this.notificationMessage = notificationMessage;
 	}
 
 	@Override

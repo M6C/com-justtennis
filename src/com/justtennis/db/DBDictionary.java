@@ -77,4 +77,8 @@ public class DBDictionary {
 			}
 		}
 	}
+
+	public GenericJustTennisDBHelper[] getListHelper() {
+		return listHelper;
+	}
 }

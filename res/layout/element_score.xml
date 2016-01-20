@@ -32,9 +32,9 @@
 		    android:background="@color/invite_score_field_background_color_1"
 	        android:gravity="center_vertical|center_horizontal"
 	        android:textSize="32sp"
-	        android:inputType="number"
+	        android:inputType="numberSigned"
 		    android:maxLines="1"
-		    android:maxLength="1"
+		    android:maxLength="2"
 		/>
 		<EditText
 		    android:id="@+id/et_score1_2"
@@ -102,9 +102,9 @@
 		    android:background="@color/invite_score_field_background_color_1"
 	        android:gravity="center_vertical|center_horizontal"
 	        android:textSize="32sp"
-	        android:inputType="number"
+	        android:inputType="numberSigned"
 		    android:maxLines="1"
-		    android:maxLength="1"
+		    android:maxLength="2"
 		/>
 		<EditText
 		    android:id="@+id/et_score2_2"

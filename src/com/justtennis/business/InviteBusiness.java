@@ -14,6 +14,7 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.cameleon.common.android.inotifier.INotifierMessage;
+import com.cameleon.common.tool.StringTool;
 import com.justtennis.ApplicationConfig;
 import com.justtennis.R;
 import com.justtennis.activity.InviteActivity;
@@ -28,6 +29,7 @@ import com.justtennis.db.service.UserService;
 import com.justtennis.domain.Address;
 import com.justtennis.domain.Club;
 import com.justtennis.domain.Invite;
+import com.justtennis.domain.Invite.SCORE_RESULT;
 import com.justtennis.domain.Invite.STATUS;
 import com.justtennis.domain.Player;
 import com.justtennis.domain.Ranking;
@@ -56,6 +58,7 @@ public class InviteBusiness {
 	private SaisonService saisonService;
 	private GCalendarHelper gCalendarHelper;
 	private LocationParser locationParser;
+	private TypeManager typeManager;
 	private User user;
 	private Invite invite;
 	private MODE mode = MODE.INVITE_MODIFY;
@@ -64,6 +67,7 @@ public class InviteBusiness {
 	private List<Saison> listSaison = new ArrayList<Saison>();
 	private List<String> listTxtSaisons = new ArrayList<String>();
 	private String[][] scores;
+
 
 	public InviteBusiness(Context context, INotifierMessage notificationMessage) {
 		this.context = context;
@@ -76,6 +80,7 @@ public class InviteBusiness {
 		saisonService = new SaisonService(context, notificationMessage);
 		gCalendarHelper = GCalendarHelper.getInstance(context);
 		locationParser = LocationParser.getInstance(context, notificationMessage);
+		typeManager = TypeManager.getInstance(context, notificationMessage);
 	}
 
 	public void initializeData(Intent intent) {
@@ -83,6 +88,7 @@ public class InviteBusiness {
 
 		invite = new Invite();
 		invite.setUser(getUser());
+		invite.setType(typeManager.getType());
 
 		if (intent.hasExtra(InviteActivity.EXTRA_MODE)) {
 			mode = (MODE) intent.getSerializableExtra(InviteActivity.EXTRA_MODE);
@@ -136,6 +142,10 @@ public class InviteBusiness {
 			invite.setDate(calendar.getTime());
 		}
 
+		if (invite.getId() == null && invite.getSaison() == null) {
+			invite.setSaison(saisonService.getSaisonActiveOrFirst());
+		}
+
 		initializeDataRanking();
 		initializeDataSaison();
 	}
@@ -167,7 +177,9 @@ public class InviteBusiness {
 	}
 
 	private void initializeScores() {
-		scores = (getInvite().getId() == null) ? null : scoreSetService.getTableByIdInvite(getInvite().getId());
+		if (getInvite().getId() != null && scores == null) {
+			scores = scoreSetService.getTableByIdInvite(getInvite().getId());
+		}
 	}
 
 	public String buildText() {
@@ -213,17 +225,20 @@ public class InviteBusiness {
 	}
 
 	public void modify() {
-		Invite inv = inviteService.find(invite.getId());
+		if (invite.getId() != null) {
+			Invite inv = inviteService.find(invite.getId());
+			if (inv != null && inv.getIdCalendar() != null && 
+				inv.getIdCalendar() != GCalendarHelper.EVENT_ID_NO_CREATED) {
+				gCalendarHelper.deleteCalendarEntry(inv.getIdCalendar());
+			}
+		}
+
 		inviteService.createOrUpdate(invite);
 		
 		saveScoreSet();
 
-		if (inv != null && inv.getIdCalendar() != null && 
-			inv.getIdCalendar() != GCalendarHelper.EVENT_ID_NO_CREATED) {
-			EVENT_STATUS status = gCalendarHelper.toEventStatus(invite.getStatus());
-			calendarAddEvent(invite, status);
-			gCalendarHelper.deleteCalendarEntry(inv.getIdCalendar());
-		}
+		EVENT_STATUS status = gCalendarHelper.toEventStatus(invite.getStatus());
+		calendarAddEvent(invite, status);
 	}
 	
 	public void confirmYes() {
@@ -348,6 +363,10 @@ public class InviteBusiness {
 		}
 	}
 
+	public String getScoresText() {
+		return scoreSetService.buildTextScore(invite);
+	}
+
 	public String[][] getScores() {
 		return scores;
 	}
@@ -403,6 +422,7 @@ public class InviteBusiness {
 		invite.setId(this.invite.getId());
 		invite.setIdExternal(this.invite.getIdExternal());
 		invite.setIdCalendar(this.invite.getIdCalendar());
+		invite.setType(typeManager.getType());
 		return invite;
 	}
 
@@ -463,54 +483,75 @@ public class InviteBusiness {
 		return ret;
 	}
 	
-	private void addScoreSet(Integer order, String score1, String score2, boolean last) {
+	private ScoreSet newScoreSet(Integer order, String score1, String score2, boolean last) {
+		ScoreSet ret = null;
 		if (checkScoreSet(score1, score2, last)) {
-			ScoreSet pojo = new ScoreSet();
-			pojo.setInvite(invite);
-			pojo.setOrder(order);
-			pojo.setValue1(Integer.parseInt(score1));
-			pojo.setValue2(Integer.parseInt(score2));
-			scoreSetService.createOrUpdate(pojo);
+			ret = new ScoreSet();
+			ret.setInvite(invite);
+			ret.setOrder(order);
+			ret.setValue1(Integer.parseInt(score1));
+			ret.setValue2(Integer.parseInt(score2));
 		}
+		return ret;
+	}
+
+	public List<ScoreSet> computeScoreSet(String[][] scores) {
+		List<ScoreSet> ret = new ArrayList<ScoreSet>();
+		int len = (scores == null) ? 0 : scores.length;
+		for(int row = 1 ; row <= len ; row++) {
+			String[] col = scores[row-1];
+			if (!StringTool.getInstance().isEmpty(col[0]) ||
+				!StringTool.getInstance().isEmpty(col[1])) {
+				if (StringTool.getInstance().isEmpty(col[0])) {
+					col[0] = "0";
+				}
+				if (StringTool.getInstance().isEmpty(col[1])) {
+					col[1] = "0";
+				}
+				ScoreSet scoreSet = newScoreSet(row, col[0], col[1], row==len);
+				if (scoreSet != null) {
+					ret.add(scoreSet);
+				}
+			}
+		}
+		return ret;
+	}
+
+	public SCORE_RESULT computeScoreResult(List<ScoreSet> listScoreSet) {
+		Invite.SCORE_RESULT ret = Invite.SCORE_RESULT.UNFINISHED;
+		int size = listScoreSet.size();
+		if (size > 0) {
+			ScoreSet scoreLast = listScoreSet.get(size-1);
+
+			int iCol0 = (scoreLast.getValue1() == null  ? 0 : scoreLast.getValue1().intValue());
+			int iCol1 = (scoreLast.getValue2() == null  ? 0 : scoreLast.getValue2().intValue());
+			if (iCol0 == -1) {
+				ret = Invite.SCORE_RESULT.WO_VICTORY;
+			} else if (iCol1 == -1) {
+				ret = Invite.SCORE_RESULT.WO_DEFEAT;
+			} else if (iCol0 > iCol1) {
+				ret = Invite.SCORE_RESULT.VICTORY;
+			} else if (iCol0 < iCol1) {
+				ret = Invite.SCORE_RESULT.DEFEAT;
+			}
+		}
+		return ret;
 	}
 
 	private void saveScoreSet() {
-		String[][] scores = getScores();
-		scoreSetService.deleteByIdInvite(invite.getId());
-
-		int len = scores.length;
-		String[] colLast = null;
-		for(int row = 1 ; row <= len ; row++) {
-			String[] col = scores[row-1];
-			addScoreSet(row, col[0], col[1], row==len);
-			if (col[0]!=null && !col[0].equals("") &&
-				col[1]!=null && !col[1].equals("")) {
-				colLast = col;
-			}
+		if (invite.getId() != null) {
+			scoreSetService.deleteByIdInvite(invite.getId());
 		}
 
-		Invite.SCORE_RESULT scoreResult = Invite.SCORE_RESULT.UNFINISHED;
-		if (colLast!=null && colLast.length==2) {
-			String col0 = colLast[0];
-			String col1 = colLast[1];
-			int iCol0 = 0;
-			int iCol1 = 0;
-			try {
-				iCol0 = (col0==null || col0.equals("")) ? 0 : Integer.parseInt(col0);
-			} catch(NumberFormatException ex) {
-			}
-			try {
-				iCol1 = (col1==null || col1.equals("")) ? 0 : Integer.parseInt(col1);
-			} catch(NumberFormatException ex) {
-			}
-			int[] iCol = new int[]{iCol0, iCol1}; 
-
-			if (iCol[0] > iCol[1]) {
-				scoreResult = Invite.SCORE_RESULT.VICTORY;
-			} else if (iCol[0] < iCol[1]) {
-				scoreResult = Invite.SCORE_RESULT.DEFEAT;
+		List<ScoreSet> listScoreSet = computeScoreSet(getScores());
+		int size = listScoreSet.size();
+		if (size > 0) {
+			for(ScoreSet scoreSet : listScoreSet) {
+				scoreSetService.createOrUpdate(scoreSet);
 			}
 		}
+		Invite.SCORE_RESULT scoreResult = computeScoreResult(listScoreSet);
+
 		invite.setScoreResult(scoreResult);
 		inviteService.createOrUpdate(invite);
 	}

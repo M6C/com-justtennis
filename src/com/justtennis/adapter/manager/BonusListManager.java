@@ -9,6 +9,7 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
+import android.widget.TextView;
 
 import com.justtennis.R;
 import com.justtennis.db.service.BonusService;
@@ -46,18 +47,30 @@ public class BonusListManager {
 		manage(context, listener, 0);
 	}
 
-	public void manage(Activity context, final IBonusListListener listener, int point) {
-		Spinner spRanking = (Spinner)context.findViewById(R.id.sp_bonus_point);
+	public void manage(final Activity context, final IBonusListListener listener, int point) {
+		final TextView tvBonus = (TextView)context.findViewById(R.id.tv_bonus_point);
+		final Spinner spBonus = (Spinner)context.findViewById(R.id.sp_bonus_point);
 
-		ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(context, android.R.layout.simple_spinner_item, listTxt);
-		dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-		spRanking.setAdapter(dataAdapter);
+//		ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(context, android.R.layout.simple_spinner_item, listTxt);
+//		dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+		ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(context, R.layout.spinner_item_bonus, listTxt);
+		dataAdapter.setDropDownViewResource(R.layout.spinner_item_bonus);
+		spBonus.setAdapter(dataAdapter);
 
-		spRanking.setOnItemSelectedListener(new OnItemSelectedListener() {
+		spBonus.setOnItemSelectedListener(new OnItemSelectedListener() {
 			@Override
 			public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+				TextView tv = (TextView)spBonus.findViewById(android.R.id.text1);
 				Bonus ranking = list.get(position);
 				listener.onSelected(ranking);
+				if (position == 0) {
+					tv.setText(context.getString(R.string.txt_bonus_point));
+					tv.setTextColor(context.getResources().getColor(R.color.spinner_color_hint));
+					tvBonus.setVisibility(View.GONE);
+				} else {
+					tv.setTextColor(context.getResources().getColor(android.R.color.black));
+					tvBonus.setVisibility(View.VISIBLE);
+				}
 			}
 
 			@Override
@@ -66,7 +79,7 @@ public class BonusListManager {
 		});
 
 		if (point > 0) {
-			initialize(spRanking, point);
+			initialize(spBonus, point);
 		}
 	}
 	
