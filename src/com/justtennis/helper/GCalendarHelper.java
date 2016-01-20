@@ -90,14 +90,14 @@ public class GCalendarHelper {
         // get the event ID that is the last element in the Uri
         long eventID = Long.parseLong(uri.getLastPathSegment());
 
-//        if (hasAlarm) {
-//            ContentValues reminders = new ContentValues();
-//            reminders.put(Reminders.EVENT_ID, eventID);
-//            reminders.put(Reminders.METHOD, Reminders.METHOD_ALERT);
-//            reminders.put(Reminders.MINUTES, selectedReminderValue);
-//
-//            Uri uri2 = cr.insert(Reminders.CONTENT_URI, reminders);
-//        }
+        if (hasAlarm) {
+            ContentValues reminders = new ContentValues();
+            reminders.put(Reminders.EVENT_ID, eventID);
+            reminders.put(Reminders.METHOD, Reminders.METHOD_ALERT);
+            reminders.put(Reminders.MINUTES, selectedReminderValue);
+
+            Uri uri2 = cr.insert(Reminders.CONTENT_URI, reminders);
+        }
         
         return eventID;
 	}
