@@ -69,7 +69,7 @@ public class ListInviteBusiness {
 		context.refresh();
 	}
 
-	private void refreshData() {
+	public void refreshData() {
 		refreshInvite();
 		refreshPlayer();
 	}

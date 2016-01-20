@@ -1,5 +1,6 @@
 package com.justtennis.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ListView;
@@ -19,6 +20,8 @@ public class ComputeRankingActivity extends GenericActivity {
 
 	@SuppressWarnings("unused")
 	private static final String TAG = ComputeRankingActivity.class.getSimpleName();
+
+	private static final int RESULT_ITEM_CLICK = 1;
 
 	private ComputeRankingBusiness business;
 
@@ -46,7 +49,7 @@ public class ComputeRankingActivity extends GenericActivity {
 		adapter.setValue(business.getList());
 
 		list = (ListView)findViewById(R.id.list);
-		list.setOnItemClickListener(new OnItemClickListInvite(this));
+		list.setOnItemClickListener(new OnItemClickListInvite(this, RESULT_ITEM_CLICK));
 		list.setAdapter(adapter);
 
 		business.onCreate();
@@ -60,6 +63,14 @@ public class ComputeRankingActivity extends GenericActivity {
 		super.onResume();
 		business.onResume();
 		refresh();
+	}
+
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		if (requestCode == RESULT_ITEM_CLICK) {
+			business.refreshData();
+			adapter.notifyDataSetChanged();
+		}
 	}
 
 	public void refresh() {

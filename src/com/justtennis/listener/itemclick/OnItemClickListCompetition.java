@@ -2,7 +2,7 @@ package com.justtennis.listener.itemclick;
 
 import java.io.Serializable;
 
-import android.content.Context;
+import android.app.Activity;
 import android.content.Intent;
 import android.view.View;
 import android.widget.ExpandableListView;
@@ -11,10 +11,12 @@ import android.widget.ExpandableListView.OnChildClickListener;
 import com.justtennis.activity.InviteActivity;
 
 public class OnItemClickListCompetition implements OnChildClickListener {
-	private Context context;
+	private Activity context;
+	private int requestCode;
 	
-	public OnItemClickListCompetition(Context context) {
+	public OnItemClickListCompetition(Activity context, int requestCode) {
 		this.context = context;
+		this.requestCode = requestCode;
 	}
 
     @Override
@@ -22,7 +24,7 @@ public class OnItemClickListCompetition implements OnChildClickListener {
     	Intent intent = new Intent(context, InviteActivity.class);
 		intent.putExtra(InviteActivity.EXTRA_INVITE, (Serializable)view.getTag());
 		intent.putExtra(InviteActivity.EXTRA_MODE, InviteActivity.MODE.INVITE_MODIFY);
-		context.startActivity(intent);
+		context.startActivityForResult(intent, requestCode);
 		return false;
     }
 }

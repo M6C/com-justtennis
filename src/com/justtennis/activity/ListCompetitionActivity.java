@@ -19,6 +19,8 @@ public class ListCompetitionActivity extends GenericActivity {
 	@SuppressWarnings("unused")
 	private static final String TAG = ListCompetitionActivity.class.getSimpleName();
 
+	private static final int RESULT_ITEM_CLICK = 1;
+
 	private ListCompetitionBusiness business;
 
 	private ExpandableListView list;
@@ -39,7 +41,7 @@ public class ListCompetitionActivity extends GenericActivity {
 
 		adapter = new ListCompetitionAdapter(this, business.getListTournament(), business.getTableInviteByTournament());
 
-		list.setOnChildClickListener(new OnItemClickListCompetition(this));
+		list.setOnChildClickListener(new OnItemClickListCompetition(this, RESULT_ITEM_CLICK));
 		list.setAdapter(adapter);
 
 		TypeManager.getInstance().initializeActivity(findViewById(R.id.layout_main), false);
@@ -53,6 +55,14 @@ public class ListCompetitionActivity extends GenericActivity {
 		initializePalmaresPoint();
 
 		expandAll();
+	}
+
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		if (requestCode == RESULT_ITEM_CLICK) {
+			business.refreshData();
+			adapter.notifyDataSetChanged();
+		}
 	}
 
 	public void onClickClose(View view) {
