@@ -26,7 +26,8 @@
 		    android:layout_height="wrap_content"
 		    android:layout_margin="5dp"
 	        android:layout_marginBottom="@dimen/invite_layout_field_marging_bottom"
-			android:orientation="vertical" >
+			android:orientation="vertical"
+			android:background="@color/form_background_color" >
 			    <LinearLayout
 			        android:layout_width="match_parent"
 			        android:layout_height="wrap_content"

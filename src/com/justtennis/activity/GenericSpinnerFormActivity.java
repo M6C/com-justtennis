@@ -23,6 +23,7 @@ import com.justtennis.R;
 import com.justtennis.adapter.CustomArrayAdapter;
 import com.justtennis.business.GenericSpinnerFormBusiness;
 import com.justtennis.domain.Address;
+import com.justtennis.manager.TypeManager;
 
 public abstract class GenericSpinnerFormActivity <DATA extends GenericDBPojoNamedSubId> extends GenericActivity {
 
@@ -89,6 +90,7 @@ public abstract class GenericSpinnerFormActivity <DATA extends GenericDBPojoName
 		initializeData();
 		initializeAdapter();
 		initializeListener();
+		TypeManager.getInstance().initializeActivity(findViewById(R.id.layout_main), false);
 	}
 
 	@Override

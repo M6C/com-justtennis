@@ -33,7 +33,9 @@ public class LocationTournamentBusiness extends GenericSpinnerFormBusiness<Tourn
 
 	@Override
 	protected Tournament getNewData() {
-		return new Tournament();
+		Tournament tournament = new Tournament();
+		tournament.setSaison(saisonService.getSaisonActiveOrFirst());
+		return tournament;
 	}
 	
 	@Override
@@ -68,8 +70,11 @@ public class LocationTournamentBusiness extends GenericSpinnerFormBusiness<Tourn
 	}
 
 	protected void initializeDataSaison() {
+		Saison saisonEmpty = SaisonService.getEmpty();
+		saisonEmpty.setName(getContext().getString(R.string.txt_saison));
+
 		listSaison.clear();
-		listSaison.add(SaisonService.getEmpty());
+		listSaison.add(saisonEmpty);
 		listSaison.addAll(saisonService.getList());
 
 		listTxtSaisons.clear();

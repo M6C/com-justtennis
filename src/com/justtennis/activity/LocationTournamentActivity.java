@@ -54,17 +54,14 @@ public class LocationTournamentActivity extends GenericSpinnerFormActivity<Tourn
 	@Override
 	protected View buildFormAdd(ViewGroup llForm) {
 		View view = getLayoutInflater().inflate(R.layout.location_element_tournament, llForm, false);
-
 		spSaison = (Spinner)view.findViewById(R.id.sp_saison);
-
-		initializeSaisonList();
-
 		return view;
 	}
 
 	@Override
 	protected void initializeData() {
 		super.initializeData();
+		initializeSaisonList();
 		initializeSaison();
 	}
 
