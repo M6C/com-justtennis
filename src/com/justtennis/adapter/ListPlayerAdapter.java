@@ -121,7 +121,7 @@ public class ListPlayerAdapter extends ArrayAdapter<Player> {
 		}
 
 		if (ApplicationConfig.SHOW_ID) {
-			name.setText(name.getText() + " [" + v.getId() + "|" + v.getIdExternal() + "]");
+			name.setText(name.getText() + " [id:" + v.getId() + "|idExt:" + v.getIdExternal() + "]");
 		}
 
 //		switch (activity.getMode()) {

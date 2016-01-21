@@ -77,8 +77,8 @@ public class ListCompetitionAdapter extends BaseExpandableListAdapter {
 		tvPoint.setText(invite.getPoint() > 0 ? ""+invite.getPoint() : "");
 
 		if (ApplicationConfig.SHOW_ID) {
-			tvPlayer.setText(tvPlayer.getText() + " [" + invite.getPlayer().getId() + "|" + invite.getPlayer().getIdExternal() + "]");
-			tvDate.setText(tvDate.getText() + " [" + invite.getId() + "|" + invite.getIdExternal() + "]");
+			tvPlayer.setText(tvPlayer.getText() + " [id:" + invite.getPlayer().getId() + "|idExt:" + invite.getPlayer().getIdExternal() + "]");
+			tvDate.setText(tvDate.getText() + " [id:" + invite.getId() + "|idExt:" + invite.getIdExternal() + "]");
 		}
 
 		String textScore = scoreSetService.buildTextScore(invite);

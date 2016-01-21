@@ -10,6 +10,7 @@ import com.cameleon.common.android.db.sqlite.service.GenericService;
 import com.cameleon.common.android.inotifier.INotifierMessage;
 import com.cameleon.common.android.model.GenericDBPojoNamedSubId;
 import com.cameleon.common.android.service.PojoNamedService;
+import com.justtennis.ApplicationConfig;
 import com.justtennis.activity.GenericSpinnerFormActivity;
 
 public abstract class GenericSpinnerFormBusiness <DATA extends GenericDBPojoNamedSubId, SUB_DATA extends GenericDBPojoNamedSubId> {
@@ -181,7 +182,7 @@ public abstract class GenericSpinnerFormBusiness <DATA extends GenericDBPojoName
 
 	protected void initializeTxt() {
 		listDataTxt.clear();
-		listDataTxt.addAll(pojoNamedService.getNames(listData));
+		listDataTxt.addAll(pojoNamedService.getNames(listData, ApplicationConfig.SHOW_ID));
 	}
 
 	protected Context getContext() {

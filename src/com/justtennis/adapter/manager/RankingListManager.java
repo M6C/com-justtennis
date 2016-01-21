@@ -16,6 +16,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.cameleon.common.android.factory.FactoryDialog;
+import com.justtennis.ApplicationConfig;
 import com.justtennis.R;
 import com.justtennis.db.service.RankingService;
 import com.justtennis.domain.Player;
@@ -147,7 +148,11 @@ public class RankingListManager {
 		int i=0;
 		listTxtRankings = new String[setRanking.size()];
 		for(Ranking ranking : setRanking) {
-			listTxtRankings[i++] = ranking.getRanking();
+			listTxtRankings[i] = ranking.getRanking();
+			if (ApplicationConfig.SHOW_ID) {
+				listTxtRankings[i] = "[" + ranking.getId() + "] " + listTxtRankings[i];
+			}
+			i++;
 		}
 
 		rankingNC = rankingService.getNC();

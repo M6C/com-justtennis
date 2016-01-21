@@ -3,6 +3,7 @@ package com.justtennis.parser;
 import android.content.Context;
 
 import com.cameleon.common.android.inotifier.INotifierMessage;
+import com.justtennis.ApplicationConfig;
 import com.justtennis.db.service.AddressService;
 import com.justtennis.db.service.ClubService;
 import com.justtennis.db.service.TournamentService;
@@ -170,6 +171,11 @@ public class LocationParser extends GenericParser {
 				}
 			}
 		}
+		if (ApplicationConfig.SHOW_ID) {
+			if (address != null && address.length == 3) {
+				address[0] = "[" + tournament.getId() + "] " + address[0];
+			}
+		}
 		return address;
 	}
 
@@ -192,6 +198,9 @@ public class LocationParser extends GenericParser {
 						line1 = addressLine[1];
 						line2 = addressLine[2];
 					}
+				}
+				if (ApplicationConfig.SHOW_ID) {
+					name = "[" + club.getId() + "] " + name;
 				}
 			}
 		}
@@ -222,6 +231,9 @@ public class LocationParser extends GenericParser {
 					line2 += " " + address.getCity();
 				}
 				line2 = line2.trim();
+				if (ApplicationConfig.SHOW_ID) {
+					name = "[" + address.getId() + "] " + name;
+				}
 			}
 		}
 		if ("".equals(name) && "".equals(line1) && "".equals(line2)) {

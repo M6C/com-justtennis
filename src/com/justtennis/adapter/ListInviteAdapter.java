@@ -118,8 +118,8 @@ public class ListInviteAdapter extends ArrayAdapter<Invite> {
 		rankingViewManager.manageRanking(rowView, v, true);
 
 		if (ApplicationConfig.SHOW_ID) {
-			tvPlayer.setText(tvPlayer.getText() + " [" + v.getPlayer().getId() + "|" + v.getPlayer().getIdExternal() + "]");
-			tvDate.setText(tvDate.getText() + " [" + v.getId() + "|" + v.getIdExternal() + "]");
+			tvPlayer.setText(tvPlayer.getText() + " [id:" + v.getPlayer().getId() + "|idExt:" + v.getPlayer().getIdExternal() + "]");
+			tvDate.setText(tvDate.getText() + " [id:" + v.getId() + "|idExt:" + v.getIdExternal() + "]");
 		}
 
 		initializeLocation(v, tvClubName);

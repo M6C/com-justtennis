@@ -19,6 +19,7 @@ import android.widget.TextView;
 import com.cameleon.common.android.factory.FactoryDialog;
 import com.cameleon.common.android.model.GenericDBPojo;
 import com.cameleon.common.android.model.GenericDBPojoNamedSubId;
+import com.justtennis.ApplicationConfig;
 import com.justtennis.R;
 import com.justtennis.adapter.CustomArrayAdapter;
 import com.justtennis.business.GenericSpinnerFormBusiness;
@@ -85,9 +86,9 @@ public abstract class GenericSpinnerFormActivity <DATA extends GenericDBPojoName
 			}
 		}
 
-		initializeResource();
 		initializeFormAdd();
 		initializeData();
+		initializeResource();
 		initializeAdapter();
 		initializeListener();
 		TypeManager.getInstance().initializeActivity(findViewById(R.id.layout_main), false);
@@ -205,6 +206,10 @@ public abstract class GenericSpinnerFormActivity <DATA extends GenericDBPojoName
 	protected void initializeResource() {
 		tvTitle.setText(resource.getTitleStringId());
 		etName.setHint(resource.getNameHintStringId());
+
+		if (ApplicationConfig.SHOW_ID) {
+			tvTitle.setText("[" + business.getData().getId() + "] " + tvTitle.getText());
+		}
 	}
 
 	protected void initializeData() {

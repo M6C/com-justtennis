@@ -27,7 +27,6 @@
               android:id="@+id/et_firstname"
               android:layout_width="match_parent"
               android:layout_height="wrap_content"
-              android:layout_marginLeft="@dimen/player_field_margin_left"
               android:gravity="center_horizontal"
               android:textSize="@dimen/player_field_size"
               android:hint="@string/txt_firstname" />
@@ -56,7 +55,6 @@
               android:id="@+id/et_lastname"
               android:layout_width="match_parent"
               android:layout_height="wrap_content"
-              android:layout_marginLeft="@dimen/player_field_margin_left"
               android:gravity="center_horizontal"
               android:textSize="@dimen/player_field_size"
               android:hint="@string/txt_lastname" />
@@ -85,7 +83,6 @@
               android:id="@+id/et_birthday"
               android:layout_width="match_parent"
               android:layout_height="wrap_content"
-              android:layout_marginLeft="@dimen/player_field_margin_left"
               android:gravity="center_horizontal"
               android:textSize="@dimen/player_field_size"
               android:hint="@string/txt_birthday" />
@@ -114,7 +111,6 @@
               android:id="@+id/et_phonenumber"
               android:layout_width="match_parent"
               android:layout_height="wrap_content"
-              android:layout_marginLeft="@dimen/player_field_margin_left"
               android:gravity="center_horizontal"
               android:textSize="@dimen/player_field_size"
               android:hint="@string/txt_phonenumber" />
@@ -141,7 +137,6 @@
               android:id="@+id/sp_ranking"
               android:layout_width="match_parent"
               android:layout_height="wrap_content"
-              android:layout_marginLeft="@dimen/player_field_margin_left"
               android:gravity="center_horizontal"
               android:textSize="@dimen/player_field_size" />
       </LinearLayout>
@@ -167,7 +162,6 @@
               android:id="@+id/sp_ranking_estimate"
               android:layout_width="match_parent"
               android:layout_height="wrap_content"
-              android:layout_marginLeft="@dimen/player_field_margin_left"
               android:gravity="center_horizontal"
               android:textSize="@dimen/player_field_size" />
       </LinearLayout>
@@ -194,7 +188,6 @@
               android:id="@+id/sp_saison"
               android:layout_width="match_parent"
               android:layout_height="wrap_content"
-              android:layout_marginLeft="@dimen/player_field_margin_left"
               android:gravity="center_horizontal"
               android:textSize="@dimen/player_field_size" />
       </LinearLayout>
@@ -221,7 +214,6 @@
               android:id="@+id/sp_type"
               android:layout_width="match_parent"
               android:layout_height="wrap_content"
-              android:layout_marginLeft="@dimen/player_field_margin_left"
               android:gravity="center_horizontal"
               android:textSize="@dimen/player_field_size" />
       </LinearLayout>
@@ -250,36 +242,35 @@
              android:id="@+id/ll_location_detail"
              android:layout_width="match_parent"
              android:layout_height="wrap_content"
-             android:layout_marginLeft="@dimen/invite_field_margin_left"
+             android:layout_marginLeft="@dimen/player_field_margin_left"
              android:orientation="vertical"
              android:visibility="gone"
 	         android:onClick="onClickLocationDetail"			              
          >
-          <TextView
-              android:id="@+id/tv_location_name"
-              android:layout_width="match_parent"
-              android:layout_height="wrap_content"
-              android:textSize="@dimen/invite_field_size_small_1"
-              android:textStyle="bold"
-              android:hint="@string/txt_location" />
-          <TextView
-              android:id="@+id/tv_location_line1"
-              android:layout_width="match_parent"
-              android:layout_height="wrap_content"
-              android:textSize="@dimen/invite_field_size_small_2"
-              android:hint="@string/txt_location" />
-          <TextView
-              android:id="@+id/tv_location_line2"
-              android:layout_width="match_parent"
-              android:layout_height="wrap_content"
-              android:textSize="@dimen/invite_field_size_small_2"
-              android:hint="@string/txt_location" />
+	         <TextView
+	              android:id="@+id/tv_location_name"
+	              android:layout_width="match_parent"
+	              android:layout_height="wrap_content"
+	              android:textSize="@dimen/invite_field_size_small_1"
+	              android:textStyle="bold"
+	              android:hint="@string/txt_location" />
+	         <TextView
+	              android:id="@+id/tv_location_line1"
+	              android:layout_width="match_parent"
+	              android:layout_height="wrap_content"
+	              android:textSize="@dimen/invite_field_size_small_2"
+	              android:hint="@string/txt_location" />
+	         <TextView
+	              android:id="@+id/tv_location_line2"
+	              android:layout_width="match_parent"
+	              android:layout_height="wrap_content"
+	              android:textSize="@dimen/invite_field_size_small_2"
+	              android:hint="@string/txt_location" />
          </LinearLayout>			
           <TextView
              android:id="@+id/et_location"
              android:layout_width="match_parent"
              android:layout_height="wrap_content"
-             android:layout_marginLeft="@dimen/player_field_margin_left"
              android:gravity="center_horizontal"
              android:textSize="@dimen/player_field_size"
              android:textColor="@color/hint_text_color"

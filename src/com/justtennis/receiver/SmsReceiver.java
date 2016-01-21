@@ -276,7 +276,7 @@ public class SmsReceiver extends BroadcastReceiver {
 		Player player = invite.getPlayer();
 		String name = player.getFirstName() + " " + player.getLastName();
 		if (ApplicationConfig.SHOW_ID) {
-			name += " [" + player.getId() + "|" + player.getIdExternal() + "]";
+			name += " [id:" + player.getId() + "|idExt:" + player.getIdExternal() + "]";
 		}
 		GCalendarHelper.getInstance(context).addAttendee(invite.getIdCalendar().intValue(), status, name);
 	}

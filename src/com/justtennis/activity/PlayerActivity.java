@@ -21,6 +21,7 @@ import android.widget.TextView;
 
 import com.cameleon.common.android.adapter.BaseViewAdapter;
 import com.cameleon.common.android.factory.FactoryDialog;
+import com.justtennis.ApplicationConfig;
 import com.justtennis.R;
 import com.justtennis.adapter.CustomArrayAdapter;
 import com.justtennis.adapter.manager.RankingListManager;
@@ -452,6 +453,13 @@ public class PlayerActivity extends GenericActivity {
 			lastname = player.getLastName();
 			birthday = player.getBirthday();
 			phonenumber = player.getPhonenumber();
+
+			if (ApplicationConfig.SHOW_ID) {
+				TextView textView = (TextView)findViewById(R.id.tv_firstname);
+				String text = textView.getText().toString();
+				text += " [" + player.getId() + "]";
+				textView.setText(text);
+			}
 		}
 		etFirstname.setEnabled(bEditable);
 		llLastname.setVisibility(iVisibility);
