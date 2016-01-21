@@ -463,6 +463,16 @@ public class InviteActivity extends GenericActivity {
 			if (player.getIdGoogle()!=null && player.getIdGoogle().longValue()>0l) {
 				ivPhoto.setImageBitmap(ContactManager.getInstance(this).getPhoto(player.getIdGoogle()));
 			}
+			if (StringTool.getInstance().isEmpty(player.getFirstName())) {
+				tvFirstname.setVisibility(View.GONE);
+			} else {
+				tvFirstname.setVisibility(View.VISIBLE);
+			}
+			if (business.isUnknownPlayer() || StringTool.getInstance().isEmpty(player.getLastName())) {
+				tvLastname.setVisibility(View.GONE);
+			} else {
+				tvLastname.setVisibility(View.VISIBLE);
+			}
 		}
 	}
 

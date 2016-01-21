@@ -18,14 +18,15 @@
                 android:layout_height="match_parent"
                 android:layout_gravity="center_vertical|center_horizontal"
                 android:layout_margin="2dp"
-                android:layout_weight=".5"
+                android:layout_marginLeft="5dp"
+                android:layout_weight=".4"
                 android:src="@drawable/player_unknow_2" />
 
             <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="10dp"
-                android:layout_weight=".5"
+                android:layout_marginRight="5dp"
+                android:layout_weight=".6"
                 android:gravity="center_vertical"
                 android:orientation="vertical" >
 
@@ -35,7 +36,7 @@
                     android:layout_marginBottom="@dimen/invite_layout_field_marging_bottom"
                     android:orientation="vertical"
                     android:padding="@dimen/invite_layout_field_padding" >
-
+ 
                     <TextView
                         android:id="@+id/tv_firstname"
                         android:layout_width="wrap_content"
@@ -62,19 +63,11 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="@dimen/invite_layout_field_marging_bottom"
+                    android:gravity="end"
                     android:orientation="vertical" >
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="@string/txt_ranking"
-                        android:textColor="@color/invite_text_color"
-                        android:textSize="@dimen/invite_text_size"
-                        android:textStyle="bold" />
-
                     <Spinner
                         android:id="@+id/sp_ranking"
-                        android:layout_width="match_parent"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="@dimen/invite_field_margin_left"
                         android:gravity="center_horizontal"
@@ -86,19 +79,11 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="@dimen/invite_layout_field_marging_bottom"
+                    android:gravity="end"
                     android:orientation="vertical" >
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="@string/txt_saison"
-                        android:textColor="@color/invite_text_color"
-                        android:textSize="@dimen/invite_text_size"
-                        android:textStyle="bold" />
-
                     <Spinner
                         android:id="@+id/sp_saison"
-                        android:layout_width="match_parent"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="@dimen/invite_field_margin_left"
                         android:gravity="center_horizontal"

@@ -78,7 +78,7 @@ public class MainActivity extends GenericActivity implements INotifierMessage {
 		dialogExit = FactoryDialog.getInstance().buildYesNoDialog(
 			this, new OnClickExitListenerOk(this), R.string.dialog_exit_title, R.string.dialog_exit_message);
 
-		typeManager.initializeActivity(layoutMain, true);
+		initializeLayoutType();
 
 		Intent intent = getIntent();
 		if (Intent.ACTION_SEND_MULTIPLE.equals(intent.getAction())) {
@@ -95,7 +95,6 @@ public class MainActivity extends GenericActivity implements INotifierMessage {
 		business.onResume();
 
 		initializeData();
-		initializeLayoutType();
 
 		if (business.getUserCount()==0) {
 			Intent intent = new Intent(getApplicationContext(), UserActivity.class);
@@ -111,9 +110,9 @@ public class MainActivity extends GenericActivity implements INotifierMessage {
 	}
 
 	private void initializeLayoutType() {
+		typeManager.initializeActivity(layoutMain, true);
 		switch(typeManager.getType()) {
 			case COMPETITION: {
-				layoutMain.setBackgroundResource(R.drawable.background_01_orange);
 				llTypeMatch.setAlpha(1f);
 				llTypeEntrainement.setAlpha(.2f);
 				ivMatch.setVisibility(View.VISIBLE);
@@ -123,7 +122,6 @@ public class MainActivity extends GenericActivity implements INotifierMessage {
 
 			case TRAINING:
 			default: {
-				layoutMain.setBackgroundResource(R.drawable.background_01);
 				llTypeEntrainement.setAlpha(1f);
 				llTypeMatch.setAlpha(.2f);
 				ivPlay.setVisibility(View.VISIBLE);

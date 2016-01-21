@@ -7,7 +7,6 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 
 import com.justtennis.activity.InviteActivity;
-import com.justtennis.activity.InviteDemandeActivity;
 
 public class OnItemClickListPlayerInvite implements OnItemClickListener {
 	private Activity context;
@@ -18,15 +17,9 @@ public class OnItemClickListPlayerInvite implements OnItemClickListener {
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-		if (((Long)view.getTag()).intValue() == -1) {
-			Intent intent = new Intent(context, InviteDemandeActivity.class);
-			intent.putExtra(InviteDemandeActivity.EXTRA_PLAYER_ID, ((Long)view.getTag()));
+		Intent intent = new Intent(context, InviteActivity.class);
+		intent.putExtra(InviteActivity.EXTRA_MODE, InviteActivity.MODE.INVITE_SIMPLE);
+		intent.putExtra(InviteActivity.EXTRA_PLAYER_ID, ((Long)view.getTag()));
 		context.startActivity(intent);
-		} else {
-			Intent intent = new Intent(context, InviteActivity.class);
-			intent.putExtra(InviteActivity.EXTRA_MODE, InviteActivity.MODE.INVITE_SIMPLE);
-			intent.putExtra(InviteActivity.EXTRA_PLAYER_ID, ((Long)view.getTag()));
-			context.startActivity(intent);
-		}
     }
 }
