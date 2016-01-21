@@ -4,7 +4,7 @@ import java.util.Locale;
 
 public class ApplicationConfig {
 	
-	public static final boolean SHOW_ID = true;
+	public static final boolean SHOW_ID = false;
 	public static final boolean SHOW_LOG_TRACE_PARSER = false;
 	public static final boolean SHOW_LOG_TRACE_MAPPER = false;
 	public static final boolean SHOW_LOG_SMS_PROCESS = true;
