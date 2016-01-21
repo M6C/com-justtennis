@@ -23,7 +23,7 @@ public class OnItemClickListInvite implements OnItemClickListener {
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
     	Intent intent = new Intent(context, InviteActivity.class);
 		intent.putExtra(InviteActivity.EXTRA_INVITE, (Serializable)view.getTag());
-		intent.putExtra(InviteActivity.EXTRA_MODE, InviteActivity.MODE.INVITE_MODIFY);
+		intent.putExtra(InviteActivity.EXTRA_MODE, InviteActivity.MODE.INVITE_DETAIL);
 		context.startActivityForResult(intent, requestCode);
     }
 }

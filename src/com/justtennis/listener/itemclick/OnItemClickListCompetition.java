@@ -23,7 +23,7 @@ public class OnItemClickListCompetition implements OnChildClickListener {
     public boolean onChildClick(ExpandableListView parent, View view, int groupPosition, int childPosition, long id) {
     	Intent intent = new Intent(context, InviteActivity.class);
 		intent.putExtra(InviteActivity.EXTRA_INVITE, (Serializable)view.getTag());
-		intent.putExtra(InviteActivity.EXTRA_MODE, InviteActivity.MODE.INVITE_MODIFY);
+		intent.putExtra(InviteActivity.EXTRA_MODE, InviteActivity.MODE.INVITE_DETAIL);
 		context.startActivityForResult(intent, requestCode);
 		return false;
     }

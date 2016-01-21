@@ -56,8 +56,8 @@ public class InviteActivity extends GenericActivity {
 	private static final String KEY_LOCATION_FROM_RESULT = "KEY_LOCATION_FROM_RESULT";
 
 	public enum MODE {
-		INVITE_CREATE,
-		INVITE_MODIFY,
+		INVITE_SIMPLE,
+		INVITE_DETAIL,
 		INVITE_CONFIRM
 	};
 	public static final String EXTRA_MODE = "MODE";
@@ -363,7 +363,7 @@ public class InviteActivity extends GenericActivity {
 	}
 
 	public void onClickDetail(View view) {
-		business.setMode(business.getMode() == MODE.INVITE_MODIFY ? MODE.INVITE_CREATE : MODE.INVITE_MODIFY);
+		business.setMode(business.getMode() == MODE.INVITE_DETAIL ? MODE.INVITE_SIMPLE : MODE.INVITE_DETAIL);
 
 		initializeContentPlayer();
 		initializeContentPlayerView();
@@ -379,7 +379,7 @@ public class InviteActivity extends GenericActivity {
 	private void initializeContentPlayer() {
 		MODE mode = business.getMode();
 
-		if (MODE.INVITE_MODIFY == mode) {
+		if (MODE.INVITE_DETAIL == mode) {
 			initializeContentViewPlayer(R.layout.element_invite_player_detail);
 		} else {
 			initializeContentViewPlayer(R.layout.element_invite_player);
@@ -408,14 +408,14 @@ public class InviteActivity extends GenericActivity {
 
 		switch(mode) {
 			case INVITE_CONFIRM:
-			case INVITE_CREATE:
+			case INVITE_SIMPLE:
 				llDetail.setVisibility(View.VISIBLE);
 				llLocation.setVisibility(View.GONE);
 				llScore.setVisibility(View.GONE);
 				llBonusPoint.setVisibility(View.GONE);
 				findViewById(R.id.sv_content).setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT, 0));
 				break;
-			case INVITE_MODIFY:
+			case INVITE_DETAIL:
 			default:
 				llDetail.setVisibility(View.GONE);
 				llLocation.setVisibility(View.VISIBLE);
@@ -431,8 +431,8 @@ public class InviteActivity extends GenericActivity {
 				edDate.setEnabled(false);
 				edTime.setEnabled(false);
 				break;
-			case INVITE_CREATE:
-			case INVITE_MODIFY:
+			case INVITE_SIMPLE:
+			case INVITE_DETAIL:
 			default:
 				llInviteDemande.setVisibility(View.VISIBLE);
 				edDate.setEnabled(true);

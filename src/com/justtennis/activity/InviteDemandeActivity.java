@@ -238,7 +238,7 @@ public class InviteDemandeActivity extends GenericActivity {
 
 	public void onClickDetail(View view) {
 		Intent intent = new Intent(this, InviteActivity.class);
-		intent.putExtra(InviteActivity.EXTRA_MODE, InviteActivity.MODE.INVITE_MODIFY);
+		intent.putExtra(InviteActivity.EXTRA_MODE, InviteActivity.MODE.INVITE_DETAIL);
 		intent.putExtra(InviteActivity.EXTRA_INVITE, business.getInvite());
 		startActivityForResult(intent, RESULT_PLAYER);
 		finish();

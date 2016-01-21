@@ -24,7 +24,7 @@ public class OnItemClickListPlayerInvite implements OnItemClickListener {
 		context.startActivity(intent);
 		} else {
 			Intent intent = new Intent(context, InviteActivity.class);
-			intent.putExtra(InviteActivity.EXTRA_MODE, InviteActivity.MODE.INVITE_CREATE);
+			intent.putExtra(InviteActivity.EXTRA_MODE, InviteActivity.MODE.INVITE_SIMPLE);
 			intent.putExtra(InviteActivity.EXTRA_PLAYER_ID, ((Long)view.getTag()));
 			context.startActivity(intent);
 		}
