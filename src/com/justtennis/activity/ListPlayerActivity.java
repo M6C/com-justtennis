@@ -156,10 +156,6 @@ public class ListPlayerActivity extends GenericActivity {
 		}
 	}
 
-	public void onClickClose(View view) {
-		finish();
-	}
-
 	public void onClickDelete(View view) {
 		Player player = (Player)view.getTag();
 		if (business.getInviteCount(player) > 0) {

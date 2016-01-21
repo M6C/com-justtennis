@@ -9,6 +9,7 @@
     <string name="button_text_qrcode_scan">QRCode Scan</string>
     <string name="button_text_list_player">List Player</string>
     <string name="button_text_list_invite">List Invite</string>
+    <string name="button_text_ok">Ok</string>
     <string name="button_text_submit">Submit</string>
     <string name="button_text_scan">Scan</string>
     <string name="button_text_import">Import</string>

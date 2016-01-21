@@ -78,10 +78,6 @@ public class ComputeRankingActivity extends GenericActivity {
 		initializePalmaresNbVictory();
 	}
 
-	public void onClickClose(View view) {
-		finish();
-	}
-
 	public void onClickPoint(View view) {
 	}
 

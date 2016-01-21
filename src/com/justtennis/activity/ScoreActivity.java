@@ -83,8 +83,7 @@ public class ScoreActivity extends GenericActivity {
 
 	@Override
 	public void onBackPressed() {
-		onClickCancel(null);
-		super.onBackPressed();
+		finish();
 	}
 
 	@Override
@@ -98,11 +97,6 @@ public class ScoreActivity extends GenericActivity {
 		Intent intent = new Intent();
 		intent.putExtra(EXTRA_SCORE, (Serializable)business.getScores());
 		setResult(RESULT_OK, intent);
-		finish();
-	}
-	
-	public void onClickCancel(View view) {
-		setResult(RESULT_CANCELED);
 		finish();
 	}
 

@@ -97,7 +97,7 @@
 		    android:layout_height="wrap_content"
 		    android:layout_weight=".5"
 	    	android:layout_marginRight="5dp"
-	        android:text="@string/button_text_submit"
+	        android:text="@string/button_text_ok"
 	        android:onClick="onClickCreate"
 	    />
 	    <Button
@@ -122,7 +122,7 @@
 		    android:layout_height="wrap_content"
 		    android:layout_weight=".5"
 	    	android:layout_marginRight="5dp"
-	        android:text="@string/button_text_submit"
+	        android:text="@string/button_text_ok"
 	        android:onClick="onClickModify"
 	    />
 	    <Button

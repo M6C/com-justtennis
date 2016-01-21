@@ -102,12 +102,12 @@ public abstract class GenericSpinnerFormActivity <DATA extends GenericDBPojoName
 	@Override
 	public void onBackPressed() {
 		if (modeOnCreate == MODE.ADD) {
-			onClickCancel(null);
+			finish();
 		} else if (mode == MODE.ADD) {
 			mode = MODE.SELECTION;
 			manageVisibility();
 		} else {
-			onClickCancel(null);
+			finish();
 		}
 	}
 
@@ -146,10 +146,6 @@ public abstract class GenericSpinnerFormActivity <DATA extends GenericDBPojoName
 	}
 
 	public void onClickValidate(View view) {
-	}
-
-	public void onClickCancel(View view) {
-		finish();
 	}
 
 	public void onClickAdd(View view) {

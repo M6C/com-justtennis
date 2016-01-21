@@ -81,6 +81,7 @@ public class PlayerActivity extends GenericActivity {
 	private LinearLayout llCreate;
 	private LinearLayout llModify;
 	private LinearLayout llAddDemande;
+	private LinearLayout llMessage;
 
 	private TextView tvLocation;
 	private TextView tvLocationEmpty;
@@ -198,6 +199,7 @@ public class PlayerActivity extends GenericActivity {
 		llCreate = (LinearLayout)findViewById(R.id.ll_create);
 		llModify = (LinearLayout)findViewById(R.id.ll_modify);
 		llAddDemande = (LinearLayout)findViewById(R.id.ll_add_demande);
+		llMessage = (LinearLayout)findViewById(R.id.ll_message);
 		tvLocation = ((TextView)findViewById(R.id.tv_location));
 		tvLocationEmpty = ((TextView)findViewById(R.id.et_location));
 		llLocationDetail = (LinearLayout)findViewById(R.id.ll_location_detail);
@@ -463,6 +465,7 @@ public class PlayerActivity extends GenericActivity {
 		etLastname.setText(lastname);
 		etBirthday.setText(birthday);
 		etPhonenumber.setText(phonenumber);
+		llMessage.setVisibility(View.GONE);
 	}
 
 	private void initializeListType() {

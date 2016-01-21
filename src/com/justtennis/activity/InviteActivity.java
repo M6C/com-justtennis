@@ -173,12 +173,6 @@ public class InviteActivity extends GenericActivity {
 	}
 
 	@Override
-	public void onBackPressed() {
-		onClickCancel(null);
-		super.onBackPressed();
-	}
-
-	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		switch (requestCode) {
 			case RESULT_PLAYER:
@@ -274,10 +268,6 @@ public class InviteActivity extends GenericActivity {
 		Intent intent = new Intent(this,  ScoreActivity.class);
 		intent.putExtra(ScoreActivity.EXTRA_SCORE, business.getScores());
 		startActivityForResult(intent, RESULT_SCORE);
-	}
-
-	public void onClickCancel(View view) {
-		finish();
 	}
 
 	public void onClickPlayer(View view) {

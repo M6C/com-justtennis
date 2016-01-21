@@ -59,10 +59,6 @@ public class UserBusiness extends PlayerBusiness {
 		mode = (player == null || player.getId() == null) ? MODE.CREATE : MODE.MODIFY;
 	}
 
-//	@Override
-//	protected void initializeDataSaison() {
-//	}
-
 	@Override
 	public boolean isUnknownPlayer(Player player) {
 		return false;
@@ -76,9 +72,15 @@ public class UserBusiness extends PlayerBusiness {
 		return player;
 	}
 
-	public void saveMessage(String message) {
+	public void saveMessage(String text) {
+		Message message = messageService.getCommon();
+		if (message == null) {
+			message = new Message(text);
+		} else {
+			message.setMessage(text);
+		}
 		// Save in database
-		messageService.createOrUpdate(new Message(message));
+		messageService.createOrUpdate(message);
 	}
 	
 	public String getMessage() {

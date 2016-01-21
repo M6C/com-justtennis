@@ -65,10 +65,6 @@ public class ListCompetitionActivity extends GenericActivity {
 		}
 	}
 
-	public void onClickClose(View view) {
-		finish();
-	}
-
 	public void onClickInviteAll(View view) {
 		updateInviteType(TYPE.ALL);
 	}

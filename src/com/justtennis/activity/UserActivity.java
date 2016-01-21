@@ -32,6 +32,7 @@ public class UserActivity extends PlayerActivity {
 	private TextView tvMessage;
 	private EditText etMessage;
 	private LinearLayout llType;
+	private LinearLayout llMessage;
 	private Spinner spSaison;
 	private UserBusiness business;
 
@@ -57,23 +58,20 @@ public class UserActivity extends PlayerActivity {
 	}
 
 	@Override
-	protected void initializeLayoutView() {
-		setContentView(R.layout.user);
-	}
-
-	@Override
 	protected void initializeViewById() {
 		super.initializeViewById();
 		tvMessage = (TextView)findViewById(R.id.tv_message);
 		etMessage = (EditText)findViewById(R.id.et_message);
 		spSaison = (Spinner)findViewById(R.id.sp_saison);
 		llType = (LinearLayout)findViewById(R.id.ll_type);
+		llMessage = (LinearLayout)findViewById(R.id.ll_message);
 	}
 
 	@Override
 	protected void initializeView() {
 		super.initializeView();
 		llType.setVisibility(View.GONE);
+		llMessage.setVisibility(View.VISIBLE);
 	}
 
 	@Override
@@ -91,10 +89,6 @@ public class UserActivity extends PlayerActivity {
 		super.initializeSaisonList();
 		spSaison.setOnItemSelectedListener(null);
 	}
-
-//	@Override
-//	protected void initializeSaison() {
-//	}
 
 	@Override
 	protected PlayerBusiness createBusiness() {

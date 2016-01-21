@@ -85,10 +85,6 @@ public class ListInviteActivity extends GenericActivity {
 		filter.filter(filterIdPlayerValue);
 	}
 
-	public void onClickClose(View view) {
-		finish();
-	}
-
 	public void onClickButtonFilter(View view) {
 		if (llFilterPlayer.getVisibility() == View.GONE) {
 			llFilterPlayer.setVisibility(View.VISIBLE);

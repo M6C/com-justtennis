@@ -122,8 +122,7 @@ public class InviteDemandeActivity extends GenericActivity {
 
 	@Override
 	public void onBackPressed() {
-		onClickCancel(null);
-		super.onBackPressed();
+		finish();
 	}
 
 	@Override
@@ -232,10 +231,6 @@ public class InviteDemandeActivity extends GenericActivity {
 		}, -1, business.getDate()).show();
 	}
 	
-	public void onClickCancel(View view) {
-		finish();
-	}
-
 	public void onClickDetail(View view) {
 		Intent intent = new Intent(this, InviteActivity.class);
 		intent.putExtra(InviteActivity.EXTRA_MODE, InviteActivity.MODE.INVITE_DETAIL);

@@ -149,8 +149,7 @@ public class LocationActivity extends GenericActivity {
 		} else if (llAddressSelection.getVisibility() == View.VISIBLE) {
 			manageVisibility(false, false, false, true, false, false);
 		} else {
-			onClickCancel(null);
-			super.onBackPressed();
+			finish();
 		}
 	}
 
@@ -176,10 +175,6 @@ public class LocationActivity extends GenericActivity {
 		finish();
 	}
 	
-	public void onClickCancel(View view) {
-		finish();
-	}
-
 	public void onClickAddressCollapser(View view) {
 		visibilityAddressContent = (visibilityAddressContent == View.GONE) ? View.VISIBLE : View.GONE;
 		llAddressContent.setVisibility(visibilityAddressContent);

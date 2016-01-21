@@ -48,20 +48,10 @@
 	>
 	    <Button
 	        android:id="@+id/btn_player_add"
-		    android:layout_width="0dp"
+		    android:layout_width="match_parent"
 		    android:layout_height="wrap_content"
-		    android:layout_weight=".5"
-	    	android:layout_marginRight="5dp"
 	        android:text="@string/button_text_add"
 	        android:onClick="onClickAdd"
-	    />
-	    <Button
-	        android:id="@+id/btn_player_close"
-		    android:layout_width="0dp"
-		    android:layout_height="wrap_content"
-		    android:layout_weight=".5"
-	        android:text="@string/button_text_close"
-	        android:onClick="onClickClose"
 	    />
 	</LinearLayout>
 </LinearLayout>
