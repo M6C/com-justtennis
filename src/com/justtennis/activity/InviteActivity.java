@@ -633,15 +633,26 @@ public class InviteActivity extends GenericActivity {
 			}
 		});
 		edTime.setOnFocusChangeListener(new OnFocusChangeListener() {
-			private boolean first = true;
 			@Override
 			public void onFocusChange(View v, boolean hasFocus) {
-				if (first) {
-					first = false;
-					return;
-				}
 				if (hasFocus) {
 					onClickInviteTime(v);
+				}
+			}
+		});
+		etScore.setOnFocusChangeListener(new OnFocusChangeListener() {
+			@Override
+			public void onFocusChange(View v, boolean hasFocus) {
+				if (hasFocus) {
+					onClickInviteScore(v);
+				}
+			}
+		});
+		tvLocationEmpty.setOnFocusChangeListener(new OnFocusChangeListener() {
+			@Override
+			public void onFocusChange(View v, boolean hasFocus) {
+				if (hasFocus) {
+					onClickLocation(v);
 				}
 			}
 		});
