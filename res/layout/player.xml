@@ -93,7 +93,7 @@
 	    android:gravity="bottom"
 	>
 	    <Button
-		    android:layout_width="wrap_content"
+		    android:layout_width="match_parent"
 		    android:layout_height="wrap_content"
 		    android:layout_weight=".5"
 	    	android:layout_marginRight="5dp"
@@ -102,7 +102,7 @@
 	    />
 	    <Button
 	        android:id="@+id/btn_import"
-		    android:layout_width="wrap_content"
+		    android:layout_width="match_parent"
 		    android:layout_height="wrap_content"
 		    android:layout_weight=".5"
 	        android:text="@string/button_text_import"
@@ -118,7 +118,7 @@
 	    android:gravity="bottom"
 	>
 	    <Button
-		    android:layout_width="wrap_content"
+		    android:layout_width="match_parent"
 		    android:layout_height="wrap_content"
 		    android:layout_weight=".5"
 	    	android:layout_marginRight="5dp"
@@ -127,7 +127,7 @@
 	    />
 	    <Button
 	        android:id="@+id/btn_qrcode"
-		    android:layout_width="wrap_content"
+		    android:layout_width="match_parent"
 		    android:layout_height="wrap_content"
 		    android:layout_weight=".5"
 	        android:text="@string/button_text_qrcode"
@@ -144,7 +144,7 @@
 	>
 	    <Button
 	        android:id="@+id/btn_add_demande_yes"
-		    android:layout_width="wrap_content"
+		    android:layout_width="match_parent"
 		    android:layout_height="wrap_content"
 		    android:layout_weight=".5"
 	    	android:layout_marginRight="5dp"
@@ -153,7 +153,7 @@
 	    />
 	    <Button
 	        android:id="@+id/btn_add_demande_no"
-		    android:layout_width="wrap_content"
+		    android:layout_width="match_parent"
 		    android:layout_height="wrap_content"
 		    android:layout_weight=".5"
 	        android:text="@string/button_text_no"
