@@ -110,6 +110,13 @@ public class InviteActivity extends GenericActivity {
 		NotifierMessageLogger notifier = NotifierMessageLogger.getInstance();
 		business = new InviteBusiness(this, notifier);
 
+		if (savedInstanceState!=null) {
+			business.initializeData(savedInstanceState);
+		}
+		else {
+			business.initializeData(getIntent());
+		}
+
 		setContentView(R.layout.invite2);
 
 		initializeContentPlayer();
@@ -134,13 +141,6 @@ public class InviteActivity extends GenericActivity {
 		llDetail = (LinearLayout)findViewById(R.id.ll_detail);
 		llBonusPoint = (LinearLayout)findViewById(R.id.ll_bonus_point);
 
-		if (savedInstanceState!=null) {
-			business.initializeData(savedInstanceState);
-		}
-		else {
-			business.initializeData(getIntent());
-		}
-
 		typeManager = TypeManager.getInstance();
 		typeManager.initializeActivity(findViewById(R.id.layout_main), false);
 		bonusListManager = BonusListManager.getInstance(this, notifier);
@@ -153,14 +153,6 @@ public class InviteActivity extends GenericActivity {
 	@Override
 	protected void onResume() {
 		super.onResume();
-//		Intent intent = getIntent();
-//		if (savedInstanceState!=null) {
-//			business.initializeData(savedInstanceState);
-//			savedInstanceState = null;
-//		}
-//		else {
-//			business.initializeData(intent);
-//		}
 
 		if (idPlayerFromResult != null) {
 			business.setPlayer(idPlayerFromResult);
@@ -387,10 +379,10 @@ public class InviteActivity extends GenericActivity {
 	private void initializeContentPlayer() {
 		MODE mode = business.getMode();
 
-		if (MODE.INVITE_CREATE == mode) {
-			initializeContentViewPlayer(R.layout.element_invite_player);
-		} else {
+		if (MODE.INVITE_MODIFY == mode) {
 			initializeContentViewPlayer(R.layout.element_invite_player_detail);
+		} else {
+			initializeContentViewPlayer(R.layout.element_invite_player);
 		}
 	}
 
