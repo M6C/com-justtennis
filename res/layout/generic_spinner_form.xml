@@ -99,6 +99,7 @@
 				            android:id="@+id/et_name"
 				            android:layout_width="match_parent"
 				            android:layout_height="wrap_content"
+				            android:textSize="@dimen/location_field_size"
 				            android:hint="@string/hint_name"
 				            android:maxLines="1" />
 
@@ -129,7 +130,6 @@
 						        android:src="@drawable/btn_add"
 						        android:onClick="onClickAddFormList"
 						    />
-				
 						    <ImageView android:id="@+id/iv_tournament_club_delete"
 							    android:layout_width="25dip"
 							    android:layout_height="25dip"
@@ -139,6 +139,7 @@
 							    android:layout_gravity="center_vertical|center_horizontal"
 							    android:contentDescription="@string/button_desctiption_delete"
 							    android:onClick="onClickDeleteFormList"
+							    android:visibility="gone"
 							/>
 					    </LinearLayout>
 				    </LinearLayout>
@@ -149,7 +150,7 @@
 			            android:layout_height="wrap_content"
 						android:layout_marginTop="5dp"
 			            android:onClick="onClickAddValidate"
-			            android:text="@string/button_text_add"
+			            android:text="@string/button_text_ok"
 			        />
 		    </LinearLayout>
 		</LinearLayout>
