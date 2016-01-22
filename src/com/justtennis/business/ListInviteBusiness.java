@@ -59,7 +59,8 @@ public class ListInviteBusiness {
 	}
 
 	public void delete(Invite invite) {
-		Logger.logMe(TAG, "Delete Button !!!");
+		Logger.logMe(TAG, "Delete Invite");
+		scoreService.deleteByIdInvite(invite.getId());
 		inviteService.delete(invite);
 		if (invite.getIdCalendar() != null) {
 			calendarHelper.deleteCalendarEntry(invite.getIdCalendar());

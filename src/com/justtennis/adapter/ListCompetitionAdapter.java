@@ -12,6 +12,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.justtennis.ApplicationConfig;
@@ -53,6 +54,7 @@ public class ListCompetitionAdapter extends BaseExpandableListAdapter {
 		return childPosition;
 	}
 
+	@SuppressLint("InflateParams")
 	@Override
 	public View getChildView(int groupPosition, final int childPosition, boolean isLastChild, View convertView, ViewGroup parent) {
 
@@ -69,12 +71,14 @@ public class ListCompetitionAdapter extends BaseExpandableListAdapter {
 		TextView tvDate = (TextView) convertView.findViewById(R.id.tv_date);
 		TextView tvScore = (TextView) convertView.findViewById(R.id.tv_score);
 		TextView tvPoint = (TextView) convertView.findViewById(R.id.tv_point);
+		ImageView imageDelete = (ImageView) convertView.findViewById(R.id.iv_delete);
 
 		rankingViewManager.manageRanking(convertView, invite, true);
 
 		tvPlayer.setText(invite.getPlayer()==null ? "" : Html.fromHtml("<b>" + invite.getPlayer().getFirstName() + "</b> " + invite.getPlayer().getLastName()));
 		tvDate.setText(invite.getDate()==null ? "" : sdf.format(invite.getDate()));
 		tvPoint.setText(invite.getPoint() > 0 ? ""+invite.getPoint() : "");
+		imageDelete.setTag(invite);
 
 		if (ApplicationConfig.SHOW_ID) {
 			tvPlayer.setText(tvPlayer.getText() + " [id:" + invite.getPlayer().getId() + "|idExt:" + invite.getPlayer().getIdExternal() + "]");
@@ -120,6 +124,7 @@ public class ListCompetitionAdapter extends BaseExpandableListAdapter {
 		return groupPosition;
 	}
 
+	@SuppressLint("InflateParams")
 	@Override
 	public View getGroupView(int groupPosition, boolean isExpanded, View convertView, ViewGroup parent) {
 		Tournament tournament = (Tournament) getGroup(groupPosition);
@@ -143,5 +148,29 @@ public class ListCompetitionAdapter extends BaseExpandableListAdapter {
 	@Override
 	public boolean isChildSelectable(int groupPosition, int childPosition) {
 		return true;
+	}
+
+	/**
+	 * @param listTournament the listTournament to set
+	 */
+	public void setListTournament(List<Tournament> listTournament) {
+		if (this.listTournament == null) {
+			this.listTournament = listTournament;
+		} else {
+			this.listTournament.clear();
+			this.listTournament.addAll(listTournament);
+		}
+	}
+
+	/**
+	 * @param listInviteByTournament the listInviteByTournament to set
+	 */
+	public void setListInviteByTournament(HashMap<Tournament, List<Invite>> listInviteByTournament) {
+		if (this.listInviteByTournament == null) {
+			this.listInviteByTournament = listInviteByTournament;
+		} else {
+			this.listInviteByTournament.clear();
+			this.listInviteByTournament.putAll(listInviteByTournament);
+		}
 	}
 }

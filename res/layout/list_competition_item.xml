@@ -10,6 +10,27 @@
         android:layout_height="match_parent"
         android:orientation="vertical"
 	    android:layout_marginLeft="2sp"
+	    android:layout_marginRight="2sp"
+    >
+		<TextView
+		    android:id="@+id/tv_ranking"
+		    android:layout_width="wrap_content"
+		    android:layout_height="wrap_content"
+		    android:textSize="14sp"
+		/>
+		<TextView
+		    android:id="@+id/tv_ranking_estimate"
+		    android:layout_width="wrap_content"
+		    android:layout_height="wrap_content"
+		    android:textSize="14sp"
+		    android:textStyle="bold"
+		/>
+	</LinearLayout>
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+	    android:layout_marginLeft="2sp"
 	    android:layout_marginRight="8sp"
     >
 		<TextView
@@ -80,19 +101,15 @@
         android:orientation="vertical"
 	    android:layout_marginLeft="2sp"
 	    android:layout_marginRight="2sp"
+	    android:gravity="center_vertical|center_horizontal"
     >
-		<TextView
-		    android:id="@+id/tv_ranking"
-		    android:layout_width="wrap_content"
-		    android:layout_height="wrap_content"
-		    android:textSize="14sp"
+	    <ImageView android:id="@+id/iv_delete"
+		    android:layout_width="25dip"
+		    android:layout_height="25dip"
+		    android:src="@drawable/player_delete"
+		    android:layout_gravity="center_vertical|center_horizontal"
+		    android:contentDescription="@string/button_desctiption_delete"
+		    android:onClick="onClickDelete"
 		/>
-		<TextView
-		    android:id="@+id/tv_ranking_estimate"
-		    android:layout_width="wrap_content"
-		    android:layout_height="wrap_content"
-		    android:textSize="14sp"
-		    android:textStyle="bold"
-		/>
-	</LinearLayout>
+    </LinearLayout>
 </LinearLayout>

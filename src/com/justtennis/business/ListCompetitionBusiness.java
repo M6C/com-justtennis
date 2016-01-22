@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import org.gdocument.gtracergps.launcher.log.Logger;
+
 import android.content.Context;
 
 import com.cameleon.common.android.inotifier.INotifierMessage;
@@ -19,6 +21,7 @@ import com.justtennis.domain.Invite;
 import com.justtennis.domain.Ranking;
 import com.justtennis.domain.Tournament;
 import com.justtennis.domain.User;
+import com.justtennis.helper.GCalendarHelper;
 import com.justtennis.notifier.NotifierMessageLogger;
 
 public class ListCompetitionBusiness {
@@ -28,7 +31,6 @@ public class ListCompetitionBusiness {
 		PALMARES
 	}
 
-	@SuppressWarnings("unused")
 	private static final String TAG = ListCompetitionBusiness.class.getSimpleName();
 	
 	private ListCompetitionActivity context;
@@ -40,6 +42,7 @@ public class ListCompetitionBusiness {
 	private TournamentService tournamentService;
 	private ComputeRankSubService computeRankService;
 	private RankingService rankingService;
+	private GCalendarHelper calendarHelper;
 
 	private List<Tournament> listTournament;
 	private HashMap<Tournament, List<Invite>> tableInviteByTournament;
@@ -56,6 +59,7 @@ public class ListCompetitionBusiness {
 		scoreService = new ScoreSetService(context, notificationMessage);
 		computeRankService = new ComputeRankSubService(context, notificationMessage);
 		rankingService = new RankingService(context, NotifierMessageLogger.getInstance());
+		calendarHelper = GCalendarHelper.getInstance(context);
 	}
 
 	public void onCreate() {
@@ -94,6 +98,18 @@ public class ListCompetitionBusiness {
 		}
 
 		addInviteNoTournament();
+	}
+
+	public void delete(Invite invite) {
+		Logger.logMe(TAG, "Delete Invite Competition");
+		scoreService.deleteByIdInvite(invite.getId());
+		inviteService.delete(invite);
+		if (invite.getIdCalendar() != null) {
+			calendarHelper.deleteCalendarEntry(invite.getIdCalendar());
+		}
+
+		refreshData();
+		context.refresh();
 	}
 
 	public int getSumPoint() {

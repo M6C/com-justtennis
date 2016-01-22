@@ -6,11 +6,14 @@ import android.view.View;
 import android.widget.ExpandableListView;
 import android.widget.TextView;
 
+import com.cameleon.common.android.factory.FactoryDialog;
 import com.justtennis.R;
 import com.justtennis.adapter.ListCompetitionAdapter;
 import com.justtennis.business.ListCompetitionBusiness;
 import com.justtennis.business.ListCompetitionBusiness.TYPE;
+import com.justtennis.domain.Invite;
 import com.justtennis.listener.itemclick.OnItemClickListCompetition;
+import com.justtennis.listener.ok.OnClickCompetitionDeleteListenerOk;
 import com.justtennis.manager.TypeManager;
 import com.justtennis.notifier.NotifierMessageLogger;
 
@@ -65,6 +68,14 @@ public class ListCompetitionActivity extends GenericActivity {
 		}
 	}
 
+	public void onClickDelete(View view) {
+		Invite invite = (Invite)view.getTag();
+		OnClickCompetitionDeleteListenerOk listener = new OnClickCompetitionDeleteListenerOk(business, invite);
+		FactoryDialog.getInstance()
+			.buildOkCancelDialog(business.getContext(), listener, R.string.dialog_player_delete_title, R.string.dialog_player_delete_message)
+			.show();
+	}
+
 	public void onClickInviteAll(View view) {
 		updateInviteType(TYPE.ALL);
 	}
@@ -75,7 +86,13 @@ public class ListCompetitionActivity extends GenericActivity {
 		startActivity(intent);
 		finish();
 	}
-	
+
+	public void refresh() {
+//		adapter.setListTournament(business.getListTournament());
+//		adapter.setListInviteByTournament(business.getTableInviteByTournament());
+		adapter.notifyDataSetChanged();
+	}
+
 	private void expandAll() {
 		int count = adapter.getGroupCount();
 		for (int i = 0; i < count; i++) {
@@ -84,6 +101,7 @@ public class ListCompetitionActivity extends GenericActivity {
 	}
 
 	// method to collapse all groups
+	@SuppressWarnings("unused")
 	private void collapseAll() {
 		int count = adapter.getGroupCount();
 		for (int i = 0; i < count; i++) {
