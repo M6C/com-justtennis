@@ -7,9 +7,9 @@ import com.justtennis.domain.User;
 public class PlayerParser extends GenericParser {
 	
 	private static final String DATA_SEPARATOR = "!";
-	private static final int DATA_SEPARATOR_LENGTH = DATA_SEPARATOR.length();
 	private static PlayerParser instance = null;
-	private static final int NB_DATA_FIELD = 11;
+	private static final int NB_DATA_FIELD = 12;
+	private static final int VERSION = 1;
 	
 	protected PlayerParser() {
 	}
@@ -21,7 +21,8 @@ public class PlayerParser extends GenericParser {
 	}
 
 	public String toDataText(Player player) {
-		return player.getId() + DATA_SEPARATOR + 
+		return VERSION + DATA_SEPARATOR +
+				player.getId() + DATA_SEPARATOR + 
 				player.getFirstName() + DATA_SEPARATOR + 
 				player.getLastName() + DATA_SEPARATOR + 
 				player.getBirthday() + DATA_SEPARATOR + 
@@ -38,17 +39,22 @@ public class PlayerParser extends GenericParser {
 		Player ret = newObject();
 		int i=0;
 		String[] split = text.split(DATA_SEPARATOR);
-		ret.setId(parseLong(split[i++]));
-		ret.setFirstName(parseString(split[i++]));
-		ret.setLastName(parseString(split[i++]));
-		ret.setBirthday(parseString(split[i++]));
-		ret.setPhonenumber(parseString(split[i++]));
-		ret.setIdClub(parseLong(split[i++]));
-		ret.setIdRanking(parseLong(split[i++]));
-		ret.setLocality(parseString(split[i++]));
-		ret.setPostalCode(parseString(split[i++]));
-		ret.setAddress(parseString(split[i++]));
-		ret.setIdExternal(parseLong(split[i++]));
+		int version = Integer.parseInt(split[i++]);
+		switch (version) {
+			case 1:
+			default:
+				ret.setId(parseLong(split[i++]));
+				ret.setFirstName(parseString(split[i++]));
+				ret.setLastName(parseString(split[i++]));
+				ret.setBirthday(parseString(split[i++]));
+				ret.setPhonenumber(parseString(split[i++]));
+				ret.setIdClub(parseLong(split[i++]));
+				ret.setIdRanking(parseLong(split[i++]));
+				ret.setLocality(parseString(split[i++]));
+				ret.setPostalCode(parseString(split[i++]));
+				ret.setAddress(parseString(split[i++]));
+				ret.setIdExternal(parseLong(split[i++]));
+		}
 		return ret;
 	}
 

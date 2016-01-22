@@ -76,7 +76,7 @@ public class PlayerParserTest extends TestCase {
 	}
 
 	public void testGetNbDataField() {
-		assertEquals(11, PlayerParser.getNbDataField());
+		assertEquals(12, PlayerParser.getNbDataField());
 	}
 
 	private Player buildPlayer() {

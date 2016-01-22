@@ -316,6 +316,12 @@ public class PlayerBusiness {
 
 	private void initializePlayerSaison() {
 		if (player != null && player.getId() == null && player.getIdSaison() == null) {
+			initializePlayerSaison(player);
+		}
+	}
+
+	public void initializePlayerSaison(Player player) {
+		if (player != null) {
 			Saison saison = saisonService.getSaisonActiveOrFirst();
 			if (saison != null) {
 				player.setIdSaison(saison.getId());

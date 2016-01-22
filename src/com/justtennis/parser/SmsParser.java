@@ -20,6 +20,9 @@ import com.justtennis.domain.User;
 
 public class SmsParser {
 	private static final String TAG = SmsParser.class.getSimpleName();
+
+	private static final int VERSION = 1;
+	private static final int[] FIELD_POSITION_VERSION_1 = new int[] {0, 1, 2, 3, 4, 5};
 	
 //	private static final String TAG_FIRSTNAME = "\\[FIRSTNAME\\]";
 //	private static final String TAG_LASTNAME = "\\[LASTNAME\\]";
@@ -195,28 +198,41 @@ public class SmsParser {
 	public Invite fromMessageInviteConfirmNo(String message) {
 		return fromMessage(MSG_TYPE.PLAY_INVITE_NO, message, true);
 	}
-	
+
 	private Invite fromMessage(MSG_TYPE type, String message, boolean parseDate) {
 		Invite ret = null;
 		if (isKnowMessage(message)) {
 			message = unprepareMessage(message);
+			int version = getVersion(message);
+			message = extractVersion(message);
 			if (isTypeOf(type, message)) {
-				ret = new Invite();
-				ret.setId(fromMessageIdInvite(type, message));
-				ret.setIdExternal(fromMessageIdExternalInvite(type, message));
-				ret.setIdCalendar(fromMessageIdCalendar(type, message));
-				ret.setUser(fromMessageUser(type, message));
-				ret.setPlayer(fromMessagePlayer(type, message));
-				ret.setStatus(fromMessageStatus(type, message));
-				if (parseDate) {
-					try {
-						String date = message.substring(message.lastIndexOf(DATA_SEPARATOR)+DATA_SEPARATOR_LENGTH);
-						date = CryptoTool.getInstance().decrypteNumeric(date);
-						ret.setDate(sdf.parse(date));
-					} catch (ParseException e) {
-						logMe(e);
-					}
+				message = extractMessage(type, message);
+				switch(version) {
+					case 1:
+						ret = fromMessageVersion1(type, message, parseDate, version);
+						break;
+					default:
 				}
+			}
+		}
+		return ret;
+	}
+
+	private Invite fromMessageVersion1(MSG_TYPE type, String message, boolean parseDate, int version) {
+		Invite ret = new Invite();
+		ret.setId(fromMessageIdInvite(version, type, message));
+		ret.setIdExternal(fromMessageIdExternalInvite(version, type, message));
+		ret.setIdCalendar(fromMessageIdCalendar(version, type, message));
+		ret.setUser(fromMessageUser(version, type, message));
+		ret.setPlayer(fromMessagePlayer(version, type, message));
+		ret.setStatus(fromMessageStatus(version, type, message));
+		if (parseDate) {
+			try {
+				String date = message.substring(message.lastIndexOf(DATA_SEPARATOR)+DATA_SEPARATOR_LENGTH);
+				date = CryptoTool.getInstance().decrypteNumeric(date);
+				ret.setDate(sdf.parse(date));
+			} catch (ParseException e) {
+				logMe(e);
 			}
 		}
 		return ret;
@@ -234,7 +250,8 @@ public class SmsParser {
 		Player player = invite.getPlayer();
 		STATUS status = invite.getStatus();
 		Date date = invite.getDate();
-		String message = 
+		String message =
+			VERSION + DATA_SEPARATOR +
 			type.code + DATA_SEPARATOR +
 			id + DATA_SEPARATOR +
 			idExternal + DATA_SEPARATOR +
@@ -257,51 +274,63 @@ public class SmsParser {
 		return text;
 	}
 
-	private Long fromMessageIdInvite(MSG_TYPE type, String message) {
-		String idPart = fromMessagePart(type, message, 0);
+	private Long fromMessageIdInvite(int version, MSG_TYPE type, String message) {
+		String idPart = fromMessagePart(version, type, message, 0);
 		logParser("fromMessageIdInvite id:", idPart);
 		return (idPart.toLowerCase().equals("null") ? null : Long.parseLong(idPart));
 	}
 
-	private Long fromMessageIdExternalInvite(MSG_TYPE type, String message) {
-		String idPart = fromMessagePart(type, message, 1);
+	private Long fromMessageIdExternalInvite(int version, MSG_TYPE type, String message) {
+		String idPart = fromMessagePart(version, type, message, 1);
 		logParser("fromMessageIdExternalInvite id:",idPart);
 		return (idPart.toLowerCase().equals("null") ? null : Long.parseLong(idPart));
 	}
 
-	private Long fromMessageIdCalendar(MSG_TYPE type, String message) {
-		String id = fromMessagePart(type, message, 2);
+	private Long fromMessageIdCalendar(int version, MSG_TYPE type, String message) {
+		String id = fromMessagePart(version, type, message, 2);
 		logParser("fromMessageIdCalendar id:",id);
 		return (id.toLowerCase().equals("null") ? null : Long.parseLong(id));
 	}
 
-	private User fromMessageUser(MSG_TYPE type, String message) {
-		String userPart = fromMessagePart(type, message, 3);
+	private User fromMessageUser(int version, MSG_TYPE type, String message) {
+		String userPart = fromMessagePart(version, type, message, 3);
 		logParser("fromMessageUser userPart:",userPart);
 		return (User)userParser.fromData(userPart);
 	}
 
-	private Player fromMessagePlayer(MSG_TYPE type, String message) {
-		String playerPart = fromMessagePart(type, message, 4);
+	private Player fromMessagePlayer(int version, MSG_TYPE type, String message) {
+		String playerPart = fromMessagePart(version, type, message, 4);
 		logParser("fromMessagePlayer playerPart:",playerPart);
 		return playerParser.fromData(playerPart);
 	}
 
-	private STATUS fromMessageStatus(MSG_TYPE type, String message) {
-		String statusPart = fromMessagePart(type, message, 5);
+	private STATUS fromMessageStatus(int version, MSG_TYPE type, String message) {
+		String statusPart = fromMessagePart(version, type, message, 5);
 		logParser("fromMessageStatus statusPart:",statusPart);
 		return STATUS.valueOf(statusPart);
 	}
 
-	private String fromMessagePart(MSG_TYPE type, String message, int indexNbStart) {
-		message = extractMessage(type, message);
-		int idx1 = 0;
-		for(int i=0 ; i<indexNbStart ; i++) {
-			idx1 = message.indexOf(DATA_SEPARATOR, idx1)+DATA_SEPARATOR_LENGTH;
+	private String fromMessagePart(int version, MSG_TYPE type, String message, int indexNbStart) {
+		int position = getFieldPositionByVersion(version, indexNbStart);
+		if (position >= 0) {
+			int idx1 = 0;
+			for(int i=0 ; i<position ; i++) {
+				idx1 = message.indexOf(DATA_SEPARATOR, idx1)+DATA_SEPARATOR_LENGTH;
+			}
+			int idx2 = message.indexOf(DATA_SEPARATOR, idx1);
+			idx2 = idx2>0 ? idx2 : message.length();
+			return message.substring(idx1, idx2);
 		}
-		int idx2 = message.indexOf(DATA_SEPARATOR, idx1);
-		idx2 = idx2>0 ? idx2 : message.length();
-		return message.substring(idx1, idx2);
+		return "";
+	}
+
+	private int getFieldPositionByVersion(int version, int indexNbStart) {
+		int ret = -1;
+		switch(version) {
+			case 1:
+				ret = FIELD_POSITION_VERSION_1[indexNbStart];
+		}
+		return ret;
 	}
 
 	public String unprepareMessage(String message) {
@@ -321,6 +350,21 @@ public class SmsParser {
 		message = message.substring(type.length + DATA_SEPARATOR_LENGTH);
 		return message;
 	}
+
+	private String extractVersion(String message) {
+		int idx = message.indexOf(DATA_SEPARATOR);
+		if (idx > 0) {
+			message = message.substring(idx+DATA_SEPARATOR_LENGTH);
+		}
+		return message;
+	}
+
+	private int getVersion(String message) {
+		int idx1 = message.indexOf(DATA_SEPARATOR)+DATA_SEPARATOR_LENGTH;
+		int idx2 = (idx1>0) ? message.indexOf(DATA_SEPARATOR, idx1) : 0;
+		return (idx1>0 && idx2>idx1) ? Integer.parseInt(message.substring(idx1, idx2)) : 0;
+	}
+
 	private boolean isKnowMessage(String message) {
 		return message.startsWith(MSG_START + DATA_SEPARATOR);
 	}

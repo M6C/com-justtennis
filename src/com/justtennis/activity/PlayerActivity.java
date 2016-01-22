@@ -151,6 +151,7 @@ public class PlayerActivity extends GenericActivity {
 				Logger.logMe(TAG, qrcodeData);
 				
 				Player player = PlayerParser.getInstance().fromData(qrcodeData);
+				business.initializePlayerSaison(player);
 				business.setPlayer(player);
 				
 				fromQrCode = true;
@@ -160,7 +161,7 @@ public class PlayerActivity extends GenericActivity {
 		} else if (requestCode==RESULT_CODE_GOOGLE) {
 			if (resultCode == RESULT_OK && data != null) {
 				Player player = (Player) data.getSerializableExtra(ListPersonActivity.EXTRA_PLAYER);
-
+				business.initializePlayerSaison(player);
 				business.setPlayer(player);
 				
 				fromQrCode = false;

@@ -61,7 +61,7 @@ public class InviteBusiness {
 	private TypeManager typeManager;
 	private User user;
 	private Invite invite;
-	private MODE mode = MODE.INVITE_MODIFY;
+	private MODE mode = MODE.INVITE_SIMPLE;
 	private List<Ranking> listRanking;
 	private List<String> listTxtRankings;
 	private List<Saison> listSaison = new ArrayList<Saison>();
@@ -341,6 +341,10 @@ public class InviteBusiness {
 
 	public MODE getMode() {
 		return mode;
+	}
+
+	public void setMode(MODE mode) { 
+		this.mode = mode;
 	}
 
 	public void setPlayer(long id) {

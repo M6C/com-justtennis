@@ -18,6 +18,7 @@ import com.justtennis.parser.SmsParser;
 
 public class MessageActivity extends GenericActivity {
 
+	@SuppressWarnings("unused")
 	private static final String TAG = MessageActivity.class.getSimpleName();
 
 	private MessageBusiness business;
