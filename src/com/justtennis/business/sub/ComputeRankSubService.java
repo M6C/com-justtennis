@@ -96,13 +96,20 @@ public class ComputeRankSubService {
 //		return inviteService.groupByIdTournament(listInvite);
 //	}
 
-	public HashMap<Long,List<Invite>> getListInvite() {
-		HashMap<Long,List<Invite>> mapInvite = inviteService.getGroupByIdRanking(Invite.SCORE_RESULT.VICTORY);
+//	public HashMap<Long,List<Invite>> getListInvite() {
+//		HashMap<Long,List<Invite>> mapInvite = inviteService.getGroupByIdRanking(Invite.SCORE_RESULT.VICTORY);
+//		return getListInvite(mapInvite);
+//	}
+
+	public HashMap<Long,List<Invite>> getListInvite(boolean estimate) {
+		List<Invite> listVictory = inviteService.getByScoreResult(SCORE_RESULT.VICTORY);
+		List<Invite> listDefeat = inviteService.getByScoreResult(SCORE_RESULT.DEFEAT);
+		HashMap<Long,List<Invite>> mapInvite = getInviteGroupByPlayerRanking(listVictory, estimate);
 		return getListInvite(mapInvite);
 	}
-	
-	public HashMap<Long,List<Invite>> getListInvite(boolean estimate) {
-		HashMap<Long,List<Invite>> mapInvite = getInviteGroupByPlayerRanking(estimate);
+
+	public HashMap<Long,List<Invite>> getListInvite(List<Invite> listVictory, List<Invite> listDefeat, boolean estimate) {
+		HashMap<Long,List<Invite>> mapInvite = getInviteGroupByPlayerRanking(listVictory, estimate);
 		return getListInvite(mapInvite);
 	}
 
@@ -167,21 +174,27 @@ public class ComputeRankSubService {
 		return inviteService.groupByIdTournament(listInvite);
 	}
 
-	public ComputeDataRanking computeDataRanking(boolean estimate) {
-		User user = userService.find();
-		Long idRanking = user.getIdRanking();
-		return computeDataRanking(idRanking, estimate);
-	}
+//	public ComputeDataRanking computeDataRanking(boolean estimate) {
+//		User user = userService.find();
+//		Long idRanking = user.getIdRanking();
+//		return computeDataRanking(idRanking, estimate);
+//	}
 
 	public ComputeDataRanking computeDataRanking(long idRanking, boolean estimate) {
-		List<Invite> listInvite = inviteService.getByScoreResult(SCORE_RESULT.VICTORY);
+		List<Invite> listVictory = inviteService.getByScoreResult(SCORE_RESULT.VICTORY);
+		List<Invite> listDefeat = inviteService.getByScoreResult(SCORE_RESULT.DEFEAT);
+		return computeDataRanking(listVictory, listDefeat, idRanking, estimate);
+	}
+
+	public ComputeDataRanking computeDataRanking(List<Invite> listVictory, List<Invite> listDefeat, long idRanking, boolean estimate) {
+//		List<Invite> listInvite = inviteService.getByScoreResult(SCORE_RESULT.VICTORY);
 		List<Invite> listInviteCalculed = new ArrayList<Invite>();
 		List<Invite> listInviteNotUsed = new ArrayList<Invite>();
 		int nbVictory = 0, nbVictoryCalculate = 0;
 		int sumPoint = 0, pointObjectif = 0;
 		int sumPointBonus = 0;
 		Ranking userRanking = rankingService.find(idRanking);
-		if (userRanking != null && listInvite.size() > 0) {
+		if (userRanking != null && listVictory.size() > 0) {
 			int rankingPositionMin = userRanking.getOrder() - NB_RANKING_ORDER_LOWER;
 			if (rankingPositionMin < 0) {
 				rankingPositionMin = 0;
@@ -192,7 +205,7 @@ public class ComputeRankSubService {
 			nbVictory = userRanking.getVictoryMan();
 			pointObjectif = userRanking.getRankingPointMan();
 			logMe("USER RANKING " + userRanking.getRanking() + " NB VICTORY:" + nbVictory);
-			for(Invite invite : listInvite) {
+			for(Invite invite : listVictory) {
 				Player player = playerService.find(invite.getPlayer().getId());
 				Ranking ranking = rankingService.getRanking(invite, player, estimate);
 				if (ranking.getOrder() >= rankingPositionMin) {
@@ -227,19 +240,19 @@ public class ComputeRankSubService {
 		data.setListInviteCalculed(listInviteCalculed);
 		data.setListInviteNotUsed(listInviteNotUsed);
 
-		computeVE2I5G(data, idRanking, estimate);
+		computeVE2I5G(data, listDefeat, idRanking, estimate);
 		computeNbVitoryAdditional(data, idRanking, estimate);
 
 		return data;
 	}
 
-	private void computeVE2I5G(ComputeDataRanking data, long idRanking, boolean estimate) {
+	private void computeVE2I5G(ComputeDataRanking data, List<Invite> listDefeaut, long idRanking, boolean estimate) {
 		int iE = 0, i2I = 0, i5G = 0;
-		List<Invite> listInvite = inviteService.getByScoreResult(SCORE_RESULT.DEFEAT);
+//		List<Invite> listInvite = inviteService.getByScoreResult(SCORE_RESULT.DEFEAT);
 		Ranking userRanking = rankingService.find(idRanking);
-		if (userRanking != null && listInvite.size() > 0) {
+		if (userRanking != null && listDefeaut.size() > 0) {
 			int rankingPosition = userRanking.getOrder();
-			for(Invite invite : listInvite) {
+			for(Invite invite : listDefeaut) {
 				if (!SCORE_RESULT.WO_DEFEAT.equals(invite.getScoreResult())) {
 					Player player = playerService.find(invite.getPlayer().getId());
 					Ranking ranking = rankingService.getRanking(invite, player, estimate);
@@ -318,11 +331,11 @@ public class ComputeRankSubService {
 	}
 
 	@SuppressLint("UseSparseArrays")
-	private HashMap<Long,List<Invite>> getInviteGroupByPlayerRanking(boolean estimate) {
+	private HashMap<Long,List<Invite>> getInviteGroupByPlayerRanking(List<Invite> listVictory, boolean estimate) {
 		HashMap<Long, List<Invite>> ret = new HashMap<Long, List<Invite>>();
 		User user = userService.find();
 		Ranking userRanking = rankingService.find(user.getIdRanking());
-		List<Invite> listVictory = inviteService.getByScoreResult(Invite.SCORE_RESULT.VICTORY);
+//		List<Invite> listVictory = inviteService.getByScoreResult(Invite.SCORE_RESULT.VICTORY);
 		if (userRanking != null && listVictory.size() > 0) {
 			int rankingPositionMin = userRanking.getOrder() - NB_RANKING_ORDER_LOWER;
 			if (rankingPositionMin < 0) {

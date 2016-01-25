@@ -82,6 +82,9 @@
         <activity android:name=".activity.ComputeRankingActivity"
    		   android:screenOrientation="portrait"
          />
+        <activity android:name=".activity.PalmaresFastActivity"
+   		   android:screenOrientation="portrait"
+         />
         <activity android:name=".activity.PlayerActivity"
    		   android:windowSoftInputMode="stateHidden"
    		   android:screenOrientation="portrait"

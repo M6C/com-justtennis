@@ -10,6 +10,7 @@
     <string name="txt_tournament">Tournament</string>
     <string name="txt_bonus_point">Bonus point</string>
     <string name="txt_detail_invite">Detail ></string>
+    <string name="txt_wo">WO</string>
     <string name="txt_wo_vitory">WO Victory</string>
     <string name="txt_wo_defeat">WO Defeat</string>
     <string name="txt_score">Score</string>
