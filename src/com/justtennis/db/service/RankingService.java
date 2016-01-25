@@ -53,6 +53,20 @@ public class RankingService extends GenericService<Ranking> {
 		}
 	}
 
+	/**
+	 * @param position
+	 * @return
+	 */
+	public List<Ranking> getWithPostionEqualLess(int position) {
+		try {
+			dbDataSource.open();
+			return ((DBRankingDataSource)dbDataSource).getWithPostionEqualLess(position);
+		}
+		finally {
+			dbDataSource.close();
+		}
+	}
+
 	public Ranking getRanking(Invite invite, boolean estimate) {
 		return getRanking(invite, invite.getPlayer(), estimate);
 	}

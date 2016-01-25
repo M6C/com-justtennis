@@ -29,6 +29,7 @@ public class ComputeRankingActivity extends GenericActivity {
 	private ComputeRankingListInviteAdapter adapter;
 	private TextView tvSumPoint;
 	private TextView tvNbVictory;
+	private TextView tvNbVictoryDetail;
 
 	private RankingListManager rankingListManager;
 
@@ -45,6 +46,7 @@ public class ComputeRankingActivity extends GenericActivity {
 
 		tvSumPoint = (TextView) findViewById(R.id.tv_sum_point);
 		tvNbVictory = (TextView) findViewById(R.id.tv_nb_victory);
+		tvNbVictoryDetail = (TextView) findViewById(R.id.tv_nb_victory_detail);
 
 		adapter.setValue(business.getList());
 
@@ -112,5 +114,7 @@ public class ComputeRankingActivity extends GenericActivity {
 	private void initializePalmaresNbVictory() {
 		tvNbVictory.setText(business.getNbVictoryCalculate() + "/" + business.getNbVictorySum());
 		tvNbVictory.setVisibility(View.VISIBLE);
+		tvNbVictoryDetail.setText("("+ business.getNbVictoryAdditional() + ") [V-E-2I-5G:" + business.getVE2I5G() + "]");
+		tvNbVictoryDetail.setVisibility(View.VISIBLE);
 	}
 }

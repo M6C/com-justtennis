@@ -104,12 +104,14 @@ public class ComputeRankingListInviteAdapter extends ArrayAdapter<Invite> {
 		View vTypeEntrainement = rowView.findViewById(R.id.tv_type_entrainement);
 		View vTypeMatch = rowView.findViewById(R.id.tv_type_match);
 		TextView tvPoint = (TextView) rowView.findViewById(R.id.tv_point);
+		TextView tvBonusPoint = (TextView) rowView.findViewById(R.id.tv_bonus_point);
 
 		initializeRanking(v, rowView);
 
 		tvPlayer.setText(v.getPlayer()==null ? "" : Html.fromHtml("<b>" + v.getPlayer().getFirstName() + "</b> " + v.getPlayer().getLastName()));
 		tvDate.setText(v.getDate()==null ? "" : sdf.format(v.getDate()));
 		tvPoint.setText(v.getPoint() > 0 ? ""+v.getPoint() : "");
+		tvBonusPoint.setText(v.getBonusPoint() > 0 ? ""+ v.getBonusPoint() : "");
 
 		if (ApplicationConfig.SHOW_ID) {
 			tvPlayer.setText(tvPlayer.getText() + " [id:" + v.getPlayer().getId() + "|idExt:" + v.getPlayer().getIdExternal() + "]");

@@ -58,6 +58,15 @@ public class DBRankingDataSource extends GenericDBDataSource<Ranking> {
 		return query(DBRankingHelper.COLUMN_POSITION + " >= ?", new String[]{Integer.toString(position)});
 	}
 
+	/**
+	 * @param position
+	 * @return
+	 */
+	public List<Ranking> getWithPostionEqualLess(int position) {
+//		return query(DBRankingHelper.COLUMN_POSITION + " >= ?", new String[]{DBRankingHelper.RANKING_NC});
+		return query(DBRankingHelper.COLUMN_POSITION + " <= ?", new String[]{Integer.toString(position)});
+	}
+
 	@Override
 	protected String[] getAllColumns() {
 		return allColumns;

@@ -112,7 +112,14 @@ public class ComputeRankingBusiness {
 		return computeDataRanking.getNbVictoryCalculate();
 	}
 
+	public int getNbVictoryAdditional() {
+		return computeDataRanking.getNbVictoryAdditional();
+	}
+
 	public int getNbVictorySum() {
-		return computeDataRanking.getNbVictoryCalculate() + computeDataRanking.getNbVictory();
+		return computeDataRanking.getNbVictoryCalculate() + computeDataRanking.getNbVictory() + computeDataRanking.getNbVictoryAdditional();
+	}
+	public int getVE2I5G() {
+		return computeDataRanking.getVE2I5G();
 	}
 }

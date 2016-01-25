@@ -4,9 +4,12 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Set;
+
 import org.gdocument.gtracergps.launcher.log.Logger;
+
 import android.annotation.SuppressLint;
 import android.content.Context;
+
 import com.cameleon.common.android.inotifier.INotifierMessage;
 import com.justtennis.ApplicationConfig;
 import com.justtennis.db.service.InviteService;
@@ -26,6 +29,7 @@ public class ComputeRankSubService {
 	private static final String TAG = ComputeRankSubService.class.getCanonicalName();
 
 	private static final int NB_RANKING_ORDER_LOWER = 3;
+	public static final int BONUS_POINT_LIMIT = 45;
 	protected Context context;
 	private InviteService inviteService;
 	private UserService userService;
@@ -197,7 +201,11 @@ public class ComputeRankSubService {
 					int point = rankingService.getNbPointDifference(rankingDif);
 					invite.setPoint(point);
 					sumPoint += point;
-					sumPointBonus += invite.getBonusPoint();
+					if (sumPointBonus >= BONUS_POINT_LIMIT) {
+						invite.setBonusPoint(0);
+					} else {
+						sumPointBonus += invite.getBonusPoint();
+					}
 					nbVictory--;
 					logMe("RANKING " + ranking.getRanking() + " POINT:" + point + " SUM:" + sumPoint + " NB VICTORY:" + nbVictory);
 				} else {
@@ -219,9 +227,96 @@ public class ComputeRankSubService {
 		data.setListInviteCalculed(listInviteCalculed);
 		data.setListInviteNotUsed(listInviteNotUsed);
 
+		computeVE2I5G(data, idRanking, estimate);
+		computeNbVitoryAdditional(data, idRanking, estimate);
+
 		return data;
 	}
-	
+
+	private void computeVE2I5G(ComputeDataRanking data, long idRanking, boolean estimate) {
+		int iE = 0, i2I = 0, i5G = 0;
+		List<Invite> listInvite = inviteService.getByScoreResult(SCORE_RESULT.DEFEAT);
+		Ranking userRanking = rankingService.find(idRanking);
+		if (userRanking != null && listInvite.size() > 0) {
+			int rankingPosition = userRanking.getOrder();
+			for(Invite invite : listInvite) {
+				if (!SCORE_RESULT.WO_DEFEAT.equals(invite.getScoreResult())) {
+					Player player = playerService.find(invite.getPlayer().getId());
+					Ranking ranking = rankingService.getRanking(invite, player, estimate);
+					int rankingPositionDiff = rankingPosition - ranking.getOrder();
+					if (rankingPositionDiff > 0) {
+						switch(rankingPositionDiff) {
+							case 0:
+								iE++;
+								break;
+							case 1:
+								i2I++;
+								break;
+							default:
+								i5G++;
+						}
+					}
+				}
+			}
+		}
+		data.setVE2I5G(userRanking.getVictoryMan() - iE - (i2I*2) - (i5G*5));
+		logMe("USER RANKING " + userRanking.getRanking() + " VE2I5G:" + data.getVE2I5G());
+	}
+
+	@SuppressLint("UseSparseArrays")
+	private void computeNbVitoryAdditional(ComputeDataRanking data, long idRanking, boolean estimate) {
+		HashMap<Integer, int[][]> victory = new HashMap<Integer, int[][]>();
+		victory.put(4, new int[][]{
+			{0, 4, 1},
+			{5, 9, 2},
+			{10, 14, 3},
+			{15, 16, 4},
+			{20, 24, 5},
+			{25, 999, 6}
+		});
+		victory.put(3, new int[][]{
+			{0, 7, 1},
+			{8, 14, 2},
+			{15, 22, 3},
+			{23, 29, 4},
+			{30, 39, 5},
+			{40, 999, 6}
+		});
+		victory.put(2, new int[][]{
+			{-999, -41, -3},
+			{-40, -31, -2},
+			{-30, -21, -1},
+			{-20, -1, 0},
+			{0, 7, 1},
+			{8, 14, 2},
+			{15, 22, 3},
+			{23, 29, 4},
+			{30, 39, 5},
+			{40, 999, 6}
+		});
+		int iVE2I5G = data.getVE2I5G();
+		Ranking userRanking = rankingService.find(idRanking);
+		logMe("USER RANKING " + userRanking.getRanking() + " NB VICTORY BEFORE VE2I5G:" + data.getNbVictoryCalculate());
+		if (userRanking != null) {
+			int[][] nbVitoryVE2I5G = victory.get(userRanking.getSerie());
+			if (nbVitoryVE2I5G != null) {
+				int[] nb = null;
+				int size = nbVitoryVE2I5G.length - 1;
+				for(int i=0 ; i<=size ; i++) {
+					nb = nbVitoryVE2I5G[i];
+					if (
+						(i == size && iVE2I5G >= nb[0]) ||
+						(iVE2I5G >= nb[0] && iVE2I5G <= nb[1])) {
+						logMe("USER RANKING " + userRanking.getRanking() + " VE2I5G FIND:" + nb);
+						data.setNbVictoryAdditional(data.getNbVictoryAdditional() + nb[2]);
+						break;
+					}
+				}
+			}
+		}
+		logMe("USER RANKING " + userRanking.getRanking() + " NB VICTORY AFTER VE2I5G:" + data.getNbVictoryCalculate());
+	}
+
 	@SuppressLint("UseSparseArrays")
 	private HashMap<Long,List<Invite>> getInviteGroupByPlayerRanking(boolean estimate) {
 		HashMap<Long, List<Invite>> ret = new HashMap<Long, List<Invite>>();
