@@ -240,19 +240,19 @@ public class ComputeRankSubService {
 		data.setListInviteCalculed(listInviteCalculed);
 		data.setListInviteNotUsed(listInviteNotUsed);
 
-		computeVE2I5G(data, listDefeat, idRanking, estimate);
+		computeVE2I5G(data, listVictory, listDefeat, idRanking, estimate);
 		computeNbVitoryAdditional(data, idRanking, estimate);
 
 		return data;
 	}
 
-	private void computeVE2I5G(ComputeDataRanking data, List<Invite> listDefeaut, long idRanking, boolean estimate) {
+	private void computeVE2I5G(ComputeDataRanking data, List<Invite> listVictory, List<Invite> listDefeat, long idRanking, boolean estimate) {
 		int iE = 0, i2I = 0, i5G = 0;
 //		List<Invite> listInvite = inviteService.getByScoreResult(SCORE_RESULT.DEFEAT);
 		Ranking userRanking = rankingService.find(idRanking);
-		if (userRanking != null && listDefeaut.size() > 0) {
+		if (userRanking != null && listDefeat.size() > 0) {
 			int rankingPosition = userRanking.getOrder();
-			for(Invite invite : listDefeaut) {
+			for(Invite invite : listDefeat) {
 				if (!SCORE_RESULT.WO_DEFEAT.equals(invite.getScoreResult())) {
 					Player player = playerService.find(invite.getPlayer().getId());
 					Ranking ranking = rankingService.getRanking(invite, player, estimate);
@@ -272,12 +272,15 @@ public class ComputeRankSubService {
 				}
 			}
 		}
-		data.setVE2I5G(userRanking.getVictoryMan() - iE - (i2I*2) - (i5G*5));
+		data.setVE2I5G(listVictory.size() - iE - (i2I*2) - (i5G*5));
 		logMe("USER RANKING " + userRanking.getRanking() + " VE2I5G:" + data.getVE2I5G());
 	}
 
 	@SuppressLint("UseSparseArrays")
 	private void computeNbVitoryAdditional(ComputeDataRanking data, long idRanking, boolean estimate) {
+		if (data.getListInviteCalculed().size() == 0) {
+			return;
+		}
 		HashMap<Integer, int[][]> victory = new HashMap<Integer, int[][]>();
 		victory.put(4, new int[][]{
 			{0, 4, 1},

@@ -81,9 +81,10 @@ public class PalmaresFastAdapter extends ArrayAdapter<PalmaresFastValue> {
 		
 		@Override
 		public void onFocusChange(View view, boolean hasFocus) {
+			EditText editText = ((EditText)view);
 			if (!hasFocus) {
 				if (value != null && value.size() > 0 && view.getTag() != null) {
-					String txt = ((EditText)view).getText().toString();
+					String txt = editText.getText().toString();
 					PalmaresFastValue v = value.get((Integer) view.getTag());
 					int val = 0;
 					try {
