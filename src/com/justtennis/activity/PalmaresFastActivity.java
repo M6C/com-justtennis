@@ -1,7 +1,9 @@
 package com.justtennis.activity;
 
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -45,6 +47,11 @@ public class PalmaresFastActivity extends GenericActivity {
 		tvNbVictoryDetail = (TextView) findViewById(R.id.tv_nb_victory_detail);
 
 		list = (ListView)findViewById(R.id.list);
+
+		LayoutInflater inflater = getLayoutInflater();
+		ViewGroup header = (ViewGroup)inflater.inflate(R.layout.list_palmares_fast_header, list, false);
+		list.addHeaderView(header, null, false);
+
 		list.setAdapter(adapter);
 
 		business.onCreate();
