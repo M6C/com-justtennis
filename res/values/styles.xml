@@ -21,10 +21,12 @@
 	    <item name="android:spinnerDropDownItemStyle">@style/SpinnerDropDownItem</item> -->
  -->
 	    <item name="android:buttonStyle">@style/StyleButton</item>
+        <item name="customLayoutBackgroundColor">@color/bleu_transparent_6</item>
     </style>
 
     <style name="AppTheme.Competition" parent="AppBaseTheme">
 	    <item name="android:buttonStyle">@style/StyleButton.Competition</item>
+        <item name="customLayoutBackgroundColor">@color/orange_transparent_6</item>
 	</style>
     
     <!-- Application theme. -->

@@ -10,9 +10,13 @@
     <color name="bleu_transparent_3">#660000CC</color>
     <color name="bleu_transparent_4">#990000CC</color>
     <color name="bleu_transparent_5">#BB0000CC</color>
-
-    <color name="orange_transparent_5">#BBF94D00</color>
-
+    <color name="bleu_transparent_6">#DD0000CC</color>
+    
+    <color name="orange_transparent_3">#66F94D00</color>
+    <color name="orange_transparent_4">#99F94D00</color>
+    <color name="orange_transparent_5">#DDF94D00</color>
+    <color name="orange_transparent_6">#BBF94D00</color>
+    
     <color name="orange_pumpkin_transparent_3">#88FF7518</color>
     <color name="orange_tangelo_transparent_1">#F7794D00</color>
 

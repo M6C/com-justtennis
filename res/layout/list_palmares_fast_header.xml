@@ -6,7 +6,7 @@
     android:paddingLeft="@dimen/list_item_horizontal_margin"
     android:paddingRight="@dimen/list_item_horizontal_margin"
     android:paddingTop="@dimen/list_item_vertical_margin"
-    android:background="@color/list_item_background_color"
+    android:background="?attr/customLayoutBackgroundColor"
     android:orientation="vertical"
 >
     <LinearLayout
