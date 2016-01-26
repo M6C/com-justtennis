@@ -1,5 +1,6 @@
 <resources>
 
+    <color name="blanc">#FFFFFF</color>
     <color name="blanc_transparent_3">#77FFFFFF</color>
     <color name="blanc_transparent_4">#99FFFFFF</color>
     <color name="blanc_transparent_5">#BBFFFFFF</color>
@@ -11,6 +12,7 @@
     <color name="bleu_transparent_4">#990000CC</color>
     <color name="bleu_transparent_5">#BB0000CC</color>
     <color name="bleu_transparent_6">#DD0000CC</color>
+    <color name="bleu_2_transparent_6">#DD0142A9</color>
     
     <color name="orange_transparent_3">#66F94D00</color>
     <color name="orange_transparent_4">#99F94D00</color>

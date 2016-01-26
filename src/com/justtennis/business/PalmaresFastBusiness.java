@@ -28,7 +28,6 @@ import com.justtennis.notifier.NotifierMessageLogger;
 
 public class PalmaresFastBusiness {
 
-	@SuppressWarnings("unused")
 	private static final String TAG = PalmaresFastBusiness.class.getSimpleName();
 	
 	private PalmaresFastActivity context;
@@ -43,6 +42,7 @@ public class PalmaresFastBusiness {
 
 	private List<PalmaresFastValue> list = new ArrayList<PalmaresFastValue>();
 	private Long idRanking;
+	private int pointBonus = 0;
 
 
 	public PalmaresFastBusiness(PalmaresFastActivity context, INotifierMessage notificationMessage) {
@@ -148,10 +148,6 @@ Logger.logMe(TAG, "PALMARES FAST - PalmaresFastBusiness - getRankingPosition:" +
 		return computeDataRanking.getPointObjectif();
 	}
 
-	public int getPointBonus() {
-		return computeDataRanking.getPointBonus();
-	}
-
 	public int getNbVictoryCalculate() {
 		return computeDataRanking.getNbVictoryCalculate();
 	}
@@ -163,7 +159,16 @@ Logger.logMe(TAG, "PALMARES FAST - PalmaresFastBusiness - getRankingPosition:" +
 	public int getNbVictorySum() {
 		return computeDataRanking.getNbVictoryCalculate() + computeDataRanking.getNbVictory() + computeDataRanking.getNbVictoryAdditional();
 	}
+
 	public int getVE2I5G() {
 		return computeDataRanking.getVE2I5G();
+	}
+
+	public int getPointBonus() {
+		return pointBonus;
+	}
+
+	public void setPointBonus(int pointBonus) {
+		this.pointBonus = pointBonus;
 	}
 }

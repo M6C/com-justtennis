@@ -95,16 +95,10 @@ public class ComputeDataRanking {
 		this.listInviteNotUsed = listInviteNotUsed;
 	}
 
-	/**
-	 * @return the vE2I5G
-	 */
 	public int getVE2I5G() {
 		return vE2I5G;
 	}
 
-	/**
-	 * @param vE2I5G the vE2I5G to set
-	 */
 	public void setVE2I5G(int vE2I5G) {
 		this.vE2I5G = vE2I5G;
 	}

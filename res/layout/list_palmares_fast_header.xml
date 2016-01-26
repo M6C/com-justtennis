@@ -19,6 +19,7 @@
 		    android:layout_height="wrap_content"
 		    android:layout_weight=".34"
 		    android:textSize="22sp"
+		    android:textColor="?attr/customHeaderTextColor"
 		    android:text="@string/txt_ranking"
 		/>
 		<TextView
@@ -27,6 +28,7 @@
 		    android:layout_weight=".33"
 		    android:gravity="center_horizontal"
 		    android:textSize="22sp"
+		    android:textColor="?attr/customHeaderTextColor"
 		    android:text="@string/txt_victory"
 		/>
 		<TextView
@@ -35,6 +37,7 @@
 		    android:layout_weight=".33"
 		    android:gravity="center_horizontal"
 		    android:textSize="22sp"
+		    android:textColor="?attr/customHeaderTextColor"
 		    android:text="@string/txt_defeat"
 		/>
 	</LinearLayout>
