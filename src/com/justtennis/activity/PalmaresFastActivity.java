@@ -1,9 +1,9 @@
 package com.justtennis.activity;
 
+import org.gdocument.gtracergps.launcher.log.Logger;
+
 import android.os.Bundle;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -48,10 +48,6 @@ public class PalmaresFastActivity extends GenericActivity {
 
 		list = (ListView)findViewById(R.id.list);
 
-		LayoutInflater inflater = getLayoutInflater();
-		ViewGroup header = (ViewGroup)inflater.inflate(R.layout.list_palmares_fast_header, list, false);
-		list.addHeaderView(header, null, false);
-
 		list.setAdapter(adapter);
 
 		business.onCreate();
@@ -68,12 +64,13 @@ public class PalmaresFastActivity extends GenericActivity {
 	}
 
 	public void refresh() {
+Logger.logMe(TAG, "PALMARES FAST - PalmaresFastActivity - refresh");
 		initializePalmaresPoint();
 		initializePalmaresNbVictory();
-		initializeFocus();
 	}
 
 	private void initializeFocus() {
+Logger.logMe(TAG, "PALMARES FAST - PalmaresFastActivity - initializeFocus");
 		list.smoothScrollToPosition(business.getRankingPosition());
 	}
 
@@ -81,6 +78,7 @@ public class PalmaresFastActivity extends GenericActivity {
 	}
 
 	public void refreshData() {
+Logger.logMe(TAG, "PALMARES FAST - PalmaresFastActivity - refreshData");
 		business.refreshData();
 
 		adapter.notifyDataSetChanged();
@@ -88,11 +86,13 @@ public class PalmaresFastActivity extends GenericActivity {
 	}
 
 	private void initializeRankingList() {
+Logger.logMe(TAG, "PALMARES FAST - PalmaresFastActivity - initializeRankingList");
 		IRankingListListener listener = new IRankingListListener() {
 			@Override
 			public void onRankingSelected(Ranking ranking) {
 				business.setIdRanking(ranking.getId());
 				refreshData();
+				initializeFocus();
 			}
 		};
 		rankingListManager.manageRanking(this, listener, business.getIdRanking(), false);

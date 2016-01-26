@@ -6,6 +6,8 @@ import java.util.List;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
+import org.gdocument.gtracergps.launcher.log.Logger;
+
 import android.content.Context;
 
 import com.cameleon.common.android.inotifier.INotifierMessage;
@@ -61,9 +63,8 @@ public class PalmaresFastBusiness {
 		initializePalmaresFastValue();
 		refreshData();
 	}
-	
+
 	public void onResume() {
-		refresh();
 	}
 
 	public List<PalmaresFastValue> getList() {
@@ -75,8 +76,8 @@ public class PalmaresFastBusiness {
 	}
 
 	public void refreshData() {
+Logger.logMe(TAG, "PALMARES FAST - PalmaresFastBusiness - refreshData");
 		refreshComputeDataRanking();
-		refresh();
 	}
 
 	private void refreshComputeDataRanking() {
@@ -103,6 +104,7 @@ public class PalmaresFastBusiness {
 	}
 
 	private void initializePalmaresFastValue() {
+Logger.logMe(TAG, "PALMARES FAST - PalmaresFastBusiness - initializePalmaresFastValue");
 		list.clear();
 
 		SortedSet<Ranking> setRanking = new TreeSet<Ranking>(new RankingComparatorByOrder(true));
@@ -118,18 +120,16 @@ public class PalmaresFastBusiness {
 		}
 	}
 
-	private void refresh() {
-	}
-
 	public int getRankingPosition() {
-		int ret = 0;
+		int ret = 1;
 		for(PalmaresFastValue value : list) {
 			if (value.getRanking().getId() !=null && value.getRanking().getId().equals(idRanking)) {
-				return ret;
+Logger.logMe(TAG, "PALMARES FAST - PalmaresFastBusiness - getRankingPosition:" + ret);
+				break;
 			}
 			ret++;
 		}
-		return 0;
+		return ret;
 	}
 
 	public void setIdRanking(Long idRanking) {
