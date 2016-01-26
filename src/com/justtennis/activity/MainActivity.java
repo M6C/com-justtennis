@@ -7,12 +7,12 @@ import java.util.List;
 
 import org.gdocument.gtracergps.launcher.log.Logger;
 
-import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -37,7 +37,6 @@ import com.justtennis.business.MainBusiness;
 import com.justtennis.domain.Saison;
 import com.justtennis.listener.ok.OnClickDBBackupListenerOk;
 import com.justtennis.listener.ok.OnClickDBRestoreListenerOk;
-import com.justtennis.listener.ok.OnClickExitListenerOk;
 import com.justtennis.listener.ok.OnClickSendApkListenerOk;
 import com.justtennis.listener.ok.OnClickSendDBListenerOk;
 import com.justtennis.manager.TypeManager;
@@ -48,7 +47,7 @@ public class MainActivity extends GenericActivity implements INotifierMessage {
 	private static final String TAG = MainActivity.class.getSimpleName();
 	private static final int RESULT_CODE_QRCODE_SCAN = 0;
 	private MainBusiness business;
-	private Dialog dialogExit;
+//	private Dialog dialogExit;
 
 	private RelativeLayout layoutMain;
 	private LinearLayout llTypeEntrainement;
@@ -59,6 +58,9 @@ public class MainActivity extends GenericActivity implements INotifierMessage {
 	private ImageView ivMatch;
 	private Spinner spSaison;
 	private CustomArrayAdapter<String> adpSaison;
+
+	private boolean backPressedToExitOnce = false;
+	private Toast toast = null;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -76,8 +78,8 @@ public class MainActivity extends GenericActivity implements INotifierMessage {
 		business = new MainBusiness(this, this);
 		typeManager = TypeManager.getInstance(this.getApplicationContext(), this);
 
-		dialogExit = FactoryDialog.getInstance().buildYesNoDialog(
-			this, new OnClickExitListenerOk(this), R.string.dialog_exit_title, R.string.dialog_exit_message);
+//		dialogExit = FactoryDialog.getInstance().buildYesNoDialog(
+//			this, new OnClickExitListenerOk(this), R.string.dialog_exit_title, R.string.dialog_exit_message);
 
 		initializeLayoutType();
 
@@ -189,11 +191,28 @@ public class MainActivity extends GenericActivity implements INotifierMessage {
 		}
 	}
 
+//	@Override
+//	public void onBackPressed() {
+//		dialogExit.show();
+//	}
 	@Override
 	public void onBackPressed() {
-		dialogExit.show();
-	}
+	    if (backPressedToExitOnce) {
+	        super.onBackPressed();
+	    } else if (this.toast == null) {
+	        this.backPressedToExitOnce = true;
+	        this.toast = Toast.makeText(this, R.string.press_again_to_exit, Toast.LENGTH_SHORT);
+	        this.toast.show();
+	        new Handler().postDelayed(new Runnable() {
 
+	            @Override
+	            public void run() {
+	                backPressedToExitOnce = false;
+	                MainActivity.this.toast = null;
+	            }
+	        }, 2000);
+	    }
+	}
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		super.onActivityResult(requestCode, resultCode, data);
