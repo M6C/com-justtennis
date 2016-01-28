@@ -64,6 +64,7 @@ public class PalmaresFastActivity extends GenericActivity {
 		list = (ListView)findViewById(R.id.list);
 
 		list.setAdapter(adapter);
+		list.setItemsCanFocus(true);
 
 		business.onCreate();
 	
@@ -102,6 +103,11 @@ public class PalmaresFastActivity extends GenericActivity {
 	public void onClickCompute(View view) {
 		bComputeVisible = !bComputeVisible;
 		initializeVisibility();
+		if (bComputeVisible) {
+			refreshData();
+		} else {
+			initializeFocus();
+		}
 	}
 
 	public void refreshData() {
@@ -119,7 +125,7 @@ public class PalmaresFastActivity extends GenericActivity {
 			public void onRankingSelected(Ranking ranking) {
 				business.setIdRanking(ranking.getId());
 				refreshData();
-				initializeFocus();
+//				initializeFocus();
 			}
 		};
 		rankingListManager.manageRanking(this, listener, business.getIdRanking(), false);

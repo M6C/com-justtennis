@@ -188,6 +188,7 @@
 		    android:layout_height="wrap_content"
 	    	android:layout_marginBottom="5dp"
 		    android:background="@color/list_background_color"
+		    android:descendantFocusability="beforeDescendants"
 		/>
     </LinearLayout>
 </LinearLayout>

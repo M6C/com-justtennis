@@ -4,12 +4,13 @@ import java.util.List;
 
 import org.gdocument.gtracergps.launcher.log.Logger;
 
+import android.annotation.SuppressLint;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.View.OnFocusChangeListener;
 import android.view.ViewGroup;
-import android.view.WindowManager;
-import android.widget.ArrayAdapter;
+import android.widget.BaseAdapter;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -19,7 +20,7 @@ import com.justtennis.activity.PalmaresFastActivity;
 import com.justtennis.domain.Invite;
 import com.justtennis.domain.PalmaresFastValue;
 
-public class PalmaresFastAdapter extends ArrayAdapter<PalmaresFastValue> {
+public class PalmaresFastAdapter extends BaseAdapter {
 
 	private static final String TAG = PalmaresFastAdapter.class.getSimpleName();
 
@@ -27,7 +28,7 @@ public class PalmaresFastAdapter extends ArrayAdapter<PalmaresFastValue> {
 	private PalmaresFastActivity activity;
 
 	public PalmaresFastAdapter(PalmaresFastActivity activity, List<PalmaresFastValue> value) {
-		super(activity, R.layout.list_invite_row, android.R.id.text1, value);
+		super();
 
 		this.activity = activity;
 		this.value = value;
@@ -42,6 +43,22 @@ public class PalmaresFastAdapter extends ArrayAdapter<PalmaresFastValue> {
 	}
 
 	@Override
+	public int getCount() {
+		return this.value.size();
+	}
+
+	@Override
+	public Object getItem(int position) {
+		return this.value.get(position);
+	}
+
+	@Override
+	public long getItemId(int position) {
+		return 0;
+	}
+
+	@SuppressLint("InflateParams")
+	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
 		PalmaresFastValue v = value.get(position);
 		View rowView = convertView;
@@ -55,104 +72,61 @@ public class PalmaresFastAdapter extends ArrayAdapter<PalmaresFastValue> {
 		EditText etNbVictory = (EditText) rowView.findViewById(R.id.et_nb_victory);
 		EditText etNbDefeat = (EditText) rowView.findViewById(R.id.et_nb_defeat);
 
-		tvRanking.setText(v.getRanking().getRanking());
-		etNbVictory.setText(Integer.toString(v.getNbVictory()));
-		etNbDefeat.setText(Integer.toString(v.getNbDefeat()));
-
 		etNbVictory.setTag(position);
 		etNbDefeat.setTag(position);
 
-//		etNbVictory.addTextChangedListener(new EditTextWatcher(etNbVictory, true));
-//		etNbDefeat.addTextChangedListener(new EditTextWatcher(etNbDefeat, false));
-		etNbVictory.setOnFocusChangeListener(new EditTextFocusChange(true));
-		etNbDefeat.setOnFocusChangeListener(new EditTextFocusChange(false));
+		tvRanking.setText(v.getRanking().getRanking());
+		etNbVictory.setText(Integer.toString(v.getNbVictory()));
+		etNbDefeat.setText(Integer.toString(v.getNbDefeat()));
+		Logger.logMe(TAG, "PALMARES FAST - PalmaresFastAdapter - onFocusChange setNbVictory data:" + v + " ranking:" + v.getRanking().getRanking() + " nbVictory:" + v.getNbVictory() + " nbDefeat:" + v.getNbDefeat());
+
+		etNbVictory.addTextChangedListener(new EditTextWatcher(etNbVictory, true));
+		etNbDefeat.addTextChangedListener(new EditTextWatcher(etNbDefeat, false));
 
 		return rowView;
 	}
 
-	private class EditTextFocusChange implements OnFocusChangeListener {
+	private class EditTextWatcher implements TextWatcher {
 
+		private View view;
 		private boolean victory;
 
-		public EditTextFocusChange(boolean victory) {
+		public EditTextWatcher(View view, boolean victory) {
+			this.view = view;
 			this.victory = victory;
 		}
-		
+
 		@Override
-		public void onFocusChange(View view, boolean hasFocus) {
-			EditText editText = ((EditText)view);
-			if (!hasFocus) {
-				if (value != null && value.size() > 0 && view.getTag() != null) {
-					String txt = editText.getText().toString();
-					PalmaresFastValue v = value.get((Integer) view.getTag());
-					int val = 0;
-					try {
-						val = Integer.parseInt(txt);
-					} catch (Exception ex) {
-						Logger.logMe(TAG, ex);
+		public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+		}
+
+		@Override
+		public void onTextChanged(CharSequence s, int start, int before, int count) {
+		}
+
+		@Override
+		public void afterTextChanged(Editable s) {
+			if (value != null && value.size() > 0 && view.getTag() != null && view.hasFocus()) {
+				String txt = ((EditText)view).getText().toString();
+				PalmaresFastValue v = value.get((Integer) view.getTag());
+				int val = 0;
+				try {
+					val = Integer.parseInt(txt);
+				} catch (Exception ex) {
+					Logger.logMe(TAG, ex);
+				}
+				if (victory) {
+					if (v.getNbVictory() != val) {
+						Logger.logMe(TAG, "PALMARES FAST - PalmaresFastAdapter - onTextChange setNbVictory s.toString:" + s.toString() + " data:" + v + " ranking:" + v.getRanking().getRanking() + " val:" + val);
+						v.setNbVictory(val);
 					}
-					if (victory) {
-						if (v.getNbVictory() != val) {
-Logger.logMe(TAG, "PALMARES FAST - PalmaresFastAdapter - onFocusChange setNbVictory");
-							v.setNbVictory(val);
-							activity.refreshData();
-						}
-					} else {
-						if (v.getNbDefeat() != val) {
-Logger.logMe(TAG, "PALMARES FAST - PalmaresFastAdapter - onFocusChange setNbDefeat");
-							v.setNbDefeat(val);
-							activity.refreshData();
-						}
+				} else {
+					if (v.getNbDefeat() != val) {
+						Logger.logMe(TAG, "PALMARES FAST - PalmaresFastAdapter - onTextChange setNbDefeat s.toString:" + s.toString() + " data:" + v + " ranking:" + v.getRanking().getRanking() + " val:" + val);
+						v.setNbDefeat(val);
 					}
 				}
-			} else {
-				editText.selectAll();
-				activity.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
 			}
 		}
 	}
-
-//	private class EditTextWatcher implements TextWatcher {
-//
-//		private View view;
-//		private boolean victory;
-//
-//		public EditTextWatcher(View view, boolean victory) {
-//			this.view = view;
-//			this.victory = victory;
-//		}
-//
-//		@Override
-//		public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-//		}
-//
-//		@Override
-//		public void onTextChanged(CharSequence s, int start, int before, int count) {
-//		}
-//
-//		@Override
-//		public void afterTextChanged(Editable s) {
-//			if (value != null && value.size() > 0 && view.getTag() != null) {
-//				String txt = ((EditText)view).getText().toString();
-//				PalmaresFastValue v = value.get((Integer) view.getTag());
-//				int val = 0;
-//				try {
-//					val = Integer.parseInt(txt);
-//				} catch (Exception ex) {
-//					Logger.logMe(TAG, ex);
-//				}
-//				if (victory) {
-//					if (v.getNbVictory() != val) {
-//						v.setNbVictory(val);
-//						activity.refreshData();
-//					}
-//				} else {
-//					if (v.getNbDefeat() != val) {
-//						v.setNbDefeat(val);
-//						activity.refreshData();
-//					}
-//				}
-//			}
-//		}
-//	}
 }

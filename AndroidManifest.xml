@@ -84,6 +84,7 @@
          />
         <activity android:name=".activity.PalmaresFastActivity"
    		   android:screenOrientation="portrait"
+   		   android:windowSoftInputMode="adjustPan"
          />
         <activity android:name=".activity.PlayerActivity"
    		   android:windowSoftInputMode="stateHidden"
