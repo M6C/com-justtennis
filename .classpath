@@ -14,7 +14,7 @@
 		</accessrules>
 	</classpathentry>
 	<classpathentry kind="lib" path="libs/achartengine-1.1.0.jar"/>
-	<classpathentry kind="lib" path="/ZXing/android/libs/zxing-2.2.jar"/>
 	<classpathentry exported="true" kind="con" path="com.android.ide.eclipse.adt.DEPENDENCIES"/>
+	<classpathentry kind="lib" path="libs/zxing-2.2.jar"/>
 	<classpathentry kind="output" path="bin/classes"/>
 </classpath>

@@ -46,24 +46,24 @@ public final class R {
 	}
 	public static final class id {
 		public static final int alertTitle = 0x7f0a0002;
-		public static final int datePicker = 0x7f0a000c;
+		public static final int datePicker = 0x7f0a000d;
 		public static final int icon = 0x7f0a0001;
-		public static final int timePicker = 0x7f0a000d;
+		public static final int timePicker = 0x7f0a000e;
 		public static final int titleDivider = 0x7f0a0003;
 		public static final int title_template = 0x7f0a0000;
-		public static final int tvDate = 0x7f0a00ad;
-		public static final int tvMonth = 0x7f0a00ac;
-		public static final int tvText = 0x7f0a000e;
-		public static final int tvTime = 0x7f0a00af;
-		public static final int tvYear = 0x7f0a00ae;
+		public static final int tvDate = 0x7f0a00b5;
+		public static final int tvMonth = 0x7f0a00b4;
+		public static final int tvText = 0x7f0a000f;
+		public static final int tvTime = 0x7f0a00b7;
+		public static final int tvYear = 0x7f0a00b6;
 	}
 	public static final class layout {
 		public static final int alert_dialog_title = 0x7f030001;
 		public static final int date_picker = 0x7f030003;
 		public static final int dialog_edit_text = 0x7f030005;
-		public static final int main = 0x7f03002c;
-		public static final int time_picker = 0x7f030035;
-		public static final int view_date = 0x7f030038;
+		public static final int main = 0x7f030035;
+		public static final int time_picker = 0x7f030040;
+		public static final int view_date = 0x7f030043;
 	}
 	public static final class string {
 		public static final int app_name = 0x7f050000;

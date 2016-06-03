@@ -15,7 +15,8 @@
     <LinearLayout
         android:id="@+id/ll_compute"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
 	    android:visibility="visible"
 	    android:orientation="vertical"
     >
@@ -162,33 +163,49 @@
 	      </LinearLayout>
 
 		</LinearLayout>
+<!-- 
 		<Button 
 			android:layout_width="match_parent"
 			android:layout_height="wrap_content"
 			android:onClick="onClickCompute"
 			android:text="@string/txt_palmares_fast_score"
 		/>
-	</LinearLayout>
+ -->
+ 	</LinearLayout>
     <LinearLayout
         android:id="@+id/ll_score"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
 	    android:orientation="vertical"
     >
+<!-- 
 		<Button 
 			android:layout_width="match_parent"
 			android:layout_height="wrap_content"
 			android:onClick="onClickCompute"
 			android:text="@string/txt_palmares_fast_compute"
 		/>
-        <include layout="@layout/list_palmares_fast_header"/>
+ -->
+         <include layout="@layout/list_palmares_fast_header"/>
 		<ListView
 			android:id="@+id/list"
 			android:layout_width="match_parent"
 		    android:layout_height="wrap_content"
-	    	android:layout_marginBottom="5dp"
 		    android:background="@color/list_background_color"
 		    android:descendantFocusability="beforeDescendants"
 		/>
     </LinearLayout>
+	<LinearLayout
+	    android:layout_width="match_parent"
+	    android:layout_height="wrap_content"
+	>
+		<Switch
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:layout_gravity="left"
+			android:textOn="@string/txt_palmares_fast_score"
+			android:textOff="@string/txt_palmares_fast_compute"
+			android:onClick="onClickCompute" />
+	</LinearLayout>
 </LinearLayout>

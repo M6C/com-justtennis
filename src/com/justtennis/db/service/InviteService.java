@@ -17,6 +17,7 @@ import com.justtennis.domain.Invite;
 import com.justtennis.domain.Saison;
 import com.justtennis.domain.comparator.InviteComparatorByDate;
 import com.justtennis.domain.comparator.InviteComparatorByPoint;
+import com.justtennis.domain.comparator.InviteComparatorByRanking;
 import com.justtennis.manager.TypeManager;
 
 public class InviteService extends GenericService<Invite> {
@@ -140,9 +141,13 @@ public class InviteService extends GenericService<Invite> {
 	public List<Invite> sortInviteByDate(List<Invite> listInvite) {
 		return sortInvite(listInvite, new InviteComparatorByDate(true));
 	}
-	
+
 	public List<Invite> sortInviteByPoint(List<Invite> listInvite) {
 		return sortInvite(listInvite, new InviteComparatorByPoint(true));
+	}
+
+	public List<Invite> sortInviteByRanking(PlayerService playerService, RankingService rankingService, boolean estimate, boolean inverse, List<Invite> listInvite) {
+		return sortInvite(listInvite, new InviteComparatorByRanking(playerService, rankingService, estimate, inverse));
 	}
 
 	public void updateInvite(SQLiteDatabase database) {

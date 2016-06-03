@@ -188,6 +188,7 @@ public class ComputeRankSubService {
 
 	public ComputeDataRanking computeDataRanking(List<Invite> listVictory, List<Invite> listDefeat, long idRanking, boolean estimate) {
 //		List<Invite> listInvite = inviteService.getByScoreResult(SCORE_RESULT.VICTORY);
+		listVictory = inviteService.sortInviteByRanking(playerService, rankingService, estimate, true, listVictory);
 		List<Invite> listInviteCalculed = new ArrayList<Invite>();
 		List<Invite> listInviteNotUsed = new ArrayList<Invite>();
 		int nbVictory = 0, nbVictoryCalculate = 0;
@@ -208,7 +209,7 @@ public class ComputeRankSubService {
 			for(Invite invite : listVictory) {
 				Player player = playerService.find(invite.getPlayer().getId());
 				Ranking ranking = rankingService.getRanking(invite, player, estimate);
-				if (ranking.getOrder() >= rankingPositionMin) {
+				if (ranking.getOrder() >= rankingPositionMin && nbVictory > 0) {
 					listInviteCalculed.add(invite);
 					int rankingDif = ranking.getOrder() - userRanking.getOrder();
 					int point = rankingService.getNbPointDifference(rankingDif);
@@ -222,6 +223,8 @@ public class ComputeRankSubService {
 					nbVictory--;
 					logMe("RANKING " + ranking.getRanking() + " POINT:" + point + " SUM:" + sumPoint + " NB VICTORY:" + nbVictory);
 				} else {
+					logMe("RANKING " + ranking.getRanking() + " NOT USED");
+					invite.setBonusPoint(0);
 					listInviteNotUsed.add(invite);
 				}
 			}
