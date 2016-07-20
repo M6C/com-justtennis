@@ -25,6 +25,7 @@ public class PalmaresFastActivity extends GenericActivity {
 
 	private static final String TAG = PalmaresFastActivity.class.getSimpleName();
 	private static final String[] LIST_BONUS = new String[]{"0", "15", "30", "45"};
+	public static final String EXTRA_PALMARES = "EXTRA_PALMARES";
 
 	private PalmaresFastBusiness business;
 

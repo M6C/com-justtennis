@@ -107,7 +107,6 @@ public class ComputeRankSubService {
 
 	public HashMap<Long,List<Invite>> getListInvite(boolean estimate) {
 		List<Invite> listVictory = inviteService.getByScoreResult(SCORE_RESULT.VICTORY);
-		List<Invite> listDefeat = inviteService.getByScoreResult(SCORE_RESULT.DEFEAT);
 		HashMap<Ranking,List<Invite>> mapInvite = getInviteGroupByPlayerRanking(listVictory, estimate);
 		return getListInvite(mapInvite);
 	}

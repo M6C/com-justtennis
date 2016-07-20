@@ -9,6 +9,7 @@ import java.util.TreeSet;
 import org.gdocument.gtracergps.launcher.log.Logger;
 
 import android.content.Context;
+import android.content.Intent;
 
 import com.cameleon.common.android.inotifier.INotifierMessage;
 import com.justtennis.R;
@@ -23,13 +24,15 @@ import com.justtennis.domain.Invite.SCORE_RESULT;
 import com.justtennis.domain.PalmaresFastValue;
 import com.justtennis.domain.Player;
 import com.justtennis.domain.Ranking;
+import com.justtennis.domain.comparator.PalmaresFastValueComparatorByRanking;
 import com.justtennis.domain.comparator.RankingComparatorByOrder;
 import com.justtennis.notifier.NotifierMessageLogger;
+import com.justtennis.tool.ListTool;
 
 public class PalmaresFastBusiness {
 
 	private static final String TAG = PalmaresFastBusiness.class.getSimpleName();
-	
+
 	private PalmaresFastActivity context;
 
 	private ComputeRankSubService computeRankService;
@@ -40,9 +43,11 @@ public class PalmaresFastBusiness {
 
 	private ComputeDataRanking computeDataRanking;
 
+	private List<PalmaresFastValue> listInitialize;
 	private List<PalmaresFastValue> list = new ArrayList<PalmaresFastValue>();
 	private Long idRanking;
 	private int pointBonus = 0;
+	private PalmaresFastValueComparatorByRanking fastValueComparatorByRanking = new PalmaresFastValueComparatorByRanking();
 
 
 	public PalmaresFastBusiness(PalmaresFastActivity context, INotifierMessage notificationMessage) {
@@ -60,6 +65,7 @@ public class PalmaresFastBusiness {
 	}
 
 	public void onCreate() {
+		initializeData();
 		initializePalmaresFastValue();
 		refreshData();
 	}
@@ -78,6 +84,15 @@ public class PalmaresFastBusiness {
 	public void refreshData() {
 Logger.logMe(TAG, "PALMARES FAST - PalmaresFastBusiness - refreshData");
 		refreshComputeDataRanking();
+	}
+
+	@SuppressWarnings("unchecked")
+	private void initializeData() {
+		Intent intent = context.getIntent();
+		if (intent.hasExtra(PalmaresFastActivity.EXTRA_PALMARES)) {
+			listInitialize = (List<PalmaresFastValue>) intent.getSerializableExtra(PalmaresFastActivity.EXTRA_PALMARES);
+		}
+		
 	}
 
 	private void refreshComputeDataRanking() {
@@ -116,8 +131,19 @@ Logger.logMe(TAG, "PALMARES FAST - PalmaresFastBusiness - initializePalmaresFast
 		list.add(new PalmaresFastValue(rankingWO, 0, 0));
 
 		for(Ranking ranking : setRanking) {
-			list.add(new PalmaresFastValue(ranking, 0, 0));
+			addPalmares(ranking);
 		}
+	}
+
+	private void addPalmares(Ranking ranking) {
+		PalmaresFastValue ret = null;
+		if (listInitialize != null && listInitialize.size() > 0) {
+			ret = ListTool.get(listInitialize, ranking, fastValueComparatorByRanking);
+		}
+		if (ret == null) {
+			ret = new PalmaresFastValue(ranking, 0, 0);
+		}
+		list.add(ret);
 	}
 
 	public int getRankingPosition() {

@@ -1,7 +1,11 @@
 package com.justtennis.activity;
 
+import java.io.Serializable;
+
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -72,6 +76,26 @@ public class ComputeRankingActivity extends GenericActivity {
 		if (requestCode == RESULT_ITEM_CLICK) {
 			business.refreshData();
 			adapter.notifyDataSetChanged();
+		}
+	}
+
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		// Inflate the menu; this adds items to the action bar if it is present.
+		getMenuInflater().inflate(R.menu.compute_ranking, menu);
+		return true;
+	}
+
+	@Override
+	public boolean onMenuItemSelected(int featureId, MenuItem item) {
+
+		if (item.getItemId() == R.id.action_palmares_fast) {
+			Intent intent = new Intent(this, PalmaresFastActivity.class);
+			intent.putExtra(PalmaresFastActivity.EXTRA_PALMARES, (Serializable)business.getPalmares());
+			startActivity(intent);
+			return true;
+		} else {
+			return super.onMenuItemSelected(featureId, item);
 		}
 	}
 
