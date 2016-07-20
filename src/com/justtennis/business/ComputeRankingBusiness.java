@@ -10,6 +10,7 @@ import com.justtennis.activity.ComputeRankingActivity;
 import com.justtennis.business.sub.ComputeRankSubService;
 import com.justtennis.db.service.InviteService;
 import com.justtennis.db.service.PlayerService;
+import com.justtennis.db.service.RankingService;
 import com.justtennis.db.service.ScoreSetService;
 import com.justtennis.db.service.UserService;
 import com.justtennis.domain.ComputeDataRanking;
@@ -28,6 +29,7 @@ public class ComputeRankingBusiness {
 	private InviteService inviteService;
 	private ScoreSetService scoreService;
 	private PlayerService playerService;
+	private RankingService rankingService;
 
 	private ComputeDataRanking computeDataRanking;
 
@@ -42,10 +44,14 @@ public class ComputeRankingBusiness {
 		playerService = new PlayerService(context, notificationMessage);
 		inviteService = new InviteService(context, notificationMessage);
 		scoreService = new ScoreSetService(context, notificationMessage);
+		rankingService = new RankingService(context, notificationMessage);
 	
 		idRanking = userService.find().getIdRankingEstimate();
 		if (idRanking == null) {
 			idRanking = userService.find().getIdRanking();
+			if (idRanking == null) {
+				idRanking = rankingService.getNC().getId();
+			}
 		}
 	}
 
