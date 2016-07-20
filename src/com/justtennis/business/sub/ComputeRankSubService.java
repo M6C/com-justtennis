@@ -3,7 +3,6 @@ package com.justtennis.business.sub;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Set;
 
 import org.gdocument.gtracergps.launcher.log.Logger;
 
@@ -101,19 +100,24 @@ public class ComputeRankSubService {
 //		return getListInvite(mapInvite);
 //	}
 
+	public HashMap<Ranking,List<Invite>> getListInviteGroupByRanking(SCORE_RESULT score_result, boolean estimate) {
+		List<Invite> listInvite = inviteService.getByScoreResult(score_result);
+		return getInviteGroupByPlayerRanking(listInvite, estimate);
+	}
+
 	public HashMap<Long,List<Invite>> getListInvite(boolean estimate) {
 		List<Invite> listVictory = inviteService.getByScoreResult(SCORE_RESULT.VICTORY);
 		List<Invite> listDefeat = inviteService.getByScoreResult(SCORE_RESULT.DEFEAT);
-		HashMap<Long,List<Invite>> mapInvite = getInviteGroupByPlayerRanking(listVictory, estimate);
+		HashMap<Ranking,List<Invite>> mapInvite = getInviteGroupByPlayerRanking(listVictory, estimate);
 		return getListInvite(mapInvite);
 	}
 
 	public HashMap<Long,List<Invite>> getListInvite(List<Invite> listVictory, List<Invite> listDefeat, boolean estimate) {
-		HashMap<Long,List<Invite>> mapInvite = getInviteGroupByPlayerRanking(listVictory, estimate);
+		HashMap<Ranking,List<Invite>> mapInvite = getInviteGroupByPlayerRanking(listVictory, estimate);
 		return getListInvite(mapInvite);
 	}
 
-	private HashMap<Long,List<Invite>> getListInvite(HashMap<Long,List<Invite>> mapInvite) {
+	private HashMap<Long,List<Invite>> getListInvite(HashMap<Ranking,List<Invite>> mapInvite) {
 		List<Invite> listInvite = new ArrayList<Invite>();
 		int nbVictory = 0, nbVictoryCalculate = 0;
 		int sumPoint = 0, pointObjectif = 0;
@@ -125,14 +129,15 @@ public class ComputeRankSubService {
 				rankingPositionMin = 0;
 			}
 			
-			int idx = 0;
-			Set<Long> keySet = mapInvite.keySet();
-			String[] keyArray = new String[keySet.size()];
-			for(Long id : keySet) {
-				keyArray[idx++] = id.toString();
-			}
+//			int idx = 0;
+//			Set<Ranking> keySet = mapInvite.keySet();
+//			String[] keyArray = new String[keySet.size()];
+//			for(Ranking id : keySet) {
+//				keyArray[idx++] = id.getId().toString();
+//			}
 			boolean doBreak = false;
-			List<Ranking> listKeyRanking = rankingService.getList(keyArray);
+//			List<Ranking> listKeyRanking = rankingService.getList(keyArray);
+			List<Ranking> listKeyRanking = new ArrayList<Ranking>(mapInvite.keySet());
 			rankingService.order(listKeyRanking, true);
 			nbVictory = userRanking.getVictoryMan();
 			pointObjectif = userRanking.getRankingPointMan();
@@ -337,8 +342,8 @@ public class ComputeRankSubService {
 	}
 
 	@SuppressLint("UseSparseArrays")
-	private HashMap<Long,List<Invite>> getInviteGroupByPlayerRanking(List<Invite> listVictory, boolean estimate) {
-		HashMap<Long, List<Invite>> ret = new HashMap<Long, List<Invite>>();
+	private HashMap<Ranking,List<Invite>> getInviteGroupByPlayerRanking(List<Invite> listVictory, boolean estimate) {
+		HashMap<Ranking, List<Invite>> ret = new HashMap<Ranking, List<Invite>>();
 		User user = userService.find();
 		Ranking userRanking = rankingService.find(user.getIdRanking());
 //		List<Invite> listVictory = inviteService.getByScoreResult(Invite.SCORE_RESULT.VICTORY);
@@ -350,13 +355,13 @@ public class ComputeRankSubService {
 
 			for(Invite victory : listVictory) {
 				Player player = playerService.find(victory.getPlayer().getId());
-				Long idRanking = rankingService.getRanking(victory, player, estimate).getId();
+				Ranking ranking = rankingService.getRanking(victory, player, estimate);
 				List<Invite> listInvite = null;
-				if (ret.containsKey(idRanking)) {
-					listInvite = ret.get(idRanking);
+				if (ret.containsKey(ranking)) {
+					listInvite = ret.get(ranking);
 				} else {
 					listInvite = new ArrayList<Invite>();
-					ret.put(idRanking, listInvite);
+					ret.put(ranking, listInvite);
 				}
 				listInvite.add(victory);
 			}
