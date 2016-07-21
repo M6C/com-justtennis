@@ -274,6 +274,7 @@ public class MainActivity extends GenericActivity implements INotifierMessage {
 	public void onClickListPlayerInvite(View view) {
 		Intent intent = new Intent(getApplicationContext(), ListPlayerActivity.class);
 		intent.putExtra(ListPlayerActivity.EXTRA_MODE, MODE.INVITE);
+		intent = new Intent(getApplicationContext(), MatchActivity.class);
 		startActivity(intent);
 	}
 
@@ -394,8 +395,10 @@ public class MainActivity extends GenericActivity implements INotifierMessage {
 	}
 
 	public void onClickTypeTraining(View view) {
-		typeManager.setType(TYPE.TRAINING);
-		initializeLayoutType();
+//		typeManager.setType(TYPE.TRAINING);
+//		initializeLayoutType();
+		Intent intent = new Intent(getApplicationContext(), MatchActivity.class);
+		startActivity(intent);
 	}
 	
 	public void onClickTypeMatch(View view) {
