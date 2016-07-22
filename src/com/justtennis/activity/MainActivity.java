@@ -34,6 +34,7 @@ import com.cameleon.common.android.db.sqlite.helper.GenericDBHelper;
 import com.cameleon.common.android.factory.FactoryDialog;
 import com.cameleon.common.android.factory.listener.OnClickViewListener;
 import com.cameleon.common.android.inotifier.INotifierMessage;
+import com.justtennis.R;
 import com.justtennis.activity.ListPlayerActivity.MODE;
 import com.justtennis.activity.MatchActivity.PlaceholderFragment;
 import com.justtennis.adapter.CustomArrayAdapter;
@@ -49,7 +50,6 @@ import com.justtennis.listener.ok.OnClickSendApkListenerOk;
 import com.justtennis.listener.ok.OnClickSendDBListenerOk;
 import com.justtennis.manager.TypeManager;
 import com.justtennis.manager.TypeManager.TYPE;
-import com.justtennis.R;
 
 public class MainActivity extends GenericActivity implements NavigationDrawerFragment.NavigationDrawerCallbacks, INotifierMessage {
 
@@ -74,6 +74,10 @@ public class MainActivity extends GenericActivity implements NavigationDrawerFra
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+
+		business = new MainBusiness(this, this);
+		typeManager = TypeManager.getInstance(this.getApplicationContext(), this);
+
 		setContentView(R.layout.main_01);
 
 		layoutMain = (RelativeLayout)findViewById(R.id.container);
@@ -84,14 +88,11 @@ public class MainActivity extends GenericActivity implements NavigationDrawerFra
 //		menuOverFlowContent = findViewById(R.id.ll_menu_overflow_content);
 //		spSaison = (Spinner)findViewById(R.id.sp_saison);
 
-		business = new MainBusiness(this, this);
-		typeManager = TypeManager.getInstance(this.getApplicationContext(), this);
-
 //		dialogExit = FactoryDialog.getInstance().buildYesNoDialog(
 //			this, new OnClickExitListenerOk(this), R.string.dialog_exit_title, R.string.dialog_exit_message);
 
 		initializeDrawer();
-		initializeLayoutType();
+		initializeLayoutType(layoutMain);
 
 		Intent intent = getIntent();
 		if (Intent.ACTION_SEND_MULTIPLE.equals(intent.getAction())) {
@@ -122,23 +123,47 @@ public class MainActivity extends GenericActivity implements NavigationDrawerFra
 //		initializeSaison();
 	}
 
-	private void initializeLayoutType() {
+	private void initializeLayoutType(View view) {
+		view = (view.getParent()==null) ? view : ((View)view.getParent());
+		View root = view.getRootView();
 		typeManager.initializeActivity(layoutMain, true);
 		switch(typeManager.getType()) {
 			case COMPETITION: {
-				llTypeMatch.setAlpha(1f);
-				llTypeEntrainement.setAlpha(.2f);
-				ivMatch.setVisibility(View.VISIBLE);
-				ivPlay.setVisibility(View.GONE);
+//				llTypeMatch.setAlpha(1f);
+//				llTypeEntrainement.setAlpha(.2f);
+//				ivMatch.setVisibility(View.VISIBLE);
+//				ivPlay.setVisibility(View.GONE);
+
+				((LinearLayout)view.findViewById(R.id.ll_type_match)).setAlpha(1f);
+				((LinearLayout)view.findViewById(R.id.ll_type_training)).setAlpha(.2f);
+				((LinearLayout)root.findViewById(R.id.ll_type_match)).setAlpha(1f);
+				((LinearLayout)root.findViewById(R.id.ll_type_training)).setAlpha(.2f);
+				if (root.findViewById(R.id.iv_match) != null) {
+					((ImageView)root.findViewById(R.id.iv_match)).setVisibility(View.VISIBLE);
+				}
+				if (root.findViewById(R.id.iv_play) != null) {
+					((ImageView)root.findViewById(R.id.iv_play)).setVisibility(View.GONE);
+				}
 			}
 			break;
 
 			case TRAINING:
 			default: {
-				llTypeEntrainement.setAlpha(1f);
-				llTypeMatch.setAlpha(.2f);
-				ivPlay.setVisibility(View.VISIBLE);
-				ivMatch.setVisibility(View.GONE);
+//				llTypeEntrainement.setAlpha(1f);
+//				llTypeMatch.setAlpha(.2f);
+//				ivPlay.setVisibility(View.VISIBLE);
+//				ivMatch.setVisibility(View.GONE);
+
+				((LinearLayout)view.findViewById(R.id.ll_type_match)).setAlpha(.2f);
+				((LinearLayout)view.findViewById(R.id.ll_type_training)).setAlpha(1f);
+				((LinearLayout)root.findViewById(R.id.ll_type_match)).setAlpha(.2f);
+				((LinearLayout)root.findViewById(R.id.ll_type_training)).setAlpha(1f);
+				if (root.findViewById(R.id.iv_match) != null) {
+					((ImageView)root.findViewById(R.id.iv_match)).setVisibility(View.GONE);
+				}
+				if (root.findViewById(R.id.iv_play) != null) {
+					((ImageView)root.findViewById(R.id.iv_play)).setVisibility(View.VISIBLE);
+				}
 			}
 			break;
 		}
@@ -154,7 +179,7 @@ public class MainActivity extends GenericActivity implements NavigationDrawerFra
 
 		// Set up the drawer.
 		mNavigationDrawerFragment.setUp(R.id.navigation_drawer, (DrawerLayout) findViewById(R.id.drawer_layout), value);
-		mNavigationDrawerFragment.setFooter(new NavigationDrawerAdapter.NavigationDrawerData(1, R.layout.fragment_navigation_drawer_element_type, null));
+		mNavigationDrawerFragment.setFooter(new NavigationDrawerAdapter.NavigationDrawerData(1, R.layout.fragment_navigation_drawer_element_type, new NavigationDrawerTypeNotifer()));
 	}
 
 	private void restoreActionBar() {
@@ -182,6 +207,7 @@ public class MainActivity extends GenericActivity implements NavigationDrawerFra
 			// Inflate the menu; this adds items to the action bar if it is present.
 			getMenuInflater().inflate(R.menu.main, menu);
 			restoreActionBar();
+			setTitle(R.string.application_label);
 			return true;
 		}
 		return super.onCreateOptionsMenu(menu);
@@ -429,14 +455,14 @@ public class MainActivity extends GenericActivity implements NavigationDrawerFra
 
 	public void onClickTypeTraining(View view) {
 		typeManager.setType(TYPE.TRAINING);
-		initializeLayoutType();
+		initializeLayoutType(view);
 //		Intent intent = new Intent(getApplicationContext(), MatchActivity.class);
 //		startActivity(intent);
 	}
 
 	public void onClickTypeMatch(View view) {
 		typeManager.setType(TYPE.COMPETITION);
-		initializeLayoutType();
+		initializeLayoutType(view);
 	}
 
 	private void handleSendMultipleDb(Intent intent) {
@@ -467,6 +493,14 @@ public class MainActivity extends GenericActivity implements NavigationDrawerFra
 			}
 		} else {
 			Log.w(TAG, "handleSendDb No DB Helper found for databaseName:'"+databaseName+"'");
+		}
+	}
+
+	private final class NavigationDrawerTypeNotifer implements NavigationDrawerNotifer {
+
+		@Override
+		public void onCreateView(View view) {
+			initializeLayoutType(view);
 		}
 	}
 
