@@ -1,9 +1,13 @@
 package com.justtennis.activity;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import android.app.ActionBar;
 import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentManager;
+import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
 import android.view.LayoutInflater;
@@ -11,8 +15,19 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.Spinner;
 
+import com.cameleon.common.android.inotifier.INotifierMessage;
+import com.justtennis.adapter.CustomArrayAdapter;
+import com.justtennis.adapter.NavigationDrawerAdapter;
+import com.justtennis.adapter.NavigationDrawerAdapter.NavigationDrawerData;
+import com.justtennis.adapter.NavigationDrawerAdapter.NavigationDrawerNotifer;
+import com.justtennis.business.MainBusiness;
+import com.justtennis.domain.Saison;
 import com.justtennis.fragment.NavigationDrawerFragment;
+import com.justtennis.manager.TypeManager;
+import com.justtennis.notifier.NotifierMessageLogger;
 import com.justtennis.R;
 
 public class MatchActivity extends Activity implements NavigationDrawerFragment.NavigationDrawerCallbacks {
@@ -38,9 +53,47 @@ public class MatchActivity extends Activity implements NavigationDrawerFragment.
 				.findFragmentById(R.id.navigation_drawer);
 		mTitle = getTitle();
 
+		NavigationDrawerNotifer notiferSaison = new NavigationDrawerNotifer() {
+
+			@Override
+			public void onCreateView(View view) {
+				Context context = view.getContext().getApplicationContext();
+				INotifierMessage notificationMessage = NotifierMessageLogger.getInstance();
+				final MainBusiness business = new MainBusiness(context, notificationMessage);
+				final TypeManager typeManager = TypeManager.getInstance(context, notificationMessage);
+				business.initializeData();
+
+				Spinner spSaison = (Spinner)view.findViewById(R.id.sp_saison);
+				CustomArrayAdapter<String> adpSaison = new CustomArrayAdapter<String>(context, business.getListTxtSaisons());
+				spSaison.setAdapter(adpSaison);
+
+				spSaison.setOnItemSelectedListener(adpSaison.new OnItemSelectedListener<Saison>() {
+					@Override
+					public Saison getItem(int position) {
+						return business.getListSaison().get(position);
+					}
+
+					@Override
+					public boolean isHintItemSelected(Saison item) {
+						return business.isEmptySaison(item);
+					}
+
+					@Override
+					public void onItemSelected(AdapterView<?> parent, View view, int position, long id, Saison item) {
+						typeManager.setSaison(business.getListSaison().get(position));
+					}
+				});
+
+				adpSaison.notifyDataSetChanged();
+			}
+			
+		};
+
+		List<NavigationDrawerData> value = new ArrayList<NavigationDrawerAdapter.NavigationDrawerData>();
+		value.add(new NavigationDrawerAdapter.NavigationDrawerData(0, R.layout.fragment_navigation_drawer_element_saison, notiferSaison));
+
 		// Set up the drawer.
-		mNavigationDrawerFragment.setUp(R.id.navigation_drawer,
-				(DrawerLayout) findViewById(R.id.drawer_layout));
+		mNavigationDrawerFragment.setUp(R.id.navigation_drawer, (DrawerLayout) findViewById(R.id.drawer_layout), value);
 	}
 
 	@Override
@@ -134,8 +187,10 @@ public class MatchActivity extends Activity implements NavigationDrawerFragment.
 		@Override
 		public void onAttach(Activity activity) {
 			super.onAttach(activity);
-			((MatchActivity) activity).onSectionAttached(getArguments().getInt(
-					ARG_SECTION_NUMBER));
+			if (activity instanceof MatchActivity) {
+				((MatchActivity) activity).onSectionAttached(getArguments().getInt(
+						ARG_SECTION_NUMBER));
+			}
 		}
 	}
 

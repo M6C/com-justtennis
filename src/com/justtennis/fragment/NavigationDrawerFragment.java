@@ -1,15 +1,18 @@
 package com.justtennis.fragment;
 
+import java.util.List;
+
 import android.app.ActionBar;
 import android.app.Activity;
 import android.app.Fragment;
+import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
-import android.support.v4.app.ActionBarDrawerToggle;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -17,10 +20,11 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.justtennis.adapter.NavigationDrawerAdapter;
+import com.justtennis.adapter.NavigationDrawerAdapter.NavigationDrawerData;
 import com.justtennis.R;
 
 /**
@@ -61,6 +65,8 @@ public class NavigationDrawerFragment extends Fragment {
 	private boolean mFromSavedInstanceState;
 	private boolean mUserLearnedDrawer;
 
+	private NavigationDrawerAdapter mDrawerAdapter;
+
 	public NavigationDrawerFragment() {
 	}
 
@@ -94,10 +100,9 @@ public class NavigationDrawerFragment extends Fragment {
 	}
 
 	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup container,
-			Bundle savedInstanceState) {
-		mDrawerListView = (ListView) inflater.inflate(
-				R.layout.fragment_navigation_drawer, container, false);
+	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+		View view = inflater.inflate(R.layout.fragment_navigation_drawer, container, false);
+		mDrawerListView = (ListView) view.findViewById(R.id.list);
 		mDrawerListView
 				.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 					@Override
@@ -106,14 +111,16 @@ public class NavigationDrawerFragment extends Fragment {
 						selectItem(position);
 					}
 				});
-		mDrawerListView.setAdapter(new ArrayAdapter<String>(getActionBar()
-				.getThemedContext(),
-				android.R.layout.simple_list_item_activated_1,
-				android.R.id.text1, new String[] {
-						getString(R.string.title_section1),
-						getString(R.string.title_section2),
-						getString(R.string.title_section3), }));
-		mDrawerListView.setItemChecked(mCurrentSelectedPosition, true);
+		mDrawerAdapter = new NavigationDrawerAdapter(inflater);
+		mDrawerListView.setAdapter(mDrawerAdapter);
+//		mDrawerListView.setAdapter(new ArrayAdapter<String>(getActionBar()
+//				.getThemedContext(),
+//				android.R.layout.simple_list_item_activated_1,
+//				android.R.id.text1, new String[] {
+//						getString(R.string.title_section1),
+//						getString(R.string.title_section2),
+//						getString(R.string.title_section3), }));
+//		mDrawerListView.setItemChecked(mCurrentSelectedPosition, true);
 		return mDrawerListView;
 	}
 
@@ -131,9 +138,11 @@ public class NavigationDrawerFragment extends Fragment {
 	 * @param drawerLayout
 	 *            The DrawerLayout containing this fragment's UI.
 	 */
-	public void setUp(int fragmentId, DrawerLayout drawerLayout) {
+	public void setUp(int fragmentId, DrawerLayout drawerLayout, List<NavigationDrawerData> value) {
 		mFragmentContainerView = getActivity().findViewById(fragmentId);
 		mDrawerLayout = drawerLayout;
+		mDrawerAdapter.setValue(value);
+		mDrawerAdapter.notifyDataSetChanged();
 
 		// set a custom shadow that overlays the main content when the drawer
 		// opens
@@ -209,6 +218,16 @@ public class NavigationDrawerFragment extends Fragment {
 		});
 
 		mDrawerLayout.setDrawerListener(mDrawerToggle);
+	}
+
+	public void setFooter(NavigationDrawerData footer) {
+		Context context = getActivity();
+		LayoutInflater inflater = ((LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE));
+        View footerView =  inflater.inflate(footer.getLayout(), null, false);
+		mDrawerListView.addFooterView(footerView);
+		if (footer.getNotifer() != null ) {
+			footer.getNotifer().onCreateView(footerView);
+		}
 	}
 
 	private void selectItem(int position) {

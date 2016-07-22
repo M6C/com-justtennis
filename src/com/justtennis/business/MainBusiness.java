@@ -13,7 +13,6 @@ import com.justtennis.db.service.SaisonService;
 import com.justtennis.db.service.UserService;
 import com.justtennis.db.sqlite.helper.GenericJustTennisDBHelper;
 import com.justtennis.domain.Saison;
-import com.justtennis.notifier.NotifierMessageLogger;
 
 public class MainBusiness {
 

@@ -7,12 +7,16 @@ import java.util.List;
 
 import org.gdocument.gtracergps.launcher.log.Logger;
 
+import android.app.ActionBar;
+import android.app.FragmentManager;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.v4.widget.DrawerLayout;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -30,25 +34,31 @@ import com.cameleon.common.android.db.sqlite.helper.GenericDBHelper;
 import com.cameleon.common.android.factory.FactoryDialog;
 import com.cameleon.common.android.factory.listener.OnClickViewListener;
 import com.cameleon.common.android.inotifier.INotifierMessage;
-import com.justtennis.R;
 import com.justtennis.activity.ListPlayerActivity.MODE;
+import com.justtennis.activity.MatchActivity.PlaceholderFragment;
 import com.justtennis.adapter.CustomArrayAdapter;
+import com.justtennis.adapter.NavigationDrawerAdapter;
+import com.justtennis.adapter.NavigationDrawerAdapter.NavigationDrawerData;
+import com.justtennis.adapter.NavigationDrawerAdapter.NavigationDrawerNotifer;
 import com.justtennis.business.MainBusiness;
 import com.justtennis.domain.Saison;
+import com.justtennis.fragment.NavigationDrawerFragment;
 import com.justtennis.listener.ok.OnClickDBBackupListenerOk;
 import com.justtennis.listener.ok.OnClickDBRestoreListenerOk;
 import com.justtennis.listener.ok.OnClickSendApkListenerOk;
 import com.justtennis.listener.ok.OnClickSendDBListenerOk;
 import com.justtennis.manager.TypeManager;
 import com.justtennis.manager.TypeManager.TYPE;
+import com.justtennis.R;
 
-public class MainActivity extends GenericActivity implements INotifierMessage {
+public class MainActivity extends GenericActivity implements NavigationDrawerFragment.NavigationDrawerCallbacks, INotifierMessage {
 
 	private static final String TAG = MainActivity.class.getSimpleName();
 	private static final int RESULT_CODE_QRCODE_SCAN = 0;
 	private MainBusiness business;
 //	private Dialog dialogExit;
 
+	private NavigationDrawerFragment mNavigationDrawerFragment;
 	private RelativeLayout layoutMain;
 	private LinearLayout llTypeEntrainement;
 	private LinearLayout llTypeMatch;
@@ -56,24 +66,23 @@ public class MainActivity extends GenericActivity implements INotifierMessage {
 	private View menuOverFlowContent;
 	private ImageView ivPlay;
 	private ImageView ivMatch;
-	private Spinner spSaison;
-	private CustomArrayAdapter<String> adpSaison;
 
 	private boolean backPressedToExitOnce = false;
 	private Toast toast = null;
+	private NavigationDrawerSaisonNotifer notiferSaison;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.main_01);
 
-		layoutMain = (RelativeLayout)findViewById(R.id.layout_main);
+		layoutMain = (RelativeLayout)findViewById(R.id.container);
 		llTypeEntrainement = (LinearLayout)findViewById(R.id.ll_type_training);
 		llTypeMatch = (LinearLayout)findViewById(R.id.ll_type_match);
 		ivPlay = (ImageView)findViewById(R.id.iv_play);
 		ivMatch = (ImageView)findViewById(R.id.iv_match);
-		menuOverFlowContent = findViewById(R.id.ll_menu_overflow_content);
-		spSaison = (Spinner)findViewById(R.id.sp_saison);
+//		menuOverFlowContent = findViewById(R.id.ll_menu_overflow_content);
+//		spSaison = (Spinner)findViewById(R.id.sp_saison);
 
 		business = new MainBusiness(this, this);
 		typeManager = TypeManager.getInstance(this.getApplicationContext(), this);
@@ -81,6 +90,7 @@ public class MainActivity extends GenericActivity implements INotifierMessage {
 //		dialogExit = FactoryDialog.getInstance().buildYesNoDialog(
 //			this, new OnClickExitListenerOk(this), R.string.dialog_exit_title, R.string.dialog_exit_message);
 
+		initializeDrawer();
 		initializeLayoutType();
 
 		Intent intent = getIntent();
@@ -108,8 +118,8 @@ public class MainActivity extends GenericActivity implements INotifierMessage {
 	}
 
 	private void initializeData() {
-		initializeSaisonList();
-		initializeSaison();
+//		initializeSaisonList();
+//		initializeSaison();
 	}
 
 	private void initializeLayoutType() {
@@ -134,67 +144,87 @@ public class MainActivity extends GenericActivity implements INotifierMessage {
 		}
 	}
 
-	private void initializeSaisonList() {
-		Log.d(TAG, "initializeSaisonList");
-		adpSaison = new CustomArrayAdapter<String>(this, business.getListTxtSaisons());
-		spSaison.setAdapter(adpSaison);
+	private void initializeDrawer() {
+		mNavigationDrawerFragment = (NavigationDrawerFragment) getFragmentManager().findFragmentById(R.id.navigation_drawer);
 
-		spSaison.setOnItemSelectedListener(adpSaison.new OnItemSelectedListener<Saison>() {
-			@Override
-			public Saison getItem(int position) {
-				return business.getListSaison().get(position);
-			}
+		notiferSaison = new NavigationDrawerSaisonNotifer();
 
-			@Override
-			public boolean isHintItemSelected(Saison item) {
-				return business.isEmptySaison(item);
-			}
+		List<NavigationDrawerData> value = new ArrayList<NavigationDrawerAdapter.NavigationDrawerData>();
+		value.add(new NavigationDrawerAdapter.NavigationDrawerData(0, R.layout.fragment_navigation_drawer_element_saison, notiferSaison));
 
-			@Override
-			public void onItemSelected(AdapterView<?> parent, View view, int position, long id, Saison item) {
-				typeManager.setSaison(business.getListSaison().get(position));
-			}
-		});
+		// Set up the drawer.
+		mNavigationDrawerFragment.setUp(R.id.navigation_drawer, (DrawerLayout) findViewById(R.id.drawer_layout), value);
+		mNavigationDrawerFragment.setFooter(new NavigationDrawerAdapter.NavigationDrawerData(1, R.layout.fragment_navigation_drawer_element_type, null));
 	}
 
-	private void initializeSaison() {
-		Log.d(TAG, "initializeSaison");
-		Saison saison = typeManager.getSaison();
-		int position = 0;
-		List<Saison> listSaison = business.getListSaison();
-		for(Saison item : listSaison) {
-			if (item.equals(saison)) {
-				spSaison.setSelection(position, true);
-				break;
-			} else {
-				position++;
-			}
-		}
+	private void restoreActionBar() {
+		ActionBar actionBar = getActionBar();
+		actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
+		actionBar.setDisplayShowTitleEnabled(true);
+	}
+
+	@Override
+	public void onNavigationDrawerItemSelected(int position) {
+		// update the main content by replacing fragments
+		FragmentManager fragmentManager = getFragmentManager();
+		fragmentManager
+				.beginTransaction()
+				.replace(R.id.container,
+						PlaceholderFragment.newInstance(position + 1)).commit();
 	}
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-		// Inflate the menu; this adds items to the action bar if it is present.
-		getMenuInflater().inflate(R.menu.main, menu);
-		return true;
+		if (!mNavigationDrawerFragment.isDrawerOpen()) {
+			// Only show items in the action bar relevant to this screen
+			// if the drawer is not showing. Otherwise, let the drawer
+			// decide what to show in the action bar.
+			// Inflate the menu; this adds items to the action bar if it is present.
+			getMenuInflater().inflate(R.menu.main, menu);
+			restoreActionBar();
+			return true;
+		}
+		return super.onCreateOptionsMenu(menu);
 	}
 
 	@Override
 	public boolean onMenuItemSelected(int featureId, MenuItem item) {
+		boolean ret = true;
 
-		if (item.getItemId() == R.id.action_palmares_fast) {
-			Intent intent = new Intent(this, PalmaresFastActivity.class);
-			startActivity(intent);
-			return true;
-		} else {
-			return super.onMenuItemSelected(featureId, item);
+		switch (item.getItemId()) {
+			case R.id.action_palmares_fast:
+				onClickFastPalmares(null);
+				break;
+			case R.id.action_message:
+				onClickMessage(null);
+				break;
+			case R.id.action_list_person:
+				onClickListPerson(null);
+				break;
+			case R.id.action_send_apk:
+				onClickSendApk(null);
+				break;
+			case R.id.action_send_db:
+				onClickSendDb(null);
+				break;
+			case R.id.action_db_backup:
+				onClickDBBackup(null);
+				break;
+			case R.id.action_db_restore:
+				onClickDBRestore(null);
+				break;
+			default:
+				ret = super.onMenuItemSelected(featureId, item);
 		}
+
+		return ret;
 	}
 
 //	@Override
 //	public void onBackPressed() {
 //		dialogExit.show();
 //	}
+
 	@Override
 	public void onBackPressed() {
 	    if (backPressedToExitOnce) {
@@ -257,6 +287,11 @@ public class MainActivity extends GenericActivity implements INotifierMessage {
 	
 	public void onClickMessage(View view) {
 		Intent intent = new Intent(getApplicationContext(), MessageActivity.class);
+		startActivity(intent);
+	}
+	
+	public void onClickFastPalmares(View view) {
+		Intent intent = new Intent(this, PalmaresFastActivity.class);
 		startActivity(intent);
 	}
 
@@ -356,8 +391,7 @@ public class MainActivity extends GenericActivity implements INotifierMessage {
 					typeManager.setSaison(saison);
 
 					business.initializeDataSaison();
-					adpSaison.notifyDataSetChanged();
-					initializeSaison();
+					notiferSaison.initializeSaison();
 				} else {
 					Toast.makeText(MainActivity.this, R.string.error_message_saison_already_exist, Toast.LENGTH_LONG).show();
 				}
@@ -381,8 +415,7 @@ public class MainActivity extends GenericActivity implements INotifierMessage {
 						typeManager.reinitialize(MainActivity.this.getApplicationContext(), MainActivity.this);
 
 						business.initializeDataSaison();
-						adpSaison.notifyDataSetChanged();
-						initializeSaison();
+						notiferSaison.initializeSaison();
 					} else {
 						Toast.makeText(MainActivity.this, R.string.error_message_invite_exist_saison, Toast.LENGTH_LONG).show();
 					}
@@ -395,12 +428,12 @@ public class MainActivity extends GenericActivity implements INotifierMessage {
 	}
 
 	public void onClickTypeTraining(View view) {
-//		typeManager.setType(TYPE.TRAINING);
-//		initializeLayoutType();
-		Intent intent = new Intent(getApplicationContext(), MatchActivity.class);
-		startActivity(intent);
+		typeManager.setType(TYPE.TRAINING);
+		initializeLayoutType();
+//		Intent intent = new Intent(getApplicationContext(), MatchActivity.class);
+//		startActivity(intent);
 	}
-	
+
 	public void onClickTypeMatch(View view) {
 		typeManager.setType(TYPE.COMPETITION);
 		initializeLayoutType();
@@ -434,6 +467,60 @@ public class MainActivity extends GenericActivity implements INotifierMessage {
 			}
 		} else {
 			Log.w(TAG, "handleSendDb No DB Helper found for databaseName:'"+databaseName+"'");
+		}
+	}
+
+	private final class NavigationDrawerSaisonNotifer implements NavigationDrawerNotifer {
+		private CustomArrayAdapter<String> adpSaison;
+		private Spinner spSaison;
+		private Context context;
+
+		@Override
+		public void onCreateView(View view) {
+			context = view.getContext().getApplicationContext();
+
+			spSaison = (Spinner)view.findViewById(R.id.sp_saison);
+			initializeSaisonList();
+			initializeSaison();
+		}
+
+		private void initializeSaisonList() {
+			Log.d(TAG, "initializeSaisonList");
+			adpSaison = new CustomArrayAdapter<String>(context, business.getListTxtSaisons());
+			spSaison.setAdapter(adpSaison);
+
+			spSaison.setOnItemSelectedListener(adpSaison.new OnItemSelectedListener<Saison>() {
+				@Override
+				public Saison getItem(int position) {
+					return business.getListSaison().get(position);
+				}
+
+				@Override
+				public boolean isHintItemSelected(Saison item) {
+					return business.isEmptySaison(item);
+				}
+
+				@Override
+				public void onItemSelected(AdapterView<?> parent, View view, int position, long id, Saison item) {
+					typeManager.setSaison(business.getListSaison().get(position));
+				}
+			});
+		}
+
+		public void initializeSaison() {
+			Log.d(TAG, "initializeSaison");
+			Saison saison = typeManager.getSaison();
+			int position = 0;
+			List<Saison> listSaison = business.getListSaison();
+			for(Saison item : listSaison) {
+				if (item.equals(saison)) {
+					spSaison.setSelection(position, true);
+					break;
+				} else {
+					position++;
+				}
+			}
+			adpSaison.notifyDataSetChanged();
 		}
 	}
 }

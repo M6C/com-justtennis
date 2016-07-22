@@ -1,0 +1,42 @@
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+>
+	<LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+	    android:orientation="horizontal"
+	    android:gravity="center_horizontal|center_vertical"
+	>
+	    <Spinner
+            android:id="@+id/sp_saison"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/invite_field_size"
+        />
+		<LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+		    android:orientation="horizontal"
+		    android:gravity="center_vertical"
+		    android:layout_marginLeft="15dp"
+		>
+		    <ImageView
+		        android:layout_width="24dp"
+		        android:layout_height="24dp"
+		        android:src="@drawable/btn_add"
+		        android:onClick="onClickSaisonAdd"
+		    />
+		    <ImageView
+		        android:layout_width="24dp"
+		        android:layout_height="24dp"
+		        android:src="@drawable/btn_del"
+		        android:onClick="onClickSaisonDel"
+		    	android:layout_marginLeft="15dp"
+		    />
+		</LinearLayout>
+	</LinearLayout>
+</LinearLayout>
