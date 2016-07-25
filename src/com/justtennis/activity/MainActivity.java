@@ -56,16 +56,11 @@ public class MainActivity extends GenericActivity implements NavigationDrawerFra
 	private static final String TAG = MainActivity.class.getSimpleName();
 	private static final int RESULT_CODE_QRCODE_SCAN = 0;
 	private MainBusiness business;
-//	private Dialog dialogExit;
 
 	private NavigationDrawerFragment mNavigationDrawerFragment;
 	private RelativeLayout layoutMain;
-	private LinearLayout llTypeEntrainement;
-	private LinearLayout llTypeMatch;
 	private TypeManager typeManager;
 	private View menuOverFlowContent;
-	private ImageView ivPlay;
-	private ImageView ivMatch;
 
 	private boolean backPressedToExitOnce = false;
 	private Toast toast = null;
@@ -81,15 +76,7 @@ public class MainActivity extends GenericActivity implements NavigationDrawerFra
 		setContentView(R.layout.main_01);
 
 		layoutMain = (RelativeLayout)findViewById(R.id.container);
-		llTypeEntrainement = (LinearLayout)findViewById(R.id.ll_type_training);
-		llTypeMatch = (LinearLayout)findViewById(R.id.ll_type_match);
-		ivPlay = (ImageView)findViewById(R.id.iv_play);
-		ivMatch = (ImageView)findViewById(R.id.iv_match);
 //		menuOverFlowContent = findViewById(R.id.ll_menu_overflow_content);
-//		spSaison = (Spinner)findViewById(R.id.sp_saison);
-
-//		dialogExit = FactoryDialog.getInstance().buildYesNoDialog(
-//			this, new OnClickExitListenerOk(this), R.string.dialog_exit_title, R.string.dialog_exit_message);
 
 		initializeDrawer();
 		initializeLayoutType(layoutMain);
@@ -129,15 +116,8 @@ public class MainActivity extends GenericActivity implements NavigationDrawerFra
 		typeManager.initializeActivity(layoutMain, true);
 		switch(typeManager.getType()) {
 			case COMPETITION: {
-//				llTypeMatch.setAlpha(1f);
-//				llTypeEntrainement.setAlpha(.2f);
-//				ivMatch.setVisibility(View.VISIBLE);
-//				ivPlay.setVisibility(View.GONE);
-
 				((LinearLayout)view.findViewById(R.id.ll_type_match)).setAlpha(1f);
 				((LinearLayout)view.findViewById(R.id.ll_type_training)).setAlpha(.2f);
-				((LinearLayout)root.findViewById(R.id.ll_type_match)).setAlpha(1f);
-				((LinearLayout)root.findViewById(R.id.ll_type_training)).setAlpha(.2f);
 				if (root.findViewById(R.id.iv_match) != null) {
 					((ImageView)root.findViewById(R.id.iv_match)).setVisibility(View.VISIBLE);
 				}
@@ -149,15 +129,8 @@ public class MainActivity extends GenericActivity implements NavigationDrawerFra
 
 			case TRAINING:
 			default: {
-//				llTypeEntrainement.setAlpha(1f);
-//				llTypeMatch.setAlpha(.2f);
-//				ivPlay.setVisibility(View.VISIBLE);
-//				ivMatch.setVisibility(View.GONE);
-
 				((LinearLayout)view.findViewById(R.id.ll_type_match)).setAlpha(.2f);
 				((LinearLayout)view.findViewById(R.id.ll_type_training)).setAlpha(1f);
-				((LinearLayout)root.findViewById(R.id.ll_type_match)).setAlpha(.2f);
-				((LinearLayout)root.findViewById(R.id.ll_type_training)).setAlpha(1f);
 				if (root.findViewById(R.id.iv_match) != null) {
 					((ImageView)root.findViewById(R.id.iv_match)).setVisibility(View.GONE);
 				}
@@ -246,11 +219,6 @@ public class MainActivity extends GenericActivity implements NavigationDrawerFra
 
 		return ret;
 	}
-
-//	@Override
-//	public void onBackPressed() {
-//		dialogExit.show();
-//	}
 
 	@Override
 	public void onBackPressed() {
