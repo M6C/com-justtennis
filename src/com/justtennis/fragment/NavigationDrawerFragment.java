@@ -20,6 +20,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.LinearLayout;
+import android.widget.LinearLayout.LayoutParams;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -58,6 +60,8 @@ public class NavigationDrawerFragment extends Fragment {
 	private ActionBarDrawerToggle mDrawerToggle;
 
 	private DrawerLayout mDrawerLayout;
+	private LinearLayout mDrawerHeader;
+	private LinearLayout mDrawerFooter;
 	private ListView mDrawerListView;
 	private View mFragmentContainerView;
 
@@ -101,7 +105,10 @@ public class NavigationDrawerFragment extends Fragment {
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-		View view = inflater.inflate(R.layout.fragment_navigation_drawer, container, false);
+		View view = inflater.inflate(R.layout.fragment_navigation_drawer, null, false);
+		mDrawerHeader = (LinearLayout) view.findViewById(R.id.header);
+		mDrawerFooter = (LinearLayout) view.findViewById(R.id.footer);
+
 		mDrawerListView = (ListView) view.findViewById(R.id.list);
 		mDrawerListView
 				.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -113,15 +120,8 @@ public class NavigationDrawerFragment extends Fragment {
 				});
 		mDrawerAdapter = new NavigationDrawerAdapter(inflater);
 		mDrawerListView.setAdapter(mDrawerAdapter);
-//		mDrawerListView.setAdapter(new ArrayAdapter<String>(getActionBar()
-//				.getThemedContext(),
-//				android.R.layout.simple_list_item_activated_1,
-//				android.R.id.text1, new String[] {
-//						getString(R.string.title_section1),
-//						getString(R.string.title_section2),
-//						getString(R.string.title_section3), }));
-//		mDrawerListView.setItemChecked(mCurrentSelectedPosition, true);
-		return mDrawerListView;
+
+		return view;
 	}
 
 	public boolean isDrawerOpen() {
@@ -220,13 +220,23 @@ public class NavigationDrawerFragment extends Fragment {
 		mDrawerLayout.setDrawerListener(mDrawerToggle);
 	}
 
+	public void setHeader(NavigationDrawerData header) {
+		setView(mDrawerHeader, header);
+	}
+
 	public void setFooter(NavigationDrawerData footer) {
+		setView(mDrawerFooter, footer);
+	}
+
+	private void setView(LinearLayout view, NavigationDrawerData data) {
 		Context context = getActivity();
 		LayoutInflater inflater = ((LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE));
-        View footerView =  inflater.inflate(footer.getLayout(), null, false);
-		mDrawerListView.addFooterView(footerView);
-		if (footer.getNotifer() != null ) {
-			footer.getNotifer().onCreateView(footerView);
+        View footerView =  inflater.inflate(data.getLayout(), null, false);
+		view.addView(footerView);
+		view.setVisibility(View.VISIBLE);
+
+		if (data.getNotifer() != null ) {
+			data.getNotifer().onCreateView(footerView);
 		}
 	}
 

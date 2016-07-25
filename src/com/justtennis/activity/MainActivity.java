@@ -175,11 +175,12 @@ public class MainActivity extends GenericActivity implements NavigationDrawerFra
 		notiferSaison = new NavigationDrawerSaisonNotifer();
 
 		List<NavigationDrawerData> value = new ArrayList<NavigationDrawerAdapter.NavigationDrawerData>();
-		value.add(new NavigationDrawerAdapter.NavigationDrawerData(0, R.layout.fragment_navigation_drawer_element_saison, notiferSaison));
+//		value.add(new NavigationDrawerAdapter.NavigationDrawerData(0, R.layout.fragment_navigation_drawer_element_saison, notiferSaison));
 
 		// Set up the drawer.
 		mNavigationDrawerFragment.setUp(R.id.navigation_drawer, (DrawerLayout) findViewById(R.id.drawer_layout), value);
-		mNavigationDrawerFragment.setFooter(new NavigationDrawerAdapter.NavigationDrawerData(1, R.layout.fragment_navigation_drawer_element_type, new NavigationDrawerTypeNotifer()));
+		mNavigationDrawerFragment.setHeader(new NavigationDrawerAdapter.NavigationDrawerData(0, R.layout.fragment_navigation_drawer_header_saison, notiferSaison));
+		mNavigationDrawerFragment.setFooter(new NavigationDrawerAdapter.NavigationDrawerData(1, R.layout.fragment_navigation_drawer_footer_type, new NavigationDrawerTypeNotifer()));
 	}
 
 	private void restoreActionBar() {

@@ -90,7 +90,7 @@ public class MatchActivity extends Activity implements NavigationDrawerFragment.
 		};
 
 		List<NavigationDrawerData> value = new ArrayList<NavigationDrawerAdapter.NavigationDrawerData>();
-		value.add(new NavigationDrawerAdapter.NavigationDrawerData(0, R.layout.fragment_navigation_drawer_element_saison, notiferSaison));
+		value.add(new NavigationDrawerAdapter.NavigationDrawerData(0, R.layout.fragment_navigation_drawer_header_saison, notiferSaison));
 
 		// Set up the drawer.
 		mNavigationDrawerFragment.setUp(R.id.navigation_drawer, (DrawerLayout) findViewById(R.id.drawer_layout), value);
