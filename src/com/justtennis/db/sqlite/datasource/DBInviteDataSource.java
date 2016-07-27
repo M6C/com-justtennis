@@ -127,6 +127,31 @@ public class DBInviteDataSource extends GenericDBDataSourceByType<Invite> {
 		return rawQuerCount(sql);
 	}
 
+	/**
+	 * Return Count Invite by Type
+	 * @return Count Invite by Type
+	 */
+	public int countByScoreResult(Invite.SCORE_RESULT[] scoreResult) {
+		String where = " WHERE " + DBInviteHelper.COLUMN_TIME + " < " + Calendar.getInstance().getTimeInMillis();
+
+		if (scoreResult != null && scoreResult.length > 0) {
+			String inValue = "(";
+			for(int i=0 ; i<scoreResult.length ; i++) {
+				if (i>0) {
+					inValue += ",";
+				}
+				inValue += "'" + scoreResult + "'";
+			}
+			inValue += ")";
+			where += " AND " + DBInviteHelper.COLUMN_SCORE_RESULT + " IN " + inValue;
+		}
+
+		where = customizeWhere(where);
+
+		String sql = "SELECT COUNT(1) NB FROM " + dbHelper.getTableName() + where;
+		return count(sql);
+	}
+
 	public void setSaisonWhereIsNull(Saison saison) {
 		String sql = 
 			"UPDATE " + DBInviteHelper.TABLE_NAME + 
@@ -219,6 +244,10 @@ public class DBInviteDataSource extends GenericDBDataSourceByType<Invite> {
 	private int countById(String columnName, long idSaison) {
 		String sql = "SELECT COUNT(1) NB FROM " + dbHelper.getTableName() + 
 			" WHERE " + columnName + " = " + idSaison;
+		return count(sql);
+	}
+
+	private int count(String sql) {
 		List<HashMap<String,Object>> result = rawQuery(sql);
 		
 		if (result==null || result.size() == 0 || !result.get(0).containsKey("NB")) {

@@ -6,7 +6,6 @@ import java.util.List;
 import android.app.ActionBar;
 import android.app.Activity;
 import android.app.Fragment;
-import android.app.FragmentManager;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
@@ -15,7 +14,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.Spinner;
 
 import com.cameleon.common.android.inotifier.INotifierMessage;
@@ -24,13 +22,11 @@ import com.justtennis.adapter.NavigationDrawerAdapter;
 import com.justtennis.adapter.NavigationDrawerAdapter.NavigationDrawerData;
 import com.justtennis.adapter.NavigationDrawerAdapter.NavigationDrawerNotifer;
 import com.justtennis.business.MainBusiness;
-import com.justtennis.domain.Saison;
 import com.justtennis.fragment.NavigationDrawerFragment;
-import com.justtennis.manager.TypeManager;
 import com.justtennis.notifier.NotifierMessageLogger;
 import com.justtennis.R;
 
-public class MatchActivity extends Activity implements NavigationDrawerFragment.NavigationDrawerCallbacks {
+public class MatchActivity extends Activity implements INotifierMessage {
 
 	/**
 	 * Fragment managing the behaviors, interactions and presentation of the
@@ -60,51 +56,36 @@ public class MatchActivity extends Activity implements NavigationDrawerFragment.
 				Context context = view.getContext().getApplicationContext();
 				INotifierMessage notificationMessage = NotifierMessageLogger.getInstance();
 				final MainBusiness business = new MainBusiness(context, notificationMessage);
-				final TypeManager typeManager = TypeManager.getInstance(context, notificationMessage);
 				business.initializeData();
 
 				Spinner spSaison = (Spinner)view.findViewById(R.id.sp_saison);
-				CustomArrayAdapter<String> adpSaison = new CustomArrayAdapter<String>(context, business.getListTxtSaisons());
+				CustomArrayAdapter<String> adpSaison = new CustomArrayAdapter<String>(context, new ArrayList<String>());
 				spSaison.setAdapter(adpSaison);
-
-				spSaison.setOnItemSelectedListener(adpSaison.new OnItemSelectedListener<Saison>() {
-					@Override
-					public Saison getItem(int position) {
-						return business.getListSaison().get(position);
-					}
-
-					@Override
-					public boolean isHintItemSelected(Saison item) {
-						return business.isEmptySaison(item);
-					}
-
-					@Override
-					public void onItemSelected(AdapterView<?> parent, View view, int position, long id, Saison item) {
-						typeManager.setSaison(business.getListSaison().get(position));
-					}
-				});
-
 				adpSaison.notifyDataSetChanged();
 			}
-			
+
+			@Override
+			public void onUpdateView(View view) {
+			}
 		};
 
 		List<NavigationDrawerData> value = new ArrayList<NavigationDrawerAdapter.NavigationDrawerData>();
 		value.add(new NavigationDrawerAdapter.NavigationDrawerData(0, R.layout.fragment_navigation_drawer_header_saison, notiferSaison));
 
 		// Set up the drawer.
-		mNavigationDrawerFragment.setUp(R.id.navigation_drawer, (DrawerLayout) findViewById(R.id.drawer_layout), value);
+		mNavigationDrawerFragment.setUp(R.id.navigation_drawer, (DrawerLayout) findViewById(R.id.drawer_layout));
+		mNavigationDrawerFragment.setValue(value);
 	}
 
-	@Override
-	public void onNavigationDrawerItemSelected(int position) {
-		// update the main content by replacing fragments
-		FragmentManager fragmentManager = getFragmentManager();
-		fragmentManager
-				.beginTransaction()
-				.replace(R.id.container,
-						PlaceholderFragment.newInstance(position + 1)).commit();
-	}
+//	@Override
+//	public void onNavigationDrawerItemSelected(int position) {
+//		// update the main content by replacing fragments
+//		FragmentManager fragmentManager = getFragmentManager();
+//		fragmentManager
+//				.beginTransaction()
+//				.replace(R.id.container,
+//						PlaceholderFragment.newInstance(position + 1)).commit();
+//	}
 
 	public void onSectionAttached(int number) {
 		switch (number) {
@@ -192,6 +173,18 @@ public class MatchActivity extends Activity implements NavigationDrawerFragment.
 						ARG_SECTION_NUMBER));
 			}
 		}
+	}
+
+	@Override
+	public void notifyError(Exception ex) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void notifyMessage(String msg) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

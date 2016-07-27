@@ -1,9 +1,10 @@
 package com.justtennis.fragment;
 
+import java.util.ArrayList;
 import java.util.List;
 
+import android.annotation.SuppressLint;
 import android.app.ActionBar;
-import android.app.Activity;
 import android.app.Fragment;
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -21,7 +22,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.LinearLayout;
-import android.widget.LinearLayout.LayoutParams;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -48,11 +48,6 @@ public class NavigationDrawerFragment extends Fragment {
 	 * user manually expands it. This shared preference tracks this.
 	 */
 	private static final String PREF_USER_LEARNED_DRAWER = "navigation_drawer_learned";
-
-	/**
-	 * A pointer to the current callbacks instance (the Activity).
-	 */
-	private NavigationDrawerCallbacks mCallbacks;
 
 	/**
 	 * Helper component that ties the action bar to the navigation drawer.
@@ -103,6 +98,7 @@ public class NavigationDrawerFragment extends Fragment {
 		setHasOptionsMenu(true);
 	}
 
+	@SuppressLint("InflateParams")
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		View view = inflater.inflate(R.layout.fragment_navigation_drawer, null, false);
@@ -138,16 +134,13 @@ public class NavigationDrawerFragment extends Fragment {
 	 * @param drawerLayout
 	 *            The DrawerLayout containing this fragment's UI.
 	 */
-	public void setUp(int fragmentId, DrawerLayout drawerLayout, List<NavigationDrawerData> value) {
+	public void setUp(int fragmentId, DrawerLayout drawerLayout) {
 		mFragmentContainerView = getActivity().findViewById(fragmentId);
 		mDrawerLayout = drawerLayout;
-		mDrawerAdapter.setValue(value);
-		mDrawerAdapter.notifyDataSetChanged();
 
 		// set a custom shadow that overlays the main content when the drawer
 		// opens
-		mDrawerLayout.setDrawerShadow(R.drawable.drawer_shadow,
-				GravityCompat.START);
+		mDrawerLayout.setDrawerShadow(R.drawable.drawer_shadow, GravityCompat.START);
 		// set up the drawer's list view with items and click listener
 
 		ActionBar actionBar = getActionBar();
@@ -220,6 +213,19 @@ public class NavigationDrawerFragment extends Fragment {
 		mDrawerLayout.setDrawerListener(mDrawerToggle);
 	}
 
+	public void setValue(List<NavigationDrawerData> value) {
+		mDrawerAdapter.setValue(value);
+		mDrawerAdapter.notifyDataSetChanged();
+	}
+
+	public void updateValue() {
+		List<NavigationDrawerData> valueSav = new ArrayList<NavigationDrawerAdapter.NavigationDrawerData>();
+		valueSav.addAll(mDrawerAdapter.getValue());
+
+		setValue(null);
+		setValue(valueSav);
+	}
+
 	public void setHeader(NavigationDrawerData header) {
 		setView(mDrawerHeader, header);
 	}
@@ -248,26 +254,6 @@ public class NavigationDrawerFragment extends Fragment {
 		if (mDrawerLayout != null) {
 			mDrawerLayout.closeDrawer(mFragmentContainerView);
 		}
-		if (mCallbacks != null) {
-			mCallbacks.onNavigationDrawerItemSelected(position);
-		}
-	}
-
-	@Override
-	public void onAttach(Activity activity) {
-		super.onAttach(activity);
-		try {
-			mCallbacks = (NavigationDrawerCallbacks) activity;
-		} catch (ClassCastException e) {
-			throw new ClassCastException(
-					"Activity must implement NavigationDrawerCallbacks.");
-		}
-	}
-
-	@Override
-	public void onDetach() {
-		super.onDetach();
-		mCallbacks = null;
 	}
 
 	@Override
@@ -325,16 +311,5 @@ public class NavigationDrawerFragment extends Fragment {
 
 	private ActionBar getActionBar() {
 		return getActivity().getActionBar();
-	}
-
-	/**
-	 * Callbacks interface that all activities using this fragment must
-	 * implement.
-	 */
-	public static interface NavigationDrawerCallbacks {
-		/**
-		 * Called when an item in the navigation drawer is selected.
-		 */
-		void onNavigationDrawerItemSelected(int position);
 	}
 }

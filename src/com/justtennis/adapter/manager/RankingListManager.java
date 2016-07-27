@@ -7,6 +7,7 @@ import java.util.TreeSet;
 
 import android.app.Activity;
 import android.content.Context;
+import android.view.ContextThemeWrapper;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.AdapterView;
@@ -16,13 +17,13 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.cameleon.common.android.factory.FactoryDialog;
+import com.cameleon.common.android.inotifier.INotifierMessage;
 import com.justtennis.ApplicationConfig;
-import com.justtennis.R;
 import com.justtennis.db.service.RankingService;
 import com.justtennis.domain.Player;
 import com.justtennis.domain.Ranking;
 import com.justtennis.domain.comparator.RankingComparatorByOrder;
-import com.justtennis.notifier.NotifierMessageLogger;
+import com.justtennis.R;
 
 public class RankingListManager {
 	
@@ -33,19 +34,23 @@ public class RankingListManager {
 	private String[] listTxtRankings;
 	private Ranking rankingNC;
 
-	private RankingListManager(Context context, NotifierMessageLogger notifier) {
+	private RankingListManager(Context context, INotifierMessage notifier) {
 		rankingService = new RankingService(context, notifier);
 		initializeDataRanking();
 	}
 
-	public static RankingListManager getInstance(Context context, NotifierMessageLogger notifier) {
+	public static RankingListManager getInstance(Context context, INotifierMessage notifier) {
 		if (instance == null) {
 			instance = new RankingListManager(context, notifier);
 		}
 		return instance;
 	}
 
-	public void manageRanking(Activity context, final Player player, final boolean estimate) {
+	public void manageRanking(Activity context, Player player, boolean estimate) {
+		manageRanking(context, context.getWindow().getDecorView(), player, estimate);
+	}
+
+	public void manageRanking(final ContextThemeWrapper context, View view, final Player player, final boolean estimate) {
 		IRankingListListener listener = new IRankingListListener() {
 			@Override
 			public void onRankingSelected(Ranking ranking) {
@@ -64,12 +69,20 @@ public class RankingListManager {
 				}
 			}
 		};
-		Long idRanking = estimate ? player.getIdRankingEstimate() : player.getIdRanking();
-		manageRanking(context, listener, idRanking, estimate);
+		manageRanking(context, view, listener, player, estimate);
 	}
 
-	public void manageRanking(final Activity context, final IRankingListListener listener, Long idRanking, boolean estimate) {
-		final Spinner spRanking = (Spinner)context.findViewById(estimate ? R.id.sp_ranking_estimate : R.id.sp_ranking);
+	public void manageRanking(final ContextThemeWrapper context, View view, IRankingListListener rankingListener, Player player, final boolean estimate) {
+		Long idRanking = estimate ? player.getIdRankingEstimate() : player.getIdRanking();
+		manageRanking(context, view, rankingListener, idRanking, estimate);
+	}
+
+	public void manageRanking(Activity context, final IRankingListListener listener, Long idRanking, boolean estimate) {
+		manageRanking(context, context.getWindow().getDecorView(), listener, idRanking, estimate);
+	}
+
+	public void manageRanking(final ContextThemeWrapper context, View view, final IRankingListListener listener, Long idRanking, boolean estimate) {
+		final Spinner spRanking = (Spinner)view.findViewById(estimate ? R.id.sp_ranking_estimate : R.id.sp_ranking);
 
 //		ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(context, android.R.layout.simple_spinner_item, listTxtRankings);
 //		dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -79,12 +92,14 @@ public class RankingListManager {
 
 		spRanking.setOnItemSelectedListener(new OnItemSelectedListener() {
 			@Override
-			public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+			public void onItemSelected(AdapterView<?> parent, View v, int position, long id) {
 				TextView tv = (TextView)spRanking.findViewById(android.R.id.text1);
 				tv.setTextColor(context.getResources().getColor(position == 0 ? R.color.spinner_color_hint : android.R.color.black));
 
-				Ranking ranking = listRanking.get(position);
-				listener.onRankingSelected(ranking);
+				if (listener != null) {
+					Ranking ranking = listRanking.get(position);
+					listener.onRankingSelected(ranking);
+				}
 			}
 
 			@Override
@@ -92,9 +107,20 @@ public class RankingListManager {
 			}
 		});
 
-		if (idRanking != null) {
-			initializeRanking(spRanking, idRanking);
+		if (idRanking == null) {
+			idRanking = rankingService.getNC().getId();
 		}
+		initializeRanking(spRanking, idRanking);
+	}
+
+	public void initializeRankingSpinner(View view, Player player, boolean estimate) {
+		Long idRanking = estimate ? player.getIdRankingEstimate() : player.getIdRanking();
+		initializeRankingSpinner(view, idRanking, estimate);
+	}
+
+	public void initializeRankingSpinner(View view, Long idRanking, boolean estimate) {
+		Spinner spRanking = (Spinner)view.findViewById(estimate ? R.id.sp_ranking_estimate : R.id.sp_ranking);
+		initializeRanking(spRanking, idRanking);
 	}
 
 	public void manageRankingTextViewDialog(final Activity context, View view, final IRankingListListener listener, boolean estimate) {
@@ -115,24 +141,21 @@ public class RankingListManager {
 			}
 		});
 	}
-	
+
 	private void initializeRanking(Spinner spRanking, Long idRanking) {
-		int rankingPosition = getRankingPosition(idRanking);
-		if (rankingPosition < listRanking.size()) {
-			spRanking.setSelection(rankingPosition, true);
-		}
+		spRanking.setSelection(getRankingPosition(idRanking), true);
 	}
 
 	private int getRankingPosition(Long idRanking) {
-		int position = 0;
-		for(Ranking r : listRanking) {
+		int ret = 0;
+		for(int i=0 ; i<listRanking.size() ; i++) {
+			Ranking r = listRanking.get(i);
 			if (r.getId().equals(idRanking)) {
+				ret = i;
 				break;
-			} else {
-				position++;
 			}
 		}
-		return position;
+		return ret;
 	}
 
 	/**

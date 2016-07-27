@@ -26,16 +26,16 @@
 		    android:layout_marginLeft="15dp"
 		>
 		    <ImageView
+		        android:id="@+id/btn_add_saison"
 		        android:layout_width="24dp"
 		        android:layout_height="24dp"
 		        android:src="@drawable/btn_add"
-		        android:onClick="onClickSaisonAdd"
 		    />
 		    <ImageView
+		        android:id="@+id/btn_del_saison"
 		        android:layout_width="24dp"
 		        android:layout_height="24dp"
 		        android:src="@drawable/btn_del"
-		        android:onClick="onClickSaisonDel"
 		    	android:layout_marginLeft="15dp"
 		    />
 		</LinearLayout>

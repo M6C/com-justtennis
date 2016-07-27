@@ -11,8 +11,6 @@ import android.widget.BaseAdapter;
 
 public class NavigationDrawerAdapter extends BaseAdapter {
 
-	private static final String TAG = NavigationDrawerAdapter.class.getSimpleName();
-
 	private List<NavigationDrawerData> value = new ArrayList<NavigationDrawerAdapter.NavigationDrawerData>();
 
 	private LayoutInflater inflater;
@@ -51,14 +49,24 @@ public class NavigationDrawerAdapter extends BaseAdapter {
 			if (notifier != null) {
 				notifier.onCreateView(rowView);
 			}
+		} else {
+			if (notifier != null) {
+				notifier.onUpdateView(rowView);
+			}
 		}
 
 		return rowView;
 	}
 
+	public List<NavigationDrawerData> getValue() {
+		return value;
+	}
+
 	public void setValue(List<NavigationDrawerData> value) {
 		this.value.clear();
-		this.value.addAll(value);
+		if (value != null) {
+			this.value.addAll(value);
+		}
 	}
 
 	public static class NavigationDrawerData {
@@ -94,5 +102,6 @@ public class NavigationDrawerAdapter extends BaseAdapter {
 
 	public static interface NavigationDrawerNotifer {
 		public void onCreateView(View view);
+		public void onUpdateView(View view);
 	}
 }

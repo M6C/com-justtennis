@@ -8,78 +8,77 @@ import java.util.List;
 import org.gdocument.gtracergps.launcher.log.Logger;
 
 import android.app.ActionBar;
-import android.app.FragmentManager;
-import android.content.Context;
-import android.content.DialogInterface;
-import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
-import android.support.v4.widget.DrawerLayout;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.CheckBox;
-import android.widget.DatePicker;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
-import android.widget.Spinner;
+import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.cameleon.common.android.db.sqlite.helper.GenericDBHelper;
 import com.cameleon.common.android.factory.FactoryDialog;
-import com.cameleon.common.android.factory.listener.OnClickViewListener;
 import com.cameleon.common.android.inotifier.INotifierMessage;
-import com.justtennis.R;
 import com.justtennis.activity.ListPlayerActivity.MODE;
-import com.justtennis.activity.MatchActivity.PlaceholderFragment;
-import com.justtennis.adapter.CustomArrayAdapter;
 import com.justtennis.adapter.NavigationDrawerAdapter;
 import com.justtennis.adapter.NavigationDrawerAdapter.NavigationDrawerData;
 import com.justtennis.adapter.NavigationDrawerAdapter.NavigationDrawerNotifer;
+import com.justtennis.adapter.manager.RankingListManager;
+import com.justtennis.adapter.manager.RankingListManager.IRankingListListener;
 import com.justtennis.business.MainBusiness;
+import com.justtennis.domain.ComputeDataRanking;
+import com.justtennis.domain.Ranking;
 import com.justtennis.domain.Saison;
-import com.justtennis.fragment.NavigationDrawerFragment;
+import com.justtennis.domain.User;
 import com.justtennis.listener.ok.OnClickDBBackupListenerOk;
 import com.justtennis.listener.ok.OnClickDBRestoreListenerOk;
 import com.justtennis.listener.ok.OnClickSendApkListenerOk;
 import com.justtennis.listener.ok.OnClickSendDBListenerOk;
+import com.justtennis.manager.DrawerManager;
+import com.justtennis.manager.DrawerManager.IDrawerLayoutSaisonNotifier;
+import com.justtennis.manager.DrawerManager.IDrawerLayoutTypeNotifier;
 import com.justtennis.manager.TypeManager;
 import com.justtennis.manager.TypeManager.TYPE;
+import com.justtennis.R;
 
-public class MainActivity extends GenericActivity implements NavigationDrawerFragment.NavigationDrawerCallbacks, INotifierMessage {
+public class MainActivity extends GenericActivity implements INotifierMessage, IDrawerLayoutTypeNotifier, IDrawerLayoutSaisonNotifier {
 
 	private static final String TAG = MainActivity.class.getSimpleName();
 	private static final int RESULT_CODE_QRCODE_SCAN = 0;
+	private static final int RESULT_CODE_USER = 1;
 	private MainBusiness business;
 
-	private NavigationDrawerFragment mNavigationDrawerFragment;
-	private RelativeLayout layoutMain;
-	private TypeManager typeManager;
 	private View menuOverFlowContent;
 
 	private boolean backPressedToExitOnce = false;
 	private Toast toast = null;
-	private NavigationDrawerSaisonNotifer notiferSaison;
+	private DrawerManager drawerManager;
+	private View layoutRoot;
+	private List<NavigationDrawerData> navigationDrawerTraining = new ArrayList<NavigationDrawerAdapter.NavigationDrawerData>();
+	private List<NavigationDrawerData> navigationDrawerCompetition = new ArrayList<NavigationDrawerAdapter.NavigationDrawerData>();
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
 		business = new MainBusiness(this, this);
-		typeManager = TypeManager.getInstance(this.getApplicationContext(), this);
+		drawerManager = new DrawerManager(this, this);
 
-		setContentView(R.layout.main_01);
+		drawerManager.setContentView(R.layout.main_01);
+		drawerManager.setDrawerLayoutTypeNotifier(this);
+		drawerManager.setDrawerLayoutSaisonNotifier(this);
+		layoutRoot = findViewById(R.id.root);
 
-		layoutMain = (RelativeLayout)findViewById(R.id.container);
-//		menuOverFlowContent = findViewById(R.id.ll_menu_overflow_content);
-
-		initializeDrawer();
-		initializeLayoutType(layoutMain);
+		navigationDrawerTraining.add(new NavigationDrawerData(0, R.layout.fragment_navigation_main_drawer_element_user, new NavigationDrawerUserNotifer()));
+		navigationDrawerTraining.add(new NavigationDrawerData(1, R.layout.fragment_navigation_main_drawer_element_training, new NavigationDrawerTrainingNotifer()));
+		navigationDrawerCompetition.add(new NavigationDrawerData(10, R.layout.fragment_navigation_main_drawer_element_user, new NavigationDrawerUserNotifer()));
+		navigationDrawerCompetition.add(new NavigationDrawerData(11, R.layout.fragment_navigation_main_drawer_element_competition, new NavigationDrawerCompetitionNotifer()));
 
 		Intent intent = getIntent();
 		if (Intent.ACTION_SEND_MULTIPLE.equals(intent.getAction())) {
@@ -95,65 +94,56 @@ public class MainActivity extends GenericActivity implements NavigationDrawerFra
 
 		business.onResume();
 
-		initializeData();
-
-		if (business.getUserCount()==0) {
+		if (business.getUser()==null) {
 			Intent intent = new Intent(getApplicationContext(), UserActivity.class);
 			startActivity(intent);
-			
+
 			finish();
 		}
+		drawerManager.onResume();
 	}
 
-	private void initializeData() {
-//		initializeSaisonList();
-//		initializeSaison();
+	@Override
+	public void onDrawerLayoutTypeChange(TYPE type) {
+		initializeLayoutType(type);
 	}
 
-	private void initializeLayoutType(View view) {
-		view = (view.getParent()==null) ? view : ((View)view.getParent());
-		View root = view.getRootView();
-		typeManager.initializeActivity(layoutMain, true);
-		switch(typeManager.getType()) {
+	@Override
+	public void onDrawerLayoutSaisonChange(AdapterView<?> parent, View view, int position, long id, Saison item) {
+		business.initializeData();
+		refreshDrawer();
+	}
+
+	private void initializeLayoutType(TYPE type) {
+		View root = layoutRoot;
+		switch(type) {
 			case COMPETITION: {
-				((LinearLayout)view.findViewById(R.id.ll_type_match)).setAlpha(1f);
-				((LinearLayout)view.findViewById(R.id.ll_type_training)).setAlpha(.2f);
 				if (root.findViewById(R.id.iv_match) != null) {
 					((ImageView)root.findViewById(R.id.iv_match)).setVisibility(View.VISIBLE);
 				}
 				if (root.findViewById(R.id.iv_play) != null) {
 					((ImageView)root.findViewById(R.id.iv_play)).setVisibility(View.GONE);
 				}
+				drawerManager.setValue(navigationDrawerCompetition);
 			}
 			break;
 
 			case TRAINING:
 			default: {
-				((LinearLayout)view.findViewById(R.id.ll_type_match)).setAlpha(.2f);
-				((LinearLayout)view.findViewById(R.id.ll_type_training)).setAlpha(1f);
 				if (root.findViewById(R.id.iv_match) != null) {
 					((ImageView)root.findViewById(R.id.iv_match)).setVisibility(View.GONE);
 				}
 				if (root.findViewById(R.id.iv_play) != null) {
 					((ImageView)root.findViewById(R.id.iv_play)).setVisibility(View.VISIBLE);
 				}
+				drawerManager.setValue(navigationDrawerTraining);
 			}
 			break;
 		}
 	}
 
-	private void initializeDrawer() {
-		mNavigationDrawerFragment = (NavigationDrawerFragment) getFragmentManager().findFragmentById(R.id.navigation_drawer);
-
-		notiferSaison = new NavigationDrawerSaisonNotifer();
-
-		List<NavigationDrawerData> value = new ArrayList<NavigationDrawerAdapter.NavigationDrawerData>();
-//		value.add(new NavigationDrawerAdapter.NavigationDrawerData(0, R.layout.fragment_navigation_drawer_element_saison, notiferSaison));
-
-		// Set up the drawer.
-		mNavigationDrawerFragment.setUp(R.id.navigation_drawer, (DrawerLayout) findViewById(R.id.drawer_layout), value);
-		mNavigationDrawerFragment.setHeader(new NavigationDrawerAdapter.NavigationDrawerData(0, R.layout.fragment_navigation_drawer_header_saison, notiferSaison));
-		mNavigationDrawerFragment.setFooter(new NavigationDrawerAdapter.NavigationDrawerData(1, R.layout.fragment_navigation_drawer_footer_type, new NavigationDrawerTypeNotifer()));
+	private void refreshDrawer() {
+		drawerManager.updateValue();
 	}
 
 	private void restoreActionBar() {
@@ -163,18 +153,8 @@ public class MainActivity extends GenericActivity implements NavigationDrawerFra
 	}
 
 	@Override
-	public void onNavigationDrawerItemSelected(int position) {
-		// update the main content by replacing fragments
-		FragmentManager fragmentManager = getFragmentManager();
-		fragmentManager
-				.beginTransaction()
-				.replace(R.id.container,
-						PlaceholderFragment.newInstance(position + 1)).commit();
-	}
-
-	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-		if (!mNavigationDrawerFragment.isDrawerOpen()) {
+		if (!drawerManager.isDrawerOpen()) {
 			// Only show items in the action bar relevant to this screen
 			// if the drawer is not showing. Otherwise, let the drawer
 			// decide what to show in the action bar.
@@ -238,6 +218,7 @@ public class MainActivity extends GenericActivity implements NavigationDrawerFra
 	        }, 2000);
 	    }
 	}
+
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		super.onActivityResult(requestCode, resultCode, data);
@@ -252,6 +233,9 @@ public class MainActivity extends GenericActivity implements NavigationDrawerFra
 			} else if (resultCode == RESULT_CANCELED) {
 				// Handle cancel
 			}
+		} else if (requestCode == RESULT_CODE_USER) {
+			business.initializeData();
+			refreshDrawer();
 		}
 	}
 
@@ -277,7 +261,7 @@ public class MainActivity extends GenericActivity implements NavigationDrawerFra
 
 	public void onClickUser(View view) {
 		Intent intent = new Intent(getApplicationContext(), UserActivity.class);
-		startActivity(intent);
+		startActivityForResult(intent, RESULT_CODE_USER);
 	}
 	
 	public void onClickMessage(View view) {
@@ -372,68 +356,6 @@ public class MainActivity extends GenericActivity implements NavigationDrawerFra
 		menuOverFlowContent.setVisibility(visibility);
 	}
 
-	public void onClickSaisonAdd(View view) {
-		OnClickViewListener onClickOkListener = new OnClickViewListener() {
-
-			@Override
-			public void onClick(DialogInterface dialog, View view, int which) {
-				CheckBox cbActivate = (CheckBox) view.findViewById(R.id.cb_activate);
-				DatePicker datePicker = (DatePicker) view.findViewById(R.id.dp_saison_year);
-				int year = datePicker.getYear();
-				if (!business.isExistSaison(year)) {
-					boolean active = cbActivate.isChecked();
-					Saison saison = business.createSaison(year, active);
-					typeManager.setSaison(saison);
-
-					business.initializeDataSaison();
-					notiferSaison.initializeSaison();
-				} else {
-					Toast.makeText(MainActivity.this, R.string.error_message_saison_already_exist, Toast.LENGTH_LONG).show();
-				}
-			}
-		};
-
-		FactoryDialog.getInstance()
-			.buildLayoutDialog(this, onClickOkListener, null, R.string.dialog_saison_add_title, R.layout.dialog_saison_year_picker, R.id.ll_main)
-			.show();
-	}
-
-	public void onClickSaisonDel(View view) {
-		OnClickListener listener = new OnClickListener() {
-
-			@Override
-			public void onClick(DialogInterface dialog, int which) {
-				Saison saison = typeManager.getSaison();
-				if (!business.isEmptySaison(saison)) {
-					if (!business.isExistInviteSaison(saison)) {
-						business.deleteSaison(saison);
-						typeManager.reinitialize(MainActivity.this.getApplicationContext(), MainActivity.this);
-
-						business.initializeDataSaison();
-						notiferSaison.initializeSaison();
-					} else {
-						Toast.makeText(MainActivity.this, R.string.error_message_invite_exist_saison, Toast.LENGTH_LONG).show();
-					}
-				}
-			}
-		};
-		FactoryDialog.getInstance()
-			.buildOkCancelDialog(business.getContext(), listener , R.string.dialog_saison_add_title, R.string.dialog_saison_del_message)
-			.show();
-	}
-
-	public void onClickTypeTraining(View view) {
-		typeManager.setType(TYPE.TRAINING);
-		initializeLayoutType(view);
-//		Intent intent = new Intent(getApplicationContext(), MatchActivity.class);
-//		startActivity(intent);
-	}
-
-	public void onClickTypeMatch(View view) {
-		typeManager.setType(TYPE.COMPETITION);
-		initializeLayoutType(view);
-	}
-
 	private void handleSendMultipleDb(Intent intent) {
 		ArrayList<Uri> uriList = intent.getParcelableArrayListExtra(Intent.EXTRA_STREAM);
 		for(Uri uri : uriList) {
@@ -465,65 +387,130 @@ public class MainActivity extends GenericActivity implements NavigationDrawerFra
 		}
 	}
 
-	private final class NavigationDrawerTypeNotifer implements NavigationDrawerNotifer {
+	private final class NavigationDrawerTrainingNotifer implements NavigationDrawerNotifer {
+
+		private TextView tvMatchValue;
+		private TextView tvMatchMax;
+		private ProgressBar pbMatch;
 
 		@Override
 		public void onCreateView(View view) {
-			initializeLayoutType(view);
+			tvMatchValue = (TextView) view.findViewById(R.id.tv_match_value);
+			tvMatchMax = (TextView) view.findViewById(R.id.tv_match_max);
+			pbMatch = (ProgressBar) view.findViewById(R.id.pb_match);
+
+			initiazeView(view);
+		}
+
+		@Override
+		public void onUpdateView(View view) {
+			initiazeView(view);
+		}
+
+		private void initiazeView(View view) {
+			ComputeDataRanking dataRanking = business.getDataRanking();
+
+			tvMatchMax.setText(Integer.toString(dataRanking.getNbMatch()));
+			tvMatchValue.setText(Integer.toString(dataRanking.getNbVictoryCalculate()));
+			pbMatch.setMax(dataRanking.getNbMatch());
+			pbMatch.setProgress(dataRanking.getNbVictoryCalculate());
 		}
 	}
 
-	private final class NavigationDrawerSaisonNotifer implements NavigationDrawerNotifer {
-		private CustomArrayAdapter<String> adpSaison;
-		private Spinner spSaison;
-		private Context context;
+	private final class NavigationDrawerUserNotifer implements NavigationDrawerNotifer {
+
+		private RankingListManager rankingListManager;
+		private TextView tvName;
 
 		@Override
 		public void onCreateView(View view) {
-			context = view.getContext().getApplicationContext();
+			rankingListManager = RankingListManager.getInstance(MainActivity.this, MainActivity.this);
+			tvName = (TextView) view.findViewById(R.id.tv_name);
 
-			spSaison = (Spinner)view.findViewById(R.id.sp_saison);
-			initializeSaisonList();
-			initializeSaison();
+			User user = business.getUser();
+			tvName.setText(user.getFullName());
+			manageRanking(MainActivity.this, view, user, true);
+			manageRanking(MainActivity.this, view, user, false);
 		}
 
-		private void initializeSaisonList() {
-			Log.d(TAG, "initializeSaisonList");
-			adpSaison = new CustomArrayAdapter<String>(context, business.getListTxtSaisons());
-			spSaison.setAdapter(adpSaison);
-
-			spSaison.setOnItemSelectedListener(adpSaison.new OnItemSelectedListener<Saison>() {
-				@Override
-				public Saison getItem(int position) {
-					return business.getListSaison().get(position);
-				}
-
-				@Override
-				public boolean isHintItemSelected(Saison item) {
-					return business.isEmptySaison(item);
-				}
-
-				@Override
-				public void onItemSelected(AdapterView<?> parent, View view, int position, long id, Saison item) {
-					typeManager.setSaison(business.getListSaison().get(position));
-				}
-			});
+		@Override
+		public void onUpdateView(View view) {
+			User user = business.getUser();
+			tvName.setText(user.getFullName());
+			rankingListManager.initializeRankingSpinner(view, user, true);
+			rankingListManager.initializeRankingSpinner(view, user, false);
 		}
 
-		public void initializeSaison() {
-			Log.d(TAG, "initializeSaison");
-			Saison saison = typeManager.getSaison();
-			int position = 0;
-			List<Saison> listSaison = business.getListSaison();
-			for(Saison item : listSaison) {
-				if (item.equals(saison)) {
-					spSaison.setSelection(position, true);
-					break;
-				} else {
-					position++;
+		private void manageRanking(MainActivity mainActivity, View view, User user, final boolean estimate) {
+			IRankingListListener listener = new IRankingListListener() {
+				@Override
+				public void onRankingSelected(Ranking ranking) {
+					Long oldId = null;
+					User user = business.getUser();
+					if (estimate) {
+						oldId = user.getIdRankingEstimate();
+						if (ranking.equals(business.getRankingNC())) {
+							user.setIdRankingEstimate(null);
+						} else {
+							user.setIdRankingEstimate(ranking.getId());
+						}
+					} else {
+						oldId = user.getIdRanking();
+						if (ranking.equals(business.getRankingNC())) {
+							user.setIdRanking(null);
+						} else {
+							user.setIdRanking(ranking.getId());
+						}
+					}
+					if (oldId != null && !oldId.equals(ranking.getId())) {
+						refreshDrawer();
+					}
 				}
-			}
-			adpSaison.notifyDataSetChanged();
+			};
+			rankingListManager.manageRanking(MainActivity.this, view, listener, user, estimate);
+		}
+	}
+
+	private final class NavigationDrawerCompetitionNotifer implements NavigationDrawerNotifer {
+
+		private TextView tvMatchValue;
+		private TextView tvMatchMax;
+		private ProgressBar pbMatch;
+		private TextView tvPointValue;
+		private TextView tvPointMax;
+		private ProgressBar pbPoint;
+
+		@Override
+		public void onCreateView(View view) {
+			tvMatchValue = (TextView) view.findViewById(R.id.tv_match_value);
+			tvMatchMax = (TextView) view.findViewById(R.id.tv_match_max);
+			pbMatch = (ProgressBar) view.findViewById(R.id.pb_match);
+			tvPointValue = (TextView) view.findViewById(R.id.tv_point_value);
+			tvPointMax = (TextView) view.findViewById(R.id.tv_point_max);
+			pbPoint = (ProgressBar) view.findViewById(R.id.pb_point);
+
+			initiazeView(view);
+		}
+
+		@Override
+		public void onUpdateView(View view) {
+			initiazeView(view);
+		}
+
+		private void initiazeView(View view) {
+			ComputeDataRanking dataRanking = business.getDataRanking();
+			int point = dataRanking.getPointCalculate() + dataRanking.getPointBonus();
+			int nbVictory = dataRanking.getListInviteCalculed().size() + dataRanking.getListInviteNotUsed().size();
+
+			tvMatchMax.setText(Integer.toString(dataRanking.getNbMatch()));
+			tvMatchValue.setText(Integer.toString(nbVictory));
+			pbMatch.setMax(dataRanking.getNbMatch());
+			pbMatch.setProgress(nbVictory);
+
+			tvPointMax.setText(Integer.toString(dataRanking.getPointObjectif()));
+			tvPointValue.setText(Integer.toString(point));
+			pbPoint.setMax(point > dataRanking.getPointObjectif() ? point : dataRanking.getPointObjectif());
+			pbPoint.setProgress(point);
 		}
 	}
 }

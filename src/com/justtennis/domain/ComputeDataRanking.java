@@ -4,6 +4,7 @@ import java.util.List;
 
 public class ComputeDataRanking {
 	private Ranking ranking;
+	private int nbMatch;
 	private int nbVictory;
 	private int nbVictoryCalculate;
 	private int nbVictoryAdditional;
@@ -23,6 +24,14 @@ public class ComputeDataRanking {
 
 	public void setRanking(Ranking ranking) {
 		this.ranking = ranking;
+	}
+
+	public int getNbMatch() {
+		return nbMatch;
+	}
+
+	public void setNbMatch(int nbMatch) {
+		this.nbMatch = nbMatch;
 	}
 
 	public int getNbVictory() {

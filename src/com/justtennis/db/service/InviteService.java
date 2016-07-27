@@ -79,6 +79,16 @@ public class InviteService extends GenericService<Invite> {
     	}
 	}
 
+	public int countByScoreResult(Invite.SCORE_RESULT[] scoreResult) {
+    	try {
+    		dbDataSource.open();
+    		return ((DBInviteDataSource)dbDataSource).countByScoreResult(scoreResult);
+    	}
+    	finally {
+    		dbDataSource.close();
+    	}
+	}
+
 	public HashMap<String,Double> countByTypeGroupByRanking(TypeManager.TYPE type, Invite.SCORE_RESULT scoreResult) {
 		try {
 			dbDataSource.open();

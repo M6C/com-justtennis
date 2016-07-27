@@ -1,7 +1,6 @@
 package com.justtennis.business;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 import android.content.Context;
@@ -16,10 +15,11 @@ import com.justtennis.db.service.ScoreSetService;
 import com.justtennis.db.service.UserService;
 import com.justtennis.domain.ComputeDataRanking;
 import com.justtennis.domain.Invite;
+import com.justtennis.domain.Invite.SCORE_RESULT;
 import com.justtennis.domain.PalmaresFastValue;
 import com.justtennis.domain.Player;
-import com.justtennis.domain.Invite.SCORE_RESULT;
 import com.justtennis.domain.Ranking;
+import com.justtennis.domain.User;
 import com.justtennis.domain.comparator.PalmaresFastValueComparatorByRanking;
 import com.justtennis.tool.ListTool;
 
@@ -53,12 +53,15 @@ public class ComputeRankingBusiness {
 		scoreService = new ScoreSetService(context, notificationMessage);
 		rankingService = new RankingService(context, notificationMessage);
 	
-		idRanking = userService.find().getIdRankingEstimate();
-		if (idRanking == null) {
-			idRanking = userService.find().getIdRanking();
+		User user = userService.find();
+		if (user != null) {
+			idRanking = user.getIdRankingEstimate();
 			if (idRanking == null) {
-				idRanking = rankingService.getNC().getId();
+				idRanking = user.getIdRanking();
 			}
+		}
+		if (idRanking == null) {
+			idRanking = rankingService.getNC().getId();
 		}
 	}
 

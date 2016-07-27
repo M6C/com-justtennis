@@ -25,5 +25,7 @@
     <string name="error_message_invite_exist_saison">Invite exist for this saison</string>
     <string name="checkbox_saison_active">Active</string>
     <string name="press_again_to_exit">Press again to exit</string>
+    <string name="drawer_element_match_victory_match">Victory/Match</string>
+    <string name="drawer_element_match_point_objectif">Point/Objectif</string>
 
 </resources>

@@ -21,7 +21,6 @@
 			    android:layout_height="match_parent"
 			    android:layout_weight=".5"
 			    android:gravity="center_horizontal"
-			    android:onClick="onClickTypeTraining"
 			    android:orientation="vertical"
 			    android:background="@color/bleu_transparent_3"
 			>
@@ -48,7 +47,6 @@
 			    android:layout_height="match_parent"
 			    android:layout_weight=".5"
 			    android:gravity="center_horizontal"
-			    android:onClick="onClickTypeMatch"
 			    android:orientation="vertical"
 			    android:background="@color/orange_pumpkin_transparent_3"
 			>

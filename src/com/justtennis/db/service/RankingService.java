@@ -88,22 +88,22 @@ public class RankingService extends GenericService<Ranking> {
 	}
 
 	public Ranking getRanking(Player player, boolean estimate) {
-		Ranking ret = null;
-		Long idRanking = null;
+		Long idRanking = getRankingId(player, estimate);
+		return find(idRanking);
+	}
+
+	public Long getRankingId(Player player, boolean estimate) {
+		Long ret = null;
 		if (estimate) {
-			idRanking = (player.getIdRankingEstimate() != null ? player.getIdRankingEstimate() : player.getIdRanking());
+			ret = (player.getIdRankingEstimate() != null ? player.getIdRankingEstimate() : player.getIdRanking());
 		} else {
-			idRanking = (player.getIdRanking() != null ? player.getIdRanking() : player.getIdRankingEstimate());
+			ret = (player.getIdRanking() != null ? player.getIdRanking() : player.getIdRankingEstimate());
 		}
-		if (idRanking != null) {
-			ret = find(idRanking);
-		}
-		if (idRanking == null) {
-			ret = getNC();
+		if (ret == null) {
+			ret = getNC().getId();
 		}
 		return ret;
 	}
-
 	public void order(List<Ranking> listRanking, boolean inverse) {
 		SortedSet<Ranking> setRanking = new TreeSet<Ranking>(new RankingComparatorByOrder(inverse));
 		setRanking.addAll(listRanking);

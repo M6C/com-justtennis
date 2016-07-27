@@ -199,46 +199,47 @@ public class ComputeRankSubService {
 		int sumPoint = 0, pointObjectif = 0;
 		int sumPointBonus = 0;
 		Ranking userRanking = rankingService.find(idRanking);
-		if (userRanking != null && listVictory.size() > 0) {
-			int rankingPositionMin = userRanking.getOrder() - NB_RANKING_ORDER_LOWER;
-			if (rankingPositionMin < 0) {
-				rankingPositionMin = 0;
-			}
-
-			List<Ranking> listKeyRanking = rankingService.getWithPostionEqualUpper(rankingPositionMin);
-			rankingService.order(listKeyRanking, true);
-			nbVictory = userRanking.getVictoryMan();
-			pointObjectif = userRanking.getRankingPointMan();
-			logMe("USER RANKING " + userRanking.getRanking() + " NB VICTORY:" + nbVictory);
-			for(Invite invite : listVictory) {
-				Player player = playerService.find(invite.getPlayer().getId());
-				Ranking ranking = rankingService.getRanking(invite, player, estimate);
-				if (ranking.getOrder() >= rankingPositionMin && nbVictory > 0) {
-					listInviteCalculed.add(invite);
-					int rankingDif = ranking.getOrder() - userRanking.getOrder();
-					int point = rankingService.getNbPointDifference(rankingDif);
-					invite.setPoint(point);
-					sumPoint += point;
-					if (sumPointBonus >= BONUS_POINT_LIMIT) {
-						invite.setBonusPoint(0);
-					} else {
-						sumPointBonus += invite.getBonusPoint();
-					}
-					nbVictory--;
-					logMe("RANKING " + ranking.getRanking() + " POINT:" + point + " SUM:" + sumPoint + " NB VICTORY:" + nbVictory);
-				} else {
-					logMe("RANKING " + ranking.getRanking() + " NOT USED");
-					invite.setBonusPoint(0);
-					listInviteNotUsed.add(invite);
-				}
-			}
-			inviteService.sortInviteByPoint(listInviteCalculed);
-			inviteService.sortInviteByDate(listInviteNotUsed);
-			logMe("USER RANKING " + userRanking.getRanking() + " TOTAL:" + sumPoint);
+		if (userRanking == null) {
+			userRanking = rankingService.getNC();
 		}
+		int rankingPositionMin = userRanking.getOrder() - NB_RANKING_ORDER_LOWER;
+		if (rankingPositionMin < 0) {
+			rankingPositionMin = 0;
+		}
+
+		List<Ranking> listKeyRanking = rankingService.getWithPostionEqualUpper(rankingPositionMin);
+		rankingService.order(listKeyRanking, true);
+		nbVictory = userRanking.getVictoryMan();
+		pointObjectif = userRanking.getRankingPointMan();
+		logMe("USER RANKING " + userRanking.getRanking() + " NB VICTORY:" + nbVictory + " POINT OBJECTIF:" + pointObjectif);
+		for(Invite invite : listVictory) {
+			Player player = playerService.find(invite.getPlayer().getId());
+			Ranking ranking = rankingService.getRanking(invite, player, estimate);
+			if (sumPointBonus >= BONUS_POINT_LIMIT) {
+				invite.setBonusPoint(0);
+			} else {
+				sumPointBonus += invite.getBonusPoint();
+			}
+			if (ranking.getOrder() >= rankingPositionMin && nbVictory > 0) {
+				listInviteCalculed.add(invite);
+				int rankingDif = ranking.getOrder() - userRanking.getOrder();
+				int point = rankingService.getNbPointDifference(rankingDif);
+				invite.setPoint(point);
+				sumPoint += point;
+				nbVictory--;
+				logMe("RANKING " + ranking.getRanking() + " POINT:" + point + " SUM:" + sumPoint + " SUM BONUS:" + sumPointBonus + " NB VICTORY:" + nbVictory);
+			} else {
+				logMe("RANKING " + ranking.getRanking() + " NOT USED SUM BONUS:" + sumPointBonus);
+				listInviteNotUsed.add(invite);
+			}
+		}
+		inviteService.sortInviteByPoint(listInviteCalculed);
+		inviteService.sortInviteByDate(listInviteNotUsed);
 		nbVictoryCalculate = listInviteCalculed.size();
+		logMe("USER RANKING " + userRanking.getRanking() + " TOTAL:" + sumPoint + " TOTAL BONUS:" + sumPointBonus + " NB VICTORY:" + nbVictoryCalculate);
 
 		ComputeDataRanking data = new ComputeDataRanking();
+		data.setNbMatch(inviteService.countByScoreResult(null));
 		data.setNbVictory(nbVictory);
 		data.setNbVictoryCalculate(nbVictoryCalculate);
 		data.setPointObjectif(pointObjectif);
@@ -257,7 +258,10 @@ public class ComputeRankSubService {
 		int iE = 0, i2I = 0, i5G = 0;
 //		List<Invite> listInvite = inviteService.getByScoreResult(SCORE_RESULT.DEFEAT);
 		Ranking userRanking = rankingService.find(idRanking);
-		if (userRanking != null && listDefeat.size() > 0) {
+		if (userRanking == null) {
+			userRanking = rankingService.getNC();
+		}
+		if (listDefeat.size() > 0) {
 			int rankingPosition = userRanking.getOrder();
 			for(Invite invite : listDefeat) {
 				if (!SCORE_RESULT.WO_DEFEAT.equals(invite.getScoreResult())) {

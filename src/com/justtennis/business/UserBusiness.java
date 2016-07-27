@@ -38,8 +38,8 @@ public class UserBusiness extends PlayerBusiness {
 	protected void initializePlayer(Intent intent) {
 		player = service.find();
 		if (player == null) {
-			player = service.findFirst();
-			if (player == null) {
+//			player = service.findFirst();
+//			if (player == null) {
 				player = new User();
 
 				Saison saison = TypeManager.getInstance().getSaison();
@@ -51,7 +51,7 @@ public class UserBusiness extends PlayerBusiness {
 //					player.setId(null);
 //					service.createOrUpdate((User)player);
 				}
-			}
+//			}
 		}
 	}
 	

@@ -13,29 +13,29 @@ import com.justtennis.manager.TypeManager;
 
 public class UserService extends GenericService<User> {
 
+	private TypeManager typeManager;
+
 	public UserService(Context context, INotifierMessage notificationMessage) {
 		super(context, new DBUserDataSource(context, notificationMessage), notificationMessage);
+		typeManager = TypeManager.getInstance(context, notificationMessage);
 	}
 
 	public User find() {
 		User ret = null;
 
-		Saison saison = TypeManager.getInstance().getSaison();
-    	try {
-    		dbDataSource.open();
+		Saison saison = typeManager.getSaison();
+		if (saison != null) {
 			// Select in database
-			if (saison != null) {
+	    	try {
+	    		dbDataSource.open();
 				ret = ((DBUserDataSource)dbDataSource).getByIdSaison(saison.getId());
-			} else {
-				List<User> list = dbDataSource.getAll();
-				if (list!=null && list.size()>0) {
-					ret = list.get(0);
-				}
-			}
-    	}
-    	finally {
-    		dbDataSource.close();
-    	}
+	    	}
+	    	finally {
+	    		dbDataSource.close();
+	    	}
+		} else {
+			ret = findFirst();
+		}
     	return ret;
 	}
 
