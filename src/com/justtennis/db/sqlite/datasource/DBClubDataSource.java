@@ -1,5 +1,7 @@
 package com.justtennis.db.sqlite.datasource;
 
+import java.util.List;
+
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
@@ -23,6 +25,15 @@ public class DBClubDataSource extends GenericDBDataSource<Club> {
 
 	public DBClubDataSource(Context context, INotifierMessage notificationMessage) {
 		super(new DBClubHelper(context, notificationMessage), notificationMessage);
+	}
+
+	/**
+	 * Return all Club like a name
+	 * @param str Name
+	 * @return all club or null
+	 */
+	public List<Club> getLikeByName(String str) {
+		return query(DBClubHelper.COLUMN_NAME + " like '%" + str + "%'");
 	}
 
 	@Override

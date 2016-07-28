@@ -1,5 +1,7 @@
 package com.justtennis.db.sqlite.datasource;
 
+import java.util.List;
+
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
@@ -26,6 +28,18 @@ public class DBAddressDataSource extends GenericDBDataSource<Address> {
 
 	public DBAddressDataSource(Context context, INotifierMessage notificationMessage) {
 		super(new DBAddressHelper(context, notificationMessage), notificationMessage);
+	}
+
+	/**
+	 * Return all Address like a line
+	 * @param str Line
+	 * @return all Address or null
+	 */
+	public List<Address> getLikeByLine(String str) {
+		return query(
+			DBAddressHelper.COLUMN_LINE1 + " like '%" + str + "%' OR " + 
+			DBAddressHelper.COLUMN_POSTAL_CODE + " like '%" + str + "%' OR " + 
+			DBAddressHelper.COLUMN_CITY + " like '%" + str + "%'");
 	}
 
 	@Override

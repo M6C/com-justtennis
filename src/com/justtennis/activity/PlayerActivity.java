@@ -8,12 +8,14 @@ import org.gdocument.gtracergps.launcher.log.Logger;
 
 import android.app.Dialog;
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.AdapterView.OnItemSelectedListener;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
@@ -22,7 +24,6 @@ import android.widget.TextView;
 import com.cameleon.common.android.adapter.BaseViewAdapter;
 import com.cameleon.common.android.factory.FactoryDialog;
 import com.justtennis.ApplicationConfig;
-import com.justtennis.R;
 import com.justtennis.adapter.CustomArrayAdapter;
 import com.justtennis.adapter.manager.RankingListManager;
 import com.justtennis.business.PlayerBusiness;
@@ -32,11 +33,16 @@ import com.justtennis.domain.Saison;
 import com.justtennis.domain.Tournament;
 import com.justtennis.listener.action.TextWatcherFieldEnableView;
 import com.justtennis.listener.ok.OnClickPlayerCreateListenerOk;
+import com.justtennis.manager.DrawerManager;
+import com.justtennis.manager.DrawerManager.IDrawerLayoutSaisonNotifier;
+import com.justtennis.manager.DrawerManager.IDrawerLayoutTypeNotifier;
 import com.justtennis.manager.TypeManager;
+import com.justtennis.manager.TypeManager.TYPE;
 import com.justtennis.notifier.NotifierMessageLogger;
 import com.justtennis.parser.PlayerParser;
+import com.justtennis.R;
 
-public class PlayerActivity extends GenericActivity {
+public class PlayerActivity extends GenericActivity implements IDrawerLayoutTypeNotifier, IDrawerLayoutSaisonNotifier {
 
 	public enum MODE {
 		CREATE,
@@ -60,6 +66,7 @@ public class PlayerActivity extends GenericActivity {
 
 	private Bundle savedInstanceState;
 	private PlayerBusiness business;
+	private DrawerManager drawerManager;
 	private RankingListManager rankingListManager;
 
 	private TextView tvFirstname;
@@ -100,43 +107,57 @@ public class PlayerActivity extends GenericActivity {
 		if (this.savedInstanceState==null) {
 			this.savedInstanceState = savedInstanceState;
 		}
+		NotifierMessageLogger notifier = NotifierMessageLogger.getInstance();
+		drawerManager = new DrawerManager(this, notifier);
 
 		initializeLayoutView();
 		initializeViewById();
 		
 		business = createBusiness();
-		NotifierMessageLogger notifier = NotifierMessageLogger.getInstance();
 		rankingListManager = RankingListManager.getInstance(this, notifier);
 
 		initializeListener();
 		initialize();
 
 		initializeListType();
-
-		TypeManager.getInstance().initializeActivity(findViewById(R.id.layout_main), false);
 	}
 
 	@Override
 	protected void onResume() {
 		super.onResume();
 
-		initializeView();
-		initializeRankingList();
-		initializeRankingEstimateList();
+		initializeData(true);
 
-		initializeType();
-
-		initializeListenerListType();
-		initializeLocation();
-
-		initializeSaisonList();
-		initializeSaison();
+		drawerManager.onResume();
+		drawerManager.setDrawerLayoutSaisonNotifier(this);
+		drawerManager.setDrawerLayoutTypeNotifier(this);
 	}
 
 	@Override
 	public void onBackPressed() {
 		finish();
 		super.onBackPressed();
+	}
+
+	@Override
+	public void onDrawerLayoutSaisonChange(AdapterView<?> parent, View view, int position, long id, Saison item) {
+		business.initialize(new Intent());
+
+		initializeData(false);
+	}
+
+	@Override
+	public void onDrawerLayoutTypeChange(TYPE type) {
+		//TODO Useless - Fix refresh button color
+		int style = (type == TYPE.COMPETITION ? R.style.StyleButton_Competition : R.style.StyleButton);
+		((Button)findViewById(R.id.btn_import)).setTypeface(Typeface.DEFAULT, style);
+		((Button)findViewById(R.id.btn_qrcode)).setTypeface(Typeface.DEFAULT, style);
+		((Button)findViewById(R.id.btn_add_demande_yes)).setTypeface(Typeface.DEFAULT, style);
+		((Button)findViewById(R.id.btn_add_demande_no)).setTypeface(Typeface.DEFAULT, style);
+
+		business.initialize(new Intent());
+
+		initializeData(false);
 	}
 
 	@Override
@@ -179,6 +200,24 @@ public class PlayerActivity extends GenericActivity {
 	protected void onSaveInstanceState(Bundle outState) {
 		business.onSaveInstanceState(outState);
 		super.onSaveInstanceState(outState);
+	}
+
+	private void initializeData(boolean listener) {
+		initializeView();
+		initializeRankingList();
+		initializeRankingEstimateList();
+
+		initializeType();
+
+		if (listener) {
+			initializeListenerListType();
+		}
+		initializeLocation();
+
+		if (listener) {
+			initializeSaisonList();
+		}
+		initializeSaison();
 	}
 
 	protected void initializeViewById() {
@@ -322,7 +361,7 @@ public class PlayerActivity extends GenericActivity {
 	}
 
 	protected void initializeLayoutView() {
-		setContentView(R.layout.player);
+		drawerManager.setContentView(R.layout.player);
 	}
 
 	private void importScan() {
@@ -524,18 +563,18 @@ public class PlayerActivity extends GenericActivity {
 	protected void initializeSaison() {
 		Log.d(TAG, "initializeSaison");
 		Saison saison = business.getSaison();
+		int position = 0;
 		if (saison != null) {
-			int position = 0;
 			List<Saison> listSaison = business.getListSaison();
 			for(Saison item : listSaison) {
 				if (item.equals(saison)) {
-					spSaison.setSelection(position, true);
 					break;
 				} else {
 					position++;
 				}
 			}
 		}
+		spSaison.setSelection(position, true);
 	}
 
 	private void initializeType() {

@@ -50,7 +50,7 @@ public class LocationAddressBusiness extends GenericSpinnerFormBusiness<Address,
 		return null;
 	}
 
-	public String formatAddressName(Address data) {
+	public static String formatAddressName(Address data) {
 		String ret = null;
 		ret = concat(ret, data.getLine1());
 		ret = concat(ret, data.getPostalCode());
@@ -58,7 +58,7 @@ public class LocationAddressBusiness extends GenericSpinnerFormBusiness<Address,
 		return ret;
 	}
 
-	private String concat(String str1, String str2) {
+	private static String concat(String str1, String str2) {
 		String ret = (str1 == null) ? "" : str1 + " ";
 		if (!StringTool.getInstance().isEmpty(str2)) {
 			ret += str2;
