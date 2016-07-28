@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,11 +14,11 @@ public class NavigationDrawerAdapter extends BaseAdapter {
 
 	private List<NavigationDrawerData> value = new ArrayList<NavigationDrawerAdapter.NavigationDrawerData>();
 
-	private LayoutInflater inflater;
+	private Context context;
 
-	public NavigationDrawerAdapter(LayoutInflater inflater) {
+	public NavigationDrawerAdapter(Context context) {
 		super();
-		this.inflater = inflater;
+		this.context = context;
 	}
 
 	@Override
@@ -44,6 +45,7 @@ public class NavigationDrawerAdapter extends BaseAdapter {
 
 		View rowView = convertView;
 		if (rowView == null || Long.parseLong(rowView.getTag().toString()) != id) {
+	        LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 			rowView = inflater.inflate(v.getLayout(), null, false);
 			rowView.setTag(id);
 			if (notifier != null) {
@@ -63,10 +65,7 @@ public class NavigationDrawerAdapter extends BaseAdapter {
 	}
 
 	public void setValue(List<NavigationDrawerData> value) {
-		this.value.clear();
-		if (value != null) {
-			this.value.addAll(value);
-		}
+		this.value = value;
 	}
 
 	public static class NavigationDrawerData {

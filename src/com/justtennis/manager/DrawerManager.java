@@ -93,8 +93,8 @@ public class DrawerManager {
 		mNavigationDrawerFragment.setValue(value);
 	}
 
-	public void updateValue() {
-		mNavigationDrawerFragment.updateValue();
+	public void updValue() {
+		mNavigationDrawerFragment.updValue();
 	}
 
 	private void initializeDrawer() {
@@ -235,7 +235,7 @@ public class DrawerManager {
 				
 										business.initializeDataSaison();
 										notiferSaison.initializeSaison();
-										updateValue();
+										updValue();
 									} else {
 										Toast.makeText(activity, R.string.error_message_invite_exist_saison, Toast.LENGTH_LONG).show();
 									}

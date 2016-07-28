@@ -91,7 +91,6 @@ public class MainActivity extends GenericActivity implements INotifierMessage, I
 	@Override
 	protected void onResume() {
 		super.onResume();
-		System.err.println("zzzzzzzzzzzzzzz USER RANKING onResume");
 
 		business.onResume();
 
@@ -106,7 +105,6 @@ public class MainActivity extends GenericActivity implements INotifierMessage, I
 
 	@Override
 	public void onDrawerLayoutTypeChange(TYPE type) {
-		System.err.println("zzzzzzzzzzzzzzz USER RANKING onDrawerLayoutTypeChange type:" + type);
 		initializeLayoutType(type);
 	}
 
@@ -145,7 +143,7 @@ public class MainActivity extends GenericActivity implements INotifierMessage, I
 	}
 
 	private void refreshDrawer() {
-		drawerManager.updateValue();
+		drawerManager.updValue();
 	}
 
 	private void restoreActionBar() {
@@ -437,10 +435,10 @@ public class MainActivity extends GenericActivity implements INotifierMessage, I
 
 		@Override
 		public void onUpdateView(View view) {
-			User user = business.getUser();
-			tvName.setText(user.getFullName());
-			rankingListManager.initializeRankingSpinner(view, user, true);
-			rankingListManager.initializeRankingSpinner(view, user, false);
+//			User user = business.getUser();
+//			tvName.setText(user.getFullName());
+//			rankingListManager.initializeRankingSpinner(view, user, true);
+//			rankingListManager.initializeRankingSpinner(view, user, false);
 		}
 
 		private void manageRanking(MainActivity mainActivity, View view, User user, final boolean estimate) {
@@ -484,7 +482,6 @@ public class MainActivity extends GenericActivity implements INotifierMessage, I
 
 		@Override
 		public void onCreateView(View view) {
-			System.err.println("zzzzzzzzzzzzzzz USER RANKING NavigationDrawerCompetitionNotifer onCreateView");
 			tvMatchValue = (TextView) view.findViewById(R.id.tv_match_value);
 			tvMatchMax = (TextView) view.findViewById(R.id.tv_match_max);
 			pbMatch = (ProgressBar) view.findViewById(R.id.pb_match);
@@ -497,8 +494,7 @@ public class MainActivity extends GenericActivity implements INotifierMessage, I
 
 		@Override
 		public void onUpdateView(View view) {
-			System.err.println("zzzzzzzzzzzzzzz USER RANKING NavigationDrawerCompetitionNotifer onUpdateView");
-			initiazeView(view);
+//			initiazeView(view);
 		}
 
 		private void initiazeView(View view) {
@@ -510,7 +506,6 @@ public class MainActivity extends GenericActivity implements INotifierMessage, I
 			tvMatchValue.setText(Integer.toString(nbVictory));
 			pbMatch.setMax(dataRanking.getNbMatch());
 			pbMatch.setProgress(nbVictory);
-System.err.println("zzzzzzzzzzzzzzz USER RANKING NavigationDrawerCompetitionNotifer onUpdateView point objectif:" + dataRanking.getPointObjectif());
 			tvPointMax.setText(Integer.toString(dataRanking.getPointObjectif()));
 			tvPointValue.setText(Integer.toString(point));
 			pbPoint.setMax(point > dataRanking.getPointObjectif() ? point : dataRanking.getPointObjectif());

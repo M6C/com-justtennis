@@ -1,6 +1,5 @@
 package com.justtennis.fragment;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import android.annotation.SuppressLint;
@@ -114,7 +113,7 @@ public class NavigationDrawerFragment extends Fragment {
 						selectItem(position);
 					}
 				});
-		mDrawerAdapter = new NavigationDrawerAdapter(inflater);
+		mDrawerAdapter = new NavigationDrawerAdapter(getActivity().getApplicationContext());
 		mDrawerListView.setAdapter(mDrawerAdapter);
 
 		return view;
@@ -214,16 +213,14 @@ public class NavigationDrawerFragment extends Fragment {
 	}
 
 	public void setValue(List<NavigationDrawerData> value) {
+		mDrawerAdapter = new NavigationDrawerAdapter(getActivity().getApplicationContext());
+		mDrawerListView.setAdapter(mDrawerAdapter);
 		mDrawerAdapter.setValue(value);
 		mDrawerAdapter.notifyDataSetChanged();
 	}
 
-	public void updateValue() {
-		List<NavigationDrawerData> valueSav = new ArrayList<NavigationDrawerAdapter.NavigationDrawerData>();
-		valueSav.addAll(mDrawerAdapter.getValue());
-
-		setValue(null);
-		setValue(valueSav);
+	public void updValue() {
+		setValue(mDrawerAdapter.getValue());
 	}
 
 	public void setHeader(NavigationDrawerData header) {
