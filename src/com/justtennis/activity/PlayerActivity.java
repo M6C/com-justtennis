@@ -28,6 +28,7 @@ import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.Spinner;
@@ -78,6 +79,7 @@ public class PlayerActivity extends GenericActivity implements IDrawerLayoutType
 	public static final String EXTRA_MODE = "MODE";
 	public static final String EXTRA_TYPE = "TYPE";
 	public static final String EXTRA_RANKING = "RANKING";
+	public static final String EXTRA_FIND = "EXTRA_FIND";
 
 	private final Integer[] drawableType = new Integer[] {R.layout.element_invite_type_entrainement, R.layout.element_invite_type_match};
 	private List<NavigationDrawerData> navigationDrawer = new ArrayList<NavigationDrawerAdapter.NavigationDrawerData>();
@@ -655,6 +657,7 @@ public class PlayerActivity extends GenericActivity implements IDrawerLayoutType
 			adpRecherche = new NavigationDrawerRechercheAdapter(view.getContext(), list);
 			listRecherche.setAdapter(adpRecherche);
 
+			edtRecherche.setText(business.getFindText());
 			edtRecherche.addTextChangedListener(
 				    new TextWatcher() {
 				        @Override public void onTextChanged(CharSequence s, int start, int before, int count) { }
@@ -672,6 +675,7 @@ public class PlayerActivity extends GenericActivity implements IDrawerLayoutType
 				                new TimerTask() {
 				                    @Override
 				                    public void run() {
+				                    	business.setFindText(text);
 				                    	list.clear();
 				                    	if (text != null && !text.trim().isEmpty()) {
 											list.addAll(rechercheService.find(typeRecherche, text));
@@ -729,11 +733,24 @@ public class PlayerActivity extends GenericActivity implements IDrawerLayoutType
 				LayoutInflater infalInflater = (LayoutInflater) this.context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 				convertView = infalInflater.inflate(R.layout.fragment_navigation_player_drawer_element_recherche_view, null);
 			}
-			TextView tvRechercheType = (TextView) convertView.findViewById(R.id.edt_recherche_type);
+			ImageView ivRechercheType = (ImageView) convertView.findViewById(R.id.imv_recherche_type);
 			TextView tvRechercheText = (TextView) convertView.findViewById(R.id.edt_recherche_text);
 
 			RechercheResult item = (RechercheResult) getItem(position);
-			tvRechercheType.setText(item.getType().toString());
+			switch (item.getType()) {
+				case TOURNAMENT:
+					ivRechercheType.setImageResource(R.drawable.ic_location_tournament);
+					break;
+	
+				case CLUB:
+					ivRechercheType.setImageResource(R.drawable.ic_location_club);
+					break;
+
+				default:
+				case ADDRESS:
+					ivRechercheType.setImageResource(R.drawable.ic_location_address_1);
+					break;
+			}
 			tvRechercheText.setText(item.getData());
 			return convertView;
 		}

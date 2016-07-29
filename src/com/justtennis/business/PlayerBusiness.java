@@ -55,6 +55,7 @@ public class PlayerBusiness {
 	private TypeManager typeManager;
 	private List<Saison> listSaison = new ArrayList<Saison>();
 	private List<String> listTxtSaisons = new ArrayList<String>();
+	private String findText;
 
 	public PlayerBusiness(Context context, INotifierMessage notificationMessage) {
 		this.context = context;
@@ -93,6 +94,7 @@ public class PlayerBusiness {
 		mode = (MODE) savedInstanceState.getSerializable(PlayerActivity.EXTRA_MODE);
 		invite = (Invite) savedInstanceState.getSerializable(PlayerActivity.EXTRA_INVITE);
 		player = (Player) savedInstanceState.getSerializable(PlayerActivity.EXTRA_PLAYER);
+		findText = (String) savedInstanceState.getSerializable(PlayerActivity.EXTRA_FIND);
 
 		initializeDataRanking();
 		initializeDataSaison();
@@ -127,6 +129,7 @@ public class PlayerBusiness {
 		outState.putSerializable(PlayerActivity.EXTRA_MODE, mode);
 		outState.putSerializable(PlayerActivity.EXTRA_INVITE, invite);
 		outState.putSerializable(PlayerActivity.EXTRA_PLAYER, player);
+		outState.putSerializable(PlayerActivity.EXTRA_FIND, findText);
 	}
 
 	public long getPlayerCount() {
@@ -353,5 +356,13 @@ public class PlayerBusiness {
 	public TYPE getPlayerType() {
 		return getPlayer() == null ? typeManager.getType() : getPlayer().getType();
 //		return TypeManager.TYPE.TRAINING;
+	}
+
+	public String getFindText() {
+		return findText;
+	}
+
+	public void setFindText(String findText) {
+		this.findText = findText;
 	}
 }

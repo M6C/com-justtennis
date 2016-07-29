@@ -5,16 +5,15 @@
     android:layout_height="match_parent"
     android:orientation="horizontal"
 >
-	<TextView
-	    android:id="@+id/edt_recherche_type"
-		android:layout_width="0dp"
-		android:layout_height="wrap_content"
-		android:layout_weight=".3"
+	<ImageView
+	    android:id="@+id/imv_recherche_type"
+		android:layout_width="25dp"
+		android:layout_height="25dp"
 	/>
 	<TextView
 	    android:id="@+id/edt_recherche_text"
 		android:layout_width="0dp"
 		android:layout_height="wrap_content"
-		android:layout_weight=".7"
+		android:layout_weight="1"
 	/>
 </LinearLayout>
