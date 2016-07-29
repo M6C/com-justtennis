@@ -19,13 +19,11 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.LinearLayout;
-import android.widget.ListView;
 import android.widget.Toast;
 
-import com.justtennis.adapter.NavigationDrawerAdapter;
 import com.justtennis.adapter.NavigationDrawerAdapter.NavigationDrawerData;
+import com.justtennis.adapter.NavigationDrawerAdapter.NavigationDrawerNotifer;
 import com.justtennis.R;
 
 /**
@@ -56,14 +54,13 @@ public class NavigationDrawerFragment extends Fragment {
 	private DrawerLayout mDrawerLayout;
 	private LinearLayout mDrawerHeader;
 	private LinearLayout mDrawerFooter;
-	private ListView mDrawerListView;
+	private LinearLayout mDrawerList;
 	private View mFragmentContainerView;
 
+	private List<NavigationDrawerData> value;
 	private int mCurrentSelectedPosition = 0;
 	private boolean mFromSavedInstanceState;
 	private boolean mUserLearnedDrawer;
-
-	private NavigationDrawerAdapter mDrawerAdapter;
 
 	public NavigationDrawerFragment() {
 	}
@@ -103,19 +100,7 @@ public class NavigationDrawerFragment extends Fragment {
 		View view = inflater.inflate(R.layout.fragment_navigation_drawer, null, false);
 		mDrawerHeader = (LinearLayout) view.findViewById(R.id.header);
 		mDrawerFooter = (LinearLayout) view.findViewById(R.id.footer);
-
-		mDrawerListView = (ListView) view.findViewById(R.id.list);
-		mDrawerListView
-				.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-					@Override
-					public void onItemClick(AdapterView<?> parent, View view,
-							int position, long id) {
-						selectItem(position);
-					}
-				});
-		mDrawerAdapter = new NavigationDrawerAdapter(getActivity().getApplicationContext());
-		mDrawerListView.setAdapter(mDrawerAdapter);
-
+		mDrawerList = (LinearLayout) view.findViewById(R.id.list);
 		return view;
 	}
 
@@ -213,14 +198,24 @@ public class NavigationDrawerFragment extends Fragment {
 	}
 
 	public void setValue(List<NavigationDrawerData> value) {
-		mDrawerAdapter = new NavigationDrawerAdapter(getActivity().getApplicationContext());
-		mDrawerListView.setAdapter(mDrawerAdapter);
-		mDrawerAdapter.setValue(value);
-		mDrawerAdapter.notifyDataSetChanged();
+		this.value = value;
+		mDrawerList.removeAllViews();
+
+		Context context = getActivity().getApplicationContext();
+		for (NavigationDrawerData data : value) {
+			long id = data.getId();
+			NavigationDrawerNotifer notifier = data.getNotifer();
+	        LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+			View rowView = inflater.inflate(data.getLayout(), mDrawerList, true);
+			rowView.setTag(id);
+			if (notifier != null) {
+				notifier.onCreateView(rowView);
+			}
+		}
 	}
 
 	public void updValue() {
-		setValue(mDrawerAdapter.getValue());
+		setValue(this.value);
 	}
 
 	public void setHeader(NavigationDrawerData header) {
@@ -245,9 +240,6 @@ public class NavigationDrawerFragment extends Fragment {
 
 	private void selectItem(int position) {
 		mCurrentSelectedPosition = position;
-		if (mDrawerListView != null) {
-			mDrawerListView.setItemChecked(position, true);
-		}
 		if (mDrawerLayout != null) {
 			mDrawerLayout.closeDrawer(mFragmentContainerView);
 		}
