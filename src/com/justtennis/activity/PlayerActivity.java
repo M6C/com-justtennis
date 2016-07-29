@@ -21,6 +21,7 @@ import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
@@ -37,6 +38,7 @@ import android.widget.TextView;
 import com.cameleon.common.android.adapter.BaseViewAdapter;
 import com.cameleon.common.android.factory.FactoryDialog;
 import com.justtennis.ApplicationConfig;
+import com.justtennis.R;
 import com.justtennis.adapter.CustomArrayAdapter;
 import com.justtennis.adapter.NavigationDrawerAdapter;
 import com.justtennis.adapter.NavigationDrawerAdapter.NavigationDrawerData;
@@ -58,7 +60,6 @@ import com.justtennis.manager.TypeManager;
 import com.justtennis.manager.TypeManager.TYPE;
 import com.justtennis.notifier.NotifierMessageLogger;
 import com.justtennis.parser.PlayerParser;
-import com.justtennis.R;
 
 public class PlayerActivity extends GenericActivity implements IDrawerLayoutTypeNotifier, IDrawerLayoutSaisonNotifier {
 
@@ -732,6 +733,32 @@ public class PlayerActivity extends GenericActivity implements IDrawerLayoutType
 			if (convertView == null) {
 				LayoutInflater infalInflater = (LayoutInflater) this.context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 				convertView = infalInflater.inflate(R.layout.fragment_navigation_player_drawer_element_recherche_view, null);
+				convertView.setOnClickListener(new OnClickListener() {
+					@Override
+					public void onClick(View v) {
+						RechercheResult item = (RechercheResult) v.getTag();
+						Player player = business.getPlayer();
+						player.setIdTournament(0l);
+						player.setIdClub(0l);
+						player.setIdAddress(0l);
+
+						switch (item.getType()) {
+							case TOURNAMENT:
+								player.setIdTournament(item.getId());
+								break;
+				
+							case CLUB:
+								player.setIdClub(item.getId());
+								break;
+	
+							case ADDRESS:
+								player.setIdAddress(item.getId());
+								break;
+						}
+						initializeLocation();
+						drawerManager.close();
+					}
+				});
 			}
 			ImageView ivRechercheType = (ImageView) convertView.findViewById(R.id.imv_recherche_type);
 			TextView tvRechercheText = (TextView) convertView.findViewById(R.id.edt_recherche_text);
@@ -752,6 +779,7 @@ public class PlayerActivity extends GenericActivity implements IDrawerLayoutType
 					break;
 			}
 			tvRechercheText.setText(item.getData());
+			convertView.setTag(item);
 			return convertView;
 		}
 		

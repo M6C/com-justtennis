@@ -81,6 +81,10 @@ public class DrawerManager {
 		return mNavigationDrawerFragment.isDrawerOpen();
 	}
 
+	public void close() {
+		mNavigationDrawerFragment.close();
+	}
+
 	public void setDrawerLayoutTypeNotifier(IDrawerLayoutTypeNotifier drawerLayoutTypeNotifier) {
 		this.drawerLayoutTypeNotifier = drawerLayoutTypeNotifier;
 	}

@@ -109,6 +109,10 @@ public class NavigationDrawerFragment extends Fragment {
 				&& mDrawerLayout.isDrawerOpen(mFragmentContainerView);
 	}
 
+	public void close() {
+		mDrawerLayout.closeDrawers();
+	}
+
 	/**
 	 * Users of this fragment must call this method to set up the navigation
 	 * drawer interactions.
