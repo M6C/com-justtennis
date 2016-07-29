@@ -1,4 +1,4 @@
-package com.justtennis.fragment;
+package com.justtennis.drawer.fragment;
 
 import java.util.List;
 
@@ -22,11 +22,11 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
-import com.justtennis.adapter.NavigationDrawerAdapter.NavigationDrawerData;
-import com.justtennis.adapter.NavigationDrawerAdapter.NavigationDrawerNotifer;
+import com.justtennis.drawer.adapter.NavigationDrawerAdapter.NavigationDrawerNotifer;
+import com.justtennis.drawer.data.NavigationDrawerData;
 import com.justtennis.R;
 
-/**
+/**.
  * Fragment used for managing interactions for and presentation of a navigation
  * drawer. See the <a href=
  * "https://developer.android.com/design/patterns/navigation-drawer.html#Interaction"

@@ -18,11 +18,10 @@ import android.widget.Spinner;
 
 import com.cameleon.common.android.inotifier.INotifierMessage;
 import com.justtennis.adapter.CustomArrayAdapter;
-import com.justtennis.adapter.NavigationDrawerAdapter;
-import com.justtennis.adapter.NavigationDrawerAdapter.NavigationDrawerData;
-import com.justtennis.adapter.NavigationDrawerAdapter.NavigationDrawerNotifer;
 import com.justtennis.business.MainBusiness;
-import com.justtennis.fragment.NavigationDrawerFragment;
+import com.justtennis.drawer.adapter.NavigationDrawerAdapter.NavigationDrawerNotifer;
+import com.justtennis.drawer.data.NavigationDrawerData;
+import com.justtennis.drawer.fragment.NavigationDrawerFragment;
 import com.justtennis.notifier.NotifierMessageLogger;
 import com.justtennis.R;
 
@@ -69,8 +68,8 @@ public class MatchActivity extends Activity implements INotifierMessage {
 			}
 		};
 
-		List<NavigationDrawerData> value = new ArrayList<NavigationDrawerAdapter.NavigationDrawerData>();
-		value.add(new NavigationDrawerAdapter.NavigationDrawerData(0, R.layout.fragment_navigation_drawer_header_saison, notiferSaison));
+		List<NavigationDrawerData> value = new ArrayList<NavigationDrawerData>();
+		value.add(new NavigationDrawerData(0, R.layout.fragment_navigation_drawer_header_saison, notiferSaison));
 
 		// Set up the drawer.
 		mNavigationDrawerFragment.setUp(R.id.navigation_drawer, (DrawerLayout) findViewById(R.id.drawer_layout));

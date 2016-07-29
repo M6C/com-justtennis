@@ -26,9 +26,6 @@ import com.cameleon.common.android.db.sqlite.helper.GenericDBHelper;
 import com.cameleon.common.android.factory.FactoryDialog;
 import com.cameleon.common.android.inotifier.INotifierMessage;
 import com.justtennis.activity.ListPlayerActivity.MODE;
-import com.justtennis.adapter.NavigationDrawerAdapter;
-import com.justtennis.adapter.NavigationDrawerAdapter.NavigationDrawerData;
-import com.justtennis.adapter.NavigationDrawerAdapter.NavigationDrawerNotifer;
 import com.justtennis.adapter.manager.RankingListManager;
 import com.justtennis.adapter.manager.RankingListManager.IRankingListListener;
 import com.justtennis.business.MainBusiness;
@@ -36,13 +33,15 @@ import com.justtennis.domain.ComputeDataRanking;
 import com.justtennis.domain.Ranking;
 import com.justtennis.domain.Saison;
 import com.justtennis.domain.User;
+import com.justtennis.drawer.adapter.NavigationDrawerAdapter.NavigationDrawerNotifer;
+import com.justtennis.drawer.data.NavigationDrawerData;
+import com.justtennis.drawer.manager.DrawerManager;
+import com.justtennis.drawer.manager.DrawerManager.IDrawerLayoutSaisonNotifier;
+import com.justtennis.drawer.manager.DrawerManager.IDrawerLayoutTypeNotifier;
 import com.justtennis.listener.ok.OnClickDBBackupListenerOk;
 import com.justtennis.listener.ok.OnClickDBRestoreListenerOk;
 import com.justtennis.listener.ok.OnClickSendApkListenerOk;
 import com.justtennis.listener.ok.OnClickSendDBListenerOk;
-import com.justtennis.manager.DrawerManager;
-import com.justtennis.manager.DrawerManager.IDrawerLayoutSaisonNotifier;
-import com.justtennis.manager.DrawerManager.IDrawerLayoutTypeNotifier;
 import com.justtennis.manager.TypeManager;
 import com.justtennis.manager.TypeManager.TYPE;
 import com.justtennis.R;
@@ -60,8 +59,8 @@ public class MainActivity extends GenericActivity implements INotifierMessage, I
 	private Toast toast = null;
 	private DrawerManager drawerManager;
 	private View layoutRoot;
-	private List<NavigationDrawerData> navigationDrawerTraining = new ArrayList<NavigationDrawerAdapter.NavigationDrawerData>();
-	private List<NavigationDrawerData> navigationDrawerCompetition = new ArrayList<NavigationDrawerAdapter.NavigationDrawerData>();
+	private List<NavigationDrawerData> navigationDrawerTraining = new ArrayList<NavigationDrawerData>();
+	private List<NavigationDrawerData> navigationDrawerCompetition = new ArrayList<NavigationDrawerData>();
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {

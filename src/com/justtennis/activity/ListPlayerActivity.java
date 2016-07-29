@@ -1,12 +1,18 @@
 package com.justtennis.activity;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
+import android.widget.BaseAdapter;
 import android.widget.Filter;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -14,11 +20,17 @@ import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.cameleon.common.android.factory.FactoryDialog;
-import com.justtennis.R;
 import com.justtennis.adapter.ListPlayerAdapter;
 import com.justtennis.business.ListPlayerBusiness;
 import com.justtennis.db.service.PlayerService;
 import com.justtennis.domain.Player;
+import com.justtennis.domain.RechercheResult;
+import com.justtennis.drawer.adapter.NavigationDrawerRechercheListPlayerAdapter;
+import com.justtennis.drawer.business.INavigationDrawerRechercheBusiness;
+import com.justtennis.drawer.data.NavigationDrawerData;
+import com.justtennis.drawer.data.NavigationDrawerRechercheData;
+import com.justtennis.drawer.manager.DrawerManager;
+import com.justtennis.drawer.notifier.NavigationDrawerRechercheNotifer.INavigationDrawerRechercheNotifer;
 import com.justtennis.listener.itemclick.OnItemClickListPlayer;
 import com.justtennis.listener.itemclick.OnItemClickListPlayerForResult;
 import com.justtennis.listener.itemclick.OnItemClickListPlayerInvite;
@@ -27,6 +39,7 @@ import com.justtennis.listener.ok.OnClickPlayerSendListenerOk;
 import com.justtennis.manager.TypeManager;
 import com.justtennis.notifier.NotifierMessageLogger;
 import com.justtennis.parser.PlayerParser;
+import com.justtennis.R;
 
 public class ListPlayerActivity extends GenericActivity {
 
@@ -44,6 +57,7 @@ public class ListPlayerActivity extends GenericActivity {
 	};
 
 	private ListPlayerBusiness business;
+	private DrawerManager drawerManager;
 	
 	private ListView list;
 	private ListPlayerAdapter adapter;
@@ -52,13 +66,17 @@ public class ListPlayerActivity extends GenericActivity {
 	private Spinner spFilterType;
 	private Filter filter;
 	private TypeManager.TYPE filterTypeValue = null;
+	private List<NavigationDrawerData> navigationDrawer = new ArrayList<NavigationDrawerData>();
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.list_player);
+
+		NotifierMessageLogger notifier = NotifierMessageLogger.getInstance();
+		drawerManager = new DrawerManager(this, notifier);
+		drawerManager.setContentView(R.layout.list_player);
 		
-		business = new ListPlayerBusiness(this, NotifierMessageLogger.getInstance());
+		business = new ListPlayerBusiness(this, notifier);
 		adapter = new ListPlayerAdapter(this, business.getList());
 		
 		spFilterType = (Spinner)findViewById(R.id.sp_filter_type);
@@ -70,6 +88,7 @@ public class ListPlayerActivity extends GenericActivity {
 
 		initializeTypeList();
 		TypeManager.getInstance().initializeActivity(findViewById(R.id.layout_main), false);
+		navigationDrawer.add(new NavigationDrawerRechercheData(0, new NavigationDrawerRecherchePlayerNotifer()));
 	}
 
 	@Override
@@ -89,6 +108,8 @@ public class ListPlayerActivity extends GenericActivity {
 				list.setOnItemClickListener(new OnItemClickListPlayerForResult(this));
 				break;
 		}
+		drawerManager.onResume();
+		drawerManager.setValue(navigationDrawer);
 	}
 
 	@Override
@@ -242,5 +263,25 @@ public class ListPlayerActivity extends GenericActivity {
 			public void onNothingSelected(AdapterView<?> arg0) {
 			}
 		});
+	}
+
+	public class NavigationDrawerRecherchePlayerNotifer implements INavigationDrawerRechercheNotifer {
+
+		@Override
+		public BaseAdapter getAdapter(Context context, List<RechercheResult> list) {
+			return new NavigationDrawerRechercheListPlayerAdapter(context, list, new NavigationDrawerRecherchePlayerItemOnClickListener());
+		}
+
+		@Override
+		public INavigationDrawerRechercheBusiness getBusiness() {
+			return business;
+		}
+	}
+
+	public class NavigationDrawerRecherchePlayerItemOnClickListener implements OnClickListener {
+		@Override
+		public void onClick(View v) {
+			drawerManager.close();
+		}
 	}
 }

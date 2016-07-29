@@ -1,4 +1,4 @@
-package com.justtennis.adapter;
+package com.justtennis.drawer.adapter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -10,9 +10,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 
+import com.justtennis.drawer.data.NavigationDrawerData;
+
 public class NavigationDrawerAdapter extends BaseAdapter {
 
-	private List<NavigationDrawerData> value = new ArrayList<NavigationDrawerAdapter.NavigationDrawerData>();
+	private List<NavigationDrawerData> value = new ArrayList<NavigationDrawerData>();
 
 	private Context context;
 
@@ -66,37 +68,6 @@ public class NavigationDrawerAdapter extends BaseAdapter {
 
 	public void setValue(List<NavigationDrawerData> value) {
 		this.value = value;
-	}
-
-	public static class NavigationDrawerData {
-		private long id;
-		private int layout;
-		private NavigationDrawerNotifer notifer;
-
-		public NavigationDrawerData(long id, int layout, NavigationDrawerNotifer notifer) {
-			this.id = id;
-			this.layout = layout;
-			this.notifer = notifer;
-		}
-
-		public long getId() {
-			return id;
-		}
-		public void setId(long id) {
-			this.id = id;
-		}
-		public int getLayout() {
-			return layout;
-		}
-		public void setLayout(int layout) {
-			this.layout = layout;
-		}
-		public NavigationDrawerNotifer getNotifer() {
-			return notifer;
-		}
-		public void setNotifer(NavigationDrawerNotifer notifer) {
-			this.notifer = notifer;
-		}
 	}
 
 	public static interface NavigationDrawerNotifer {

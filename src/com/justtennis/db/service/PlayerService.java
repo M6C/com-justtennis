@@ -7,14 +7,13 @@ import java.util.List;
 import android.annotation.SuppressLint;
 import android.content.Context;
 
-import com.cameleon.common.android.db.sqlite.service.GenericService;
 import com.cameleon.common.android.inotifier.INotifierMessage;
-import com.justtennis.R;
 import com.justtennis.db.sqlite.datasource.DBPlayerDataSource;
 import com.justtennis.domain.Player;
 import com.justtennis.manager.TypeManager;
+import com.justtennis.R;
 
-public class PlayerService extends GenericService<Player> {
+public class PlayerService extends PersonService<Player> {
 
 	public static final long ID_EMPTY_PLAYER = -2l;
 	private static final long ID_UNKNOWN_PLAYER = -1l;

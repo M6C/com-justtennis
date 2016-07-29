@@ -2,6 +2,7 @@ package com.justtennis.business;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 import java.util.SortedSet;
@@ -17,6 +18,7 @@ import com.justtennis.activity.PlayerActivity;
 import com.justtennis.activity.PlayerActivity.MODE;
 import com.justtennis.db.service.PlayerService;
 import com.justtennis.db.service.RankingService;
+import com.justtennis.db.service.RechercheService;
 import com.justtennis.db.service.SaisonService;
 import com.justtennis.db.service.UserService;
 import com.justtennis.domain.Address;
@@ -24,10 +26,12 @@ import com.justtennis.domain.Club;
 import com.justtennis.domain.Invite;
 import com.justtennis.domain.Player;
 import com.justtennis.domain.Ranking;
+import com.justtennis.domain.RechercheResult;
 import com.justtennis.domain.Saison;
 import com.justtennis.domain.Tournament;
 import com.justtennis.domain.User;
 import com.justtennis.domain.comparator.RankingComparatorByOrder;
+import com.justtennis.drawer.business.INavigationDrawerRechercheBusiness;
 import com.justtennis.manager.SmsManager;
 import com.justtennis.manager.TypeManager;
 import com.justtennis.manager.TypeManager.TYPE;
@@ -36,7 +40,13 @@ import com.justtennis.parser.LocationParser;
 import com.justtennis.parser.PlayerParser;
 import com.justtennis.parser.SmsParser;
 
-public class PlayerBusiness {
+public class PlayerBusiness implements INavigationDrawerRechercheBusiness {
+
+	private final com.justtennis.db.service.RechercheService.TYPE[] typeRecherche = new com.justtennis.db.service.RechercheService.TYPE[] {
+			com.justtennis.db.service.RechercheService.TYPE.CLUB,
+			com.justtennis.db.service.RechercheService.TYPE.TOURNAMENT,
+			com.justtennis.db.service.RechercheService.TYPE.ADDRESS
+	};
 
 	protected Player player;
 	protected MODE mode;
@@ -47,6 +57,7 @@ public class PlayerBusiness {
 	private PlayerParser playerParser;
 	private LocationParser locationParser;
 	private SaisonService saisonService;
+	private RechercheService rechercheService;
 	private User user;
 	private Invite invite;
 	private List<Invite> list = new ArrayList<Invite>();
@@ -62,6 +73,7 @@ public class PlayerBusiness {
 		userService = new UserService(context, notificationMessage);
 		playerService = createPlayerService(context, notificationMessage);
 		saisonService = new SaisonService(context, notificationMessage);
+		rechercheService = new RechercheService(context, notificationMessage);
 		playerParser = PlayerParser.getInstance();
 		locationParser = LocationParser.getInstance(context, notificationMessage);
 		typeManager = TypeManager.getInstance();
@@ -130,6 +142,21 @@ public class PlayerBusiness {
 		outState.putSerializable(PlayerActivity.EXTRA_INVITE, invite);
 		outState.putSerializable(PlayerActivity.EXTRA_PLAYER, player);
 		outState.putSerializable(PlayerActivity.EXTRA_FIND, findText);
+	}
+
+	@Override
+	public String getFindText() {
+		return findText;
+	}
+
+	@Override
+	public void setFindText(String findText) {
+		this.findText = findText;
+	}
+
+	@Override
+	public Collection<? extends RechercheResult> find(String text) {
+		return rechercheService.find(typeRecherche, text);
 	}
 
 	public long getPlayerCount() {
@@ -356,13 +383,5 @@ public class PlayerBusiness {
 	public TYPE getPlayerType() {
 		return getPlayer() == null ? typeManager.getType() : getPlayer().getType();
 //		return TypeManager.TYPE.TRAINING;
-	}
-
-	public String getFindText() {
-		return findText;
-	}
-
-	public void setFindText(String findText) {
-		this.findText = findText;
 	}
 }

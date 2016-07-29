@@ -14,7 +14,6 @@ import com.cameleon.common.android.inotifier.INotifierMessage;
 import com.justtennis.business.LocationAddressBusiness;
 import com.justtennis.db.sqlite.datasource.DBAddressDataSource;
 import com.justtennis.db.sqlite.datasource.DBClubDataSource;
-import com.justtennis.db.sqlite.datasource.DBRankingDataSource;
 import com.justtennis.db.sqlite.datasource.DBTournamentDataSource;
 import com.justtennis.domain.Address;
 import com.justtennis.domain.Club;

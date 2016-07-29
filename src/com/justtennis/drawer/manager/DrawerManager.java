@@ -1,4 +1,4 @@
-package com.justtennis.manager;
+package com.justtennis.drawer.manager;
 
 import java.util.List;
 
@@ -22,13 +22,13 @@ import com.cameleon.common.android.factory.FactoryDialog;
 import com.cameleon.common.android.factory.listener.OnClickViewListener;
 import com.cameleon.common.android.inotifier.INotifierMessage;
 import com.justtennis.adapter.CustomArrayAdapter;
-import com.justtennis.adapter.NavigationDrawerAdapter;
-import com.justtennis.adapter.NavigationDrawerAdapter.NavigationDrawerData;
-import com.justtennis.adapter.NavigationDrawerAdapter.NavigationDrawerNotifer;
 import com.justtennis.domain.Saison;
-import com.justtennis.fragment.NavigationDrawerFragment;
+import com.justtennis.drawer.adapter.NavigationDrawerAdapter.NavigationDrawerNotifer;
+import com.justtennis.drawer.data.NavigationDrawerData;
+import com.justtennis.drawer.fragment.NavigationDrawerFragment;
+import com.justtennis.drawer.manager.business.DrawerBusiness;
+import com.justtennis.manager.TypeManager;
 import com.justtennis.manager.TypeManager.TYPE;
-import com.justtennis.manager.business.DrawerBusiness;
 import com.justtennis.R;
 
 public class DrawerManager {
@@ -107,8 +107,8 @@ public class DrawerManager {
 		mNavigationDrawerFragment = (NavigationDrawerFragment) activity.getFragmentManager().findFragmentById(R.id.navigation_drawer);
 		mNavigationDrawerFragment.setUp(R.id.navigation_drawer, (DrawerLayout) drawerLayout);
 
-		NavigationDrawerData header = new NavigationDrawerAdapter.NavigationDrawerData(0, R.layout.fragment_navigation_drawer_header_saison, notiferSaison);
-		NavigationDrawerData footer = new NavigationDrawerAdapter.NavigationDrawerData(1, R.layout.fragment_navigation_drawer_footer_type, new NavigationDrawerTypeNotifer());
+		NavigationDrawerData header = new NavigationDrawerData(0, R.layout.fragment_navigation_drawer_header_saison, notiferSaison);
+		NavigationDrawerData footer = new NavigationDrawerData(1, R.layout.fragment_navigation_drawer_footer_type, new NavigationDrawerTypeNotifer());
 		mNavigationDrawerFragment.setHeader(header);
 		mNavigationDrawerFragment.setFooter(footer);
 	}

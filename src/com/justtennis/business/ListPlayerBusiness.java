@@ -2,6 +2,7 @@ package com.justtennis.business;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 
@@ -19,13 +20,15 @@ import com.justtennis.db.service.PlayerService;
 import com.justtennis.db.service.UserService;
 import com.justtennis.domain.Invite;
 import com.justtennis.domain.Player;
+import com.justtennis.domain.RechercheResult;
 import com.justtennis.domain.User;
 import com.justtennis.domain.comparator.PlayerComparatorByName;
+import com.justtennis.drawer.business.INavigationDrawerRechercheBusiness;
 import com.justtennis.manager.SmsManager;
 import com.justtennis.notifier.NotifierMessageLogger;
 import com.justtennis.parser.SmsParser;
 
-public class ListPlayerBusiness {
+public class ListPlayerBusiness implements INavigationDrawerRechercheBusiness {
 
 	private static final String TAG = ListPlayerBusiness.class.getSimpleName();
 
@@ -38,6 +41,8 @@ public class ListPlayerBusiness {
 	private Bundle extraIn = null;
 
 	private MODE mode;
+
+	private String findText;
 
 	public ListPlayerBusiness(ListPlayerActivity context, INotifierMessage notificationMessage) {
 		this.context = context;
@@ -58,6 +63,21 @@ public class ListPlayerBusiness {
 		}
 
 		refreshData();
+	}
+
+	@Override
+	public String getFindText() {
+		return findText;
+	}
+
+	@Override
+	public void setFindText(String findText) {
+		this.findText = findText;
+	}
+
+	@Override
+	public Collection<? extends RechercheResult> find(String text) {
+		return playerService.find(text);
 	}
 
 	public List<Player> getList() {

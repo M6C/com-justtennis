@@ -8,7 +8,7 @@ import com.justtennis.domain.Player;
 import com.justtennis.manager.TypeManager;
 import com.justtennis.manager.TypeManager.TYPE;
 
-public class DBPlayerHelper extends GenericJustTennisDBHelper {
+public class DBPlayerHelper extends DBPersonHelper {
 
 	private static final String TAG = DBPlayerHelper.class.getCanonicalName();
 
@@ -20,13 +20,6 @@ public class DBPlayerHelper extends GenericJustTennisDBHelper {
 	public static final String COLUMN_ID_RANKING = "ID_RANKING";
 	public static final String COLUMN_ID_RANKING_ESTIMAGE = "ID_RANKING_ESTIMAGE";
 	public static final String COLUMN_ID_ADDRESS = "ID_ADDRESS";
-	public static final String COLUMN_FIRSTNAME = "FIRSTNAME";
-	public static final String COLUMN_LASTNAME = "LASTNAME";
-	public static final String COLUMN_BIRTHDAY = "BIRTHDAY";
-	public static final String COLUMN_PHONENUMBER = "PHONENUMBER";
-	public static final String COLUMN_ADDRESS = "ADDRESS";
-	public static final String COLUMN_POSTALCODE = "POSTALCODE";
-	public static final String COLUMN_LOCALITY = "LOCALITY";
 	public static final String COLUMN_ID_EXTERNAL = "ID_EXTERNAL";
 	public static final String COLUMN_ID_GOOGLE = "ID_GOOGLE";
 	public static final String COLUMN_TYPE = "TYPE";
