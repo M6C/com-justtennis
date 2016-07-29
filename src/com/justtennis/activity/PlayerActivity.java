@@ -2,22 +2,34 @@
 package com.justtennis.activity;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import org.gdocument.gtracergps.launcher.log.Logger;
 
+import android.annotation.SuppressLint;
 import android.app.Dialog;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
+import android.os.Handler;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.AdapterView.OnItemSelectedListener;
+import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -25,10 +37,15 @@ import com.cameleon.common.android.adapter.BaseViewAdapter;
 import com.cameleon.common.android.factory.FactoryDialog;
 import com.justtennis.ApplicationConfig;
 import com.justtennis.adapter.CustomArrayAdapter;
+import com.justtennis.adapter.NavigationDrawerAdapter;
+import com.justtennis.adapter.NavigationDrawerAdapter.NavigationDrawerData;
+import com.justtennis.adapter.NavigationDrawerAdapter.NavigationDrawerNotifer;
 import com.justtennis.adapter.manager.RankingListManager;
 import com.justtennis.business.PlayerBusiness;
+import com.justtennis.db.service.RechercheService;
 import com.justtennis.domain.Club;
 import com.justtennis.domain.Player;
+import com.justtennis.domain.RechercheResult;
 import com.justtennis.domain.Saison;
 import com.justtennis.domain.Tournament;
 import com.justtennis.listener.action.TextWatcherFieldEnableView;
@@ -63,6 +80,7 @@ public class PlayerActivity extends GenericActivity implements IDrawerLayoutType
 	public static final String EXTRA_RANKING = "RANKING";
 
 	private final Integer[] drawableType = new Integer[] {R.layout.element_invite_type_entrainement, R.layout.element_invite_type_match};
+	private List<NavigationDrawerData> navigationDrawer = new ArrayList<NavigationDrawerAdapter.NavigationDrawerData>();
 
 	private Bundle savedInstanceState;
 	private PlayerBusiness business;
@@ -109,6 +127,7 @@ public class PlayerActivity extends GenericActivity implements IDrawerLayoutType
 		}
 		NotifierMessageLogger notifier = NotifierMessageLogger.getInstance();
 		drawerManager = new DrawerManager(this, notifier);
+		navigationDrawer.add(new NavigationDrawerData(0, R.layout.fragment_navigation_player_drawer_element_recherche, new NavigationDrawerRechercheNotifer(this, notifier)));
 
 		initializeLayoutView();
 		initializeViewById();
@@ -131,6 +150,7 @@ public class PlayerActivity extends GenericActivity implements IDrawerLayoutType
 		drawerManager.onResume();
 		drawerManager.setDrawerLayoutSaisonNotifier(this);
 		drawerManager.setDrawerLayoutTypeNotifier(this);
+		drawerManager.setValue(navigationDrawer);
 	}
 
 	@Override
@@ -604,5 +624,119 @@ public class PlayerActivity extends GenericActivity implements IDrawerLayoutType
 		default:
 			return TypeManager.TYPE.COMPETITION;
 		}
+	}
+
+	private final class NavigationDrawerRechercheNotifer implements NavigationDrawerNotifer {
+
+		private final com.justtennis.db.service.RechercheService.TYPE[] typeRecherche = new com.justtennis.db.service.RechercheService.TYPE[] {
+				com.justtennis.db.service.RechercheService.TYPE.CLUB,
+				com.justtennis.db.service.RechercheService.TYPE.TOURNAMENT,
+				com.justtennis.db.service.RechercheService.TYPE.ADDRESS
+		};
+		private Context context;
+		private NotifierMessageLogger notifier;
+		private RechercheService rechercheService;
+		private EditText edtRecherche;
+		private ListView listRecherche;
+		private NavigationDrawerRechercheAdapter adpRecherche;
+		private List<RechercheResult> list = new ArrayList<RechercheResult>();
+		private Handler handler = new Handler();
+
+		public NavigationDrawerRechercheNotifer(Context context, NotifierMessageLogger notifier) {
+			this.context = context;
+			this.notifier = notifier;
+		}
+
+		@Override
+		public void onCreateView(View view) {
+			rechercheService = new RechercheService(context, notifier);
+			edtRecherche = (EditText) view.findViewById(R.id.edt_recherche);
+			listRecherche = (ListView) view.findViewById(R.id.lst_recherche);
+			adpRecherche = new NavigationDrawerRechercheAdapter(view.getContext(), list);
+			listRecherche.setAdapter(adpRecherche);
+
+			edtRecherche.addTextChangedListener(
+				    new TextWatcher() {
+				        @Override public void onTextChanged(CharSequence s, int start, int before, int count) { }
+				        @Override public void beforeTextChanged(CharSequence s, int start, int count, int after) { }
+
+				        private Timer timer=new Timer();
+				        private final long DELAY = 1000; // milliseconds
+
+				        @Override
+				        public void afterTextChanged(Editable s) {
+				        	final String text = s.toString();
+				            timer.cancel();
+				            timer = new Timer();
+				            timer.schedule(
+				                new TimerTask() {
+				                    @Override
+				                    public void run() {
+				                    	list.clear();
+				                    	if (text != null && !text.trim().isEmpty()) {
+											list.addAll(rechercheService.find(typeRecherche, text));
+				                    	}
+				                    	handler.post(new Runnable() {
+											
+											@Override
+											public void run() {
+						                    	adpRecherche.notifyDataSetChanged();
+											}
+										});
+				                    }
+				                }, 
+				                DELAY
+				            );
+				        }
+				    }
+				);
+			}
+
+		@Override
+		public void onUpdateView(View view) {
+		}
+	}
+
+	private final class NavigationDrawerRechercheAdapter extends BaseAdapter {
+
+		private List<RechercheResult> list;
+		private Context context;
+
+		public NavigationDrawerRechercheAdapter(Context context, List<RechercheResult> list) {
+			this.context = context;
+			this.list = list;
+		}
+
+		@Override
+		public int getCount() {
+			return list.size();
+		}
+
+		@Override
+		public Object getItem(int position) {
+			return list.get(position);
+		}
+
+		@Override
+		public long getItemId(int position) {
+			return 0;
+		}
+
+		@SuppressLint("InflateParams")
+		@Override
+		public View getView(int position, View convertView, ViewGroup parent) {
+			if (convertView == null) {
+				LayoutInflater infalInflater = (LayoutInflater) this.context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+				convertView = infalInflater.inflate(R.layout.fragment_navigation_player_drawer_element_recherche_view, null);
+			}
+			TextView tvRechercheType = (TextView) convertView.findViewById(R.id.edt_recherche_type);
+			TextView tvRechercheText = (TextView) convertView.findViewById(R.id.edt_recherche_text);
+
+			RechercheResult item = (RechercheResult) getItem(position);
+			tvRechercheType.setText(item.getType().toString());
+			tvRechercheText.setText(item.getData());
+			return convertView;
+		}
+		
 	}
 }

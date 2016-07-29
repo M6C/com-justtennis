@@ -14,6 +14,7 @@ import com.cameleon.common.android.inotifier.INotifierMessage;
 import com.justtennis.business.LocationAddressBusiness;
 import com.justtennis.db.sqlite.datasource.DBAddressDataSource;
 import com.justtennis.db.sqlite.datasource.DBClubDataSource;
+import com.justtennis.db.sqlite.datasource.DBRankingDataSource;
 import com.justtennis.db.sqlite.datasource.DBTournamentDataSource;
 import com.justtennis.domain.Address;
 import com.justtennis.domain.Club;
@@ -45,27 +46,45 @@ public class RechercheService {
 		List<RechercheResult> ret = new ArrayList<RechercheResult>();
 
 		if (listType.contains(TYPE.TOURNAMENT)) {
-			List<Tournament> listTournament = dbTournamentDataSource.getLikeByName(data);
-			for(Tournament tournament : listTournament) {
-				ret.add(new RechercheResult(TYPE.TOURNAMENT, tournament.getId(), tournament.getName()));
+			try {
+				dbTournamentDataSource.open();
+				List<Tournament> listTournament = dbTournamentDataSource.getLikeByName(data);
+				for(Tournament tournament : listTournament) {
+					ret.add(new RechercheResult(TYPE.TOURNAMENT, tournament.getId(), tournament.getName()));
+				}
+				logMe("find(data:" + data + ", tournament.size:"+listTournament.size()+")", dateStart);
 			}
-			logMe("find(data:" + data + ", tournament.size:"+listTournament.size()+")", dateStart);
+			finally {
+				dbTournamentDataSource.close();
+			}
 		}
 
 		if (listType.contains(TYPE.CLUB)) {
-			List<Club> listClub = dbClubDataSource.getLikeByName(data);
-			for(Club club : listClub) {
-				ret.add(new RechercheResult(TYPE.CLUB, club.getId(), club.getName()));
+			try {
+				dbClubDataSource.open();
+				List<Club> listClub = dbClubDataSource.getLikeByName(data);
+				for(Club club : listClub) {
+					ret.add(new RechercheResult(TYPE.CLUB, club.getId(), club.getName()));
+				}
+				logMe("find(data:" + data + ", club.size:"+listClub.size()+")", dateStart);
 			}
-			logMe("find(data:" + data + ", club.size:"+listClub.size()+")", dateStart);
+			finally {
+				dbClubDataSource.close();
+			}
 		}
 
 		if (listType.contains(TYPE.ADDRESS)) {
-			List<Address> listAddress = dbAddressDataSource.getLikeByLine(data);
-			for(Address address : listAddress) {
-				ret.add(new RechercheResult(TYPE.ADDRESS, address.getId(), LocationAddressBusiness.formatAddressName(address)));
+			try {
+				dbAddressDataSource.open();
+				List<Address> listAddress = dbAddressDataSource.getLikeByLine(data);
+				for(Address address : listAddress) {
+					ret.add(new RechercheResult(TYPE.ADDRESS, address.getId(), LocationAddressBusiness.formatAddressName(address)));
+				}
+				logMe("find(data:" + data + ", address.size:"+listAddress.size()+")", dateStart);
 			}
-			logMe("find(data:" + data + ", address.size:"+listAddress.size()+")", dateStart);
+			finally {
+				dbAddressDataSource.close();
+			}
 		}
 
 		logMe("find(data:" + data + ", ret.size:"+ret.size()+")", dateStart);
