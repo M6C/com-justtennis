@@ -35,7 +35,7 @@ public class DBTournamentDataSource extends GenericDBDataSource<Tournament> {
 	 * @return all Tournament or null
 	 */
 	public List<Tournament> getLikeByName(String str) {
-		return query(DBTournamentHelper.COLUMN_NAME + " like '%" + str + "%'");
+		return query("(" + DBTournamentHelper.COLUMN_NAME + " like '%" + str + "%'" + ") ");
 	}
 
 	@Override

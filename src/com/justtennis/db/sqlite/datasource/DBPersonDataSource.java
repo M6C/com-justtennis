@@ -22,19 +22,17 @@ public abstract class DBPersonDataSource<P extends Person> extends GenericDBData
 	}
 
 	public List<P> getLikeByName(String str) {
-		return query(
+		return query("(" +
 			DBPersonHelper.COLUMN_FIRSTNAME + " like '%" + str + "%' OR " + 
-			DBPersonHelper.COLUMN_LASTNAME + " like '%" + str + "%'");
+			DBPersonHelper.COLUMN_LASTNAME + " like '%" + str + "%'" +
+		") ");
 	}
 
 	@Override
 	protected String customizeWhere(String where) {
 		where = super.customizeWhere(where);
 
-		Saison saison = TypeManager.getInstance().getSaison();
-		if (saison != null && saison.getId() != null && !SaisonService.isEmpty(saison)) {
-			where += " AND (" + DBPlayerHelper.COLUMN_ID_SAISON + " = " + saison.getId() + " OR " + DBPlayerHelper.COLUMN_ID_SAISON + " IS NULL)";
-		}
+		where = customizeWhereSaison(where);
 		return where;
 	}
 
@@ -49,7 +47,16 @@ public abstract class DBPersonDataSource<P extends Person> extends GenericDBData
 		values.put(DBPersonHelper.COLUMN_LOCALITY, person.getLocality());
 	}
 
-	protected int cursorToPojo(Cursor cursor, Person person, int col) {
+	protected String customizeWhereSaison(String where) {
+		Saison saison = TypeManager.getInstance().getSaison();
+		if (saison != null && saison.getId() != null && !SaisonService.isEmpty(saison)) {
+			where += " AND (" + DBPlayerHelper.COLUMN_ID_SAISON + " = " + saison.getId() + " OR " + DBPlayerHelper.COLUMN_ID_SAISON + " IS NULL)";
+		}
+		return where;
+	}
+
+	protected int cursorToPojo(Cursor cursor, P person, int col) {
+		col = super.cursorToPojo(cursor, person, col);
 		person.setFirstName(cursor.getString(col++));
 		person.setLastName(cursor.getString(col++));
 		person.setBirthday(cursor.getString(col++));

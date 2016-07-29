@@ -6,32 +6,34 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 
-import com.cameleon.common.android.db.sqlite.datasource.GenericDBDataSource;
+import com.cameleon.common.android.db.sqlite.helper.GenericDBHelper;
 import com.cameleon.common.android.inotifier.INotifierMessage;
 import com.cameleon.common.tool.DbTool;
+import com.justtennis.db.sqlite.helper.DBPersonHelper;
+import com.justtennis.db.sqlite.helper.DBPlayerHelper;
 import com.justtennis.db.sqlite.helper.DBUserHelper;
 import com.justtennis.domain.User;
 
-public class DBUserDataSource extends GenericDBDataSource<User> {
+public class DBUserDataSource extends DBPersonDataSource<User> {
 
 	private static final String TAG = DBUserDataSource.class.getCanonicalName();
 
 	// Database fields
 	private String[] allColumns = {
-		DBUserHelper.COLUMN_ID,
-		DBUserHelper.COLUMN_ID_SAISON,
-		DBUserHelper.COLUMN_ID_TOURNAMENT,
-		DBUserHelper.COLUMN_ID_CLUB,
-		DBUserHelper.COLUMN_ID_ADDRESS,
-		DBUserHelper.COLUMN_ID_RANKING,
-		DBUserHelper.COLUMN_ID_RANKING_ESTIMAGE,
-		DBUserHelper.COLUMN_FIRSTNAME,
-		DBUserHelper.COLUMN_LASTNAME,
-		DBUserHelper.COLUMN_BIRTHDAY,
-		DBUserHelper.COLUMN_PHONENUMBER,
-		DBUserHelper.COLUMN_ADDRESS,
-		DBUserHelper.COLUMN_POSTALCODE,
-		DBUserHelper.COLUMN_LOCALITY
+		GenericDBHelper.COLUMN_ID,
+		DBPersonHelper.COLUMN_FIRSTNAME,
+		DBPersonHelper.COLUMN_LASTNAME,
+		DBPersonHelper.COLUMN_BIRTHDAY,
+		DBPersonHelper.COLUMN_PHONENUMBER,
+		DBPersonHelper.COLUMN_ADDRESS,
+		DBPersonHelper.COLUMN_POSTALCODE,
+		DBPersonHelper.COLUMN_LOCALITY,
+		DBPlayerHelper.COLUMN_ID_SAISON,
+		DBPlayerHelper.COLUMN_ID_TOURNAMENT,
+		DBPlayerHelper.COLUMN_ID_CLUB,
+		DBPlayerHelper.COLUMN_ID_ADDRESS,
+		DBPlayerHelper.COLUMN_ID_RANKING,
+		DBPlayerHelper.COLUMN_ID_RANKING_ESTIMAGE
 	};
 
 	public DBUserDataSource(Context context, INotifierMessage notificationMessage) {
@@ -59,41 +61,34 @@ public class DBUserDataSource extends GenericDBDataSource<User> {
 	}
 
 	@Override
-	protected void putContentValue(ContentValues values, User player) {
-		values.put(DBUserHelper.COLUMN_ID_SAISON, player.getIdSaison());
-		values.put(DBUserHelper.COLUMN_ID_TOURNAMENT, player.getIdTournament());
-		values.put(DBUserHelper.COLUMN_ID_CLUB, player.getIdClub());
-		values.put(DBUserHelper.COLUMN_ID_ADDRESS, player.getIdAddress());
-		values.put(DBUserHelper.COLUMN_ID_RANKING, player.getIdRanking());
-		values.put(DBUserHelper.COLUMN_ID_RANKING_ESTIMAGE, player.getIdRankingEstimate());
-		values.put(DBUserHelper.COLUMN_FIRSTNAME, player.getFirstName());
-		values.put(DBUserHelper.COLUMN_LASTNAME, player.getLastName());
-		values.put(DBUserHelper.COLUMN_BIRTHDAY, player.getBirthday());
-		values.put(DBUserHelper.COLUMN_PHONENUMBER, player.getPhonenumber());
-		values.put(DBUserHelper.COLUMN_ADDRESS, player.getAddress());
-		values.put(DBUserHelper.COLUMN_POSTALCODE, player.getPostalCode());
-		values.put(DBUserHelper.COLUMN_LOCALITY, player.getLocality());
+	protected String customizeWhere(String where) {
+		return customizeWhereSaison(where);
+	}
+
+	@Override
+	protected void putContentValue(ContentValues values, User user) {
+		super.putContentValue(values, user);
+		values.put(DBPlayerHelper.COLUMN_ID_SAISON, user.getIdSaison());
+		values.put(DBPlayerHelper.COLUMN_ID_TOURNAMENT, user.getIdTournament());
+		values.put(DBPlayerHelper.COLUMN_ID_CLUB, user.getIdClub());
+		values.put(DBPlayerHelper.COLUMN_ID_ADDRESS, user.getIdAddress());
+		values.put(DBPlayerHelper.COLUMN_ID_RANKING, user.getIdRanking());
+		values.put(DBPlayerHelper.COLUMN_ID_RANKING_ESTIMAGE, user.getIdRankingEstimate());
 	}
 
 	@Override
 	protected User cursorToPojo(Cursor cursor) {
 		int col = 0;
-		User player = new User();
-		player.setId(DbTool.getInstance().toLong(cursor, col++));
-		player.setIdSaison(DbTool.getInstance().toLong(cursor, col++));
-		player.setIdTournament(DbTool.getInstance().toLong(cursor, col++));
-		player.setIdClub(DbTool.getInstance().toLong(cursor, col++));
-		player.setIdAddress(DbTool.getInstance().toLong(cursor, col++));
-		player.setIdRanking(DbTool.getInstance().toLong(cursor, col++));
-		player.setIdRankingEstimate(DbTool.getInstance().toLong(cursor, col++));
-		player.setFirstName(cursor.getString(col++));
-		player.setLastName(cursor.getString(col++));
-		player.setBirthday(cursor.getString(col++));
-		player.setPhonenumber(cursor.getString(col++));
-		player.setAddress(cursor.getString(col++));
-		player.setPostalCode(cursor.getString(col++));
-		player.setLocality(cursor.getString(col++));
-		return player;
+		User user = new User();
+		col = super.cursorToPojo(cursor, user, col);
+		user.setId(DbTool.getInstance().toLong(cursor, col++));
+		user.setIdSaison(DbTool.getInstance().toLong(cursor, col++));
+		user.setIdTournament(DbTool.getInstance().toLong(cursor, col++));
+		user.setIdClub(DbTool.getInstance().toLong(cursor, col++));
+		user.setIdAddress(DbTool.getInstance().toLong(cursor, col++));
+		user.setIdRanking(DbTool.getInstance().toLong(cursor, col++));
+		user.setIdRankingEstimate(DbTool.getInstance().toLong(cursor, col++));
+		return user;
 	}
 	
 	@Override

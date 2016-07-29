@@ -36,10 +36,11 @@ public class DBAddressDataSource extends GenericDBDataSource<Address> {
 	 * @return all Address or null
 	 */
 	public List<Address> getLikeByLine(String str) {
-		return query(
+		return query("(" +
 			DBAddressHelper.COLUMN_LINE1 + " like '%" + str + "%' OR " + 
 			DBAddressHelper.COLUMN_POSTAL_CODE + " like '%" + str + "%' OR " + 
-			DBAddressHelper.COLUMN_CITY + " like '%" + str + "%'");
+			DBAddressHelper.COLUMN_CITY + " like '%" + str + "%'" +
+		") ");
 	}
 
 	@Override

@@ -4,6 +4,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 
+import com.cameleon.common.android.db.sqlite.helper.GenericDBHelper;
 import com.cameleon.common.android.inotifier.INotifierMessage;
 import com.cameleon.common.tool.DbTool;
 import com.justtennis.db.sqlite.helper.DBPersonHelper;
@@ -17,13 +18,7 @@ public class DBPlayerDataSource extends DBPersonDataSource<Player> {
 
 	// Database fields
 	private String[] allColumns = {
-		DBPlayerHelper.COLUMN_ID,
-		DBPlayerHelper.COLUMN_ID_SAISON,
-		DBPlayerHelper.COLUMN_ID_TOURNAMENT,
-		DBPlayerHelper.COLUMN_ID_CLUB,
-		DBPlayerHelper.COLUMN_ID_ADDRESS,
-		DBPlayerHelper.COLUMN_ID_RANKING,
-		DBPlayerHelper.COLUMN_ID_RANKING_ESTIMAGE,
+		GenericDBHelper.COLUMN_ID,
 		DBPersonHelper.COLUMN_FIRSTNAME,
 		DBPersonHelper.COLUMN_LASTNAME,
 		DBPersonHelper.COLUMN_BIRTHDAY,
@@ -31,6 +26,12 @@ public class DBPlayerDataSource extends DBPersonDataSource<Player> {
 		DBPersonHelper.COLUMN_ADDRESS,
 		DBPersonHelper.COLUMN_POSTALCODE,
 		DBPersonHelper.COLUMN_LOCALITY,
+		DBPlayerHelper.COLUMN_ID_SAISON,
+		DBPlayerHelper.COLUMN_ID_TOURNAMENT,
+		DBPlayerHelper.COLUMN_ID_CLUB,
+		DBPlayerHelper.COLUMN_ID_ADDRESS,
+		DBPlayerHelper.COLUMN_ID_RANKING,
+		DBPlayerHelper.COLUMN_ID_RANKING_ESTIMAGE,
 		DBPlayerHelper.COLUMN_ID_EXTERNAL,
 		DBPlayerHelper.COLUMN_ID_GOOGLE,
 		DBPlayerHelper.COLUMN_TYPE
@@ -47,15 +48,13 @@ public class DBPlayerDataSource extends DBPersonDataSource<Player> {
 
 	@Override
 	protected void putContentValue(ContentValues values, Player player) {
+		super.putContentValue(values, player);
 		values.put(DBPlayerHelper.COLUMN_ID_SAISON, player.getIdSaison());
 		values.put(DBPlayerHelper.COLUMN_ID_TOURNAMENT, player.getIdTournament());
 		values.put(DBPlayerHelper.COLUMN_ID_CLUB, player.getIdClub());
 		values.put(DBPlayerHelper.COLUMN_ID_ADDRESS, player.getIdAddress());
 		values.put(DBPlayerHelper.COLUMN_ID_RANKING, player.getIdRanking());
 		values.put(DBPlayerHelper.COLUMN_ID_RANKING_ESTIMAGE, player.getIdRankingEstimate());
-
-		super.putContentValue(values, player);
-
 		values.put(DBPlayerHelper.COLUMN_ID_EXTERNAL, player.getIdExternal());
 		values.put(DBPlayerHelper.COLUMN_ID_GOOGLE, player.getIdGoogle());
 		values.put(DBPlayerHelper.COLUMN_TYPE, player.getType().toString());
@@ -65,16 +64,13 @@ public class DBPlayerDataSource extends DBPersonDataSource<Player> {
 	protected Player cursorToPojo(Cursor cursor) {
 		int col = 0;
 		Player player = new Player();
-		player.setId(DbTool.getInstance().toLong(cursor, col++));
+		col = super.cursorToPojo(cursor, player, col);
 		player.setIdSaison(DbTool.getInstance().toLong(cursor, col++));
 		player.setIdTournament(DbTool.getInstance().toLong(cursor, col++));
 		player.setIdClub(DbTool.getInstance().toLong(cursor, col++));
 		player.setIdAddress(DbTool.getInstance().toLong(cursor, col++));
 		player.setIdRanking(DbTool.getInstance().toLong(cursor, col++));
 		player.setIdRankingEstimate(DbTool.getInstance().toLong(cursor, col++));
-
-		col = super.cursorToPojo(cursor, player, col);
-
 		player.setIdExternal(DbTool.getInstance().toLong(cursor, col++));
 		player.setIdGoogle(DbTool.getInstance().toLong(cursor, col++));
 		player.setType(TypeManager.TYPE.valueOf(DbTool.getInstance().toString(cursor, col++, TypeManager.TYPE.TRAINING.toString())));

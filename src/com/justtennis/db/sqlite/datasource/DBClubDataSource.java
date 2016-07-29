@@ -33,7 +33,7 @@ public class DBClubDataSource extends GenericDBDataSource<Club> {
 	 * @return all club or null
 	 */
 	public List<Club> getLikeByName(String str) {
-		return query(DBClubHelper.COLUMN_NAME + " like '%" + str + "%'");
+		return query("(" + DBClubHelper.COLUMN_NAME + " like '%" + str + "%'" + ") ");
 	}
 
 	@Override

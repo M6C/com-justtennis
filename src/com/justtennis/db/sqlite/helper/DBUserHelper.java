@@ -8,7 +8,7 @@ import com.justtennis.db.service.SaisonService;
 import com.justtennis.domain.Saison;
 import com.justtennis.domain.User;
 
-public class DBUserHelper extends GenericJustTennisDBHelper {
+public class DBUserHelper extends DBPersonHelper {
 
 	private static final String TAG = DBUserHelper.class.getCanonicalName();
 
@@ -20,13 +20,6 @@ public class DBUserHelper extends GenericJustTennisDBHelper {
 	public static final String COLUMN_ID_ADDRESS = "ID_ADDRESS";
 	public static final String COLUMN_ID_RANKING = "ID_RANKING";
 	public static final String COLUMN_ID_RANKING_ESTIMAGE = "ID_RANKING_ESTIMAGE";
-	public static final String COLUMN_FIRSTNAME = "FIRSTNAME";
-	public static final String COLUMN_LASTNAME = "LASTNAME";
-	public static final String COLUMN_BIRTHDAY = "BIRTHDAY";
-	public static final String COLUMN_PHONENUMBER = "PHONENUMBER";
-	public static final String COLUMN_ADDRESS = "ADDRESS";
-	public static final String COLUMN_POSTALCODE = "POSTALCODE";
-	public static final String COLUMN_LOCALITY = "LOCALITY";
 
 	private static final String DATABASE_NAME = "User.db";
 	private static final int DATABASE_VERSION = 9;
