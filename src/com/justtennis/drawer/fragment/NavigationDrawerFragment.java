@@ -206,10 +206,10 @@ public class NavigationDrawerFragment extends Fragment {
 		mDrawerList.removeAllViews();
 
 		Context context = getActivity().getApplicationContext();
+		LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 		for (NavigationDrawerData data : value) {
 			long id = data.getId();
 			NavigationDrawerNotifer notifier = data.getNotifer();
-	        LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 			View rowView = inflater.inflate(data.getLayout(), mDrawerList, true);
 			rowView.setTag(id);
 			if (notifier != null) {

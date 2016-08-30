@@ -116,19 +116,23 @@ public class DrawerManager {
 	private void initializeLayoutType(View view) {
 		view = (view.getParent()==null) ? view : ((View)view.getParent());
 		typeManager.initializeActivity(container, true);
-		switch(typeManager.getType()) {
-			case COMPETITION: {
-				((LinearLayout)view.findViewById(R.id.ll_type_match)).setAlpha(1f);
-				((LinearLayout)view.findViewById(R.id.ll_type_training)).setAlpha(.2f);
+		LinearLayout llTypeMatch = (LinearLayout)view.findViewById(R.id.ll_type_match);
+		LinearLayout llTypeTraining = (LinearLayout)view.findViewById(R.id.ll_type_training);
+		if (llTypeMatch != null && llTypeTraining != null) {
+			switch(typeManager.getType()) {
+				case COMPETITION: {
+					llTypeMatch.setAlpha(1f);
+					llTypeTraining.setAlpha(.2f);
+				}
+				break;
+	
+				case TRAINING:
+				default: {
+					llTypeMatch.setAlpha(.2f);
+					llTypeTraining.setAlpha(1f);
+				}
+				break;
 			}
-			break;
-
-			case TRAINING:
-			default: {
-				((LinearLayout)view.findViewById(R.id.ll_type_match)).setAlpha(.2f);
-				((LinearLayout)view.findViewById(R.id.ll_type_training)).setAlpha(1f);
-			}
-			break;
 		}
 		if (drawerLayoutTypeNotifier != null) {
 			drawerLayoutTypeNotifier.onDrawerLayoutTypeChange(typeManager.getType());
@@ -139,24 +143,26 @@ public class DrawerManager {
 
 		@Override
 		public void onCreateView(View view) {
-			LinearLayout llMatch = (LinearLayout)view.findViewById(R.id.ll_type_match);
-			LinearLayout llTraining = (LinearLayout)view.findViewById(R.id.ll_type_training);
+			LinearLayout llTypeMatch = (LinearLayout)view.findViewById(R.id.ll_type_match);
+			LinearLayout llTypeTraining = (LinearLayout)view.findViewById(R.id.ll_type_training);
 
-			llMatch.setOnClickListener(new OnClickListener() {
-				@Override
-				public void onClick(View v) {
-					typeManager.setType(TYPE.COMPETITION);
-					initializeLayoutType(drawerLayout);
-				}
-			});
-
-			llTraining.setOnClickListener(new OnClickListener() {
-				@Override
-				public void onClick(View v) {
-					typeManager.setType(TYPE.TRAINING);
-					initializeLayoutType(drawerLayout);
-				}
-			});
+			if (llTypeMatch != null && llTypeTraining != null) {
+				llTypeMatch.setOnClickListener(new OnClickListener() {
+					@Override
+					public void onClick(View v) {
+						typeManager.setType(TYPE.COMPETITION);
+						initializeLayoutType(drawerLayout);
+					}
+				});
+	
+				llTypeTraining.setOnClickListener(new OnClickListener() {
+					@Override
+					public void onClick(View v) {
+						typeManager.setType(TYPE.TRAINING);
+						initializeLayoutType(drawerLayout);
+					}
+				});
+			}
 
 			initializeLayoutType(view);
 		}

@@ -1,7 +1,10 @@
 package com.justtennis.activity;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+
+import org.gdocument.gtracergps.launcher.log.Logger;
 
 import android.app.Activity;
 import android.content.Context;
@@ -20,6 +23,7 @@ import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.cameleon.common.android.factory.FactoryDialog;
+import com.justtennis.R;
 import com.justtennis.adapter.ListPlayerAdapter;
 import com.justtennis.business.ListPlayerBusiness;
 import com.justtennis.db.service.PlayerService;
@@ -39,11 +43,9 @@ import com.justtennis.listener.ok.OnClickPlayerSendListenerOk;
 import com.justtennis.manager.TypeManager;
 import com.justtennis.notifier.NotifierMessageLogger;
 import com.justtennis.parser.PlayerParser;
-import com.justtennis.R;
 
 public class ListPlayerActivity extends GenericActivity {
 
-	@SuppressWarnings("unused")
 	private static final String TAG = ListPlayerActivity.class.getSimpleName();
 	public static final String EXTRA_MODE = "MODE";
 	public static final String EXTRA_PLAYER_ID = "EXTRA_PLAYER_ID";
@@ -67,6 +69,7 @@ public class ListPlayerActivity extends GenericActivity {
 	private Filter filter;
 	private TypeManager.TYPE filterTypeValue = null;
 	private List<NavigationDrawerData> navigationDrawer = new ArrayList<NavigationDrawerData>();
+	private Date dateStart = new Date();
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -74,7 +77,9 @@ public class ListPlayerActivity extends GenericActivity {
 
 		NotifierMessageLogger notifier = NotifierMessageLogger.getInstance();
 		drawerManager = new DrawerManager(this, notifier);
+		logMe("onCreate new DrawerManager", dateStart);
 		drawerManager.setContentView(R.layout.list_player);
+		logMe("onCreate DrawerManager.setContentView", dateStart);
 		
 		business = new ListPlayerBusiness(this, notifier);
 		adapter = new ListPlayerAdapter(this, business.getList());
@@ -89,6 +94,7 @@ public class ListPlayerActivity extends GenericActivity {
 		initializeTypeList();
 		TypeManager.getInstance().initializeActivity(findViewById(R.id.layout_main), false);
 		navigationDrawer.add(new NavigationDrawerRechercheData(0, new NavigationDrawerRecherchePlayerNotifer()));
+		logMe("onCreate End", dateStart);
 	}
 
 	@Override
@@ -109,7 +115,10 @@ public class ListPlayerActivity extends GenericActivity {
 				break;
 		}
 		drawerManager.onResume();
+		logMe("onResume DrawerManager.onResume", dateStart);
 		drawerManager.setValue(navigationDrawer);
+		logMe("onResume DrawerManager.setValue", dateStart);
+		logMe("onResume End", dateStart);
 	}
 
 	@Override
@@ -264,6 +273,14 @@ public class ListPlayerActivity extends GenericActivity {
 			}
 		});
 	}
+
+	protected void logMe(String msg, Date dateStart) {
+		logMe("ListPlayerActivity time:" + (new Date().getTime() - dateStart.getTime()) + " millisecond - " + msg);
+    }
+
+	protected static void logMe(String msg) {
+		Logger.logMe(TAG, msg);
+    }
 
 	public class NavigationDrawerRecherchePlayerNotifer implements INavigationDrawerRechercheNotifer {
 
