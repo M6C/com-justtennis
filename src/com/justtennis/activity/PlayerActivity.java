@@ -588,7 +588,9 @@ public class PlayerActivity extends GenericActivity implements IDrawerLayoutType
 				}
 			}
 		}
-		spSaison.setSelection(position, true);
+		if (position < spSaison.getCount()) {
+			spSaison.setSelection(position, true);
+		}
 	}
 
 	private void initializeType() {
