@@ -1,0 +1,25 @@
+<LinearLayout
+      xmlns:android="http://schemas.android.com/apk/res/android"
+      android:id="@+id/ll_bonus_point"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:layout_marginBottom="@dimen/player_layout_field_marging_bottom"
+      android:orientation="vertical"
+      android:padding="@dimen/player_layout_field_padding" >
+
+     <TextView
+         android:id="@+id/tv_bonus_point"
+         android:layout_width="match_parent"
+         android:layout_height="wrap_content"
+         android:text="@string/txt_bonus_point"
+         android:textSize="@dimen/invite_text_size"
+         android:textColor="@color/invite_text_color"
+         android:textStyle="bold" />
+
+     <Spinner
+         android:id="@+id/sp_bonus_point"
+         android:layout_width="match_parent"
+         android:layout_height="wrap_content"
+         android:gravity="center_horizontal"
+         android:textSize="@dimen/player_field_size" />
+</LinearLayout>

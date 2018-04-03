@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="txt_date">Date</string>
+    <string name="txt_time">Time</string>
+    <string name="txt_status">Status</string>
+    <string name="txt_location">Location</string>
+    <string name="txt_address">Address</string>
+    <string name="txt_club">Club</string>
+    <string name="txt_tournament">Tournament</string>
+    <string name="txt_bonus_point">Bonus point</string>
+    <string name="txt_detail_invite">Detail ></string>
+    <string name="txt_wo">WO</string>
+    <string name="txt_wo_vitory">WO Victory</string>
+    <string name="txt_wo_defeat">WO Defeat</string>
+    <string name="txt_score">Score</string>
+    
+</resources>

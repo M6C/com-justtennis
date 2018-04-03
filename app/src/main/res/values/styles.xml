@@ -1,0 +1,52 @@
+<resources xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!--
+        Base application theme, dependent on API level. This theme is replaced
+        by AppBaseTheme from res/values-vXX/styles.xml on newer devices.
+    -->
+    <style name="AppBaseTheme" parent="android:Theme.Light">
+        <!--
+            Theme customizations available in newer API levels can go in
+            res/values-vXX/styles.xml, while customizations related to
+            backward-compatibility can go here.
+        -->
+    </style>
+
+    <!-- Application theme. -->
+    <style name="AppTheme" parent="AppBaseTheme">
+        <!-- All customizations that are NOT specific to a particular API-level can go here. -->
+<!-- 
+	    <item name="android:spinnerStyle">@style/SpinnerStyle</item>
+	    <item name="android:spinnerItemStyle">@style/SpinnerItem</item>
+	    <item name="android:spinnerDropDownItemStyle">@style/SpinnerDropDownItem</item> -->
+ -->
+	    <item name="android:buttonStyle">@style/StyleButton</item>
+        <!-- <item name="customLayoutBackgroundColor">@color/bleu_transparent_6</item> -->
+        <item name="customLayoutBackgroundColor">@color/bleu_2_transparent_6</item>
+        <item name="customHeaderTextColor">@color/blanc</item>
+    </style>
+
+    <style name="AppTheme.Competition" parent="AppBaseTheme">
+	    <item name="android:buttonStyle">@style/StyleButton.Competition</item>
+        <item name="customLayoutBackgroundColor">@color/orange_transparent_6</item>
+        <item name="customHeaderTextColor">@color/blanc</item>
+	</style>
+    
+    <!-- Application theme. -->
+    <style name="SpinnerStyleNormal">
+        <!-- All customizations that are NOT specific to a particular API-level can go here. -->
+	    <item name="android:spinnerStyle">@style/SpinnerStyle</item>
+	    <item name="android:spinnerItemStyle">@style/SpinnerItem</item>
+	    <item name="android:spinnerDropDownItemStyle">@style/SpinnerDropDownItem</item> -->
+    </style>
+
+	<style name="StyleButton" parent="android:style/Widget.Button">
+		<item name="android:textSize">19sp</item>
+        <item name="android:background">@color/button_background_color</item>
+        <item name="android:textColor">@color/button_text_color</item>
+	</style>
+
+	<style name="StyleButton.Competition">
+        <item name="android:background">@color/button_background_color_orange</item>
+	</style>
+</resources>

@@ -1,0 +1,158 @@
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/layout_main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    android:background="@drawable/background_03"
+    android:orientation="vertical"
+    android:gravity="center_vertical"
+>
+	<LinearLayout
+		android:layout_width="match_parent"
+	    android:layout_height="wrap_content"
+    	android:layout_marginBottom="5dp"
+	    android:orientation="vertical"
+	    android:background="@color/form_background_color"
+	    android:gravity="top"
+	>
+		<LinearLayout
+		    android:id="@+id/ll_collapser"
+		    android:layout_width="match_parent"
+		    android:layout_height="wrap_content"
+		    android:layout_margin="5dp"
+	        android:layout_marginBottom="@dimen/invite_layout_field_marging_bottom"
+			android:orientation="vertical"
+			android:background="@color/form_background_color" >
+			    <LinearLayout
+			        android:layout_width="match_parent"
+			        android:layout_height="wrap_content"
+			        android:orientation="horizontal" >
+			
+				    <TextView
+				        android:id="@+id/tv_title"
+				        android:layout_width="0dp"
+				        android:layout_height="wrap_content"
+				        android:layout_weight="1"
+				        android:layout_marginLeft="2dp"
+				        android:text=""
+			            android:textColor="@color/location_text_color"
+			           	android:textSize="@dimen/location_text_size"
+			            android:textStyle="bold" />
+			
+				    <ImageView android:id="@+id/iv_delete"
+					    android:layout_width="35dip"
+					    android:layout_height="35dip"
+					    android:layout_weight=".1"
+					    android:src="@drawable/player_delete"
+					    android:layout_gravity="center_vertical|center_horizontal"
+					    android:contentDescription="@string/button_desctiption_delete"
+					    android:onClick="onClickDelete"
+					/>
+				</LinearLayout>
+
+			    <LinearLayout
+			        android:layout_width="match_parent"
+			        android:layout_height="1dp"
+			        android:background="@color/separator_collapser"
+			        android:layout_marginBottom="5dp"/>
+
+			    <LinearLayout
+			        android:id="@+id/ll_content"
+			        android:layout_width="match_parent"
+			        android:layout_height="wrap_content"
+			        android:orientation="vertical" >
+
+				    <LinearLayout
+				        android:id="@+id/ll_selection"
+				        android:layout_width="match_parent"
+				        android:layout_height="wrap_content"
+				        android:gravity="center_vertical"
+				        android:orientation="horizontal" >
+
+					    <Spinner
+					        android:id="@+id/sp_list"
+					        android:layout_width="0dp"
+					        android:layout_height="wrap_content"
+					        android:layout_weight="1"
+					        android:textSize="@dimen/location_field_size" />
+				
+					    <ImageView
+					        android:layout_width="wrap_content"
+					        android:layout_height="wrap_content"
+					        android:src="@drawable/btn_add"
+					        android:onClick="onClickAdd"
+					    />
+					</LinearLayout>
+				    <LinearLayout
+				        android:id="@+id/ll_add"
+				        android:layout_width="match_parent"
+				        android:layout_height="wrap_content"
+				        android:gravity="center_vertical"
+				        android:orientation="vertical" >
+				
+				        <EditText
+				            android:id="@+id/et_name"
+				            android:layout_width="match_parent"
+				            android:layout_height="wrap_content"
+				            android:textSize="@dimen/location_field_size"
+				            android:hint="@string/hint_name"
+				            android:maxLines="1" />
+
+				        <LinearLayout
+				            android:id="@+id/ll_form"
+				            android:layout_width="match_parent"
+				            android:layout_height="wrap_content"
+				            android:orientation="vertical">
+				        </LinearLayout>
+
+				        <LinearLayout
+				            android:id="@+id/ll_list_form"
+					        android:layout_width="match_parent"
+					        android:layout_height="wrap_content"
+					        android:orientation="horizontal"
+					        android:gravity="center_vertical"
+				        >
+						    <Spinner
+						        android:id="@+id/sp_list_form"
+						        android:layout_width="0dp"
+						        android:layout_height="wrap_content"
+						        android:layout_weight="1"
+						        android:textSize="@dimen/location_field_size" />
+				
+						    <ImageView
+						        android:layout_width="wrap_content"
+						        android:layout_height="wrap_content"
+						        android:src="@drawable/btn_add"
+						        android:onClick="onClickAddFormList"
+						    />
+						    <ImageView android:id="@+id/iv_tournament_club_delete"
+							    android:layout_width="25dip"
+							    android:layout_height="25dip"
+							    android:layout_weight=".1"
+							    android:layout_marginLeft="5dp"
+							    android:src="@drawable/player_delete"
+							    android:layout_gravity="center_vertical|center_horizontal"
+							    android:contentDescription="@string/button_desctiption_delete"
+							    android:onClick="onClickDeleteFormList"
+							    android:visibility="gone"
+							/>
+					    </LinearLayout>
+				    </LinearLayout>
+
+			        <Button
+			            android:id="@+id/btn_validate"
+			            android:layout_width="match_parent"
+			            android:layout_height="wrap_content"
+						android:layout_marginTop="5dp"
+			            android:onClick="onClickAddValidate"
+			            android:text="@string/button_text_ok"
+			        />
+		    </LinearLayout>
+		</LinearLayout>
+    </LinearLayout>
+</LinearLayout>

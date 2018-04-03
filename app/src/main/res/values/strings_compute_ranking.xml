@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="txt_sum_point">Sum point</string>
+    <string name="txt_ve2i5g">V-E-2I-5G</string>
+    <string name="txt_nb_victory">Nb victory</string>
+    <string name="txt_victory">Victory</string>
+    <string name="txt_defeat">Defeat</string>
+    
+</resources>

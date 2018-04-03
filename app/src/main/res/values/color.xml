@@ -1,0 +1,46 @@
+<resources>
+
+    <color name="white">#FFFFFF</color>
+    <color name="red">#FF0000</color>
+    <color name="black">#000000</color>
+    <color name="orange_tangelo">#794D00</color>
+    <color name="transparent">#FFFFFFFF</color>
+
+    <color name="blanc">#FFFFFF</color>
+    <color name="blanc_transparent_3">#77FFFFFF</color>
+    <color name="blanc_transparent_4">#99FFFFFF</color>
+    <color name="blanc_transparent_5">#BBFFFFFF</color>
+    <color name="gris_1">#666666</color>
+    <color name="gris_2">#888888</color>
+    <color name="gris_3">#999999</color>
+    <color name="bleu_clair_1">#7777FF</color>
+    <color name="bleu_transparent_3">#660000CC</color>
+    <color name="bleu_transparent_4">#990000CC</color>
+    <color name="bleu_transparent_5">#BB0000CC</color>
+    <color name="bleu_transparent_6">#DD0000CC</color>
+    <color name="bleu_2_transparent_6">#DD0142A9</color>
+    
+    <color name="orange_transparent_3">#66F94D00</color>
+    <color name="orange_transparent_4">#99F94D00</color>
+    <color name="orange_transparent_5">#DDF94D00</color>
+    <color name="orange_transparent_6">#BBF94D00</color>
+
+    <color name="orange_pumpkin_transparent_3">#88FF7518</color>
+    <color name="orange_tangelo_transparent_1">#F7794D00</color>
+
+    <color name="form_background_color">@color/blanc_transparent_3</color>
+    <color name="form_field_background_color">@color/blanc_transparent_4</color>
+    <color name="list_background_color">@color/blanc_transparent_5</color>
+    <color name="list_item_background_color">@color/blanc_transparent_4</color>
+    <color name="list_divider_background_color">@color/blanc_transparent_3</color>
+    <color name="button_background_color">@color/bleu_transparent_5</color>
+    <color name="button_text_color">@color/blanc_transparent_5</color>
+    <color name="label_text_color">@color/gris_1</color>
+    <color name="hint_text_color">@color/gris_1</color>
+
+    <color name="drw_arrow">@color/gris_1</color>
+    <color name="separator_collapser">@color/bleu_transparent_5</color>
+
+    <color name="button_background_color_orange">@color/orange_transparent_5</color>
+    <color name="border_color">@color/gris_1</color>
+</resources>

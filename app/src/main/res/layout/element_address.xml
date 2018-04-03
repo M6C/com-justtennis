@@ -1,0 +1,82 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:baselineAligned="false" >
+
+    <LinearLayout
+        android:id="@+id/ll_address_selection"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:orientation="horizontal" >
+
+	    <Spinner
+	        android:id="@+id/sp_address_list"
+	        android:layout_width="0dp"
+	        android:layout_height="wrap_content"
+	        android:layout_weight="1"
+	        android:textSize="@dimen/location_field_size" />
+
+	    <ImageView
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:src="@drawable/btn_add"
+	        android:onClick="onClickAddressAdd"
+	    />
+	</LinearLayout>
+    <LinearLayout
+        android:id="@+id/ll_address_add"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:orientation="vertical" >
+
+        <EditText
+            android:id="@+id/et_address_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="15dp"
+            android:hint="@string/hint_address_name"
+            android:maxLines="1" />
+
+        <EditText
+            android:id="@+id/et_address_line_1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/hint_address_line_1"
+            android:maxLines="1" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+			android:layout_marginTop="2dp"
+            android:orientation="horizontal">
+
+            <EditText
+                android:id="@+id/et_address_postal_code"
+                android:layout_width="75dp"
+                android:layout_height="wrap_content"
+                android:maxLength="5"
+                android:maxLines="1"
+                android:hint="@string/hint_address_postal_code" />
+
+            <EditText
+                android:id="@+id/et_address_city"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:maxLines="1"
+                android:hint="@string/hint_address_city" />
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/btn_address_validate"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+			android:layout_marginTop="5dp"
+            android:onClick="onClickAddressAddValidate"
+            android:text="@string/button_text_add"
+        />
+    </LinearLayout>
+
+</LinearLayout>

@@ -1,0 +1,55 @@
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/layout_main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    android:background="@drawable/background_03"
+    android:orientation="vertical"
+    tools:context=".ListPlayerActivity"
+>
+
+    <LinearLayout
+        android:id="@+id/ll_filter_player"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+	    android:background="@color/list_background_color"
+	    android:visibility="visible"
+	    android:orientation="horizontal"
+    >
+	    <Button
+		    android:layout_width="match_parent"
+		    android:layout_height="35dp"
+		    android:layout_weight=".5"
+	        android:text="@string/button_text_all"
+	        android:onClick="onClickInviteAll"
+	    />
+	    <Button
+		    android:layout_width="match_parent"
+		    android:layout_height="35dp"
+		    android:layout_weight=".5"
+	        android:text="@string/button_text_palmares"
+	        android:onClick="onClickInvitePalmares"
+	    />
+		<TextView
+		    android:id="@+id/tv_sum_point"
+		    android:layout_width="wrap_content"
+		    android:layout_height="wrap_content"
+		    android:layout_marginLeft="2sp"
+		    android:visibility="gone"
+		/>
+
+	</LinearLayout>
+	<ExpandableListView
+		android:id="@+id/list"
+		android:layout_width="match_parent"
+	    android:layout_height="0dp"
+	    android:layout_weight="1"
+    	android:layout_marginBottom="5dp"
+	    android:background="@color/list_background_color"
+	/>
+</LinearLayout>
