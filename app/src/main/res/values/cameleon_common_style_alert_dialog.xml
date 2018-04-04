@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- https://sites.google.com/site/androidhowto/how-to-1/customize-alertdialog-theme -->
+    <!-- http://janrain.com/blog/introduction-to-android-theme-customization/ -->
+    <!-- http://stackoverflow.com/questions/7302365/style-attributes-of-custom-styled-alertdialog -->
+    <!-- http://blog.stylingandroid.com/archives/271 -->
+    <!-- http://brainflush.wordpress.com/2009/03/15/understanding-android-themes-and-styles/ -->
+<!-- 
+	<style name="AlertDialog">
+		<item name="android:alertDialogStyle">@style/AlertDialogTheme</item>
+	</style>
+-->
+	<style name="AlertDialogTheme"  parent="@android:style/Theme.Dialog">
+	    <item name="android:padding">0dp</item>
+	</style>
+<!--
+	<style name="AlertDialogList" parent="@android:style/Widget.ListView">
+	</style>
+ --> 
+	<style name="AlertDialogItem">
+ 	    <!-- <item name="android:background">@color/blanc</item> -->
+ 	    <item name="android:background">@drawable/cameleon_common_selector_list_view_item_background</item>
+ 	    <item name="android:textColor">@color/text_black_default</item>
+	</style>
+
+    <style name="AlertDialogWindowTitle" parent="@android:style/TextAppearance.DialogWindowTitle">
+        <item name="android:textSize">24sp</item>
+ 	    <item name="android:textColor">@color/text_white_default</item>
+    </style>
+</resources>

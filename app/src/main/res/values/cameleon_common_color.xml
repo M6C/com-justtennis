@@ -1,0 +1,38 @@
+<resources>
+    <color name="white">#FFFFFF</color>
+    <color name="cameleon_common_gradient_red_begin">#880000</color>
+    <color name="cameleon_common_gradient_red_end">#FF0000</color>
+    <color name="list_view_item_normal">@color/white</color>
+    <color name="list_view_item_focused">#EE880000</color>
+	<color name="list_view_item_pressed">#11FF9999</color>
+
+    <color name="transparent">#00000000</color>
+    <color name="black_transparent">#77000000</color>
+    <color name="black">#000000</color>
+    <color name="red">#FF0000</color>
+    	<!-- http://simple.wikipedia.org/wiki/Yellow -->
+    <color name="yellow">#FFFF33</color>
+    <color name="yellow_golden">#FFD700</color>
+    <color name="yellow_golden_transparent">#55FFD700</color>
+    <!-- http://simple.wikipedia.org/wiki/Orange#Tones_of_orange_color_comparison_chart -->
+    <color name="orange">#FFA500</color>
+    <color name="orange_bright">#FF8C00</color>
+    <color name="orange_bright_transparent">#33FF8C00</color>
+    <color name="orange_pumpkin">#FF7518</color>
+    <color name="orange_rich">#FF681F</color>
+    <color name="orange_tangelo">#F94D00</color>
+    <color name="orange_mahohany">#C04000</color>
+    <!-- http://simple.wikipedia.org/wiki/Red -->
+    <color name="red_deep_carmine">#A9203E</color>
+    <color name="red_redwood">#AB4E52</color>
+    <color name="red_redwood_transparent">#33AB4E52</color>
+
+    <!-- <color name="text_black_default">#99000000</color> -->
+    <color name="text_black_full">#000000</color>
+    <color name="text_black_default">#777777</color>
+    <color name="text_white_default">#FFFFFF</color>
+
+    <color name="option_menu_normal">@color/white</color>
+	<color name="option_menu_focused">#EE880000</color>
+	<color name="option_menu_pressed">#EEFF0000</color>
+</resources>
