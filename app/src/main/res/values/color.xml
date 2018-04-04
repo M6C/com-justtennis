@@ -1,10 +1,10 @@
 <resources>
 
-    <color name="white">#FFFFFF</color>
-    <color name="red">#FF0000</color>
-    <color name="black">#000000</color>
-    <color name="orange_tangelo">#794D00</color>
-    <color name="transparent">#FFFFFFFF</color>
+    <!--<color name="white">#FFFFFF</color>-->
+    <!--<color name="red">#FF0000</color>-->
+    <!--<color name="black">#000000</color>-->
+    <!--<color name="orange_tangelo">#794D00</color>-->
+    <!--<color name="transparent">#FFFFFFFF</color>-->
 
     <color name="blanc">#FFFFFF</color>
     <color name="blanc_transparent_3">#77FFFFFF</color>

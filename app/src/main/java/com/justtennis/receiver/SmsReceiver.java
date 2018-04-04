@@ -113,7 +113,12 @@ public class SmsReceiver extends BroadcastReceiver {
 		CharSequence text = context.getText(NOTIFICATION);
 
 		// Set the icon, scrolling text and timestamp
-		Notification notification = new Notification(R.drawable.icon_01, text, System.currentTimeMillis());
+		Notification.Builder builder = new Notification.Builder(context);
+		builder.setSmallIcon(R.drawable.icon_01);
+		builder.setContentTitle(text);
+		builder.setTicker(text + " ticker");
+		builder.setSubText(text + " subtext");   //API level 16
+		builder.setWhen(System.currentTimeMillis());
 
 		Invite invite = buildInvite(msgType, message);
 		if (invite!=null) {
@@ -125,13 +130,15 @@ public class SmsReceiver extends BroadcastReceiver {
 	
 				// Set the info for the views that show in the notification panel.
 				message = buildText(msgType, invite);
-				notification.setLatestEventInfo(context, text, message, contentIntent);
-	
+				builder.setContentText(message);
+				builder.setContentIntent(contentIntent);
+
 				// Cancel the notification after its selected
-				notification.flags |= Notification.FLAG_AUTO_CANCEL;
-	
+				// notification.flags |= Notification.FLAG_AUTO_CANCEL;
+				builder.setAutoCancel(false);
+
 				// Send the notification.
-				mNM.notify(NOTIFICATION, notification);
+				mNM.notify(NOTIFICATION, builder.build());
 			}
 		}
 	}

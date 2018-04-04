@@ -36,8 +36,7 @@ public abstract class DBPersonDataSource<P extends Person> extends GenericDBData
 		return where;
 	}
 
-	@Override
-	protected void putContentValue(ContentValues values, Person person) {
+	protected void putPersonValue(ContentValues values, Person person) {
 		values.put(DBPersonHelper.COLUMN_FIRSTNAME, person.getFirstName());
 		values.put(DBPersonHelper.COLUMN_LASTNAME, person.getLastName());
 		values.put(DBPersonHelper.COLUMN_BIRTHDAY, person.getBirthday());

@@ -73,7 +73,7 @@ public class RankingListManager {
 	}
 
 	public void manageRanking(final ContextThemeWrapper context, View view, IRankingListListener rankingListener, Player player, final boolean estimate) {
-		Long idRanking = estimate ? player.getIdRankingEstimate() : player.getIdRanking();
+		Long idRanking = (player==null) ? rankingNC.getId() : (estimate ? player.getIdRankingEstimate() : player.getIdRanking());
 		manageRanking(context, view, rankingListener, idRanking, estimate);
 	}
 
@@ -114,7 +114,7 @@ public class RankingListManager {
 	}
 
 	public void initializeRankingSpinner(View view, Player player, boolean estimate) {
-		Long idRanking = estimate ? player.getIdRankingEstimate() : player.getIdRanking();
+		Long idRanking = (player==null) ? rankingNC.getId() : (estimate ? player.getIdRankingEstimate() : player.getIdRanking());
 		initializeRankingSpinner(view, idRanking, estimate);
 	}
 

@@ -427,7 +427,9 @@ public class MainActivity extends GenericActivity implements INotifierMessage, I
 			tvName = (TextView) view.findViewById(R.id.tv_name);
 
 			User user = business.getUser();
-			tvName.setText(user.getFullName());
+			if (user != null) {
+				tvName.setText(user.getFullName());
+			}
 			manageRanking(MainActivity.this, view, user, true);
 			manageRanking(MainActivity.this, view, user, false);
 		}
@@ -446,6 +448,9 @@ public class MainActivity extends GenericActivity implements INotifierMessage, I
 				public void onRankingSelected(Ranking ranking) {
 					Long oldId = null;
 					User user = business.getUser();
+					if (user == null) {
+						return;
+					}
 					if (estimate) {
 						oldId = user.getIdRankingEstimate();
 						if (ranking.equals(business.getRankingNC())) {

@@ -48,7 +48,7 @@ public class DBPlayerDataSource extends DBPersonDataSource<Player> {
 
 	@Override
 	protected void putContentValue(ContentValues values, Player player) {
-		super.putContentValue(values, player);
+		super.putPersonValue(values, player);
 		values.put(DBPlayerHelper.COLUMN_ID_SAISON, player.getIdSaison());
 		values.put(DBPlayerHelper.COLUMN_ID_TOURNAMENT, player.getIdTournament());
 		values.put(DBPlayerHelper.COLUMN_ID_CLUB, player.getIdClub());
