@@ -94,4 +94,28 @@ public class Player extends Person {
 	public void setType(TypeManager.TYPE type) {
 		this.type = type;
 	}
+
+	@Override
+	public String toString() {
+		return this.getClass().getName() + "{" +
+				"id=" + getId() +
+				", firstName='" + getFirstName() + '\'' +
+				", lastName='" + getLastName() + '\'' +
+				", birthday='" + getBirthday() + '\'' +
+				", phonenumber='" + getPhonenumber() + '\'' +
+				", address='" + getIdAddress() + '\'' +
+				", postalCode='" + getPostalCode() + '\'' +
+				", locality='" + getLocality() + '\'' +
+				", idSaison=" + idSaison +
+				", idTournament=" + idTournament +
+				", idClub=" + idClub +
+				", idAddress=" + idAddress +
+				", idRanking=" + idRanking +
+				", idRankingEstimate=" + idRankingEstimate +
+				", idExternal=" + idExternal +
+				", idGoogle=" + idGoogle +
+				", photo=" + photo +
+				", type=" + type +
+				'}';
+	}
 }

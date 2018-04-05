@@ -77,4 +77,17 @@ public class Ranking extends GenericDBPojo<Long> {
 	public void setVictoryWoman(Integer victoryWoman) {
 		VictoryWoman = victoryWoman;
 	}
+
+	@Override
+	public String toString() {
+		return "Ranking{" +
+				"ranking='" + ranking + '\'' +
+				", serie=" + serie +
+				", order=" + order +
+				", rankingPointMan=" + rankingPointMan +
+				", rankingPointWoman=" + rankingPointWoman +
+				", VictoryMan=" + VictoryMan +
+				", VictoryWoman=" + VictoryWoman +
+				'}';
+	}
 }

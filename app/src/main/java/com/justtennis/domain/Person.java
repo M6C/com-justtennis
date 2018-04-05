@@ -91,4 +91,18 @@ public class Person extends GenericDBPojo<Long> {
 	public void setPhonenumber(String phonenumber) {
 		this.phonenumber = phonenumber;
 	}
+
+	@Override
+	public String toString() {
+		return "Person{" +
+				"id=" + getId() +
+				", firstName='" + firstName + '\'' +
+				", lastName='" + lastName + '\'' +
+				", birthday='" + birthday + '\'' +
+				", phonenumber='" + phonenumber + '\'' +
+				", address='" + address + '\'' +
+				", postalCode='" + postalCode + '\'' +
+				", locality='" + locality + '\'' +
+				'}';
+	}
 }
