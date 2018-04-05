@@ -106,7 +106,8 @@ public class ComputeRankingListInviteAdapter extends ArrayAdapter<Invite> {
 		TextView tvPoint = (TextView) rowView.findViewById(R.id.tv_point);
 		TextView tvBonusPoint = (TextView) rowView.findViewById(R.id.tv_bonus_point);
 
-		initializeRanking(v, rowView);
+		initializeRanking(v, rowView, false);
+		initializeRanking(v, rowView, true);
 
 		tvPlayer.setText(v.getPlayer()==null ? "" : Html.fromHtml("<b>" + v.getPlayer().getFirstName() + "</b> " + v.getPlayer().getLastName()));
 		tvDate.setText(v.getDate()==null ? "" : sdf.format(v.getDate()));
@@ -169,23 +170,26 @@ public class ComputeRankingListInviteAdapter extends ArrayAdapter<Invite> {
 		}
 	}
 
-	private void initializeRanking(Invite v, final View rowView) {
-		rankingViewManager.manageRanking(rowView, v, true);
-		IRankingListListener listener = new IRankingListListener() {
-			
+	private void initializeRanking(Invite v, final View rowView, final boolean estimate) {
+		rankingViewManager.manageRanking(rowView, v, estimate);
+		IRankingListListener listenerRanking = new IRankingListListener() {
+
 			@Override
 			public void onRankingSelected(Ranking ranking) {
 				Invite invite = (Invite) rowView.getTag();
 				Player player = playerService.find(invite.getPlayer().getId());
 				if (player != null) {
-					player.setIdRankingEstimate(ranking.getId());
+					if (estimate) {
+						player.setIdRankingEstimate(ranking.getId());
+					} else {
+						player.setIdRanking(ranking.getId());
+					}
 					playerService.createOrUpdate(player);
 
 					activity.refreshData();
 				}
 			}
 		};
-		rankingListManager.manageRankingTextViewDialog(activity, rowView, listener, false);
-		rankingListManager.manageRankingTextViewDialog(activity, rowView, listener, true);
+		rankingListManager.manageRankingTextViewDialog(activity, rowView, listenerRanking, estimate);
 	}
 }
