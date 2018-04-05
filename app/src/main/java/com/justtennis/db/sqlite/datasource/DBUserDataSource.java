@@ -81,7 +81,6 @@ public class DBUserDataSource extends DBPersonDataSource<User> {
 		int col = 0;
 		User user = new User();
 		col = super.cursorToPojo(cursor, user, col);
-		user.setId(DbTool.getInstance().toLong(cursor, col++));
 		user.setIdSaison(DbTool.getInstance().toLong(cursor, col++));
 		user.setIdTournament(DbTool.getInstance().toLong(cursor, col++));
 		user.setIdClub(DbTool.getInstance().toLong(cursor, col++));
