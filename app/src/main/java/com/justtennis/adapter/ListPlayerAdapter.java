@@ -101,10 +101,10 @@ public class ListPlayerAdapter extends ArrayAdapter<Player> {
 	
 			final Player v = value.get(position);
 			ListPlayerBusiness business = activity.getBusiness();
-			if (rowView == null) {
+//			if (rowView == null) {
 				LayoutInflater inflater = activity.getLayoutInflater();
 				rowView = inflater.inflate(R.layout.list_player_row, null);
-			}
+//			}
 			rowView.setTag(v.getId());
 	
 			int iVisibility = (business.isUnknownPlayer(v) ? View.GONE : View.VISIBLE);
