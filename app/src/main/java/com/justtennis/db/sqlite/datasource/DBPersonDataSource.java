@@ -49,7 +49,12 @@ public abstract class DBPersonDataSource<P extends Person> extends GenericDBData
 	protected String customizeWhereSaison(String where) {
 		Saison saison = TypeManager.getInstance().getSaison();
 		if (saison != null && saison.getId() != null && !SaisonService.isEmpty(saison)) {
-			where += " AND (" + DBPlayerHelper.COLUMN_ID_SAISON + " = " + saison.getId() + " OR " + DBPlayerHelper.COLUMN_ID_SAISON + " IS NULL)";
+			if (where != null) {
+				where += " AND ";
+			} else {
+				where = " ";
+			}
+			where += "(" + DBPlayerHelper.COLUMN_ID_SAISON + " = " + saison.getId() + " OR " + DBPlayerHelper.COLUMN_ID_SAISON + " IS NULL)";
 		}
 		return where;
 	}
