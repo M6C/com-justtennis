@@ -11,7 +11,7 @@ import com.justtennis.domain.Saison;
 import com.justtennis.domain.User;
 import com.justtennis.manager.TypeManager;
 
-public class UserService extends GenericService<User> {
+public class UserService extends PersonService<User> {
 
 	private TypeManager typeManager;
 

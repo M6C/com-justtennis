@@ -103,6 +103,14 @@ public class UserActivity extends PlayerActivity {
 	}
 
 	@Override
+	public void onClickCreate(View view) {
+		super.onClickCreate(view);
+
+		Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+		startActivity(intent);
+	}
+
+	@Override
 	public void onClickModify(View view) {
 		super.onClickModify(view);
 		business.saveMessage(etMessage.getText().toString());
@@ -166,14 +174,5 @@ public class UserActivity extends PlayerActivity {
 		});
 		dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
 		dialog.show();
-	}
-
-	@Override
-	public void onClickCreate(View view) {
-    	business.create(false);
-    	finish();
-
-    	Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-		startActivity(intent);
 	}
 }

@@ -17,58 +17,38 @@ import com.justtennis.manager.TypeManager;
 
 public class UserBusiness extends PlayerBusiness {
 
-	private UserService service;
-	private SaisonService saisonService;
 	private MessageService messageService;
 
 	public UserBusiness(Context context, INotifierMessage notificationMessage) {
 		super(context, notificationMessage);
 		messageService = new MessageService(context, notificationMessage);
-		saisonService = new SaisonService(context, notificationMessage);
 	}
 
 	@SuppressWarnings("unchecked")
 	@Override
 	protected <P extends Player> GenericService<P> createPlayerService(Context context, INotifierMessage notificationMessage) {
-		service = new UserService(context, notificationMessage);
-		return (GenericService<P>) service;
-	}
-
-	@Override
-	protected void initializePlayer(Intent intent) {
-		player = service.find();
-		if (player == null) {
-//			player = service.findFirst();
-//			if (player == null) {
-				player = new User();
-
-				Saison saison = TypeManager.getInstance().getSaison();
-				if (saison == null) {
-					saison = saisonService.getSaisonActiveOrFirst();
-				}
-				if (saison != null) {
-					player.setIdSaison(saison.getId());
-//					player.setId(null);
-//					service.createOrUpdate((User)player);
-				}
-//			}
-		}
-	}
-	
-	@Override
-	protected void initializeMode(Intent intent) {
-		mode = (player == null || player.getId() == null) ? MODE.CREATE : MODE.MODIFY;
-	}
-
-	@Override
-	public boolean isUnknownPlayer(Player player) {
-		return false;
+		return (GenericService<P>) new UserService(context, notificationMessage);
 	}
 
 	@Override
 	public Player buildPlayer() {
 		if (player==null) {
-			player = new User();
+
+			player = getUserService().find();
+			if (player == null) {
+				player = getUserService().findFirst();
+				if (player == null) {
+					player = new User();
+				}
+			}
+
+			Saison saison = TypeManager.getInstance().getSaison();
+			if (saison == null) {
+				saison = getSaisonService().getSaisonActiveOrFirst();
+			}
+			if (saison != null) {
+				player.setIdSaison(saison.getId());
+			}
 		}
 		return player;
 	}
@@ -83,9 +63,23 @@ public class UserBusiness extends PlayerBusiness {
 		// Save in database
 		messageService.createOrUpdate(message);
 	}
-	
+
 	public String getMessage() {
 		Message message = messageService.getCommon();
 		return (message == null) ? "" : message.getMessage();
+	}
+
+	@Override
+	public boolean isUnknownPlayer(Player player) {
+		return false;
+	}
+
+	@Override
+	public boolean sendMessageConfirmation() {
+		return false;
+	}
+
+	private UserService getUserService() {
+		return (UserService)super.getPlayerService();
 	}
 }

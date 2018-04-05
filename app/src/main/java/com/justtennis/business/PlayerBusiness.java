@@ -164,6 +164,7 @@ public class PlayerBusiness implements INavigationDrawerRechercheBusiness {
 	}
 
 	public void create(boolean sendAddConfirmation) {
+		System.out.println("PlayerBusiness create:" + player.toString());
 		// Save in database
 		playerService.createOrUpdate(player);
 
@@ -175,6 +176,7 @@ public class PlayerBusiness implements INavigationDrawerRechercheBusiness {
 	}
 	
 	public void modify() {
+		System.out.println("PlayerBusiness modify:" + player.toString());
 		// Save in database
 		playerService.createOrUpdate(player);
 	}
@@ -311,14 +313,10 @@ public class PlayerBusiness implements INavigationDrawerRechercheBusiness {
 	}
 
 	protected void initializeMode(Intent intent) {
-		mode = MODE.CREATE;
-
-		if (player!=null && player.getId()!=null) {
-			mode = MODE.MODIFY;
-		}
-
 		if (intent.hasExtra(PlayerActivity.EXTRA_MODE)) {
 			mode = (MODE) intent.getSerializableExtra(PlayerActivity.EXTRA_MODE);
+		} else {
+			mode = (player == null || player.getId() == null) ? MODE.CREATE : MODE.MODIFY;
 		}
 	}
 
@@ -357,6 +355,14 @@ public class PlayerBusiness implements INavigationDrawerRechercheBusiness {
 				player.setIdSaison(saison.getId());
 			}
 		}
+	}
+
+	public GenericService<? extends Player> getPlayerService() {
+		return playerService;
+	}
+
+	public SaisonService getSaisonService() {
+		return saisonService;
 	}
 
 //	private void initializeDataInvite() {
