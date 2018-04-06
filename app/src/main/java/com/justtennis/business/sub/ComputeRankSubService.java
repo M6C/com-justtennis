@@ -121,8 +121,11 @@ public class ComputeRankSubService {
 		int nbVictory = 0, nbVictoryCalculate = 0;
 		int sumPoint = 0, pointObjectif = 0;
 		User user = userService.find();
-		Ranking userRanking = rankingService.find(user.getIdRanking());
-		if (userRanking != null && mapInvite.keySet().size() > 0) {
+		Long idRanking = user.getIdRanking();
+		Ranking userRanking = rankingService.find(idRanking);
+		if (userRanking == null) {
+			logMe("USER RANKING userRanking NOT FOUND FOR idRanking = " + idRanking);
+		} else if (mapInvite.keySet().size() > 0) {
 			int rankingPositionMin = userRanking.getOrder() - NB_RANKING_ORDER_LOWER;
 			if (rankingPositionMin < 0) {
 				rankingPositionMin = 0;
@@ -200,6 +203,7 @@ public class ComputeRankSubService {
 		int sumPointBonus = 0;
 		Ranking userRanking = rankingService.find(idRanking);
 		if (userRanking == null) {
+			logMe("USER RANKING userRanking NOT FOUND FOR idRanking = " + idRanking);
 			userRanking = rankingService.getNC();
 		}
 		int rankingPositionMin = userRanking.getOrder() - NB_RANKING_ORDER_LOWER;
@@ -259,6 +263,7 @@ public class ComputeRankSubService {
 //		List<Invite> listInvite = inviteService.getByScoreResult(SCORE_RESULT.DEFEAT);
 		Ranking userRanking = rankingService.find(idRanking);
 		if (userRanking == null) {
+			logMe("USER RANKING userRanking NOT FOUND FOR idRanking = " + idRanking);
 			userRanking = rankingService.getNC();
 		}
 		if (listDefeat.size() > 0) {
@@ -323,6 +328,10 @@ public class ComputeRankSubService {
 		});
 		int iVE2I5G = data.getVE2I5G();
 		Ranking userRanking = rankingService.find(idRanking);
+		if (userRanking == null) {
+			logMe("USER RANKING userRanking NOT FOUND FOR idRanking = " + idRanking);
+			userRanking = rankingService.getNC();
+		}
 		logMe("USER RANKING " + userRanking.getRanking() + " NB VICTORY BEFORE VE2I5G:" + data.getNbVictoryCalculate());
 		if (userRanking != null) {
 			int[][] nbVitoryVE2I5G = victory.get(userRanking.getSerie());
@@ -348,9 +357,12 @@ public class ComputeRankSubService {
 	private HashMap<Ranking,List<Invite>> getInviteGroupByPlayerRanking(List<Invite> listVictory, boolean estimate) {
 		HashMap<Ranking, List<Invite>> ret = new HashMap<Ranking, List<Invite>>();
 		User user = userService.find();
-		Ranking userRanking = rankingService.find(user.getIdRanking());
+		Long idRanking = user.getIdRanking();
+		Ranking userRanking = rankingService.find(idRanking);
 //		List<Invite> listVictory = inviteService.getByScoreResult(Invite.SCORE_RESULT.VICTORY);
-		if (userRanking != null && listVictory.size() > 0) {
+		if (userRanking == null) {
+			logMe("USER RANKING userRanking NOT FOUND FOR idRanking = " + idRanking);
+		} else if (listVictory.size() > 0) {
 			int rankingPositionMin = userRanking.getOrder() - NB_RANKING_ORDER_LOWER;
 			if (rankingPositionMin < 0) {
 				rankingPositionMin = 0;

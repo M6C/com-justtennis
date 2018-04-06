@@ -1,8 +1,6 @@
 package com.justtennis.manager;
 
-import java.io.InputStream;
-import java.util.List;
-
+import android.app.Activity;
 import android.content.ContentResolver;
 import android.content.ContentUris;
 import android.content.Context;
@@ -16,37 +14,45 @@ import android.provider.ContactsContract.Contacts;
 import com.cameleon.common.android.manager.GenericCursorManager;
 import com.justtennis.domain.Contact;
 import com.justtennis.manager.mapper.ContactMapper;
+import com.justtennis.tool.ToolPermission;
+
+import java.io.InputStream;
+import java.util.List;
 
 public class ContactManager extends GenericCursorManager<Contact, ContactMapper> {
 
 	private static ContactManager instance = null;
-	private Context context;
+	private Activity context;
 
-	public ContactManager(Context context) {
+	public ContactManager(Activity context) {
 		this.context = context;
 	}
 
-	public static ContactManager getInstance(Context context) {
+	public static ContactManager getInstance(Activity context) {
 		if (instance == null) {
-			instance = new ContactManager(context.getApplicationContext());
+			instance = new ContactManager(context);
 		}
 		return instance;
 	}
 
 	public List<Contact> getListContact() {
 //		String selection = ContactsContract.Contacts.IN_VISIBLE_GROUP + " = '" + ("1") + "'";
-	    String where = ContactsContract.Contacts.IN_VISIBLE_GROUP + " = ?"; 
+
+	    String where = ContactsContract.Contacts.IN_VISIBLE_GROUP + " = ?";
 	    String[] whereParameters = new String[]{"1"};
 		return getList(context, where, whereParameters);
 	}
 
 	public Bitmap getPhoto(Long contactId) {
 		ContentResolver contentResolver = context.getContentResolver();
+
+		if (!ToolPermission.checkPermissionREAD_CONTACTS(context, false)) {
+			return null;
+		}
 		
 		Uri contactPhotoUri = ContentUris.withAppendedId(Contacts.CONTENT_URI, contactId);
 
 	    // contactPhotoUri --> content://com.android.contacts/contacts/1557
-
 	    InputStream photoDataStream = Contacts.openContactPhotoInputStream(contentResolver,contactPhotoUri); // <-- always null
 	    Bitmap photo = BitmapFactory.decodeStream(photoDataStream);
 	    return photo;

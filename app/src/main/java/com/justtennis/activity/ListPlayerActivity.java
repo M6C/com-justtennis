@@ -9,7 +9,9 @@ import org.gdocument.gtracergps.launcher.log.Logger;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.AdapterView;
@@ -43,6 +45,7 @@ import com.justtennis.listener.ok.OnClickPlayerSendListenerOk;
 import com.justtennis.manager.TypeManager;
 import com.justtennis.notifier.NotifierMessageLogger;
 import com.justtennis.parser.PlayerParser;
+import com.justtennis.tool.ToolPermission;
 
 public class ListPlayerActivity extends GenericActivity {
 
@@ -70,6 +73,7 @@ public class ListPlayerActivity extends GenericActivity {
 	private TypeManager.TYPE filterTypeValue = null;
 	private List<NavigationDrawerData> navigationDrawer = new ArrayList<NavigationDrawerData>();
 	private Date dateStart = new Date();
+	boolean checkPermission = true;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -80,7 +84,7 @@ public class ListPlayerActivity extends GenericActivity {
 		logMe("onCreate new DrawerManager", dateStart);
 		drawerManager.setContentView(R.layout.list_player);
 		logMe("onCreate DrawerManager.setContentView", dateStart);
-		
+
 		business = new ListPlayerBusiness(this, notifier);
 		adapter = new ListPlayerAdapter(this, business.getList());
 		
@@ -94,6 +98,7 @@ public class ListPlayerActivity extends GenericActivity {
 		initializeTypeList();
 		TypeManager.getInstance().initializeActivity(findViewById(R.id.layout_main), false);
 		navigationDrawer.add(new NavigationDrawerRechercheData(0, new NavigationDrawerRecherchePlayerNotifer()));
+
 		logMe("onCreate End", dateStart);
 	}
 
@@ -101,24 +106,9 @@ public class ListPlayerActivity extends GenericActivity {
 	protected void onResume() {
 		super.onResume();
 
-		initialize();
-
-		switch (business.getMode()) {
-			case EDIT:
-				list.setOnItemClickListener(new OnItemClickListPlayer(this));
-				break;
-			case INVITE:
-				list.setOnItemClickListener(new OnItemClickListPlayerInvite(this));
-				break;
-			case FOR_RESULT:
-				list.setOnItemClickListener(new OnItemClickListPlayerForResult(this));
-				break;
+		if (checkPermission && ToolPermission.checkPermissionREAD_CONTACTS(this, true)) {
+			initialize();
 		}
-		drawerManager.onResume();
-		logMe("onResume DrawerManager.onResume", dateStart);
-		drawerManager.setValue(navigationDrawer);
-		logMe("onResume DrawerManager.setValue", dateStart);
-		logMe("onResume End", dateStart);
 	}
 
 	@Override
@@ -153,6 +143,22 @@ public class ListPlayerActivity extends GenericActivity {
 	}
 
 	@Override
+	public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
+		switch (requestCode) {
+			case ToolPermission.MY_PERMISSIONS_REQUEST: {
+				checkPermission = false;
+				initialize();
+				// If request is cancelled, the result arrays are empty.
+				if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+				} else {
+					logMe("Permission Denied ! Cancel initialization");
+				}
+				return;
+			}
+		}
+	}
+
+	@Override
 	public void onBackPressed() {
 		finish();
 	}
@@ -161,12 +167,30 @@ public class ListPlayerActivity extends GenericActivity {
 		business.initialize();
 
 		refresh();
+
+		switch (business.getMode()) {
+			case EDIT:
+				list.setOnItemClickListener(new OnItemClickListPlayer(this));
+				break;
+			case INVITE:
+				list.setOnItemClickListener(new OnItemClickListPlayerInvite(this));
+				break;
+			case FOR_RESULT:
+				list.setOnItemClickListener(new OnItemClickListPlayerForResult(this));
+				break;
+		}
+		drawerManager.onResume();
+		logMe("onResume DrawerManager.onResume", dateStart);
+		drawerManager.setValue(navigationDrawer);
+		logMe("onResume DrawerManager.setValue", dateStart);
+		logMe("onResume End", dateStart);
 	}
 
 	public void refresh() {
-//		adapter.notifyDataSetChanged();
-		adapter.setValue(business.getList());
 		filter.filter(filterTypeValue == null ? null : filterTypeValue.toString());
+		adapter.setValue(business.getList());
+		list.setAdapter(adapter);
+//		adapter.notifyDataSetChanged();
 	}
 
 	public void onClickAdd(View view) {

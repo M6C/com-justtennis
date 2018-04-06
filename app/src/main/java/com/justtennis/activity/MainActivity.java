@@ -1,14 +1,9 @@
 package com.justtennis.activity;
 
-import java.io.File;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-
-import org.gdocument.gtracergps.launcher.log.Logger;
-
+import android.Manifest;
 import android.app.ActionBar;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
@@ -25,6 +20,7 @@ import android.widget.Toast;
 import com.cameleon.common.android.db.sqlite.helper.GenericDBHelper;
 import com.cameleon.common.android.factory.FactoryDialog;
 import com.cameleon.common.android.inotifier.INotifierMessage;
+import com.justtennis.R;
 import com.justtennis.activity.ListPlayerActivity.MODE;
 import com.justtennis.adapter.manager.RankingListManager;
 import com.justtennis.adapter.manager.RankingListManager.IRankingListListener;
@@ -44,7 +40,15 @@ import com.justtennis.listener.ok.OnClickSendApkListenerOk;
 import com.justtennis.listener.ok.OnClickSendDBListenerOk;
 import com.justtennis.manager.TypeManager;
 import com.justtennis.manager.TypeManager.TYPE;
-import com.justtennis.R;
+import com.justtennis.tool.ToolPermission;
+
+import org.gdocument.gtracergps.launcher.log.Logger;
+
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 public class MainActivity extends GenericActivity implements INotifierMessage, IDrawerLayoutTypeNotifier, IDrawerLayoutSaisonNotifier {
 
@@ -239,6 +243,33 @@ public class MainActivity extends GenericActivity implements INotifierMessage, I
 	}
 
 	@Override
+	public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
+		switch (requestCode) {
+			case ToolPermission.MY_PERMISSIONS_REQUEST: {
+				// If request is cancelled, the result arrays are empty.
+				if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+					if (permissions.length >0 && permissions[0].equals(Manifest.permission.READ_EXTERNAL_STORAGE)) {
+						OnClickDBRestoreListenerOk listener = new OnClickDBRestoreListenerOk(this);
+						FactoryDialog.getInstance()
+								.buildOkCancelDialog(business.getContext(), listener, R.string.dialog_restore_title, R.string.dialog_restore_message)
+								.show();
+					} else if (permissions.length >0 && permissions[0].equals(Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
+						OnClickDBBackupListenerOk listener = new OnClickDBBackupListenerOk(this);
+						FactoryDialog.getInstance()
+								.buildOkCancelDialog(business.getContext(), listener, R.string.dialog_backup_title, R.string.dialog_backup_message)
+								.show();
+					} else {
+						logMe("Permission Unknown! permissions:" + permissions);
+					}
+				} else {
+					logMe("Permission Denied ! Cancel initialization");
+				}
+				return;
+			}
+		}
+	}
+
+	@Override
 	public void notifyError(Exception arg0) {
 	}
 
@@ -337,17 +368,11 @@ public class MainActivity extends GenericActivity implements INotifierMessage, I
 	}
 	
 	public void onClickDBBackup(View view) {
-		OnClickDBBackupListenerOk listener = new OnClickDBBackupListenerOk(this);
-		FactoryDialog.getInstance()
-			.buildOkCancelDialog(business.getContext(), listener, R.string.dialog_backup_title, R.string.dialog_backup_message)
-			.show();
+		ToolPermission.checkPermissionWRITE_EXTERNAL_STORAGE(this);
 	}
 	
 	public void onClickDBRestore(View view) {
-		OnClickDBRestoreListenerOk listener = new OnClickDBRestoreListenerOk(this);
-		FactoryDialog.getInstance()
-			.buildOkCancelDialog(business.getContext(), listener, R.string.dialog_restore_title, R.string.dialog_restore_message)
-			.show();
+		ToolPermission.checkPermissionREAD_EXTERNAL_STORAGE(this);
 	}
 
 	public void onClickMenuOverFlow(View view) {
@@ -384,6 +409,14 @@ public class MainActivity extends GenericActivity implements INotifierMessage, I
 		} else {
 			Log.w(TAG, "handleSendDb No DB Helper found for databaseName:'"+databaseName+"'");
 		}
+	}
+
+	protected void logMe(String msg, Date dateStart) {
+		logMe("ListPlayerActivity time:" + (new Date().getTime() - dateStart.getTime()) + " millisecond - " + msg);
+	}
+
+	protected static void logMe(String msg) {
+		Logger.logMe(TAG, msg);
 	}
 
 	private final class NavigationDrawerTrainingNotifer implements NavigationDrawerNotifer {

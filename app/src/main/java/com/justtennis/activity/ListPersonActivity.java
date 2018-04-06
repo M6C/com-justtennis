@@ -1,6 +1,9 @@
 package com.justtennis.activity;
 
+import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.widget.EditText;
 import android.widget.ListView;
@@ -12,10 +15,14 @@ import com.justtennis.listener.action.OnEditorActionListenerFilter;
 import com.justtennis.listener.itemclick.OnItemClickListPerson;
 import com.justtennis.manager.TypeManager;
 import com.justtennis.notifier.NotifierMessageLogger;
+import com.justtennis.tool.ToolPermission;
+
+import org.gdocument.gtracergps.launcher.log.Logger;
+
+import java.util.Date;
 
 public class ListPersonActivity extends GenericActivity {
 
-	@SuppressWarnings("unused")
 	private static final String TAG = ListPersonActivity.class.getSimpleName();
 	public static final String EXTRA_PLAYER = "PLAYER";
 
@@ -48,7 +55,25 @@ public class ListPersonActivity extends GenericActivity {
 	protected void onResume() {
 		super.onResume();
 
-		initialize();
+		if (ToolPermission.checkPermissionREAD_CONTACTS(this, true)) {
+			initialize();
+		}
+	}
+
+	@Override
+	public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
+		switch (requestCode) {
+			case ToolPermission.MY_PERMISSIONS_REQUEST: {
+				// If request is cancelled, the result arrays are empty.
+				if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+					initialize();
+				} else {
+					logMe("Permission Denied ! Cancel initialization");
+					finish();
+				}
+				return;
+			}
+		}
 	}
 
 	private void initialize() {
@@ -63,6 +88,14 @@ public class ListPersonActivity extends GenericActivity {
 		} finally {
 			progressDialog.dismiss();
 		}
+	}
+
+	protected void logMe(String msg, Date dateStart) {
+		logMe("ListPlayerActivity time:" + (new Date().getTime() - dateStart.getTime()) + " millisecond - " + msg);
+	}
+
+	protected static void logMe(String msg) {
+		Logger.logMe(TAG, msg);
 	}
 
 	public void refresh() {
