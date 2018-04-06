@@ -249,15 +249,9 @@ public class MainActivity extends GenericActivity implements INotifierMessage, I
 				// If request is cancelled, the result arrays are empty.
 				if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
 					if (permissions.length >0 && permissions[0].equals(Manifest.permission.READ_EXTERNAL_STORAGE)) {
-						OnClickDBRestoreListenerOk listener = new OnClickDBRestoreListenerOk(this);
-						FactoryDialog.getInstance()
-								.buildOkCancelDialog(business.getContext(), listener, R.string.dialog_restore_title, R.string.dialog_restore_message)
-								.show();
+						doDBRestore();
 					} else if (permissions.length >0 && permissions[0].equals(Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
-						OnClickDBBackupListenerOk listener = new OnClickDBBackupListenerOk(this);
-						FactoryDialog.getInstance()
-								.buildOkCancelDialog(business.getContext(), listener, R.string.dialog_backup_title, R.string.dialog_backup_message)
-								.show();
+						doDBBackup();
 					} else {
 						logMe("Permission Unknown! permissions:" + permissions);
 					}
@@ -267,6 +261,20 @@ public class MainActivity extends GenericActivity implements INotifierMessage, I
 				return;
 			}
 		}
+	}
+
+	private void doDBBackup() {
+		OnClickDBBackupListenerOk listener = new OnClickDBBackupListenerOk(this);
+		FactoryDialog.getInstance()
+                .buildOkCancelDialog(business.getContext(), listener, R.string.dialog_backup_title, R.string.dialog_backup_message)
+                .show();
+	}
+
+	private void doDBRestore() {
+		OnClickDBRestoreListenerOk listener = new OnClickDBRestoreListenerOk(this);
+		FactoryDialog.getInstance()
+                .buildOkCancelDialog(business.getContext(), listener, R.string.dialog_restore_title, R.string.dialog_restore_message)
+                .show();
 	}
 
 	@Override
@@ -368,11 +376,15 @@ public class MainActivity extends GenericActivity implements INotifierMessage, I
 	}
 	
 	public void onClickDBBackup(View view) {
-		ToolPermission.checkPermissionWRITE_EXTERNAL_STORAGE(this);
+		if (ToolPermission.checkPermissionWRITE_EXTERNAL_STORAGE(this)) {
+			doDBBackup();
+		}
 	}
 	
 	public void onClickDBRestore(View view) {
-		ToolPermission.checkPermissionREAD_EXTERNAL_STORAGE(this);
+		if (ToolPermission.checkPermissionREAD_EXTERNAL_STORAGE(this)) {
+			doDBRestore();
+		}
 	}
 
 	public void onClickMenuOverFlow(View view) {
