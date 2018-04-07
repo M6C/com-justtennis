@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.os.Bundle;
 import android.widget.DatePicker;
+import android.widget.TimePicker;
 
 import com.justtennis.R;
 
@@ -11,7 +12,7 @@ public class DateTimeDialog extends AlertDialog {
 
 	private static final String TAG = DateTimeDialog.class.getSimpleName();
 	private DatePicker datePicker;
-	private DatePicker timePicker;
+	private TimePicker timePicker;
 
 	public DateTimeDialog(Context context) {
 		super(context, true, null);
@@ -24,6 +25,6 @@ public class DateTimeDialog extends AlertDialog {
 		setContentView(R.layout.date_time);
 		
 		datePicker = (DatePicker)findViewById(R.id.datePicker);
-		timePicker = (DatePicker)findViewById(R.id.timePicker);
+		timePicker = (TimePicker)findViewById(R.id.timePicker);
 	}
 }
