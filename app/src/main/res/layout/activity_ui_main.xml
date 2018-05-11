@@ -17,11 +17,7 @@
          the container. -->
     <fragment
         android:id="@+id/navigation_drawer"
-<<<<<<< HEAD
         android:name="com.justtennis.ui.fragment.NavigationDrawerFragment"
-=======
-        android:name="com.justtennis.ui.activity.NavigationDrawerFragment"
->>>>>>> dd6a6747da6aa47cf0804f72820f24aebf6eeb0a
         android:layout_width="@dimen/navigation_drawer_width"
         android:layout_height="match_parent"
         android:layout_gravity="start"
