@@ -40,9 +40,9 @@ public class DBFeedTool {
         }
 
         SaisonService saisonService = new SaisonService(context, NotifierMessageLogger.getInstance());
-        InviteService inviteService = new InviteService(context, NotifierMessageLogger.getInstance());
-        PlayerService playerService = new PlayerService(context, NotifierMessageLogger.getInstance());
         UserService userService = new UserService(context, NotifierMessageLogger.getInstance());
+        PlayerService playerService = new PlayerService(context, NotifierMessageLogger.getInstance());
+        InviteService inviteService = new InviteService(context, NotifierMessageLogger.getInstance());
 
         Saison saison = saisonService.getSaisonActiveOrFirst();
         if (saison == null) {
@@ -54,10 +54,20 @@ public class DBFeedTool {
             user = createUser(saison);
             userService.createOrUpdate(user);
         }
-        Player player = playerService.getUnknownPlayer();
-        Invite invite = createInvite(saison, user, player);
+        if (inviteService.getCount() < 10) {
+            Player player = playerService.getUnknownPlayer();
 
-        inviteService.createOrUpdate(invite);
+            for(int i=0 ; i<10 ; i++) {
+                Invite invite = createInvite(saison, user, player);
+                inviteService.createOrUpdate(invite);
+            }
+/*
+        } else {
+            for(Invite invite : inviteService.getList()) {
+                inviteService.delete(invite);
+            }
+*/
+        }
     }
 
     private static User createUser(Saison saison) {

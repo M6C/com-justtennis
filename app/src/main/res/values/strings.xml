@@ -156,5 +156,6 @@
     </string>
     <string name="title_item_list">Items</string>
     <string name="title_item_detail">Item Detail</string>
+    <string name="empty_list">Nothing to show at this time.</string>
 
 </resources>

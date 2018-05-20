@@ -1,19 +1,26 @@
 package com.justtennis.ui.adapter;
 
 
+import android.content.Context;
+import android.content.Intent;
+import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
 import com.justtennis.R;
+import com.justtennis.activity.InviteActivity;
+import com.justtennis.adapter.viewholder.InviteViewHolder;
 import com.justtennis.domain.Invite;
+import com.justtennis.helper.InviteViewHelper;
+import com.justtennis.ui.fragment.ItemDetailFragment;
 
+import java.io.Serializable;
 import java.util.List;
 
-public class SimpleInviteRecyclerViewAdapter extends RecyclerView.Adapter<SimpleInviteRecyclerViewAdapter.ViewHolder> {
+public class SimpleInviteRecyclerViewAdapter extends RecyclerView.Adapter<InviteViewHolder> {
 
     private final FragmentActivity mParentActivity;
     private final List<Invite> mValues;
@@ -29,11 +36,11 @@ public class SimpleInviteRecyclerViewAdapter extends RecyclerView.Adapter<Simple
     private final View.OnClickListener mOnClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
-/*
-            DummyContent.DummyItem item = (DummyContent.DummyItem) view.getTag();
+            InviteViewHolder item = (InviteViewHolder) view.getTag();
             if (mTwoPane) {
                 Bundle arguments = new Bundle();
-                arguments.putString(ItemDetailFragment.ARG_ITEM_ID, item.id);
+                arguments.putSerializable(InviteActivity.EXTRA_INVITE, (Serializable)item.invite);
+                arguments.putSerializable(InviteActivity.EXTRA_MODE, InviteActivity.MODE.INVITE_DETAIL);
                 ItemDetailFragment fragment = new ItemDetailFragment();
                 fragment.setArguments(arguments);
                 mParentActivity.getSupportFragmentManager().beginTransaction()
@@ -41,45 +48,34 @@ public class SimpleInviteRecyclerViewAdapter extends RecyclerView.Adapter<Simple
                         .commit();
             } else {
                 Context context = view.getContext();
-                Intent intent = new Intent(context, ItemDetailActivity.class);
-                intent.putExtra(ItemDetailFragment.ARG_ITEM_ID, item.id);
-
+                Intent intent = new Intent(context, InviteActivity.class);
+                intent.putExtra(InviteActivity.EXTRA_INVITE, (Serializable)item.invite);
+                intent.putExtra(InviteActivity.EXTRA_MODE, InviteActivity.MODE.INVITE_DETAIL);
                 context.startActivity(intent);
             }
-*/
         }
     };
 
     @Override
-    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public InviteViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.invite_list_content, parent, false);
-        return new ViewHolder(view);
+                .inflate(R.layout.list_invite_row, parent, false);
+        view.setOnClickListener(mOnClickListener);
+        InviteViewHolder holder = new InviteViewHolder(view);
+        view.setTag(holder);
+        return holder;
     }
 
     @Override
-    public void onBindViewHolder(final ViewHolder holder, int position) {
-        Invite invite = mValues.get(position);
-        holder.mIdView.setText(Long.toString(invite.getId()));
-        holder.mContentView.setText(invite.getPlayer().toString());
+    public void onBindViewHolder(final InviteViewHolder holder, int position) {
+        holder.invite = mValues.get(position);
 
-        holder.itemView.setTag(invite);
-        holder.itemView.setOnClickListener(mOnClickListener);
+        InviteViewHelper.INVITE_MODE_VIEW mode = InviteViewHelper.INVITE_MODE_VIEW.MODIFY;
+        InviteViewHelper.initializeView(mParentActivity, holder, mode);
     }
 
     @Override
     public int getItemCount() {
         return mValues.size();
-    }
-
-    class ViewHolder extends RecyclerView.ViewHolder {
-        final TextView mIdView;
-        final TextView mContentView;
-
-        ViewHolder(View view) {
-            super(view);
-            mIdView = (TextView) view.findViewById(R.id.id_text);
-            mContentView = (TextView) view.findViewById(R.id.content);
-        }
     }
 }

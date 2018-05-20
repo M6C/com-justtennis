@@ -38,7 +38,7 @@ public class NavigationDrawerAdapter extends BaseAdapter {
 		return this.value.get(position).getId();
 	}
 
-	@SuppressLint("ViewHolder")
+	@SuppressLint("InviteViewHolder")
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
 		NavigationDrawerData v = value.get(position);

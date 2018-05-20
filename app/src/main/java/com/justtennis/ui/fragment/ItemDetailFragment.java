@@ -22,6 +22,7 @@ public class ItemDetailFragment extends Fragment implements IListInviteActivity 
      */
     private boolean mTwoPane = false;
 
+    private SimpleInviteRecyclerViewAdapter adapter;
     private ListInviteBusiness business;
 
     /**
@@ -35,24 +36,42 @@ public class ItemDetailFragment extends Fragment implements IListInviteActivity 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+
         business = new ListInviteBusiness(getContext(), this, NotifierMessageLogger.getInstance());
+        adapter = new SimpleInviteRecyclerViewAdapter(getActivity(), business.getList(), mTwoPane);
+
         business.onCreate();
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.item_detail, container, false);
 
         View recyclerView = rootView.findViewById(R.id.item_list);
+        View emptyView = rootView.findViewById(R.id.empty_list);
         assert recyclerView != null;
-        setupRecyclerView((RecyclerView) recyclerView);
+        assert emptyView != null;
+        setupRecyclerView((RecyclerView) recyclerView, emptyView);
 
         return rootView;
     }
 
-    private void setupRecyclerView(@NonNull RecyclerView recyclerView) {
-        recyclerView.setAdapter(new SimpleInviteRecyclerViewAdapter(getActivity(), business.getList(), mTwoPane));
+    private void setupRecyclerView(@NonNull final RecyclerView recyclerView, @NonNull final View emptyView) {
+        RecyclerView.AdapterDataObserver observer = new RecyclerView.AdapterDataObserver() {
+            @Override
+            public void onChanged() {
+                if (adapter.getItemCount() == 0) {
+                    emptyView.setVisibility(View.VISIBLE);
+                    recyclerView.setVisibility(View.GONE);
+                } else {
+                    emptyView.setVisibility(View.GONE);
+                    recyclerView.setVisibility(View.VISIBLE);
+                }
+            }
+        };
+        adapter.registerAdapterDataObserver(observer);
+        recyclerView.setAdapter(adapter);
+        observer.onChanged();
     }
 
     @Override

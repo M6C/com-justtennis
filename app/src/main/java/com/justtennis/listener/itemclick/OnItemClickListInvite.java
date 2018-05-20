@@ -1,7 +1,5 @@
 package com.justtennis.listener.itemclick;
 
-import java.io.Serializable;
-
 import android.app.Activity;
 import android.content.Intent;
 import android.view.View;
@@ -9,6 +7,9 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 
 import com.justtennis.activity.InviteActivity;
+import com.justtennis.adapter.viewholder.InviteViewHolder;
+
+import java.io.Serializable;
 
 public class OnItemClickListInvite implements OnItemClickListener {
 	private Activity context;
@@ -22,7 +23,7 @@ public class OnItemClickListInvite implements OnItemClickListener {
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
     	Intent intent = new Intent(context, InviteActivity.class);
-		intent.putExtra(InviteActivity.EXTRA_INVITE, (Serializable)view.getTag());
+		intent.putExtra(InviteActivity.EXTRA_INVITE, (Serializable)((InviteViewHolder)view.getTag()).invite);
 		intent.putExtra(InviteActivity.EXTRA_MODE, InviteActivity.MODE.INVITE_DETAIL);
 		context.startActivityForResult(intent, requestCode);
     }

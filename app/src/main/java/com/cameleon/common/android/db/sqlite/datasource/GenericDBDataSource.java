@@ -155,7 +155,7 @@ public abstract class GenericDBDataSource<POJO extends GenericDBPojo<Long>> {
 	 */
 	public long count() {
 		String where = customizeWhere(null);
-		Cursor mCount= db.rawQuery("select count(*) from "+dbHelper.getTableName() + " " + where, null);
+		Cursor mCount= db.rawQuery("select count(*) from "+dbHelper.getTableName() + " WHERE " + where, null);
 		mCount.moveToFirst();
 		long ret = mCount.getLong(0);
 		mCount.close();
