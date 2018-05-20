@@ -27,8 +27,9 @@
         android:icon="@drawable/icon_01"
         android:label="@string/application_label"
         android:theme="@style/AppTheme">
+
         <activity
-            android:name=".ui.activity.UiMainActivity"
+            android:name=".ui.activity.ItemDetailActivity"
             android:label="@string/application_label"
             android:screenOrientation="portrait">
             <intent-filter>
@@ -36,6 +37,12 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity>
+
+        <activity
+            android:name=".activity.MainActivity"
+            android:label="@string/application_label"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.SEND" />
 
@@ -58,7 +65,6 @@
                     android:scheme="file" />
             </intent-filter>
         </activity>
-
         <activity
             android:name="com.google.zxing.client.android.CaptureActivity"
             android:configChanges="orientation|keyboardHidden"
@@ -76,7 +82,6 @@
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
-
         <activity
             android:name=".activity.UserActivity"
             android:screenOrientation="portrait"
@@ -146,5 +151,22 @@
 	      </intent-filter>
 	   </receiver>    
         -->
-	</application>
+<!--
+        <activity
+            android:name=".ui.activity.ItemListActivity"
+            android:label="@string/title_item_list"></activity>
+-->
+<!--
+        <activity
+            android:name=".ui.activity.ItemDetailActivity"
+            android:label="@string/title_item_detail"
+            android:parentActivityName=".ui.activity.ItemListActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.justtennis.ui.activity.ItemListActivity" />
+        </activity>
+-->
+
+    </application>
+
 </manifest>

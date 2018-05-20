@@ -14,6 +14,7 @@ import android.view.View;
 import android.widget.TextView;
 
 public class FactoryLayoutInFlater {
+/*
 
 	private static FactoryLayoutInFlater instance;
 
@@ -37,7 +38,8 @@ public class FactoryLayoutInFlater {
 		return instance;
 	}
 
-	/**
+	*/
+/**
 	 * http://www.gitshah.com/2011/06/how-to-change-background-color-of.html
 	 * http://stackoverflow.com/questions/2944244/change-the-background-color-of-the-options-menu
 	 * 
@@ -55,7 +57,8 @@ public class FactoryLayoutInFlater {
 	 *  }
 	 * 
 	 * @return
-	 */
+	 *//*
+
 	public LayoutInflater.Factory createOptionsMenuBackground() {
 		return new Factory()
 	    {
@@ -174,4 +177,5 @@ public class FactoryLayoutInFlater {
 	        }
 	    };
      }
+*/
 }

@@ -12,6 +12,7 @@ import android.widget.ListView;
 
 import com.cameleon.common.android.factory.FactoryDialog;
 import com.justtennis.R;
+import com.justtennis.activity.interfaces.IListInviteActivity;
 import com.justtennis.adapter.ListInviteAdapter;
 import com.justtennis.business.ListInviteBusiness;
 import com.justtennis.domain.Invite;
@@ -20,7 +21,7 @@ import com.justtennis.listener.ok.OnClickInviteDeleteListenerOk;
 import com.justtennis.manager.TypeManager;
 import com.justtennis.notifier.NotifierMessageLogger;
 
-public class ListInviteActivity extends GenericActivity {
+public class ListInviteActivity extends GenericActivity implements IListInviteActivity {
 
 	@SuppressWarnings("unused")
 	private static final String TAG = ListInviteActivity.class.getSimpleName();
@@ -47,7 +48,7 @@ public class ListInviteActivity extends GenericActivity {
 		setContentView(R.layout.list_invite);
 //		getWindow().setFeatureInt(Window.FEATURE_CUSTOM_TITLE, R.layout.list_invite_title);
 
-		business = new ListInviteBusiness(this, NotifierMessageLogger.getInstance());
+		business = new ListInviteBusiness(this, this, NotifierMessageLogger.getInstance());
 		adapter = new ListInviteAdapter(this, business.getList());
 
 		filter = adapter.getFilter();
@@ -80,6 +81,7 @@ public class ListInviteActivity extends GenericActivity {
 		}
 	}
 
+	@Override
 	public void refresh() {
 		adapter.setValue(business.getList());
 		filter.filter(filterIdPlayerValue);

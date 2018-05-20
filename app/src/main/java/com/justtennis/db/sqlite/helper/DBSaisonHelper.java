@@ -1,13 +1,9 @@
 package com.justtennis.db.sqlite.helper;
 
-import java.util.Calendar;
-
-import android.content.ContentValues;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 
 import com.cameleon.common.android.inotifier.INotifierMessage;
-import com.justtennis.db.service.SaisonService;
 import com.justtennis.domain.Saison;
 
 public class DBSaisonHelper extends GenericJustTennisDBHelper {
@@ -42,8 +38,6 @@ public class DBSaisonHelper extends GenericJustTennisDBHelper {
 	@Override
 	public void onCreate(SQLiteDatabase database) {
 		super.onCreate(database);
-
-		feed(database);
 	}
 
 	@Override
@@ -64,36 +58,5 @@ public class DBSaisonHelper extends GenericJustTennisDBHelper {
 	@Override
 	public Class<?> getClassType() {
 		return CLASS_TYPE;
-	}
-
-	private void feed(SQLiteDatabase database) {
-		Saison[] rows = new Saison[] {
-			feedBuild()
-		};
-
-		try {
-			database.beginTransaction();
-			database.delete(TABLE_NAME, null, null);
-			for (int row = 0 ; row < rows.length ; row++) {
-				Saison saison = rows[row];
-				logMe("insert row:" + saison);
-				ContentValues values = new ContentValues();
-				values.put(COLUMN_NAME, saison.getName());
-				values.put(COLUMN_BEGIN, saison.getBegin().getTime());
-				values.put(COLUMN_END, saison.getEnd().getTime());
-				values.put(COLUMN_ACTIVE, saison.isActive() ? 1 : 0);
-	
-				long id = database.insert(TABLE_NAME, null, values);
-				saison.setId(id);
-			}
-			database.setTransactionSuccessful();
-		}
-		finally {
-			database.endTransaction();
-		}
-	}
-
-	private Saison feedBuild() {
-		return SaisonService.build(Calendar.getInstance());
 	}
 }

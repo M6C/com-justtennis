@@ -10,6 +10,7 @@ import android.content.Context;
 
 import com.cameleon.common.android.inotifier.INotifierMessage;
 import com.justtennis.activity.ListInviteActivity;
+import com.justtennis.activity.interfaces.IListInviteActivity;
 import com.justtennis.db.service.InviteService;
 import com.justtennis.db.service.PlayerService;
 import com.justtennis.db.service.ScoreSetService;
@@ -22,7 +23,8 @@ public class ListInviteBusiness {
 
 	private static final String TAG = ListInviteBusiness.class.getSimpleName();
 	
-	private ListInviteActivity context;
+	private Context context;
+	private IListInviteActivity iActivity;
 
 	private InviteService inviteService;
 	private ScoreSetService scoreService;
@@ -34,8 +36,9 @@ public class ListInviteBusiness {
 	private List<Player> listPlayer = new ArrayList<Player>();
 	private String[] listPlayerName;
 
-	public ListInviteBusiness(ListInviteActivity context, INotifierMessage notificationMessage) {
+	public ListInviteBusiness(Context context, IListInviteActivity iActivity, INotifierMessage notificationMessage) {
 		this.context = context;
+		this.iActivity = iActivity;
 		playerService = new PlayerService(context, notificationMessage);
 		inviteService = new InviteService(context, notificationMessage);
 		scoreService = new ScoreSetService(context, notificationMessage);
@@ -67,7 +70,7 @@ public class ListInviteBusiness {
 		}
 
 		refreshInvite();
-		context.refresh();
+		iActivity.refresh();
 	}
 
 	public void refreshData() {
