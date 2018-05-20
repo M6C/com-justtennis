@@ -37,7 +37,7 @@
 	    <ImageView android:id="@+id/iv_delete"
 		    android:layout_width="25dip"
 		    android:layout_height="25dip"
-		    android:src="@drawable/player_delete"
+		    android:src="@android:drawable/ic_menu_delete"
 		    android:layout_gravity="center_vertical|center_horizontal"
 		    android:contentDescription="@string/button_desctiption_delete"
 		    android:onClick="onClickDelete"

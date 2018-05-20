@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/navigation_player"
+        android:icon="@android:drawable/ic_menu_today"
+        android:title="@string/navigation_player"/>
+
+    <item
+        android:id="@+id/navigation_invite"
+        android:icon="@android:drawable/ic_menu_agenda"
+        android:title="@string/navigation_invite"/>
+
+    <item
+        android:id="@+id/navigation_statistic"
+        android:icon="@android:drawable/ic_menu_month"
+        android:title="@string/navigation_statistique"/>
+
+</menu>

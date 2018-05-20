@@ -1,11 +1,5 @@
 package com.justtennis.db.sqlite.datasource;
 
-import java.util.Calendar;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Locale;
-
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
@@ -23,6 +17,12 @@ import com.justtennis.domain.Player;
 import com.justtennis.domain.Saison;
 import com.justtennis.domain.Tournament;
 import com.justtennis.manager.TypeManager;
+
+import java.util.Calendar;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Locale;
 
 public class DBInviteDataSource extends GenericDBDataSourceByType<Invite> {
 
@@ -81,7 +81,7 @@ public class DBInviteDataSource extends GenericDBDataSourceByType<Invite> {
 	
 	/**
 	 * Return all Invite for a Tournament
-	 * @param idTournament Tournament id
+	 * @param scoreResult score result
 	 * @return Invite list
 	 */
 	public List<Invite> getByScoreResult(Invite.SCORE_RESULT scoreResult) {
@@ -135,15 +135,15 @@ public class DBInviteDataSource extends GenericDBDataSourceByType<Invite> {
 		String where = " WHERE " + DBInviteHelper.COLUMN_TIME + " < " + Calendar.getInstance().getTimeInMillis();
 
 		if (scoreResult != null && scoreResult.length > 0) {
-			String inValue = "(";
+			StringBuilder inValue = new StringBuilder("(");
 			for(int i=0 ; i<scoreResult.length ; i++) {
 				if (i>0) {
-					inValue += ",";
+					inValue.append(",");
 				}
-				inValue += "'" + scoreResult + "'";
+				inValue.append("'").append(scoreResult[i]).append("'");
 			}
-			inValue += ")";
-			where += " AND " + DBInviteHelper.COLUMN_SCORE_RESULT + " IN " + inValue;
+			inValue.append(")");
+			where += " AND " + DBInviteHelper.COLUMN_SCORE_RESULT + " IN " + inValue.toString();
 		}
 
 		where = customizeWhere(where);
@@ -200,26 +200,27 @@ public class DBInviteDataSource extends GenericDBDataSourceByType<Invite> {
 		invite.setAddress(DbTool.getInstance().toPojo(cursor, col++, Address.class));
 		invite.setClub(DbTool.getInstance().toPojo(cursor, col++, Club.class));
 		invite.setTournament(DbTool.getInstance().toPojo(cursor, col++, Tournament.class));
-		Integer bonusPoint  = DbTool.getInstance().toInteger(cursor, col++);
-		invite.setBonusPoint(bonusPoint == null ? 0 : bonusPoint.intValue());
+		Integer bonusPoint  = DbTool.getInstance().toInteger(cursor, col);
+		invite.setBonusPoint(bonusPoint == null ? 0 : bonusPoint);
 		return invite;
 	}
 
 	@Override
 	protected String customizeWhere(String where) {
-		where = super.customizeWhere(where);
+		String ret = super.customizeWhere(where);
 
-		where = customizeWhereSaison(where);
+		ret = customizeWhereSaison(ret);
 
-		return where;
+		return ret;
 	}
 
-	protected String customizeWhereSaison(String where) {
+	private String customizeWhereSaison(String where) {
+		StringBuilder stb = new StringBuilder(where);
 		Saison saison = TypeManager.getInstance().getSaison();
 		if (saison != null && saison.getId() != null && !SaisonService.isEmpty(saison)) {
-			where += " AND " + DBInviteHelper.COLUMN_ID_SAISON + " = " + saison.getId();
+			stb.append(" AND ").append(DBInviteHelper.COLUMN_ID_SAISON).append(" = ").append(saison.getId());
 		}
-		return where;
+		return stb.toString();
 	}
 
 	@Override
@@ -228,11 +229,15 @@ public class DBInviteDataSource extends GenericDBDataSourceByType<Invite> {
 	}
 
 	private HashMap<String, Double> rawQuerCount(String sql) {
-		HashMap<String, Double> ret = new HashMap<String, Double>();
+		HashMap<String, Double> ret = new HashMap<>();
 		List<HashMap<String,Object>> data = rawQuery(sql);
 
 		for(HashMap<String,Object> row : data) {
-			ret.put(row.get("ID_RANKING").toString(), Double.parseDouble(row.get("NB").toString()));
+			Object id_ranking = row.get("ID_RANKING");
+			if (id_ranking != null) {
+				Object nb = row.get("NB");
+				ret.put(id_ranking.toString(), (nb == null ? 0.0d : Double.parseDouble(nb.toString())));
+			}
 		}
 		return ret;
 	}
