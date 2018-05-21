@@ -2,6 +2,7 @@
 <resources>
 
     <string name="application_label">JustTennis</string>
+    <string name="action_old_ihm">Old Ihm</string>
     <string name="action_settings">Settings</string>
     <string name="action_palmares_fast">Fast Palmares</string>
     <string name="img_desc_qr_code">QR Code</string>

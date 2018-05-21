@@ -1,16 +1,8 @@
 package com.justtennis.activity;
 
-import java.io.Serializable;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.GregorianCalendar;
-import java.util.List;
-import java.util.Locale;
-
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.text.Html;
@@ -48,6 +40,18 @@ import com.justtennis.listener.action.TextWatcherFieldEnableView;
 import com.justtennis.manager.ContactManager;
 import com.justtennis.manager.TypeManager;
 import com.justtennis.notifier.NotifierMessageLogger;
+import com.justtennis.tool.ToolPermission;
+
+import org.gdocument.gtracergps.launcher.log.Logger;
+
+import java.io.Serializable;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
+import java.util.List;
+import java.util.Locale;
 
 public class InviteActivity extends GenericActivity {
 
@@ -154,22 +158,25 @@ public class InviteActivity extends GenericActivity {
 	protected void onResume() {
 		super.onResume();
 
-		if (idPlayerFromResult != null) {
-			business.setPlayer(idPlayerFromResult);
-			idPlayerFromResult = null;
+		if (ToolPermission.checkPermissionCALENDAR(this, true)) {
+			initialize();
 		}
+	}
 
-		if (locationFromResult != null) {
-			business.setLocation(locationFromResult);
-			locationFromResult = null;
+	@Override
+	public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
+		switch (requestCode) {
+			case ToolPermission.MY_PERMISSIONS_REQUEST: {
+				// If request is cancelled, the result arrays are empty.
+				if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+					initialize();
+				} else {
+					logMe("Permission Denied ! Cancel initialization");
+					finish();
+				}
+				return;
+			}
 		}
-		
-		if (locationClubFromResult != null) {
-			business.setLocationClub(locationClubFromResult);
-			locationFromResult = null;
-		}
-		initializeData();
-		initializeListener();
 	}
 
 	@Override
@@ -374,6 +381,25 @@ public class InviteActivity extends GenericActivity {
 		} else {
 			initializeContentViewPlayer(R.layout.element_invite_player);
 		}
+	}
+
+	private void initialize() {
+		if (idPlayerFromResult != null) {
+			business.setPlayer(idPlayerFromResult);
+			idPlayerFromResult = null;
+		}
+
+		if (locationFromResult != null) {
+			business.setLocation(locationFromResult);
+			locationFromResult = null;
+		}
+
+		if (locationClubFromResult != null) {
+			business.setLocationClub(locationClubFromResult);
+			locationFromResult = null;
+		}
+		initializeData();
+		initializeListener();
 	}
 
 	private void initializeContentPlayerView() {
@@ -679,5 +705,9 @@ public class InviteActivity extends GenericActivity {
 			}
 		}
 		return score;
+	}
+
+	private static void logMe(String msg) {
+		Logger.logMe(TAG, msg);
 	}
 }

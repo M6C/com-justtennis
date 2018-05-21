@@ -6,20 +6,27 @@ import android.support.design.widget.BottomNavigationView;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
+import com.cameleon.common.android.factory.FactoryDialog;
 import com.justtennis.R;
 import com.justtennis.activity.InviteActivity;
-import com.justtennis.activity.ListCompetitionActivity;
-import com.justtennis.activity.ListInviteActivity;
+import com.justtennis.activity.ListPersonActivity;
 import com.justtennis.activity.ListPlayerActivity;
 import com.justtennis.activity.MainActivity;
+import com.justtennis.activity.MessageActivity;
+import com.justtennis.activity.PalmaresFastActivity;
 import com.justtennis.activity.PieChartActivity;
 import com.justtennis.business.MainBusiness;
-import com.justtennis.manager.TypeManager;
+import com.justtennis.listener.ok.OnClickDBBackupListenerOk;
+import com.justtennis.listener.ok.OnClickDBRestoreListenerOk;
+import com.justtennis.listener.ok.OnClickSendApkListenerOk;
+import com.justtennis.listener.ok.OnClickSendDBListenerOk;
 import com.justtennis.notifier.NotifierMessageLogger;
 import com.justtennis.tool.DBFeedTool;
+import com.justtennis.tool.ToolPermission;
 import com.justtennis.ui.fragment.ItemDetailFragment;
 
 
@@ -33,12 +40,18 @@ public class ItemDetailActivity extends AppCompatActivity {
 
     private MainBusiness business;
 
+    /**
+     * Used to store the last screen title. For use in {@link #restoreActionBar()}.
+     */
+    private CharSequence mTitle;
     private int currentBottomNavigationItem = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_item_detail);
+
+        mTitle = getTitle();
 
         DBFeedTool.feed(getApplicationContext());
 
@@ -54,7 +67,7 @@ public class ItemDetailActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(getApplicationContext(), MainActivity.class));
+                onClickMatch();
             }
         });
 
@@ -100,19 +113,66 @@ public class ItemDetailActivity extends AppCompatActivity {
     }
 
     @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+//        if (!drawerManager.isDrawerOpen()) {
+        // Only show items in the action bar relevant to this screen
+        // if the drawer is not showing. Otherwise, let the drawer
+        // decide what to show in the action bar.
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.main, menu);
+        restoreActionBar();
+//            setTitle(R.string.application_label);
+        return true;
+//        }
+//        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
-        if (id == android.R.id.home) {
-            // This ID represents the Home or Up button. In the case of this
-            // activity, the Up button is shown. For
-            // more details, see the Navigation pattern on Android Design:
-            //
-            // http://developer.android.com/design/patterns/navigation.html#up-vs-back
-            //
-            navigateUpTo(new Intent(this, ItemListActivity.class));
-            return true;
+        boolean ret = true;
+
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                navigateUpTo(new Intent(this, ItemListActivity.class));
+                break;
+            case R.id.action_old_ihm:
+                startActivity(new Intent(getApplicationContext(), MainActivity.class));
+                break;
+            case R.id.action_palmares_fast:
+                onClickFastPalmares(null);
+                break;
+            case R.id.action_message:
+                onClickMessage(null);
+                break;
+            case R.id.action_list_person:
+                onClickListPerson(null);
+                break;
+            case R.id.action_send_apk:
+                onClickSendApk(null);
+                break;
+            case R.id.action_send_db:
+                onClickSendDb(null);
+                break;
+            case R.id.action_db_backup:
+                onClickDBBackup(null);
+                break;
+            case R.id.action_db_restore:
+                onClickDBRestore(null);
+                break;
+            default:
+                ret = super.onOptionsItemSelected(item);
         }
-        return super.onOptionsItemSelected(item);
+
+        return ret;
+    }
+
+    public void restoreActionBar() {
+        android.app.ActionBar actionBar = getActionBar();
+        if (actionBar != null) {
+            actionBar.setNavigationMode(android.app.ActionBar.NAVIGATION_MODE_STANDARD);
+            actionBar.setDisplayShowTitleEnabled(true);
+            actionBar.setTitle(mTitle);
+        }
     }
 
     private void onClickListInvite() {
@@ -142,6 +202,61 @@ public class ItemDetailActivity extends AppCompatActivity {
     private void onClickListStatistic() {
         Intent intent = new Intent(getApplicationContext(), PieChartActivity.class);
         startActivity(intent);
+    }
+
+    public void onClickFastPalmares(View view) {
+        Intent intent = new Intent(this, PalmaresFastActivity.class);
+        startActivity(intent);
+    }
+
+    public void onClickMessage(View view) {
+        Intent intent = new Intent(getApplicationContext(), MessageActivity.class);
+        startActivity(intent);
+    }
+
+    public void onClickListPerson(View view) {
+        Intent intent = new Intent(getApplicationContext(), ListPersonActivity.class);
+        startActivity(intent);
+    }
+
+    public void onClickSendApk(View view) {
+        OnClickSendApkListenerOk listener = new OnClickSendApkListenerOk(this);
+        FactoryDialog.getInstance()
+                .buildOkCancelDialog(getApplicationContext(), listener, R.string.dialog_send_apk_title, R.string.dialog_send_apk_message)
+                .show();
+    }
+
+    public void onClickSendDb(View view) {
+        OnClickSendDBListenerOk listener = new OnClickSendDBListenerOk(this);
+        FactoryDialog.getInstance()
+                .buildOkCancelDialog(getApplicationContext(), listener, R.string.dialog_send_db_title, R.string.dialog_send_db_message)
+                .show();
+    }
+
+    public void onClickDBBackup(View view) {
+        if (ToolPermission.checkPermissionWRITE_EXTERNAL_STORAGE(this)) {
+            doDBBackup();
+        }
+    }
+
+    public void onClickDBRestore(View view) {
+        if (ToolPermission.checkPermissionREAD_EXTERNAL_STORAGE(this)) {
+            doDBRestore();
+        }
+    }
+
+    private void doDBBackup() {
+        OnClickDBBackupListenerOk listener = new OnClickDBBackupListenerOk(this);
+        FactoryDialog.getInstance()
+                .buildOkCancelDialog(getApplicationContext(), listener, R.string.dialog_backup_title, R.string.dialog_backup_message)
+                .show();
+    }
+
+    private void doDBRestore() {
+        OnClickDBRestoreListenerOk listener = new OnClickDBRestoreListenerOk(this);
+        FactoryDialog.getInstance()
+                .buildOkCancelDialog(getApplicationContext(), listener, R.string.dialog_restore_title, R.string.dialog_restore_message)
+                .show();
     }
 
     private void onClickMatch() {

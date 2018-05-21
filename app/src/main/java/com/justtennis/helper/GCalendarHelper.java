@@ -1,69 +1,75 @@
 package com.justtennis.helper;
 
-import java.util.TimeZone;
-
-import org.gdocument.gtracergps.launcher.log.Logger;
-
+import android.Manifest;
+import android.annotation.SuppressLint;
 import android.content.ContentResolver;
 import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.net.Uri;
+import android.provider.CalendarContract;
 import android.provider.CalendarContract.Attendees;
 import android.provider.CalendarContract.Events;
 import android.provider.CalendarContract.Reminders;
+import android.support.v4.app.ActivityCompat;
 
 import com.justtennis.ApplicationConfig;
 import com.justtennis.domain.Invite.STATUS;
 
+import org.gdocument.gtracergps.launcher.log.Logger;
+
+import java.util.TimeZone;
+
 public class GCalendarHelper {
-	
-	private static final String TAG = GCalendarHelper.class.getSimpleName();
-	
-	public enum EVENT_STATUS {
-		UNKNOW(0, Attendees.ATTENDEE_STATUS_TENTATIVE),
-	    CONFIRMED(1, Attendees.ATTENDEE_STATUS_ACCEPTED),
-	    CANCELED(2, Attendees.ATTENDEE_STATUS_DECLINED);
 
-		int value = 0;
-		int attentee = 0;
-		EVENT_STATUS(int value, int attentee) {
-			this.value = value;
-			this.attentee = attentee;
-		}
-	}
-	
-	public static final int DEFAULT_CALENDAR_ID = 1;
-	public static final int EVENT_ID_NO_CREATED = -1;
+    private static final String TAG = GCalendarHelper.class.getSimpleName();
 
-	private static GCalendarHelper instance;
-	private Context context;
-	
-	private GCalendarHelper() {
-	}
-	
-	private GCalendarHelper(Context context) {
-		this.context = context;
-	}
-	
-	public static GCalendarHelper getInstance(Context context) {
-		if (instance==null) {
-			instance = new GCalendarHelper(context);
-		}
-		return instance;
-	}
+    public enum EVENT_STATUS {
+        UNKNOW(0, Attendees.ATTENDEE_STATUS_TENTATIVE),
+        CONFIRMED(1, Attendees.ATTENDEE_STATUS_ACCEPTED),
+        CANCELED(2, Attendees.ATTENDEE_STATUS_DECLINED);
 
-	public long addEvent(String title,String description,String location,long startTime,long endTime, boolean allDay, boolean hasAlarm, int calendarId,int selectedReminderValue, EVENT_STATUS status) {
-		
-		if (!ApplicationConfig.CALENDAR_ADD_EVENT)
-			return EVENT_ID_NO_CREATED;
-		
-		if (!ApplicationConfig.CALENDAR_ADD_EVENT_CONFIRMED && (EVENT_STATUS.CONFIRMED == status))
-			return EVENT_ID_NO_CREATED;
-		
-		if (!ApplicationConfig.CALENDAR_ADD_EVENT_CANCELED && (EVENT_STATUS.CANCELED == status))
-			return EVENT_ID_NO_CREATED;
+        int value = 0;
+        int attentee = 0;
+
+        EVENT_STATUS(int value, int attentee) {
+            this.value = value;
+            this.attentee = attentee;
+        }
+    }
+
+    public static final int DEFAULT_CALENDAR_ID = 1;
+    public static final int EVENT_ID_NO_CREATED = -1;
+
+    private static GCalendarHelper instance;
+    private Context context;
+
+    private GCalendarHelper() {
+    }
+
+    private GCalendarHelper(Context context) {
+        this.context = context;
+    }
+
+    public static GCalendarHelper getInstance(Context context) {
+        if (instance == null) {
+            instance = new GCalendarHelper(context);
+        }
+        return instance;
+    }
+
+    public long addEvent(String title, String description, String location, long startTime, long endTime, boolean allDay, boolean hasAlarm, int calendarId, int selectedReminderValue, EVENT_STATUS status) {
+
+        if (!ApplicationConfig.CALENDAR_ADD_EVENT)
+            return EVENT_ID_NO_CREATED;
+
+        if (!ApplicationConfig.CALENDAR_ADD_EVENT_CONFIRMED && (EVENT_STATUS.CONFIRMED == status))
+            return EVENT_ID_NO_CREATED;
+
+        if (!ApplicationConfig.CALENDAR_ADD_EVENT_CANCELED && (EVENT_STATUS.CANCELED == status))
+            return EVENT_ID_NO_CREATED;
 
         ContentResolver cr = context.getContentResolver();
         ContentValues values = new ContentValues();
@@ -83,20 +89,30 @@ public class GCalendarHelper {
         values.put(Attendees.SELF_ATTENDEE_STATUS, status.attentee);
 
         //Get current timezone
-        values.put(Events.EVENT_TIMEZONE,TimeZone.getDefault().getID());
-        logMe("Timezone retrieved=>"+TimeZone.getDefault().getID());
-        Uri uri = cr.insert(Events.CONTENT_URI, values);
-        logMe("Uri returned=>"+uri.toString());
+        values.put(Events.EVENT_TIMEZONE, TimeZone.getDefault().getID());
+        logMe("Timezone retrieved=>" + TimeZone.getDefault().getID());
+        @SuppressLint("MissingPermission") Uri uri = cr.insert(Events.CONTENT_URI, values);
+        logMe("Uri returned=>" + uri.toString());
         // get the event ID that is the last element in the Uri
         long eventID = Long.parseLong(uri.getLastPathSegment());
 
         if (hasAlarm) {
-            ContentValues reminders = new ContentValues();
-            reminders.put(Reminders.EVENT_ID, eventID);
-            reminders.put(Reminders.METHOD, Reminders.METHOD_ALERT);
-            reminders.put(Reminders.MINUTES, selectedReminderValue);
+            try {
+                ContentValues reminders = new ContentValues();
+                reminders.put(Reminders.EVENT_ID, eventID);
+                reminders.put(Reminders.METHOD, Reminders.METHOD_ALERT);
+                reminders.put(Reminders.MINUTES, selectedReminderValue);
 
-            Uri uri2 = cr.insert(Reminders.CONTENT_URI, reminders);
+                @SuppressLint("MissingPermission") Uri uri2 = cr.insert(Reminders.CONTENT_URI, reminders);
+                Cursor c = CalendarContract.Reminders.query(cr, eventID, new String[]{CalendarContract.Reminders.MINUTES});
+                if (c.moveToFirst()) {
+                    System.out.println("calendar"
+                            + c.getInt(c.getColumnIndex(CalendarContract.Reminders.MINUTES)));
+                }
+                c.close();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
         
         return eventID;

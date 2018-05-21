@@ -35,6 +35,10 @@ public class ToolPermission {
 		return checkPermission(activity, Manifest.permission.READ_CONTACTS, "Contact acces permission is necessary", doRequest);
 	}
 
+	public static boolean checkPermissionCALENDAR(final Activity activity, boolean doRequest) {
+		return checkPermission(activity, new String[] {Manifest.permission.READ_CALENDAR, Manifest.permission.WRITE_CALENDAR}, "Calendar acces permission is necessary", doRequest);
+	}
+
 	public static void grantPermissionProvider(Context context, Intent intent, Uri uri) {
 		List<ResolveInfo> resInfoList = context.getPackageManager().queryIntentActivities(intent, PackageManager.MATCH_DEFAULT_ONLY);
 		for (ResolveInfo resolveInfo : resInfoList) {
@@ -44,15 +48,28 @@ public class ToolPermission {
 	}
 
 	private static boolean checkPermission(final Activity context, String permission, String message, boolean doRequest) {
+		return checkPermission(context, new String[]{permission}, message, doRequest);
+	}
+
+	private static boolean checkPermission(final Activity context, String[] permission, String message, boolean doRequest) {
 		int currentAPIVersion = Build.VERSION.SDK_INT;
 		if (currentAPIVersion >= android.os.Build.VERSION_CODES.M) {
-			int p = ContextCompat.checkSelfPermission(context, permission);
+			int p = PackageManager.PERMISSION_GRANTED;
+			for(String perm : permission) {
+				p = ContextCompat.checkSelfPermission(context, perm);
+				if (p != PackageManager.PERMISSION_GRANTED) break;
+			}
 			if (p != PackageManager.PERMISSION_GRANTED) {
 				if (doRequest) {
-					if (ActivityCompat.shouldShowRequestPermissionRationale(context, permission)) {
+					boolean shouldShowRequestPermissionRationale = true;
+					for(String perm : permission) {
+						shouldShowRequestPermissionRationale = ActivityCompat.shouldShowRequestPermissionRationale(context, perm);
+						if (shouldShowRequestPermissionRationale) break;
+					}
+					if (shouldShowRequestPermissionRationale) {
 						showDialog(message, context, permission);
 					} else {
-						ActivityCompat.requestPermissions(context, new String[]{permission}, MY_PERMISSIONS_REQUEST);
+						ActivityCompat.requestPermissions(context, permission, MY_PERMISSIONS_REQUEST);
 					}
 				}
 				return false;
@@ -65,7 +82,7 @@ public class ToolPermission {
 		}
 	}
 
-	private static void showDialog(final String msg, final Activity context, final String permission) {
+	private static void showDialog(final String msg, final Activity context, final String[] permission) {
 		ContextThemeWrapper contextThemeWrapper = new ContextThemeWrapper(context, R.style.AppDialog);
 		AlertDialog.Builder alertBuilder = new AlertDialog.Builder(contextThemeWrapper);
 		alertBuilder.setCancelable(false);
@@ -74,7 +91,7 @@ public class ToolPermission {
 		alertBuilder.setPositiveButton(android.R.string.yes,
 			new DialogInterface.OnClickListener() {
 				public void onClick(DialogInterface dialog, int which) {
-					ActivityCompat.requestPermissions((Activity) context, new String[] { permission }, MY_PERMISSIONS_REQUEST);
+					ActivityCompat.requestPermissions((Activity) context, permission , MY_PERMISSIONS_REQUEST);
 				}
 			}
 		);

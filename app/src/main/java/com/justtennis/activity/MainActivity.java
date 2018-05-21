@@ -301,25 +301,10 @@ public class MainActivity extends GenericActivity implements INotifierMessage, I
 		Intent intent = new Intent(getApplicationContext(), UserActivity.class);
 		startActivityForResult(intent, RESULT_CODE_USER);
 	}
-	
-	public void onClickMessage(View view) {
-		Intent intent = new Intent(getApplicationContext(), MessageActivity.class);
-		startActivity(intent);
-	}
-	
-	public void onClickFastPalmares(View view) {
-		Intent intent = new Intent(this, PalmaresFastActivity.class);
-		startActivity(intent);
-	}
 
 	public void onClickListPlayer(View view) {
 		Intent intent = new Intent(getApplicationContext(), ListPlayerActivity.class);
 		intent.putExtra(ListPlayerActivity.EXTRA_MODE, MODE.EDIT);
-		startActivity(intent);
-	}
-	
-	public void onClickListPerson(View view) {
-		Intent intent = new Intent(getApplicationContext(), ListPersonActivity.class);
 		startActivity(intent);
 	}
 
@@ -361,6 +346,21 @@ public class MainActivity extends GenericActivity implements INotifierMessage, I
 		startActivity(intent);
 	}
 
+	public void onClickFastPalmares(View view) {
+		Intent intent = new Intent(this, PalmaresFastActivity.class);
+		startActivity(intent);
+	}
+
+	public void onClickMessage(View view) {
+		Intent intent = new Intent(getApplicationContext(), MessageActivity.class);
+		startActivity(intent);
+	}
+
+	public void onClickListPerson(View view) {
+		Intent intent = new Intent(getApplicationContext(), ListPersonActivity.class);
+		startActivity(intent);
+	}
+
 	public void onClickSendApk(View view) {
 		OnClickSendApkListenerOk listener = new OnClickSendApkListenerOk(this);
 		FactoryDialog.getInstance()
@@ -374,13 +374,13 @@ public class MainActivity extends GenericActivity implements INotifierMessage, I
 			.buildOkCancelDialog(business.getContext(), listener, R.string.dialog_send_db_title, R.string.dialog_send_db_message)
 			.show();
 	}
-	
+
 	public void onClickDBBackup(View view) {
 		if (ToolPermission.checkPermissionWRITE_EXTERNAL_STORAGE(this)) {
 			doDBBackup();
 		}
 	}
-	
+
 	public void onClickDBRestore(View view) {
 		if (ToolPermission.checkPermissionREAD_EXTERNAL_STORAGE(this)) {
 			doDBRestore();
