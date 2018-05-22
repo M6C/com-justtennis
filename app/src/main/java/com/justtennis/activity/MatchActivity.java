@@ -83,7 +83,7 @@ public class MatchActivity extends Activity implements INotifierMessage {
 //		fragmentManager
 //				.beginTransaction()
 //				.replace(R.id.container,
-//						PlaceholderFragment.newInstance(position + 1)).commit();
+//						UiMainPlaceHolderFragment.newInstance(position + 1)).commit();
 //	}
 
 	public void onSectionAttached(int number) {
