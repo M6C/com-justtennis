@@ -68,6 +68,8 @@ public class ItemDetailActivity extends AppCompatActivity implements NavigationD
 
         business = new MainBusiness(this, NotifierMessageLogger.getInstance());
 
+        setSupportActionBar(findViewById(R.id.detail_toolbar));
+
         // Show the Up button in the action bar.
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
