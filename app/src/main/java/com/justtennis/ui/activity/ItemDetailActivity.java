@@ -2,6 +2,7 @@ package com.justtennis.ui.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.BottomNavigationView;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.widget.DrawerLayout;
@@ -109,6 +110,15 @@ public class ItemDetailActivity extends AppCompatActivity implements NavigationD
         });
 
         bottomNavigation.setSelectedItemId(R.id.navigation_invite);
+
+        View toolbar = findViewById(R.id.toolbar_layout);//detail_toolbar
+
+        ((AppBarLayout)toolbar.getParent()).addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
+            @Override
+            public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
+                bottomNavigation.setTranslationY(verticalOffset*-1);
+            }
+        });
 
         // savedInstanceState is non-null when there is fragment state
         // saved from previous configurations of this activity
