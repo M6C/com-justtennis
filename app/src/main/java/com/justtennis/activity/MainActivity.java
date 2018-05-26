@@ -13,8 +13,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ImageView;
-import android.widget.ProgressBar;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.cameleon.common.android.db.sqlite.helper.GenericDBHelper;
@@ -22,18 +20,15 @@ import com.cameleon.common.android.factory.FactoryDialog;
 import com.cameleon.common.android.inotifier.INotifierMessage;
 import com.justtennis.R;
 import com.justtennis.activity.ListPlayerActivity.MODE;
-import com.justtennis.adapter.manager.RankingListManager;
-import com.justtennis.adapter.manager.RankingListManager.IRankingListListener;
+import com.justtennis.activity.notifier.NavigationDrawerCompetitionNotifer;
+import com.justtennis.activity.notifier.NavigationDrawerTrainingNotifer;
+import com.justtennis.activity.notifier.NavigationDrawerUserNotifer;
 import com.justtennis.business.MainBusiness;
-import com.justtennis.domain.ComputeDataRanking;
-import com.justtennis.domain.Ranking;
 import com.justtennis.domain.Saison;
-import com.justtennis.domain.User;
-import com.justtennis.drawer.adapter.NavigationDrawerAdapter.NavigationDrawerNotifer;
 import com.justtennis.drawer.data.NavigationDrawerData;
 import com.justtennis.drawer.manager.DrawerManager;
-import com.justtennis.drawer.manager.DrawerManager.IDrawerLayoutSaisonNotifier;
-import com.justtennis.drawer.manager.DrawerManager.IDrawerLayoutTypeNotifier;
+import com.justtennis.drawer.manager.notifier.IDrawerLayoutSaisonNotifier;
+import com.justtennis.drawer.manager.notifier.IDrawerLayoutTypeNotifier;
 import com.justtennis.listener.ok.OnClickDBBackupListenerOk;
 import com.justtennis.listener.ok.OnClickDBRestoreListenerOk;
 import com.justtennis.listener.ok.OnClickSendApkListenerOk;
@@ -78,10 +73,10 @@ public class MainActivity extends GenericActivity implements INotifierMessage, I
 		drawerManager.setDrawerLayoutSaisonNotifier(this);
 		layoutRoot = findViewById(R.id.root);
 
-		navigationDrawerTraining.add(new NavigationDrawerData(0, R.layout.fragment_navigation_main_drawer_element_user, new NavigationDrawerUserNotifer()));
-		navigationDrawerTraining.add(new NavigationDrawerData(1, R.layout.fragment_navigation_main_drawer_element_training, new NavigationDrawerTrainingNotifer()));
-		navigationDrawerCompetition.add(new NavigationDrawerData(10, R.layout.fragment_navigation_main_drawer_element_user, new NavigationDrawerUserNotifer()));
-		navigationDrawerCompetition.add(new NavigationDrawerData(11, R.layout.fragment_navigation_main_drawer_element_competition, new NavigationDrawerCompetitionNotifer()));
+		navigationDrawerTraining.add(new NavigationDrawerData(0, R.layout.fragment_navigation_main_drawer_element_user, new NavigationDrawerUserNotifer(this)));
+		navigationDrawerTraining.add(new NavigationDrawerData(1, R.layout.fragment_navigation_main_drawer_element_training, new NavigationDrawerTrainingNotifer(this)));
+		navigationDrawerCompetition.add(new NavigationDrawerData(10, R.layout.fragment_navigation_main_drawer_element_user, new NavigationDrawerUserNotifer(this)));
+		navigationDrawerCompetition.add(new NavigationDrawerData(11, R.layout.fragment_navigation_main_drawer_element_competition, new NavigationDrawerCompetitionNotifer(this)));
 
 		Intent intent = getIntent();
 		if (Intent.ACTION_SEND_MULTIPLE.equals(intent.getAction())) {
@@ -145,7 +140,7 @@ public class MainActivity extends GenericActivity implements INotifierMessage, I
 		}
 	}
 
-	private void refreshDrawer() {
+	public void refreshDrawer() {
 		drawerManager.updValue();
 	}
 
@@ -431,134 +426,7 @@ public class MainActivity extends GenericActivity implements INotifierMessage, I
 		Logger.logMe(TAG, msg);
 	}
 
-	private final class NavigationDrawerTrainingNotifer implements NavigationDrawerNotifer {
-
-		private TextView tvMatchValue;
-		private TextView tvMatchMax;
-		private ProgressBar pbMatch;
-
-		@Override
-		public void onCreateView(View view) {
-			tvMatchValue = (TextView) view.findViewById(R.id.tv_match_value);
-			tvMatchMax = (TextView) view.findViewById(R.id.tv_match_max);
-			pbMatch = (ProgressBar) view.findViewById(R.id.pb_match);
-
-			initiazeView(view);
-		}
-
-		@Override
-		public void onUpdateView(View view) {
-			initiazeView(view);
-		}
-
-		private void initiazeView(View view) {
-			ComputeDataRanking dataRanking = business.getDataRanking();
-
-			tvMatchMax.setText(Integer.toString(dataRanking.getNbMatch()));
-			tvMatchValue.setText(Integer.toString(dataRanking.getNbVictoryCalculate()));
-			pbMatch.setMax(dataRanking.getNbMatch());
-			pbMatch.setProgress(dataRanking.getNbVictoryCalculate());
-		}
-	}
-
-	private final class NavigationDrawerUserNotifer implements NavigationDrawerNotifer {
-
-		private RankingListManager rankingListManager;
-		private TextView tvName;
-
-		@Override
-		public void onCreateView(View view) {
-			rankingListManager = RankingListManager.getInstance(MainActivity.this, MainActivity.this);
-			tvName = (TextView) view.findViewById(R.id.tv_name);
-
-			User user = business.getUser();
-			if (user != null) {
-				tvName.setText(user.getFullName());
-			}
-			manageRanking(MainActivity.this, view, user, true);
-			manageRanking(MainActivity.this, view, user, false);
-		}
-
-		@Override
-		public void onUpdateView(View view) {
-//			User user = business.getUser();
-//			tvName.setText(user.getFullName());
-//			rankingListManager.initializeRankingSpinner(view, user, true);
-//			rankingListManager.initializeRankingSpinner(view, user, false);
-		}
-
-		private void manageRanking(MainActivity mainActivity, View view, User user, final boolean estimate) {
-			IRankingListListener listener = new IRankingListListener() {
-				@Override
-				public void onRankingSelected(Ranking ranking) {
-					Long oldId = null;
-					User user = business.getUser();
-					if (user == null) {
-						return;
-					}
-					if (estimate) {
-						oldId = user.getIdRankingEstimate();
-						if (ranking.equals(business.getRankingNC())) {
-							user.setIdRankingEstimate(null);
-						} else {
-							user.setIdRankingEstimate(ranking.getId());
-						}
-					} else {
-						oldId = user.getIdRanking();
-						if (ranking.equals(business.getRankingNC())) {
-							user.setIdRanking(null);
-						} else {
-							user.setIdRanking(ranking.getId());
-						}
-					}
-					if (oldId != null && !oldId.equals(ranking.getId())) {
-						refreshDrawer();
-					}
-				}
-			};
-			rankingListManager.manageRanking(MainActivity.this, view, listener, user, estimate);
-		}
-	}
-
-	private final class NavigationDrawerCompetitionNotifer implements NavigationDrawerNotifer {
-
-		private TextView tvMatchValue;
-		private TextView tvMatchMax;
-		private ProgressBar pbMatch;
-		private TextView tvPointValue;
-		private TextView tvPointMax;
-		private ProgressBar pbPoint;
-
-		@Override
-		public void onCreateView(View view) {
-			tvMatchValue = (TextView) view.findViewById(R.id.tv_match_value);
-			tvMatchMax = (TextView) view.findViewById(R.id.tv_match_max);
-			pbMatch = (ProgressBar) view.findViewById(R.id.pb_match);
-			tvPointValue = (TextView) view.findViewById(R.id.tv_point_value);
-			tvPointMax = (TextView) view.findViewById(R.id.tv_point_max);
-			pbPoint = (ProgressBar) view.findViewById(R.id.pb_point);
-
-			initiazeView(view);
-		}
-
-		@Override
-		public void onUpdateView(View view) {
-//			initiazeView(view);
-		}
-
-		private void initiazeView(View view) {
-			ComputeDataRanking dataRanking = business.getDataRanking();
-			int point = dataRanking.getPointCalculate() + dataRanking.getPointBonus();
-			int nbVictory = dataRanking.getListInviteCalculed().size() + dataRanking.getListInviteNotUsed().size();
-
-			tvMatchMax.setText(Integer.toString(dataRanking.getNbMatch()));
-			tvMatchValue.setText(Integer.toString(nbVictory));
-			pbMatch.setMax(dataRanking.getNbMatch());
-			pbMatch.setProgress(nbVictory);
-			tvPointMax.setText(Integer.toString(dataRanking.getPointObjectif()));
-			tvPointValue.setText(Integer.toString(point));
-			pbPoint.setMax(point > dataRanking.getPointObjectif() ? point : dataRanking.getPointObjectif());
-			pbPoint.setProgress(point);
-		}
+	public MainBusiness getBusiness() {
+		return business;
 	}
 }

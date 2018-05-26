@@ -15,11 +15,11 @@ import android.widget.EditText;
 import android.widget.ListView;
 
 import com.justtennis.domain.RechercheResult;
-import com.justtennis.drawer.adapter.NavigationDrawerAdapter.NavigationDrawerNotifer;
+import com.justtennis.drawer.adapter.notifier.INavigationDrawerNotifer;
 import com.justtennis.drawer.business.INavigationDrawerRechercheBusiness;
 import com.justtennis.R;
 
-public class NavigationDrawerRechercheNotifer implements NavigationDrawerNotifer {
+public class NavigationDrawerRechercheNotifer implements INavigationDrawerNotifer {
 
 	private EditText edtRecherche;
 	private ListView listRecherche;

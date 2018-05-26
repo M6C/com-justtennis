@@ -257,17 +257,21 @@ public class ItemDetailActivity extends AppCompatActivity implements NavigationD
     }
 
     public void onClickSendApk(View view) {
-        OnClickSendApkListenerOk listener = new OnClickSendApkListenerOk(this);
-        FactoryDialog.getInstance()
-                .buildOkCancelDialog(getApplicationContext(), listener, R.string.dialog_send_apk_title, R.string.dialog_send_apk_message)
-                .show();
+        post(() -> {
+            OnClickSendApkListenerOk listener = new OnClickSendApkListenerOk(this);
+            FactoryDialog.getInstance()
+                    .buildOkCancelDialog(this, listener, R.string.dialog_send_apk_title, R.string.dialog_send_apk_message)
+                    .show();
+        });
     }
 
     public void onClickSendDb(View view) {
-        OnClickSendDBListenerOk listener = new OnClickSendDBListenerOk(this);
-        FactoryDialog.getInstance()
-                .buildOkCancelDialog(getApplicationContext(), listener, R.string.dialog_send_db_title, R.string.dialog_send_db_message)
-                .show();
+        post(() -> {
+            OnClickSendDBListenerOk listener = new OnClickSendDBListenerOk(this);
+            FactoryDialog.getInstance()
+                    .buildOkCancelDialog(this, listener, R.string.dialog_send_db_title, R.string.dialog_send_db_message)
+                    .show();
+        });
     }
 
     public void onClickDBBackup(View view) {
@@ -283,17 +287,25 @@ public class ItemDetailActivity extends AppCompatActivity implements NavigationD
     }
 
     private void doDBBackup() {
-        OnClickDBBackupListenerOk listener = new OnClickDBBackupListenerOk(this);
-        FactoryDialog.getInstance()
-                .buildOkCancelDialog(getApplicationContext(), listener, R.string.dialog_backup_title, R.string.dialog_backup_message)
-                .show();
+        post(() -> {
+            OnClickDBBackupListenerOk listener = new OnClickDBBackupListenerOk(this);
+            FactoryDialog.getInstance()
+                    .buildOkCancelDialog(this, listener, R.string.dialog_backup_title, R.string.dialog_backup_message)
+                    .show();
+        });
     }
 
     private void doDBRestore() {
-        OnClickDBRestoreListenerOk listener = new OnClickDBRestoreListenerOk(this);
-        FactoryDialog.getInstance()
-                .buildOkCancelDialog(getApplicationContext(), listener, R.string.dialog_restore_title, R.string.dialog_restore_message)
-                .show();
+        post(() -> {
+            OnClickDBRestoreListenerOk listener = new OnClickDBRestoreListenerOk(this);
+            FactoryDialog.getInstance()
+                    .buildOkCancelDialog(this, listener, R.string.dialog_restore_title, R.string.dialog_restore_message)
+                    .show();
+        });
+    }
+
+    private void post(Runnable o) {
+        findViewById(R.id.container).postDelayed(o, 1000);
     }
 
     private void onClickMatch() {

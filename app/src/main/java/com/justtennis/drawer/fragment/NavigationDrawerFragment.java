@@ -22,7 +22,7 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
-import com.justtennis.drawer.adapter.NavigationDrawerAdapter.NavigationDrawerNotifer;
+import com.justtennis.drawer.adapter.notifier.INavigationDrawerNotifer;
 import com.justtennis.drawer.data.NavigationDrawerData;
 import com.justtennis.R;
 
@@ -211,7 +211,7 @@ public class NavigationDrawerFragment extends Fragment {
 		LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 		for (NavigationDrawerData data : value) {
 			long id = data.getId();
-			NavigationDrawerNotifer notifier = data.getNotifer();
+			INavigationDrawerNotifer notifier = data.getNotifer();
 			View rowView = inflater.inflate(data.getLayout(), mDrawerList, true);
 			rowView.setTag(id);
 			if (notifier != null) {

@@ -19,7 +19,7 @@ import android.widget.Spinner;
 import com.cameleon.common.android.inotifier.INotifierMessage;
 import com.justtennis.adapter.CustomArrayAdapter;
 import com.justtennis.business.MainBusiness;
-import com.justtennis.drawer.adapter.NavigationDrawerAdapter.NavigationDrawerNotifer;
+import com.justtennis.drawer.adapter.notifier.INavigationDrawerNotifer;
 import com.justtennis.drawer.data.NavigationDrawerData;
 import com.justtennis.drawer.fragment.NavigationDrawerFragment;
 import com.justtennis.notifier.NotifierMessageLogger;
@@ -48,7 +48,7 @@ public class MatchActivity extends Activity implements INotifierMessage {
 				.findFragmentById(R.id.navigation_drawer);
 		mTitle = getTitle();
 
-		NavigationDrawerNotifer notiferSaison = new NavigationDrawerNotifer() {
+		INavigationDrawerNotifer notiferSaison = new INavigationDrawerNotifer() {
 
 			@Override
 			public void onCreateView(View view) {

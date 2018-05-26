@@ -1,13 +1,13 @@
 package com.justtennis.drawer.data;
 
-import com.justtennis.drawer.adapter.NavigationDrawerAdapter.NavigationDrawerNotifer;
+import com.justtennis.drawer.adapter.notifier.INavigationDrawerNotifer;
 
 public class NavigationDrawerData {
 	private long id;
 	private int layout;
-	private NavigationDrawerNotifer notifer;
+	private INavigationDrawerNotifer notifer;
 
-	public NavigationDrawerData(long id, int layout, NavigationDrawerNotifer notifer) {
+	public NavigationDrawerData(long id, int layout, INavigationDrawerNotifer notifer) {
 		this.id = id;
 		this.layout = layout;
 		this.notifer = notifer;
@@ -25,10 +25,10 @@ public class NavigationDrawerData {
 	public void setLayout(int layout) {
 		this.layout = layout;
 	}
-	public NavigationDrawerNotifer getNotifer() {
+	public INavigationDrawerNotifer getNotifer() {
 		return notifer;
 	}
-	public void setNotifer(NavigationDrawerNotifer notifer) {
+	public void setNotifer(INavigationDrawerNotifer notifer) {
 		this.notifer = notifer;
 	}
 }

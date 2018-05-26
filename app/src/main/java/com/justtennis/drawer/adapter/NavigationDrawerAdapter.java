@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 
+import com.justtennis.drawer.adapter.notifier.INavigationDrawerNotifer;
 import com.justtennis.drawer.data.NavigationDrawerData;
 
 public class NavigationDrawerAdapter extends BaseAdapter {
@@ -43,7 +44,7 @@ public class NavigationDrawerAdapter extends BaseAdapter {
 	public View getView(int position, View convertView, ViewGroup parent) {
 		NavigationDrawerData v = value.get(position);
 		long id = v.getId();
-		NavigationDrawerNotifer notifier = v.getNotifer();
+		INavigationDrawerNotifer notifier = v.getNotifer();
 
 		View rowView = convertView;
 		if (rowView == null || Long.parseLong(rowView.getTag().toString()) != id) {
@@ -70,8 +71,4 @@ public class NavigationDrawerAdapter extends BaseAdapter {
 		this.value = value;
 	}
 
-	public static interface NavigationDrawerNotifer {
-		public void onCreateView(View view);
-		public void onUpdateView(View view);
-	}
 }
