@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+	<!--Component - NavBar -->
+	<attr name="styleNavBar" format="reference"/>
+	<attr name="styleNavBarHeader" format="reference"/>
+	<attr name="textAppearanceNavBarTitle" format="reference"/>
+	<attr name="styleSpinnerSaison" format="reference"/>
+
+</resources>

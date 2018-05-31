@@ -1,10 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+
 	<attr name="customHeaderTextColor" format="reference|color" />
 	<attr name="customLayoutBackgroundColor" format="reference|color" />
 
-	<!--Component - NavBar -->
-	<attr name="styleNavBar" format="reference"/>
-	<attr name="styleNavBarHeader" format="reference"/>
-	<attr name="textAppearanceNavBarTitle" format="reference"/>
 </resources>

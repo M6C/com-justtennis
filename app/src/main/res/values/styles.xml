@@ -49,6 +49,7 @@
         <item name="styleNavBar">@style/AppComponentNavBar</item>
         <item name="styleNavBarHeader">@style/AppComponentNavBarHeader</item>
         <item name="textAppearanceNavBarTitle">@style/AppTextAppearanceNavBar</item>
+        <item name="styleSpinnerSaison">@style/AppNavBarSpinnerSaison</item>
     </style>
 
     <style name="AppDialog" parent="Theme.AppCompat.Dialog">

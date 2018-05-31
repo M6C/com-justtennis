@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="AppNavBarSpinnerSaison" parent="android:Widget.Material.Spinner">
+        <item name="android:textAppearance">@style/AppNavBarTextAppearance</item>
+    </style>
+</resources>

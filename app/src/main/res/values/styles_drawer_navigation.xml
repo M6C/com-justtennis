@@ -19,4 +19,7 @@
         <item name="android:textSize">18sp</item>
     </style>
 
+    <style name="AppNavBarSpinnerSaison" parent="Base.Widget.AppCompat.Spinner">
+        <item name="android:textAppearance">@style/AppNavBarTextAppearance</item>
+    </style>
 </resources>

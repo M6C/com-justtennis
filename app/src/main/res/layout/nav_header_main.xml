@@ -12,6 +12,13 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     style="?attr/styleNavBarHeader">
 
+    <android.support.v7.widget.AppCompatSpinner
+        android:id="@+id/sp_saison"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        style="?attr/styleSpinnerSaison"
+        android:spinnerMode="dialog"/>
+
     <ImageView
         android:id="@+id/imageView"
         android:layout_width="70dp"

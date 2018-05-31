@@ -7,12 +7,14 @@ import android.content.res.Configuration;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
+import android.support.design.widget.NavigationView;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.AppCompatSpinner;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -92,13 +94,27 @@ public class NavigationDrawerFragment extends Fragment {
     }
 
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        View rootView = inflater.inflate(
-                R.layout.drawer_ui_main, container, false);
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        View rootView = inflater.inflate(R.layout.drawer_ui_main, container, false);
         mDrawerListView = (ListView)rootView.findViewById(R.id.nav_lv);
 
-                mDrawerListView.setOnItemClickListener((parent, view, position, id) -> selectItem(position));
+        NavigationView navView = rootView.findViewById(R.id.nav_view);
+
+//        AppCompatSpinner spSaison = (AppCompatSpinner)rootView.findViewById(R.id.sp_saison);
+        AppCompatSpinner spSaison = navView.getHeaderView(0).findViewById(R.id.sp_saison);
+        if (spSaison != null) {
+            spSaison.setAdapter(new ArrayAdapter<>(
+                    Objects.requireNonNull(getActivity()).getApplicationContext(),
+                    android.R.layout.simple_list_item_activated_1,
+                    android.R.id.text1,
+                    new String[]{
+                            getString(R.string.title_section1),
+                            getString(R.string.title_section2),
+                            getString(R.string.title_section3),
+                    }));
+        }
+
+        mDrawerListView.setOnItemClickListener((parent, view, position, id) -> selectItem(position));
         mDrawerListView.setAdapter(new ArrayAdapter<>(
                 Objects.requireNonNull(getActivity()).getApplicationContext(),
                 android.R.layout.simple_list_item_activated_1,
