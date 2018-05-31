@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="launcherImage">launcherImage</string>
+    <string name="user_postman_name">John Doe</string>
+
+    <string name="menu_item_user">Utilisateurs</string>
+    <string name="menu_item_circuit_start">Départ Tournée</string>
+    <string name="menu_item_tweet">Tweet</string>
+    <string name="menu_item_prestations">Prestations</string>
+
+</resources>

@@ -94,9 +94,11 @@ public class NavigationDrawerFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        mDrawerListView = (ListView) inflater.inflate(
+        View rootView = inflater.inflate(
                 R.layout.drawer_ui_main, container, false);
-        mDrawerListView.setOnItemClickListener((parent, view, position, id) -> selectItem(position));
+        mDrawerListView = (ListView)rootView.findViewById(R.id.nav_lv);
+
+                mDrawerListView.setOnItemClickListener((parent, view, position, id) -> selectItem(position));
         mDrawerListView.setAdapter(new ArrayAdapter<>(
                 Objects.requireNonNull(getActivity()).getApplicationContext(),
                 android.R.layout.simple_list_item_activated_1,
@@ -107,7 +109,7 @@ public class NavigationDrawerFragment extends Fragment {
                         getString(R.string.title_section3),
                 }));
         mDrawerListView.setItemChecked(mCurrentSelectedPosition, true);
-        return mDrawerListView;
+        return rootView;
     }
 
     public boolean isDrawerOpen() {

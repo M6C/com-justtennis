@@ -1,0 +1,10 @@
+<resources>
+
+    <color name="app_gris">#666666</color>
+    <color name="app_gris_fonce">#414042</color>
+    <color name="app_gris_noir">#333333</color>
+    <color name="app_gris_clair">#F0EFED</color>
+
+    <color name="avatar_background_color">#a2b9e1</color>
+
+</resources>

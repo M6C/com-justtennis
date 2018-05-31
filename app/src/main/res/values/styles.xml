@@ -44,6 +44,11 @@
         <!-- <item name="customLayoutBackgroundColor">@color/bleu_transparent_6</item> -->
         <item name="customLayoutBackgroundColor">@color/bleu_2_transparent_6</item>
         <item name="customHeaderTextColor">@color/blanc</item>
+
+        <!-- Component - NavBar -->
+        <item name="styleNavBar">@style/AppComponentNavBar</item>
+        <item name="styleNavBarHeader">@style/AppComponentNavBarHeader</item>
+        <item name="textAppearanceNavBarTitle">@style/AppTextAppearanceNavBar</item>
     </style>
 
     <style name="AppDialog" parent="Theme.AppCompat.Dialog">
