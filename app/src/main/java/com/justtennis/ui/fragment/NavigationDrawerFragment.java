@@ -22,7 +22,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.ListView;
 import android.widget.Toast;
 
 import com.justtennis.R;
@@ -58,7 +57,7 @@ public class NavigationDrawerFragment extends Fragment {
     private ActionBarDrawerToggle mDrawerToggle;
 
     private DrawerLayout mDrawerLayout;
-    private ListView mDrawerListView;
+//    private ListView mDrawerListView;
     private View mFragmentContainerView;
 
     private int mCurrentSelectedPosition = 0;
@@ -96,11 +95,10 @@ public class NavigationDrawerFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.drawer_ui_main, container, false);
-        mDrawerListView = (ListView)rootView.findViewById(R.id.nav_lv);
+//        mDrawerListView = (ListView)rootView.findViewById(R.id.nav_lv);
 
         NavigationView navView = rootView.findViewById(R.id.nav_view);
 
-//        AppCompatSpinner spSaison = (AppCompatSpinner)rootView.findViewById(R.id.sp_saison);
         AppCompatSpinner spSaison = navView.getHeaderView(0).findViewById(R.id.sp_saison);
         if (spSaison != null) {
             spSaison.setAdapter(new ArrayAdapter<>(
@@ -114,17 +112,17 @@ public class NavigationDrawerFragment extends Fragment {
                     }));
         }
 
-        mDrawerListView.setOnItemClickListener((parent, view, position, id) -> selectItem(position));
-        mDrawerListView.setAdapter(new ArrayAdapter<>(
-                Objects.requireNonNull(getActivity()).getApplicationContext(),
-                android.R.layout.simple_list_item_activated_1,
-                android.R.id.text1,
-                new String[]{
-                        getString(R.string.title_section1),
-                        getString(R.string.title_section2),
-                        getString(R.string.title_section3),
-                }));
-        mDrawerListView.setItemChecked(mCurrentSelectedPosition, true);
+//        mDrawerListView.setOnItemClickListener((parent, view, position, id) -> selectItem(position));
+//        mDrawerListView.setAdapter(new ArrayAdapter<>(
+//                Objects.requireNonNull(getActivity()).getApplicationContext(),
+//                android.R.layout.simple_list_item_activated_1,
+//                android.R.id.text1,
+//                new String[]{
+//                        getString(R.string.title_section1),
+//                        getString(R.string.title_section2),
+//                        getString(R.string.title_section3),
+//                }));
+//        mDrawerListView.setItemChecked(mCurrentSelectedPosition, true);
         return rootView;
     }
 
@@ -205,9 +203,9 @@ public class NavigationDrawerFragment extends Fragment {
 
     private void selectItem(int position) {
         mCurrentSelectedPosition = position;
-        if (mDrawerListView != null) {
-            mDrawerListView.setItemChecked(position, true);
-        }
+//        if (mDrawerListView != null) {
+//            mDrawerListView.setItemChecked(position, true);
+//        }
         if (mDrawerLayout != null) {
             mDrawerLayout.closeDrawer(mFragmentContainerView);
         }
