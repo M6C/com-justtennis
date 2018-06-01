@@ -25,6 +25,8 @@ import android.widget.ArrayAdapter;
 import android.widget.Toast;
 
 import com.justtennis.R;
+import com.justtennis.drawer.manager.DrawerManager;
+import com.justtennis.notifier.NotifierMessageLogger;
 
 import java.util.Objects;
 
@@ -63,6 +65,7 @@ public class NavigationDrawerFragment extends Fragment {
     private int mCurrentSelectedPosition = 0;
     private boolean mFromSavedInstanceState;
     private boolean mUserLearnedDrawer;
+    private DrawerManager drawerManager;
 
     public NavigationDrawerFragment() {
     }
@@ -70,6 +73,9 @@ public class NavigationDrawerFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        NotifierMessageLogger notifier = NotifierMessageLogger.getInstance();
+        drawerManager = new DrawerManager(getActivity(), notifier);
 
         // Read in the flag indicating whether or not the user has demonstrated awareness of the
         // drawer. See PREF_USER_LEARNED_DRAWER for details.
@@ -94,23 +100,7 @@ public class NavigationDrawerFragment extends Fragment {
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.drawer_ui_main, container, false);
-//        mDrawerListView = (ListView)rootView.findViewById(R.id.nav_lv);
-
-        NavigationView navView = rootView.findViewById(R.id.nav_view);
-
-        AppCompatSpinner spSaison = navView.getHeaderView(0).findViewById(R.id.sp_saison);
-        if (spSaison != null) {
-            spSaison.setAdapter(new ArrayAdapter<>(
-                    Objects.requireNonNull(getActivity()).getApplicationContext(),
-                    android.R.layout.simple_list_item_activated_1,
-                    android.R.id.text1,
-                    new String[]{
-                            getString(R.string.title_section1),
-                            getString(R.string.title_section2),
-                            getString(R.string.title_section3),
-                    }));
-        }
+        return drawerManager.onCreateView(inflater, container, savedInstanceState);
 
 //        mDrawerListView.setOnItemClickListener((parent, view, position, id) -> selectItem(position));
 //        mDrawerListView.setAdapter(new ArrayAdapter<>(
@@ -123,7 +113,6 @@ public class NavigationDrawerFragment extends Fragment {
 //                        getString(R.string.title_section3),
 //                }));
 //        mDrawerListView.setItemChecked(mCurrentSelectedPosition, true);
-        return rootView;
     }
 
     public boolean isDrawerOpen() {

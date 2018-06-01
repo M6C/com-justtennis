@@ -2,10 +2,15 @@ package com.justtennis.drawer.manager;
 
 import android.app.Activity;
 import android.content.Context;
+import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.design.widget.NavigationView;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v7.widget.AppCompatSpinner;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.LinearLayout;
 
 import com.cameleon.common.android.inotifier.INotifierMessage;
@@ -20,6 +25,7 @@ import com.justtennis.drawer.manager.notifier.IDrawerLayoutTypeNotifier;
 import com.justtennis.manager.TypeManager;
 
 import java.util.List;
+import java.util.Objects;
 
 public class DrawerManager {
 
@@ -49,6 +55,10 @@ public class DrawerManager {
 		business.initializeDataSaison();
 	}
 
+	/**
+	 * For Activity
+	 * @param layoutResId
+	 */
 	public void setContentView(int layoutResId) {
 		activity.setContentView(R.layout.generic_main_drawer);
 
@@ -61,6 +71,26 @@ public class DrawerManager {
 		container.setVisibility(View.VISIBLE);
 
 		initializeDrawer();
+	}
+
+	public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+		View rootView = inflater.inflate(R.layout.drawer_ui_main, container, false);
+//        mDrawerListView = (ListView)rootView.findViewById(R.id.nav_lv);
+
+		NavigationView navView = rootView.findViewById(R.id.nav_view);
+
+		AppCompatSpinner spSaison = navView.getHeaderView(0).findViewById(R.id.sp_saison);
+		if (spSaison != null) {
+			spSaison.setAdapter(new ArrayAdapter<>(
+					Objects.requireNonNull(getActivity()).getApplicationContext(),
+					android.R.layout.simple_list_item_activated_1,
+					android.R.id.text1,
+					getBusiness().getListTxtSaisons()));
+		}
+
+//		initializeDrawer();
+
+		return rootView;
 	}
 
 	public void onResume() {
