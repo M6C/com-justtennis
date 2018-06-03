@@ -16,8 +16,10 @@ import com.justtennis.db.service.PlayerService;
 import com.justtennis.db.service.ScoreSetService;
 import com.justtennis.domain.Invite;
 import com.justtennis.domain.Player;
+import com.justtennis.domain.Saison;
 import com.justtennis.domain.comparator.PlayerComparatorByName;
 import com.justtennis.helper.GCalendarHelper;
+import com.justtennis.manager.TypeManager;
 
 public class ListInviteBusiness {
 
@@ -29,6 +31,7 @@ public class ListInviteBusiness {
 	private InviteService inviteService;
 	private ScoreSetService scoreService;
 	private PlayerService playerService;
+	private TypeManager typeManager;
 
 	private GCalendarHelper calendarHelper;
 
@@ -43,6 +46,7 @@ public class ListInviteBusiness {
 		inviteService = new InviteService(context, notificationMessage);
 		scoreService = new ScoreSetService(context, notificationMessage);
 		calendarHelper = GCalendarHelper.getInstance(context);
+		typeManager = TypeManager.getInstance(context, notificationMessage);
 	}
 
 	public void onCreate() {
@@ -127,5 +131,9 @@ public class ListInviteBusiness {
 
 	public String[] getListPlayerName() {
 		return listPlayerName;
+	}
+
+	public void setSaison(Saison saison) {
+		typeManager.setSaison(saison);
 	}
 }

@@ -21,14 +21,18 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Toast;
 
 import com.justtennis.R;
-import com.justtennis.drawer.manager.DrawerManager;
+import com.justtennis.drawer.manager.business.DrawerSaisonBusiness;
 import com.justtennis.notifier.NotifierMessageLogger;
+import com.justtennis.ui.rxjava.RxBus;
 
 import java.util.Objects;
+
+import io.reactivex.functions.Consumer;
 
 /**
  * Fragment used for managing interactions for and presentation of a navigation drawer.
@@ -61,12 +65,13 @@ public class NavigationDrawerFragment extends Fragment {
     private DrawerLayout mDrawerLayout;
 //    private ListView mDrawerListView;
     private View mFragmentContainerView;
+    private AppCompatSpinner mSpSaison;
+    private ArrayAdapter<String> mAdapterSaison;
 
     private int mCurrentSelectedPosition = 0;
     private boolean mFromSavedInstanceState;
     private boolean mUserLearnedDrawer;
-    private DrawerManager drawerManager;
-
+    private DrawerSaisonBusiness saisonBusiness;
     public NavigationDrawerFragment() {
     }
 
@@ -75,7 +80,8 @@ public class NavigationDrawerFragment extends Fragment {
         super.onCreate(savedInstanceState);
 
         NotifierMessageLogger notifier = NotifierMessageLogger.getInstance();
-        drawerManager = new DrawerManager(getActivity(), notifier);
+        saisonBusiness = new DrawerSaisonBusiness(getActivity().getApplicationContext(), notifier);
+        saisonBusiness.initializeData();
 
         // Read in the flag indicating whether or not the user has demonstrated awareness of the
         // drawer. See PREF_USER_LEARNED_DRAWER for details.
@@ -100,19 +106,60 @@ public class NavigationDrawerFragment extends Fragment {
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        return drawerManager.onCreateView(inflater, container, savedInstanceState);
+        View rootView = inflater.inflate(R.layout.drawer_ui_main, container, false);
 
-//        mDrawerListView.setOnItemClickListener((parent, view, position, id) -> selectItem(position));
-//        mDrawerListView.setAdapter(new ArrayAdapter<>(
-//                Objects.requireNonNull(getActivity()).getApplicationContext(),
-//                android.R.layout.simple_list_item_activated_1,
-//                android.R.id.text1,
-//                new String[]{
-//                        getString(R.string.title_section1),
-//                        getString(R.string.title_section2),
-//                        getString(R.string.title_section3),
-//                }));
-//        mDrawerListView.setItemChecked(mCurrentSelectedPosition, true);
+        NavigationView navView = rootView.findViewById(R.id.nav_view);
+
+        mSpSaison = navView.getHeaderView(0).findViewById(R.id.sp_saison);
+        if (mSpSaison != null) {
+            mAdapterSaison = new ArrayAdapter<>(
+                    Objects.requireNonNull(getActivity()).getApplicationContext(),
+                    android.R.layout.simple_list_item_activated_1,
+                    android.R.id.text1,
+                    saisonBusiness.getListTxtSaisons());
+            mSpSaison.setAdapter(mAdapterSaison);
+            mSpSaison.setSelection(saisonBusiness.getSaisonActivePosition());
+
+            mSpSaison.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                    RxBus.publish(RxBus.SUBJECT_SELECT_SAISON, saisonBusiness.getListSaison().get(position));
+                }
+
+                @Override
+                public void onNothingSelected(AdapterView<?> parent) {
+                    RxBus.publish(RxBus.SUBJECT_SELECT_SAISON, saisonBusiness.getEmptySaison());
+                }
+            });
+        }
+
+        RxBus.subscribe(RxBus.SUBJECT_DB_RESTORED, this, new Consumer<Object>() {
+            @Override
+            public void accept(Object o) throws Exception {
+                saisonBusiness.initializeData();
+                mAdapterSaison.notifyDataSetChanged();
+
+                // Select 1st Saison Active
+                AdapterView.OnItemSelectedListener onItemSelectedListener = mSpSaison.getOnItemSelectedListener();
+                mSpSaison.setOnItemSelectedListener(null);
+                mSpSaison.setSelection(saisonBusiness.getSaisonActivePosition());
+                mSpSaison.setOnItemSelectedListener(onItemSelectedListener);
+            }
+        });
+
+        return rootView;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        saisonBusiness.onResume();
+        mAdapterSaison.notifyDataSetChanged();
+    }
+
+    @Override
+    public void onDestroy() {
+        RxBus.unregister(this);
+        super.onDestroy();
     }
 
     public boolean isDrawerOpen() {
@@ -190,19 +237,6 @@ public class NavigationDrawerFragment extends Fragment {
         mDrawerLayout.setDrawerListener(mDrawerToggle);
     }
 
-    private void selectItem(int position) {
-        mCurrentSelectedPosition = position;
-//        if (mDrawerListView != null) {
-//            mDrawerListView.setItemChecked(position, true);
-//        }
-        if (mDrawerLayout != null) {
-            mDrawerLayout.closeDrawer(mFragmentContainerView);
-        }
-        if (mCallbacks != null) {
-            mCallbacks.onNavigationDrawerItemSelected(position);
-        }
-    }
-
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
@@ -255,6 +289,23 @@ public class NavigationDrawerFragment extends Fragment {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    public AppCompatSpinner getSaisonSpinner() {
+        return mSpSaison;
+    }
+
+    private void selectItem(int position) {
+        mCurrentSelectedPosition = position;
+//        if (mDrawerListView != null) {
+//            mDrawerListView.setItemChecked(position, true);
+//        }
+        if (mDrawerLayout != null) {
+            mDrawerLayout.closeDrawer(mFragmentContainerView);
+        }
+        if (mCallbacks != null) {
+            mCallbacks.onNavigationDrawerItemSelected(position);
+        }
     }
 
     /**

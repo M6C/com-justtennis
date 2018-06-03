@@ -10,10 +10,10 @@ import com.justtennis.db.service.InviteService;
 import com.justtennis.db.service.SaisonService;
 import com.justtennis.domain.Saison;
 
-public class DrawerBusiness {
+public class DrawerSaisonBusiness {
 
 	@SuppressWarnings("unused")
-	private static final String TAG = DrawerBusiness.class.getSimpleName();
+	private static final String TAG = DrawerSaisonBusiness.class.getSimpleName();
 
 	private SaisonService saisonService;
 	private InviteService inviteService;
@@ -22,9 +22,11 @@ public class DrawerBusiness {
 
 	private List<Saison> listSaison = new ArrayList<Saison>();
 	private List<String> listTxtSaisons = new ArrayList<String>();
+	private Saison saisonActive;
+	private int saisonActivePosition = 0;
 
 
-	public DrawerBusiness(Context context, INotifierMessage notificationMessage) {
+	public DrawerSaisonBusiness(Context context, INotifierMessage notificationMessage) {
 		this.context = context;
 		saisonService = new SaisonService(context, notificationMessage);
 		inviteService = new InviteService(context, notificationMessage);
@@ -45,10 +47,20 @@ public class DrawerBusiness {
 
 		listTxtSaisons.clear();
 		listTxtSaisons.addAll(saisonService.getListName(listSaison));
+
+		saisonActive = saisonService.getSaisonActiveOrFirst();
+		saisonActivePosition = listSaison.indexOf(saisonActive);
+		if (saisonActivePosition < 0) {
+			saisonActivePosition = 0;
+		}
 	}
 
 	public boolean isEmptySaison(Saison saison) {
 		return SaisonService.isEmpty(saison);
+	}
+
+	public Saison getEmptySaison() {
+		return SaisonService.getEmpty();
 	}
 
 	public boolean isExistSaison(int year) {
@@ -85,5 +97,13 @@ public class DrawerBusiness {
 
 	public void setListTxtSaisons(List<String> listTxtSaisons) {
 		this.listTxtSaisons = listTxtSaisons;
+	}
+
+	public Saison getSaisonActive() {
+		return saisonActive;
+	}
+
+	public int getSaisonActivePosition() {
+		return saisonActivePosition;
 	}
 }

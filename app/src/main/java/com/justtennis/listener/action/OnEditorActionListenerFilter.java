@@ -1,7 +1,5 @@
 package com.justtennis.listener.action;
 
-import org.gdocument.gtracergps.launcher.log.Logger;
-
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.widget.Filter;
@@ -32,7 +30,6 @@ public class OnEditorActionListenerFilter implements TextWatcher {
 
 	@Override
 	public void onTextChanged(CharSequence txt, int arg1, int arg2, int arg3) {
-Logger.logMe(TAG, "---------------> txt:" + txt + " length:" + txt.length());
 		if (txt.length()>2) {
 			filter.filter(txt);
 		} else {

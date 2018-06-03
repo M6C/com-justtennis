@@ -19,7 +19,7 @@ import com.justtennis.drawer.adapter.notifier.NavigationDrawerSaisonNotifer;
 import com.justtennis.drawer.adapter.notifier.NavigationDrawerTypeNotifer;
 import com.justtennis.drawer.data.NavigationDrawerData;
 import com.justtennis.drawer.fragment.NavigationDrawerFragment;
-import com.justtennis.drawer.manager.business.DrawerBusiness;
+import com.justtennis.drawer.manager.business.DrawerSaisonBusiness;
 import com.justtennis.drawer.manager.notifier.IDrawerLayoutSaisonNotifier;
 import com.justtennis.drawer.manager.notifier.IDrawerLayoutTypeNotifier;
 import com.justtennis.manager.TypeManager;
@@ -41,14 +41,14 @@ public class DrawerManager {
 	private IDrawerLayoutTypeNotifier drawerLayoutTypeNotifier = null;
 	private IDrawerLayoutSaisonNotifier drawerLayoutSaisonNotifier = null;
 	private View drawerLayout;
-	private DrawerBusiness business;
+	private DrawerSaisonBusiness business;
 
 	public DrawerManager(Activity activity, INotifierMessage notificationMessage) {
 		this.notificationMessage = notificationMessage;
 		this.context = activity.getApplicationContext();
 		this.activity = activity;
 
-		this.business = new DrawerBusiness(context, notificationMessage);
+		this.business = new DrawerSaisonBusiness(context, notificationMessage);
 		this.notiferSaison = new NavigationDrawerSaisonNotifer(this);
 		this.typeManager = TypeManager.getInstance(context, notificationMessage);
 
@@ -163,7 +163,7 @@ public class DrawerManager {
 		return activity;
 	}
 
-	public DrawerBusiness getBusiness() {
+	public DrawerSaisonBusiness getBusiness() {
 		return business;
 	}
 

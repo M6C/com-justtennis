@@ -161,5 +161,6 @@
     <string name="navigation_player">Players</string>
     <string name="navigation_statistique">Statistiques</string>
     <string name="navigation_invite">Invites</string>
-
+    <string name="drawer_open">Open navigation drawer</string>
+    <string name="drawer_close">Close navigation drawer</string>
 </resources>

@@ -1,5 +1,6 @@
 package com.justtennis.ui.activity;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
@@ -7,7 +8,9 @@ import android.support.design.widget.BottomNavigationView;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -31,6 +34,7 @@ import com.justtennis.tool.DBFeedTool;
 import com.justtennis.tool.ToolPermission;
 import com.justtennis.ui.fragment.ItemDetailFragment;
 import com.justtennis.ui.fragment.NavigationDrawerFragment;
+import com.justtennis.ui.rxjava.RxBus;
 
 
 /**
@@ -45,6 +49,7 @@ public class ItemDetailActivity extends AppCompatActivity implements NavigationD
      * Fragment managing the behaviors, interactions and presentation of the navigation drawer.
      */
     private NavigationDrawerFragment mNavigationDrawerFragment;
+    private DrawerLayout mDrawerLayout;
 
     private MainBusiness business;
 
@@ -53,6 +58,7 @@ public class ItemDetailActivity extends AppCompatActivity implements NavigationD
      */
     private CharSequence mTitle;
     private int currentBottomNavigationItem = 0;
+    private Toolbar mToolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,63 +68,15 @@ public class ItemDetailActivity extends AppCompatActivity implements NavigationD
         mNavigationDrawerFragment = (NavigationDrawerFragment)getSupportFragmentManager().findFragmentById(R.id.navigation_drawer);
         mTitle = getTitle();
 
+        mToolbar = (Toolbar) findViewById(R.id.detail_toolbar);
+        mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+
         // Set up the drawer.
-        mNavigationDrawerFragment.setUp(R.id.navigation_drawer, (DrawerLayout) findViewById(R.id.drawer_layout));
+        mNavigationDrawerFragment.setUp(R.id.navigation_drawer, mDrawerLayout);
 
         DBFeedTool.feed(getApplicationContext());
 
         business = new MainBusiness(this, NotifierMessageLogger.getInstance());
-
-        setSupportActionBar(findViewById(R.id.detail_toolbar));
-
-        // Show the Up button in the action bar.
-        ActionBar actionBar = getSupportActionBar();
-        if (actionBar != null) {
-            actionBar.setDisplayHomeAsUpEnabled(true);
-        }
-
-        FloatingActionButton fab = findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onClickMatch();
-            }
-        });
-
-        BottomNavigationView bottomNavigation = findViewById(R.id.navigationView);
-        bottomNavigation.setOnNavigationItemSelectedListener(item -> {
-            if (currentBottomNavigationItem == item.getItemId()) {
-                return false;
-            }
-            currentBottomNavigationItem = item.getItemId();
-            switch (currentBottomNavigationItem) {
-                case R.id.navigation_player: {
-                    onClickListPlayer();
-                    return true;
-                }
-                case R.id.navigation_invite: {
-                    onClickListInvite();
-                    return true;
-                }
-                case R.id.navigation_statistic: {
-                    onClickListStatistic();
-                    return true;
-                }
-                default:
-                    return false;
-            }
-        });
-
-        bottomNavigation.setSelectedItemId(R.id.navigation_invite);
-
-        View toolbar = findViewById(R.id.toolbar_layout);//detail_toolbar
-
-        ((AppBarLayout)toolbar.getParent()).addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
-            @Override
-            public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
-                bottomNavigation.setTranslationY(verticalOffset*-1);
-            }
-        });
 
         // savedInstanceState is non-null when there is fragment state
         // saved from previous configurations of this activity
@@ -133,6 +91,10 @@ public class ItemDetailActivity extends AppCompatActivity implements NavigationD
             // Create the detail fragment and add it to the activity
             // using a fragment transaction.
         }
+
+        initializeActionBar();
+        initializeFab();
+        initializeBottomNavigation();
     }
 
     @Override
@@ -284,6 +246,72 @@ public class ItemDetailActivity extends AppCompatActivity implements NavigationD
         if (ToolPermission.checkPermissionREAD_EXTERNAL_STORAGE(this)) {
             doDBRestore();
         }
+    }
+
+    private void initializeActionBar() {
+        setSupportActionBar(mToolbar);
+
+        // Show the Up button in the action bar.
+        ActionBar actionBar = getSupportActionBar();
+        if (actionBar != null) {
+            actionBar.setDisplayHomeAsUpEnabled(true);
+        }
+
+        // Tie DrawerLayout events to the ActionBarToggle
+        mDrawerLayout.addDrawerListener(setupDrawerToggle());
+    }
+
+    private ActionBarDrawerToggle setupDrawerToggle() {
+        // NOTE: Make sure you pass in a valid toolbar reference.  ActionBarDrawToggle() does not require it
+        // and will not render the hamburger icon without it.
+        return new ActionBarDrawerToggle(this, mDrawerLayout, mToolbar, R.string.drawer_open,  R.string.drawer_close);
+    }
+
+    private void initializeBottomNavigation() {
+        BottomNavigationView bottomNavigation = findViewById(R.id.navigationView);
+        bottomNavigation.setOnNavigationItemSelectedListener(item -> {
+            if (currentBottomNavigationItem == item.getItemId()) {
+                return false;
+            }
+            currentBottomNavigationItem = item.getItemId();
+            switch (currentBottomNavigationItem) {
+                case R.id.navigation_player: {
+                    onClickListPlayer();
+                    return true;
+                }
+                case R.id.navigation_invite: {
+                    onClickListInvite();
+                    return true;
+                }
+                case R.id.navigation_statistic: {
+                    onClickListStatistic();
+                    return true;
+                }
+                default:
+                    return false;
+            }
+        });
+
+        bottomNavigation.setSelectedItemId(R.id.navigation_invite);
+
+        View toolbar = findViewById(R.id.toolbar_layout);//detail_toolbar
+
+        ((AppBarLayout)toolbar.getParent()).addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
+            @Override
+            public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
+                bottomNavigation.setTranslationY(verticalOffset*-1);
+            }
+        });
+    }
+
+    private void initializeFab() {
+        FloatingActionButton fab = findViewById(R.id.fab);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onClickMatch();
+            }
+        });
     }
 
     private void doDBBackup() {
