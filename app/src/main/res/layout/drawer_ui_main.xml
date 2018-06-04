@@ -6,14 +6,51 @@
     android:orientation="vertical">
 
     <android.support.design.widget.NavigationView
-        android:id="@+id/nav_view"
+        android:id="@+id/navigation_drawer"
         style="?attr/styleNavBar"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="match_parent"
-        android:layout_gravity="start"
-        app:headerLayout="@layout/nav_header_main"
-        app:menu="@menu/menu_drawer_navigation" />
+        android:layout_gravity="start">
 
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="top"
+            android:orientation="vertical">
+
+            <android.support.design.widget.NavigationView
+                android:id="@+id/nav_view"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:headerLayout="@layout/nav_header_main"/>
+
+            <android.support.design.widget.NavigationView
+                style="?attr/styleNavBar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:menu="@menu/menu_drawer_navigation" />
+        </LinearLayout>
+        <android.support.design.widget.NavigationView
+            android:id="@+id/navigation_drawer_bottom"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom" >
+            <!--app:menu="@menu/drawer_navigation_bottom"-->
+
+            <android.support.design.widget.BottomNavigationView
+                android:id="@+id/navigationView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="0dp"
+                android:layout_marginStart="0dp"
+                android:background="?android:attr/windowBackground"
+                app:itemBackground="@color/colorPrimary"
+                app:itemIconTint="@color/white"
+                app:itemTextColor="@color/white"
+                app:menu="@menu/drawer_navigation_bottom" />
+        </android.support.design.widget.NavigationView>
+
+    </android.support.design.widget.NavigationView>
     <ListView
         android:id="@+id/nav_lv"
         android:layout_width="match_parent"

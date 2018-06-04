@@ -1,6 +1,10 @@
-<resources>
+<resources
+    xmlns:tools="http://schemas.android.com/tools">
 
     <dimen name="nav_header_vertical_spacing">8dp</dimen>
     <dimen name="nav_header_height">176dp</dimen>
 
+    <!-- Override navigation drawer padding to reduce padding between multiple NavigationView (drawer_ui_main) -->
+    <dimen tools:override="true" name="design_navigation_separator_vertical_padding">0dp</dimen>
+    <dimen tools:override="true" name="design_navigation_padding_bottom">0dp</dimen>
 </resources>
