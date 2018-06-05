@@ -2,8 +2,8 @@ package com.justtennis.ui.fragment;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,6 +14,7 @@ import com.justtennis.business.ListInviteBusiness;
 import com.justtennis.domain.Saison;
 import com.justtennis.notifier.NotifierMessageLogger;
 import com.justtennis.ui.adapter.SimpleInviteRecyclerViewAdapter;
+import com.justtennis.ui.manager.DrawerManager;
 import com.justtennis.ui.rxjava.RxBus;
 
 import io.reactivex.functions.Consumer;
@@ -43,9 +44,11 @@ public class ItemDetailFragment extends Fragment implements IListInviteActivity 
         super.onCreate(savedInstanceState);
 
 
-        NotifierMessageLogger notifier = NotifierMessageLogger.getInstance();
+        FragmentActivity activity = getActivity();
         business = new ListInviteBusiness(getContext(), this, NotifierMessageLogger.getInstance());
-        adapter = new SimpleInviteRecyclerViewAdapter(getActivity(), business.getList(), mTwoPane);
+        adapter = new SimpleInviteRecyclerViewAdapter(activity, business.getList(), mTwoPane);
+
+        new DrawerManager().initializeDrawerToogle(activity);
 
         business.onCreate();
     }
@@ -70,7 +73,6 @@ public class ItemDetailFragment extends Fragment implements IListInviteActivity 
         RxBus.subscribe(RxBus.SUBJECT_SELECT_SAISON, this, new Consumer<Object>() {
             @Override
             public void accept(Object o) throws Exception {
-                Log.e(ItemDetailFragment.class.getName(), "-----------------------> RxBux.SUBJECT_SELECT_SAISON");
                 Saison saison = (Saison) o;
                 business.setSaison(saison);
                 business.refreshData();
@@ -80,7 +82,6 @@ public class ItemDetailFragment extends Fragment implements IListInviteActivity 
         RxBus.subscribe(RxBus.SUBJECT_DB_RESTORED, this, new Consumer<Object>() {
             @Override
             public void accept(Object o) throws Exception {
-                Log.e(ItemDetailFragment.class.getName(), "-----------------------> RxBus.SUBJECT_DB_RESTORED");
                 business.refreshData();
                 adapter.notifyDataSetChanged();
             }
