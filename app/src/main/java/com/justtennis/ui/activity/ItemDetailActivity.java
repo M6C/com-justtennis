@@ -1,8 +1,9 @@
 package com.justtennis.ui.activity;
 
-import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.res.Resources;
 import android.os.Bundle;
+import android.support.annotation.IdRes;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.BottomNavigationView;
 import android.support.design.widget.FloatingActionButton;
@@ -11,6 +12,7 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -29,6 +31,7 @@ import com.justtennis.listener.ok.OnClickDBBackupListenerOk;
 import com.justtennis.listener.ok.OnClickDBRestoreListenerOk;
 import com.justtennis.listener.ok.OnClickSendApkListenerOk;
 import com.justtennis.listener.ok.OnClickSendDBListenerOk;
+import com.justtennis.manager.TypeManager;
 import com.justtennis.notifier.NotifierMessageLogger;
 import com.justtennis.tool.DBFeedTool;
 import com.justtennis.tool.ToolPermission;
@@ -50,8 +53,10 @@ public class ItemDetailActivity extends AppCompatActivity implements NavigationD
      */
     private NavigationDrawerFragment mNavigationDrawerFragment;
     private DrawerLayout mDrawerLayout;
+    private BottomNavigationView mBottomNavigation;
 
     private MainBusiness business;
+    private TypeManager mTypeManager;
 
     /**
      * Used to store the last screen title. For use in {@link #restoreActionBar()}.
@@ -76,7 +81,9 @@ public class ItemDetailActivity extends AppCompatActivity implements NavigationD
 
         DBFeedTool.feed(getApplicationContext());
 
-        business = new MainBusiness(this, NotifierMessageLogger.getInstance());
+        NotifierMessageLogger notifier = NotifierMessageLogger.getInstance();
+        business = new MainBusiness(this, notifier);
+        mTypeManager = TypeManager.getInstance(this, notifier);
 
         // savedInstanceState is non-null when there is fragment state
         // saved from previous configurations of this activity
@@ -95,6 +102,20 @@ public class ItemDetailActivity extends AppCompatActivity implements NavigationD
         initializeActionBar();
         initializeFab();
         initializeBottomNavigation();
+        initializeSubscribeChangeType();
+    }
+
+    @Override
+    protected void onDestroy() {
+        RxBus.unregister(this);
+        super.onDestroy();
+    }
+
+    @Override
+    protected void onApplyThemeResource(Resources.Theme theme, @IdRes int resid, boolean first) {
+        int id = TypeManager.getThemeResource();
+        theme.applyStyle(id, true);
+        super.onApplyThemeResource(theme, id, first);
     }
 
     @Override
@@ -174,6 +195,30 @@ public class ItemDetailActivity extends AppCompatActivity implements NavigationD
         }
     }
 
+    private void initializeSubscribeChangeType() {
+        RxBus.subscribe(RxBus.SUBJECT_CHANGE_TYPE, this, o -> {
+            TypeManager.TYPE type = (TypeManager.TYPE)o;
+            mTypeManager.setType(type);
+
+            int id = TypeManager.getThemeResource(type);
+            setTheme(id);
+
+            Intent intent = getIntent();
+            intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            finish();
+            startActivity(intent);
+        });
+    }
+
+    @Override
+    public Resources.Theme getTheme() {
+        Resources.Theme theme = super.getTheme();
+        theme.applyStyle(TypeManager.getThemeResource(), true);
+        return theme;
+    }
+
     private void onClickListInvite() {
 //        Intent intent = null;
 //        switch(TypeManager.getInstance().getType()) {
@@ -186,10 +231,12 @@ public class ItemDetailActivity extends AppCompatActivity implements NavigationD
 //                break;
 //        }
 //        startActivity(intent);
-        ItemDetailFragment fragment = new ItemDetailFragment();
-        getSupportFragmentManager().beginTransaction()
-                .add(R.id.item_detail_container, fragment)
-                .commit();
+        if (mBottomNavigation.getSelectedItemId() != R.id.navigation_invite) {
+            ItemDetailFragment fragment = new ItemDetailFragment();
+            getSupportFragmentManager().beginTransaction()
+                    .add(R.id.item_detail_container, fragment)
+                    .commit();
+        }
     }
 
     private void onClickListPlayer() {
@@ -268,8 +315,8 @@ public class ItemDetailActivity extends AppCompatActivity implements NavigationD
     }
 
     private void initializeBottomNavigation() {
-        BottomNavigationView bottomNavigation = findViewById(R.id.navigationView);
-        bottomNavigation.setOnNavigationItemSelectedListener(item -> {
+        mBottomNavigation = findViewById(R.id.navigationView);
+        mBottomNavigation.setOnNavigationItemSelectedListener(item -> {
             if (currentBottomNavigationItem == item.getItemId()) {
                 return false;
             }
@@ -292,14 +339,14 @@ public class ItemDetailActivity extends AppCompatActivity implements NavigationD
             }
         });
 
-        bottomNavigation.setSelectedItemId(R.id.navigation_invite);
+        mBottomNavigation.setSelectedItemId(R.id.navigation_invite);
 
         View toolbar = findViewById(R.id.toolbar_layout);//detail_toolbar
 
         ((AppBarLayout)toolbar.getParent()).addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
             @Override
             public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
-                bottomNavigation.setTranslationY(verticalOffset*-1);
+                mBottomNavigation.setTranslationY(verticalOffset*-1);
             }
         });
     }

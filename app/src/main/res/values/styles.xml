@@ -35,6 +35,8 @@
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
         <!-- All customizations that are NOT specific to a particular API-level can go here. -->
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
 <!-- 
 	    <item name="android:spinnerStyle">@style/SpinnerStyle</item>
 	    <item name="android:spinnerItemStyle">@style/SpinnerItem</item>
@@ -57,10 +59,10 @@
         <item name="android:windowNoTitle">true</item>
     </style>
 
-    <style name="AppTheme.Competition" parent="AppBaseTheme">
-	    <item name="android:buttonStyle">@style/StyleButton.Competition</item>
-        <item name="customLayoutBackgroundColor">@color/orange_transparent_6</item>
-        <item name="customHeaderTextColor">@color/blanc</item>
+    <style name="AppTheme.Competition">
+        <item name="colorPrimary">@color/colorAccent</item>
+        <item name="colorPrimaryDark">@color/colorAccentDark</item>
+        <item name="colorAccent">@color/colorPrimary</item>
 	</style>
     
     <!-- Application theme. -->

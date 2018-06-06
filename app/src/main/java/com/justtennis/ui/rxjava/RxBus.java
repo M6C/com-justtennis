@@ -66,7 +66,7 @@ public final class RxBus {
      * This should be called when the object is going to go out of memory.
      */
     public static void unregister(@NonNull Object lifecycle) {
-        Log.e(RxBus.class.getName(), "-----------------------> unregister");
+        Log.e(RxBus.class.getName(), "-----------------------> unregister " + lifecycle.getClass().getName());
         //We have to remove the composition from the map, because once you dispose it can't be used anymore
         CompositeDisposable compositeDisposable = sSubscriptionsMap.remove(lifecycle);
         if (compositeDisposable != null) {

@@ -86,6 +86,10 @@ public class TypeManager {
 	}
 
 	public static int getThemeResource() {
+		return getThemeResource(type);
+	}
+
+	public static int getThemeResource(TYPE type) {
 		switch(type) {
 			case COMPETITION: {
 				return R.style.AppTheme_Competition;

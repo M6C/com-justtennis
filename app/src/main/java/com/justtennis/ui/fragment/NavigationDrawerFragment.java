@@ -125,7 +125,6 @@ public class NavigationDrawerFragment extends Fragment {
         initializeSaison(navView);
         initializeType(rootView);
         initializeSubscribeDbRestored();
-        initializeSubscribeChangeType();
 
         return rootView;
     }
@@ -328,14 +327,6 @@ public class NavigationDrawerFragment extends Fragment {
                 mSpSaison.setSelection(saisonBusiness.getSaisonActivePosition());
                 mSpSaison.setOnItemSelectedListener(onItemSelectedListener);
             }
-        });
-    }
-
-    private void initializeSubscribeChangeType() {
-        RxBus.subscribe(RxBus.SUBJECT_CHANGE_TYPE, this, o -> {
-            TypeManager.TYPE type = (TypeManager.TYPE)o;
-            mTypeManager.setType(type);
-            managerVisibilityType(type);
         });
     }
 

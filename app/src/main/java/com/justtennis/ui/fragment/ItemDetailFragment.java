@@ -3,6 +3,7 @@ package com.justtennis.ui.fragment;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,8 +17,6 @@ import com.justtennis.notifier.NotifierMessageLogger;
 import com.justtennis.ui.adapter.SimpleInviteRecyclerViewAdapter;
 import com.justtennis.ui.manager.DrawerManager;
 import com.justtennis.ui.rxjava.RxBus;
-
-import io.reactivex.functions.Consumer;
 
 public class ItemDetailFragment extends Fragment implements IListInviteActivity {
 
@@ -70,30 +69,34 @@ public class ItemDetailFragment extends Fragment implements IListInviteActivity 
         assert mEmptyView != null;
         setupRecyclerView();
 
-        RxBus.subscribe(RxBus.SUBJECT_SELECT_SAISON, this, new Consumer<Object>() {
-            @Override
-            public void accept(Object o) throws Exception {
-                Saison saison = (Saison) o;
-                business.setSaison(saison);
-                business.refreshData();
-                adapter.notifyDataSetChanged();
-            }
-        });
-        RxBus.subscribe(RxBus.SUBJECT_DB_RESTORED, this, new Consumer<Object>() {
-            @Override
-            public void accept(Object o) throws Exception {
-                business.refreshData();
-                adapter.notifyDataSetChanged();
-            }
-        });
-        RxBus.subscribe(RxBus.SUBJECT_CHANGE_TYPE, this, new Consumer<Object>() {
-            @Override
-            public void accept(Object o) throws Exception {
-                business.refreshData();
-                adapter.notifyDataSetChanged();
-            }
-        });
+        initializeSubscribeSelectSaison();
+        initializeSubscribeDbRestored();
+//        initializeSubscribeChangeType();
+
         return rootView;
+    }
+
+//    private void initializeSubscribeChangeType() {
+//        RxBus.subscribe(RxBus.SUBJECT_CHANGE_TYPE, this, o -> {
+//            business.refreshData();
+//            adapter.notifyDataSetChanged();
+//        });
+//    }
+
+    private void initializeSubscribeDbRestored() {
+        RxBus.subscribe(RxBus.SUBJECT_DB_RESTORED, this, o -> {
+            business.refreshData();
+            adapter.notifyDataSetChanged();
+        });
+    }
+
+    private void initializeSubscribeSelectSaison() {
+        RxBus.subscribe(RxBus.SUBJECT_SELECT_SAISON, this, o -> {
+            Saison saison = (Saison) o;
+            business.setSaison(saison);
+            business.refreshData();
+            adapter.notifyDataSetChanged();
+        });
     }
 
     @Override
