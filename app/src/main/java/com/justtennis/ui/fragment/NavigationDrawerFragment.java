@@ -2,6 +2,7 @@ package com.justtennis.ui.fragment;
 
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.os.Bundle;
@@ -23,10 +24,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.Toast;
 
 import com.justtennis.R;
 import com.justtennis.drawer.manager.business.DrawerSaisonBusiness;
+import com.justtennis.manager.TypeManager;
 import com.justtennis.notifier.NotifierMessageLogger;
 import com.justtennis.ui.rxjava.RxBus;
 
@@ -62,16 +65,23 @@ public class NavigationDrawerFragment extends Fragment {
      */
     private ActionBarDrawerToggle mDrawerToggle;
 
+    private Context mContext;
     private DrawerLayout mDrawerLayout;
 //    private ListView mDrawerListView;
     private View mFragmentContainerView;
     private AppCompatSpinner mSpSaison;
+    private Button mButtonTypeTraining;
+    private Button mButtonTypeMatch;
+    private Button mButtonTypeTrainingDisable;
+    private Button mButtonTypeMatchDisable;
     private ArrayAdapter<String> mAdapterSaison;
 
     private int mCurrentSelectedPosition = 0;
     private boolean mFromSavedInstanceState;
     private boolean mUserLearnedDrawer;
     private DrawerSaisonBusiness saisonBusiness;
+    private TypeManager mTypeManager;
+
     public NavigationDrawerFragment() {
     }
 
@@ -80,8 +90,10 @@ public class NavigationDrawerFragment extends Fragment {
         super.onCreate(savedInstanceState);
 
         NotifierMessageLogger notifier = NotifierMessageLogger.getInstance();
-        saisonBusiness = new DrawerSaisonBusiness(getActivity().getApplicationContext(), notifier);
+        mContext = getActivity().getApplicationContext();
+        saisonBusiness = new DrawerSaisonBusiness(mContext, notifier);
         saisonBusiness.initializeData();
+        mTypeManager = TypeManager.getInstance(mContext, notifier);
 
         // Read in the flag indicating whether or not the user has demonstrated awareness of the
         // drawer. See PREF_USER_LEARNED_DRAWER for details.
@@ -110,41 +122,10 @@ public class NavigationDrawerFragment extends Fragment {
 
         NavigationView navView = rootView.findViewById(R.id.nav_view);
 
-        mSpSaison = navView.getHeaderView(0).findViewById(R.id.sp_saison);
-        if (mSpSaison != null) {
-            mAdapterSaison = new ArrayAdapter<>(
-                    Objects.requireNonNull(getActivity()).getApplicationContext(),
-                    android.R.layout.simple_list_item_activated_1,
-                    android.R.id.text1,
-                    saisonBusiness.getListTxtSaisons());
-            mSpSaison.setAdapter(mAdapterSaison);
-            mSpSaison.setSelection(saisonBusiness.getSaisonActivePosition());
-
-            mSpSaison.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-                public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                    RxBus.publish(RxBus.SUBJECT_SELECT_SAISON, saisonBusiness.getListSaison().get(position));
-                }
-
-                @Override
-                public void onNothingSelected(AdapterView<?> parent) {
-                    RxBus.publish(RxBus.SUBJECT_SELECT_SAISON, saisonBusiness.getEmptySaison());
-                }
-            });
-        }
-
-        RxBus.subscribe(RxBus.SUBJECT_DB_RESTORED, this, new Consumer<Object>() {
-            @Override
-            public void accept(Object o) throws Exception {
-                saisonBusiness.initializeData();
-                mAdapterSaison.notifyDataSetChanged();
-
-                // Select 1st Saison Active
-                AdapterView.OnItemSelectedListener onItemSelectedListener = mSpSaison.getOnItemSelectedListener();
-                mSpSaison.setOnItemSelectedListener(null);
-                mSpSaison.setSelection(saisonBusiness.getSaisonActivePosition());
-                mSpSaison.setOnItemSelectedListener(onItemSelectedListener);
-            }
-        });
+        initializeSaison(navView);
+        initializeType(rootView);
+        initializeSubscribeDbRestored();
+        initializeSubscribeChangeType();
 
         return rootView;
     }
@@ -152,6 +133,8 @@ public class NavigationDrawerFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
+        managerVisibilityType(mTypeManager.getType());
+
         saisonBusiness.onResume();
         mAdapterSaison.notifyDataSetChanged();
     }
@@ -295,6 +278,81 @@ public class NavigationDrawerFragment extends Fragment {
         return mSpSaison;
     }
 
+    private void initializeSaison(NavigationView navView) {
+        mSpSaison = navView.getHeaderView(0).findViewById(R.id.sp_saison);
+        if (mSpSaison != null) {
+            mAdapterSaison = new ArrayAdapter<>(
+                    Objects.requireNonNull(getActivity()).getApplicationContext(),
+                    android.R.layout.simple_list_item_activated_1,
+                    android.R.id.text1,
+                    saisonBusiness.getListTxtSaisons());
+            mSpSaison.setAdapter(mAdapterSaison);
+            mSpSaison.setSelection(saisonBusiness.getSaisonActivePosition());
+
+            mSpSaison.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                    RxBus.publish(RxBus.SUBJECT_SELECT_SAISON, saisonBusiness.getListSaison().get(position));
+                }
+
+                @Override
+                public void onNothingSelected(AdapterView<?> parent) {
+                    RxBus.publish(RxBus.SUBJECT_SELECT_SAISON, saisonBusiness.getEmptySaison());
+                }
+            });
+        }
+    }
+
+    private void initializeType(View navView) {
+        NavigationView navigationDrawerBottom = navView.findViewById(R.id.navigation_drawer_bottom);
+        if (navigationDrawerBottom != null) {
+            mButtonTypeTraining = navigationDrawerBottom.findViewById(R.id.btn_type_entrainement);
+            mButtonTypeTrainingDisable = navigationDrawerBottom.findViewById(R.id.btn_type_entrainement_disable);
+            mButtonTypeMatch = navigationDrawerBottom.findViewById(R.id.btn_type_match);
+            mButtonTypeMatchDisable = navigationDrawerBottom.findViewById(R.id.btn_type_match_disable);
+
+            mButtonTypeTrainingDisable.setOnClickListener(v -> RxBus.publish(RxBus.SUBJECT_CHANGE_TYPE, TypeManager.TYPE.TRAINING));
+            mButtonTypeMatchDisable.setOnClickListener(v -> RxBus.publish(RxBus.SUBJECT_CHANGE_TYPE, TypeManager.TYPE.COMPETITION));
+        }
+    }
+
+    private void initializeSubscribeDbRestored() {
+        RxBus.subscribe(RxBus.SUBJECT_DB_RESTORED, this, new Consumer<Object>() {
+            @Override
+            public void accept(Object o) throws Exception {
+                saisonBusiness.initializeData();
+                mAdapterSaison.notifyDataSetChanged();
+
+                // Select 1st Saison Active
+                AdapterView.OnItemSelectedListener onItemSelectedListener = mSpSaison.getOnItemSelectedListener();
+                mSpSaison.setOnItemSelectedListener(null);
+                mSpSaison.setSelection(saisonBusiness.getSaisonActivePosition());
+                mSpSaison.setOnItemSelectedListener(onItemSelectedListener);
+            }
+        });
+    }
+
+    private void initializeSubscribeChangeType() {
+        RxBus.subscribe(RxBus.SUBJECT_CHANGE_TYPE, this, o -> {
+            TypeManager.TYPE type = (TypeManager.TYPE)o;
+            mTypeManager.setType(type);
+            managerVisibilityType(type);
+        });
+    }
+
+    private void managerVisibilityType(TypeManager.TYPE o) {
+        if (TypeManager.TYPE.TRAINING == o) {
+            mButtonTypeTraining.setVisibility(View.VISIBLE);
+            mButtonTypeTrainingDisable.setVisibility(View.GONE);
+            mButtonTypeMatch.setVisibility(View.GONE);
+            mButtonTypeMatchDisable.setVisibility(View.VISIBLE);
+        } else {
+            mButtonTypeTraining.setVisibility(View.GONE);
+            mButtonTypeTrainingDisable.setVisibility(View.VISIBLE);
+            mButtonTypeMatch.setVisibility(View.VISIBLE);
+            mButtonTypeMatchDisable.setVisibility(View.GONE);
+        }
+    }
+
     private void selectItem(int position) {
         mCurrentSelectedPosition = position;
 //        if (mDrawerListView != null) {
@@ -310,7 +368,7 @@ public class NavigationDrawerFragment extends Fragment {
 
     /**
      * Per the navigation drawer design guidelines, updates the action bar to show the global app
-     * 'context', rather than just what's in the current screen.
+     * 'mContext', rather than just what's in the current screen.
      */
     private void showGlobalContextActionBar() {
         ActionBar actionBar = getActionBar();

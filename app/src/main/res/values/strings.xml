@@ -45,8 +45,8 @@
     <string name="msg_no_message_to_send">No Message to send</string>
     <string name="msg_common_format_date">EEEEE d MMMMM yyyy</string>
     <string name="msg_common_format_time">H:mm</string>
-    <string name="invite_type_text_entrainement">Entrainement</string>
-    <string name="invite_type_text_entrainement_small">E</string>
+    <string name="invite_type_text_entrainement">Training</string>
+    <string name="invite_type_text_entrainement_small">T</string>
     <string name="invite_type_text_match">Match</string>
     <string name="invite_type_text_match_small">M</string>
     <string name="fr_msg_invite_message_default">Salut [FIRSTNAME], veux-tu jouer [DATE] à [HOUR] ? [USER_FIRSTNAME]</string>

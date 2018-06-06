@@ -86,6 +86,13 @@ public class ItemDetailFragment extends Fragment implements IListInviteActivity 
                 adapter.notifyDataSetChanged();
             }
         });
+        RxBus.subscribe(RxBus.SUBJECT_CHANGE_TYPE, this, new Consumer<Object>() {
+            @Override
+            public void accept(Object o) throws Exception {
+                business.refreshData();
+                adapter.notifyDataSetChanged();
+            }
+        });
         return rootView;
     }
 

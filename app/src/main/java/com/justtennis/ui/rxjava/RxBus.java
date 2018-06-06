@@ -30,9 +30,10 @@ public final class RxBus {
 
     public static final int SUBJECT_SELECT_SAISON = 0;
     public static final int SUBJECT_DB_RESTORED = 1;
+    public static final int SUBJECT_CHANGE_TYPE = 2;
 
     @Retention(SOURCE)
-    @IntDef({SUBJECT_SELECT_SAISON, SUBJECT_DB_RESTORED})
+    @IntDef({SUBJECT_SELECT_SAISON, SUBJECT_DB_RESTORED, SUBJECT_CHANGE_TYPE})
     @interface Subject {
     }
 

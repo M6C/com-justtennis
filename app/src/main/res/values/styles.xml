@@ -40,7 +40,8 @@
 	    <item name="android:spinnerItemStyle">@style/SpinnerItem</item>
 	    <item name="android:spinnerDropDownItemStyle">@style/SpinnerDropDownItem</item> -->
  -->
-	    <item name="android:buttonStyle">@style/StyleButton</item>
+        <item name="android:buttonStyle">@style/StyleButton</item>
+        <item name="buttonStyleAccent">@style/StyleButtonAccent</item>
         <!-- <item name="customLayoutBackgroundColor">@color/bleu_transparent_6</item> -->
         <item name="customLayoutBackgroundColor">@color/bleu_2_transparent_6</item>
         <item name="customHeaderTextColor">@color/blanc</item>
@@ -70,11 +71,12 @@
 	    <item name="android:spinnerDropDownItemStyle">@style/SpinnerDropDownItem</item> -->
     </style>
 
-	<style name="StyleButton" parent="android:style/Widget.Button">
-		<item name="android:textSize">19sp</item>
-        <item name="android:background">@color/button_background_color</item>
-        <item name="android:textColor">@color/button_text_color</item>
-	</style>
+    <style name="StyleButton" parent="@style/Widget.AppCompat.Button">
+        <item name="android:textSize">19sp</item>
+    </style>
+    <style name="StyleButtonAccent" parent="@style/Widget.AppCompat.Button.Colored">
+        <item name="android:textSize">19sp</item>
+    </style>
 
 	<style name="StyleButton.Competition">
         <item name="android:background">@color/button_background_color_orange</item>
