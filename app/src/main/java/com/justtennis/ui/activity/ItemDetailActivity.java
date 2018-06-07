@@ -12,7 +12,6 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -234,7 +233,7 @@ public class ItemDetailActivity extends AppCompatActivity implements NavigationD
         if (mBottomNavigation.getSelectedItemId() != R.id.navigation_invite) {
             ItemDetailFragment fragment = new ItemDetailFragment();
             getSupportFragmentManager().beginTransaction()
-                    .add(R.id.item_detail_container, fragment)
+                    .replace(R.id.item_detail_container, fragment)
                     .commit();
         }
     }
