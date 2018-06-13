@@ -83,4 +83,10 @@
 	<style name="StyleButton.Competition">
         <item name="android:background">@color/button_background_color_orange</item>
 	</style>
+
+    <style name="SpinnerTheme" parent="android:Widget.DeviceDefault.Spinner">
+        <item name="android:textSize">24sp</item>
+        <item name="android:textColor">@android:color/white</item>
+        <item name="android:textAppearance">@style/AppTextAppearanceNavBar</item>
+    </style>
 </resources>

@@ -4,9 +4,8 @@
     <string name="launcherImage">launcherImage</string>
     <string name="user_postman_name">John Doe</string>
 
-    <string name="menu_item_user">Utilisateurs</string>
-    <string name="menu_item_circuit_start">Départ Tournée</string>
-    <string name="menu_item_tweet">Tweet</string>
-    <string name="menu_item_prestations">Prestations</string>
+    <string name="menu_item_user">Utilisateur</string>
+    <string name="menu_item_list_club">Clubs</string>
+    <string name="menu_item_palmares_fast">Fast Palmares</string>
 
 </resources>

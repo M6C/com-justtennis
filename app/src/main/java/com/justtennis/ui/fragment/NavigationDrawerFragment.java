@@ -3,6 +3,7 @@ package com.justtennis.ui.fragment;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.os.Bundle;
@@ -28,6 +29,8 @@ import android.widget.Button;
 import android.widget.Toast;
 
 import com.justtennis.R;
+import com.justtennis.activity.PalmaresFastActivity;
+import com.justtennis.activity.UserActivity;
 import com.justtennis.drawer.manager.business.DrawerSaisonBusiness;
 import com.justtennis.manager.TypeManager;
 import com.justtennis.notifier.NotifierMessageLogger;
@@ -120,9 +123,8 @@ public class NavigationDrawerFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.drawer_ui_main, container, false);
 
-        NavigationView navView = rootView.findViewById(R.id.nav_view);
-
-        initializeSaison(navView);
+        initializeMenu(rootView);
+        initializeSaison(rootView);
         initializeType(rootView);
         initializeSubscribeDbRestored();
 
@@ -277,7 +279,34 @@ public class NavigationDrawerFragment extends Fragment {
         return mSpSaison;
     }
 
-    private void initializeSaison(NavigationView navView) {
+    private void initializeMenu(View rootView) {
+        NavigationView navView = rootView.findViewById(R.id.nav_menu);
+        navView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                switch (item.getItemId()) {
+                    case R.id.nav_user: {
+                        Intent intent = new Intent(getActivity().getApplicationContext(), UserActivity.class);
+                        startActivity(intent);
+                        break;
+                    }
+                    case R.id.nav_list_club: {
+                        break;
+                    }
+                    case R.id.nav_palmares_fast: {
+                        Intent intent = new Intent(getActivity().getApplicationContext(), PalmaresFastActivity.class);
+                        startActivity(intent);
+                        break;
+                    }
+                }
+                return false;
+            }
+        });
+    }
+
+    private void initializeSaison(View rootView) {
+        NavigationView navView = rootView.findViewById(R.id.nav_view);
+
         mSpSaison = navView.getHeaderView(0).findViewById(R.id.sp_saison);
         if (mSpSaison != null) {
             mAdapterSaison = new ArrayAdapter<>(

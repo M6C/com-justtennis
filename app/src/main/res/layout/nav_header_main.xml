@@ -25,11 +25,13 @@
         android:text="@string/user_postman_name"
         style="?attr/textAppearanceNavBarTitle" />
 
-    <android.support.v7.widget.AppCompatSpinner
+    <!--style="?attr/styleSpinnerSaison"-->
+    <!--<android.support.v7.widget.AppCompatSpinner-->
+    <Spinner
         android:id="@+id/sp_saison"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        style="?attr/styleSpinnerSaison"
+        style="@style/SpinnerTheme"
         android:spinnerMode="dialog"/>
 
 </LinearLayout>
