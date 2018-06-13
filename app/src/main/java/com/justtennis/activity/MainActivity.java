@@ -19,7 +19,6 @@ import com.cameleon.common.android.db.sqlite.helper.GenericDBHelper;
 import com.cameleon.common.android.factory.FactoryDialog;
 import com.cameleon.common.android.inotifier.INotifierMessage;
 import com.justtennis.R;
-import com.justtennis.activity.ListPlayerActivity.MODE;
 import com.justtennis.activity.notifier.NavigationDrawerCompetitionNotifer;
 import com.justtennis.activity.notifier.NavigationDrawerTrainingNotifer;
 import com.justtennis.activity.notifier.NavigationDrawerUserNotifer;
@@ -36,6 +35,7 @@ import com.justtennis.listener.ok.OnClickSendDBListenerOk;
 import com.justtennis.manager.TypeManager;
 import com.justtennis.manager.TypeManager.TYPE;
 import com.justtennis.tool.ToolPermission;
+import com.justtennis.ui.common.CommonEnum;
 
 import org.gdocument.gtracergps.launcher.log.Logger;
 
@@ -299,13 +299,13 @@ public class MainActivity extends GenericActivity implements INotifierMessage, I
 
 	public void onClickListPlayer(View view) {
 		Intent intent = new Intent(getApplicationContext(), ListPlayerActivity.class);
-		intent.putExtra(ListPlayerActivity.EXTRA_MODE, MODE.EDIT);
+		intent.putExtra(ListPlayerActivity.EXTRA_MODE, CommonEnum.LIST_PLAYER_MODE.EDIT);
 		startActivity(intent);
 	}
 
 	public void onClickListPlayerInvite(View view) {
 		Intent intent = new Intent(getApplicationContext(), ListPlayerActivity.class);
-		intent.putExtra(ListPlayerActivity.EXTRA_MODE, MODE.INVITE);
+		intent.putExtra(ListPlayerActivity.EXTRA_MODE, CommonEnum.LIST_PLAYER_MODE.INVITE);
 //		intent = new Intent(getApplicationContext(), MatchActivity.class);
 		startActivity(intent);
 	}
@@ -313,7 +313,7 @@ public class MainActivity extends GenericActivity implements INotifierMessage, I
 	public void onClickMatch(View view) {
 		Intent intent = new Intent(getApplicationContext(), InviteActivity.class);
 		intent.putExtra(InviteActivity.EXTRA_PLAYER_ID, business.getUnknownPlayerId());
-		intent.putExtra(InviteActivity.EXTRA_MODE, InviteActivity.MODE.INVITE_SIMPLE);
+		intent.putExtra(InviteActivity.EXTRA_MODE, CommonEnum.MODE.INVITE_SIMPLE);
 		startActivity(intent);
 	}
 

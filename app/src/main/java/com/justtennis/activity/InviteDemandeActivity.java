@@ -38,6 +38,7 @@ import com.justtennis.domain.Ranking;
 import com.justtennis.manager.ContactManager;
 import com.justtennis.manager.TypeManager;
 import com.justtennis.notifier.NotifierMessageLogger;
+import com.justtennis.ui.common.CommonEnum;
 
 public class InviteDemandeActivity extends GenericActivity {
 
@@ -233,7 +234,7 @@ public class InviteDemandeActivity extends GenericActivity {
 	
 	public void onClickDetail(View view) {
 		Intent intent = new Intent(this, InviteActivity.class);
-		intent.putExtra(InviteActivity.EXTRA_MODE, InviteActivity.MODE.INVITE_DETAIL);
+		intent.putExtra(InviteActivity.EXTRA_MODE, CommonEnum.MODE.INVITE_DETAIL);
 		intent.putExtra(InviteActivity.EXTRA_INVITE, business.getInvite());
 		startActivityForResult(intent, RESULT_PLAYER);
 		finish();
@@ -242,7 +243,7 @@ public class InviteDemandeActivity extends GenericActivity {
 	public void onClickPlayer(View view) {
 		if (business.isUnknownPlayer()) {
 			Intent intent = new Intent(this, ListPlayerActivity.class);
-			intent.putExtra(ListPlayerActivity.EXTRA_MODE, ListPlayerActivity.MODE.FOR_RESULT);
+			intent.putExtra(ListPlayerActivity.EXTRA_MODE, CommonEnum.LIST_PLAYER_MODE.FOR_RESULT);
 //			Intent intent = new Intent(this, PlayerActivity.class);
 //			intent.putExtra(PlayerActivity.EXTRA_MODE, PlayerActivity.MODE.FOR_RESULT);
 			startActivityForResult(intent, RESULT_PLAYER);

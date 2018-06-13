@@ -18,7 +18,6 @@ import com.cameleon.common.tool.StringTool;
 import com.justtennis.ApplicationConfig;
 import com.justtennis.R;
 import com.justtennis.activity.InviteActivity;
-import com.justtennis.activity.InviteActivity.MODE;
 import com.justtennis.db.service.InviteService;
 import com.justtennis.db.service.MessageService;
 import com.justtennis.db.service.PlayerService;
@@ -43,6 +42,7 @@ import com.justtennis.manager.SmsManager;
 import com.justtennis.manager.TypeManager;
 import com.justtennis.parser.LocationParser;
 import com.justtennis.parser.SmsParser;
+import com.justtennis.ui.common.CommonEnum;
 
 public class InviteBusiness {
 
@@ -61,7 +61,7 @@ public class InviteBusiness {
 	private TypeManager typeManager;
 	private User user;
 	private Invite invite;
-	private MODE mode = MODE.INVITE_SIMPLE;
+	private CommonEnum.MODE mode = CommonEnum.MODE.INVITE_SIMPLE;
 	private List<Ranking> listRanking;
 	private List<String> listTxtRankings;
 	private List<Saison> listSaison = new ArrayList<Saison>();
@@ -91,7 +91,7 @@ public class InviteBusiness {
 		invite.setType(typeManager.getType());
 
 		if (intent.hasExtra(InviteActivity.EXTRA_MODE)) {
-			mode = (MODE) intent.getSerializableExtra(InviteActivity.EXTRA_MODE);
+			mode = (CommonEnum.MODE) intent.getSerializableExtra(InviteActivity.EXTRA_MODE);
 		}
 
 		if (intent.hasExtra(InviteActivity.EXTRA_USER)) {
@@ -115,7 +115,7 @@ public class InviteBusiness {
 	}
 
 	public void initializeData(Bundle savedInstanceState) {
-		mode = (MODE) savedInstanceState.getSerializable(InviteActivity.EXTRA_MODE);
+		mode = (CommonEnum.MODE) savedInstanceState.getSerializable(InviteActivity.EXTRA_MODE);
 		invite = (Invite) savedInstanceState.getSerializable(InviteActivity.EXTRA_INVITE);
 
 		initializeDataRanking();
@@ -339,11 +339,11 @@ public class InviteBusiness {
 		setClub((Club)location);
 	}
 
-	public MODE getMode() {
+	public CommonEnum.MODE getMode() {
 		return mode;
 	}
 
-	public void setMode(MODE mode) { 
+	public void setMode(CommonEnum.MODE mode) { 
 		this.mode = mode;
 	}
 

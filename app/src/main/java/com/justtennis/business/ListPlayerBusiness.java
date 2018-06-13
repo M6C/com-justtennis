@@ -1,20 +1,11 @@
 package com.justtennis.business;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Date;
-import java.util.List;
-
-import org.gdocument.gtracergps.launcher.log.Logger;
-
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 
 import com.cameleon.common.android.inotifier.INotifierMessage;
 import com.justtennis.activity.ListPlayerActivity;
-import com.justtennis.activity.ListPlayerActivity.MODE;
 import com.justtennis.db.service.InviteService;
 import com.justtennis.db.service.PlayerService;
 import com.justtennis.db.service.UserService;
@@ -27,6 +18,15 @@ import com.justtennis.drawer.business.INavigationDrawerRechercheBusiness;
 import com.justtennis.manager.SmsManager;
 import com.justtennis.notifier.NotifierMessageLogger;
 import com.justtennis.parser.SmsParser;
+import com.justtennis.ui.common.CommonEnum;
+
+import org.gdocument.gtracergps.launcher.log.Logger;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Date;
+import java.util.List;
 
 public class ListPlayerBusiness implements INavigationDrawerRechercheBusiness {
 
@@ -40,7 +40,7 @@ public class ListPlayerBusiness implements INavigationDrawerRechercheBusiness {
 	private User user;
 	private Bundle extraIn = null;
 
-	private MODE mode;
+	private CommonEnum.LIST_PLAYER_MODE mode;
 
 	private String findText;
 
@@ -56,10 +56,10 @@ public class ListPlayerBusiness implements INavigationDrawerRechercheBusiness {
 	public void initialize() {
 
 		Intent intent = context.getIntent();
-		mode = MODE.EDIT;
+		mode = CommonEnum.LIST_PLAYER_MODE.EDIT;
 
 		if (intent.hasExtra(ListPlayerActivity.EXTRA_MODE)) {
-			mode = (MODE) intent.getSerializableExtra(ListPlayerActivity.EXTRA_MODE);
+			mode = (CommonEnum.LIST_PLAYER_MODE) intent.getSerializableExtra(ListPlayerActivity.EXTRA_MODE);
 		}
 
 		refreshData();
@@ -88,7 +88,7 @@ public class ListPlayerBusiness implements INavigationDrawerRechercheBusiness {
 		return context;
 	}
 
-	public MODE getMode() {
+	public CommonEnum.LIST_PLAYER_MODE getMode() {
 		return mode;
 	}
 
@@ -120,7 +120,7 @@ public class ListPlayerBusiness implements INavigationDrawerRechercheBusiness {
 
 	private void refreshData() {
 		list.clear();
-		if (!MODE.EDIT.equals(mode)) {
+		if (!CommonEnum.LIST_PLAYER_MODE.EDIT.equals(mode)) {
 			list.add(playerService.getUnknownPlayer());
 		}
 		list.addAll(sortPlayer(playerService.getList()));

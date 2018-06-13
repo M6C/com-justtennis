@@ -1,61 +1,35 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/layout_main"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@drawable/background_03"
-    android:orientation="vertical"
-    android:paddingBottom="@dimen/activity_vertical_margin"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
-    android:gravity="center_vertical"
-    tools:context=".InviteActivity" >
-    
-    <LinearLayout
-        android:id="@+id/sv_content"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="5dp"
-		android:background="@color/form_background_color"
-        android:gravity="top"
-        android:orientation="vertical"
-	>
-		<LinearLayout
-			android:id="@+id/ll_player"
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:app="http://schemas.android.com/apk/res-auto"
+	xmlns:tools="http://schemas.android.com/tools"
+	android:id="@+id/layout_main"
+	android:layout_width="match_parent"
+	android:layout_height="match_parent"
+	android:background="@drawable/background_03"
+	android:fitsSystemWindows="true"
+	tools:ignore="MergeRootFrame">
+	<LinearLayout
+		android:layout_width="match_parent"
+		android:layout_height="match_parent"
+		android:orientation="vertical"
+		android:paddingBottom="@dimen/activity_vertical_margin"
+		android:paddingLeft="@dimen/activity_horizontal_margin"
+		android:paddingRight="@dimen/activity_horizontal_margin"
+		android:paddingTop="@dimen/activity_vertical_margin"
+		android:gravity="center_vertical" >
+
+		<android.support.v4.widget.NestedScrollView
+			android:id="@+id/invite_container"
 			android:layout_width="match_parent"
-			android:layout_height="wrap_content"
-			android:layout_margin="5dp"
+			android:layout_height="match_parent"
 			android:orientation="vertical"
-		/>
-		<ScrollView
-			android:layout_width="match_parent"
-			android:layout_height="0dp"
-			android:layout_gravity="center_horizontal"
-			android:layout_margin="5dp"
-			android:layout_weight="1"
+			android:paddingBottom="@dimen/activity_vertical_margin"
+			android:paddingLeft="@dimen/activity_horizontal_margin"
+			android:paddingRight="@dimen/activity_horizontal_margin"
+			android:paddingTop="@dimen/activity_vertical_margin"
+			android:gravity="center_vertical"
 			android:background="@color/form_background_color"
-		>
-			<LinearLayout
-				android:layout_width="match_parent"
-				android:layout_height="wrap_content"
-				android:orientation="vertical" >
-				<include layout="@layout/element_invite_date"/>
-				<include layout="@layout/element_invite_detail_button"/>
-				<include layout="@layout/element_invite_location"/>
-				<include layout="@layout/element_invite_score"/>
-				<include layout="@layout/element_invite_bonus"/>
-			</LinearLayout>
-		</ScrollView>
-		<LinearLayout
-		    android:layout_width="match_parent"
-		    android:layout_height="wrap_content"
-			android:layout_margin="5dp"
-		    android:gravity="top"
-			android:orientation="vertical"
-		>
-			<include layout="@layout/element_invite_button_demande"/>
-			<include layout="@layout/element_invite_button_confirm"/>
-		</LinearLayout>
+			app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 	</LinearLayout>
-</LinearLayout>
+
+</android.support.design.widget.CoordinatorLayout>

@@ -1,17 +1,10 @@
 package com.justtennis.activity;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-
-import org.gdocument.gtracergps.launcher.log.Logger;
-
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.AdapterView;
@@ -46,6 +39,13 @@ import com.justtennis.manager.TypeManager;
 import com.justtennis.notifier.NotifierMessageLogger;
 import com.justtennis.parser.PlayerParser;
 import com.justtennis.tool.ToolPermission;
+import com.justtennis.ui.common.CommonEnum;
+
+import org.gdocument.gtracergps.launcher.log.Logger;
+
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 public class ListPlayerActivity extends GenericActivity {
 
@@ -54,12 +54,6 @@ public class ListPlayerActivity extends GenericActivity {
 	public static final String EXTRA_PLAYER_ID = "EXTRA_PLAYER_ID";
 	private static final int RESULT_PLAYER = 1;
 	private static final int RESULT_PLAYER_FOR_INFO = 2;
-
-	public enum MODE {
-		EDIT,
-		FOR_RESULT,
-		INVITE
-	};
 
 	private ListPlayerBusiness business;
 	private DrawerManager drawerManager;
@@ -131,7 +125,7 @@ public class ListPlayerActivity extends GenericActivity {
 					if (id != PlayerService.ID_EMPTY_PLAYER) {
 						Intent intent = new Intent(this, InviteActivity.class);
 						intent.putExtra(InviteActivity.EXTRA_PLAYER_ID, id);
-						intent.putExtra(InviteActivity.EXTRA_MODE, InviteActivity.MODE.INVITE_DETAIL);
+						intent.putExtra(InviteActivity.EXTRA_MODE, CommonEnum.MODE.INVITE_DETAIL);
 						startActivity(intent);
 					}
 				}
@@ -198,10 +192,10 @@ public class ListPlayerActivity extends GenericActivity {
 		if (business.getExtraIn() != null) {
 			intent.putExtras(business.getExtraIn());
 		}
-		if (business.getMode() == MODE.FOR_RESULT) {
+		if (business.getMode() == CommonEnum.LIST_PLAYER_MODE.FOR_RESULT) {
 			intent.putExtra(PlayerActivity.EXTRA_MODE, PlayerActivity.MODE.FOR_RESULT);
 			startActivityForResult(intent, RESULT_PLAYER);
-		} else if (business.getMode() == MODE.INVITE) {
+		} else if (business.getMode() == CommonEnum.LIST_PLAYER_MODE.INVITE) {
 			intent.putExtra(PlayerActivity.EXTRA_MODE, PlayerActivity.MODE.FOR_RESULT);
 			startActivityForResult(intent, RESULT_PLAYER_FOR_INFO);
 		} else {
@@ -235,7 +229,7 @@ public class ListPlayerActivity extends GenericActivity {
 
 		Intent intent = new Intent(getApplicationContext(), InviteActivity.class);
 		intent.putExtra(InviteActivity.EXTRA_PLAYER_ID, player.getId());
-		intent.putExtra(InviteActivity.EXTRA_MODE, InviteActivity.MODE.INVITE_SIMPLE);
+		intent.putExtra(InviteActivity.EXTRA_MODE, CommonEnum.MODE.INVITE_SIMPLE);
 		startActivity(intent);
 		
 //		finish();
@@ -259,7 +253,7 @@ public class ListPlayerActivity extends GenericActivity {
 		}
 	}
 
-	public MODE getMode() {
+	public CommonEnum.LIST_PLAYER_MODE getMode() {
 		return business.getMode();
 	}
 	

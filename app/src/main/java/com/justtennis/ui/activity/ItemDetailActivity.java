@@ -34,6 +34,8 @@ import com.justtennis.manager.TypeManager;
 import com.justtennis.notifier.NotifierMessageLogger;
 import com.justtennis.tool.DBFeedTool;
 import com.justtennis.tool.ToolPermission;
+import com.justtennis.ui.common.CommonEnum;
+import com.justtennis.ui.fragment.InviteFragment;
 import com.justtennis.ui.fragment.ItemDetailFragment;
 import com.justtennis.ui.fragment.NavigationDrawerFragment;
 import com.justtennis.ui.rxjava.RxBus;
@@ -240,7 +242,7 @@ public class ItemDetailActivity extends AppCompatActivity implements NavigationD
 
     private void onClickListPlayer() {
         Intent intent = new Intent(getApplicationContext(), ListPlayerActivity.class);
-        intent.putExtra(ListPlayerActivity.EXTRA_MODE, ListPlayerActivity.MODE.EDIT);
+        intent.putExtra(ListPlayerActivity.EXTRA_MODE, CommonEnum.LIST_PLAYER_MODE.EDIT);
         startActivity(intent);
     }
 
@@ -383,9 +385,18 @@ public class ItemDetailActivity extends AppCompatActivity implements NavigationD
     }
 
     private void onClickMatch() {
-        Intent intent = new Intent(getApplicationContext(), InviteActivity.class);
-        intent.putExtra(InviteActivity.EXTRA_PLAYER_ID, business.getUnknownPlayerId());
-        intent.putExtra(InviteActivity.EXTRA_MODE, InviteActivity.MODE.INVITE_SIMPLE);
-        startActivity(intent);
+//        Intent intent = new Intent(getApplicationContext(), InviteActivity.class);
+//        intent.putExtra(InviteActivity.EXTRA_PLAYER_ID, business.getUnknownPlayerId());
+//        intent.putExtra(InviteActivity.EXTRA_MODE, CommonEnum.MODE.INVITE_SIMPLE);
+//        startActivity(intent);
+
+        InviteFragment fragment = new InviteFragment();
+        Bundle args = new Bundle();
+        args.putLong(InviteActivity.EXTRA_PLAYER_ID, business.getUnknownPlayerId());
+        args.putSerializable(InviteActivity.EXTRA_MODE, CommonEnum.MODE.INVITE_SIMPLE);
+        fragment.setArguments(args);
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.item_detail_container, fragment)
+                .commit();
     }
 }

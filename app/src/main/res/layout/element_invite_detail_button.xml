@@ -1,14 +1,16 @@
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/ll_detail"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="horizontal"
-    android:background="@color/form_background_color">
-    <Button 
+    android:background="@color/form_background_color"
+	tools:context="com.justtennis.ui.fragment.InviteFragment">
+    <Button
+		android:id="@+id/btn_detail"
     	android:layout_width="match_parent"
     	android:layout_height="wrap_content"
-    	android:onClick="onClickDetail"
     	android:text="@string/txt_detail_invite"
     />
 </LinearLayout>

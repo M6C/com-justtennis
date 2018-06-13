@@ -13,7 +13,6 @@
 	    android:layout_weight=".5"
     	android:layout_marginRight="5dp"
         android:text="@string/button_text_yes"
-        android:onClick="onClickInviteConfirmeYes"
     />
     <Button
         android:id="@+id/btn_invite_confirm_no"
@@ -21,6 +20,5 @@
 	    android:layout_height="wrap_content"
 	    android:layout_weight=".5"
         android:text="@string/button_text_no"
-        android:onClick="onClickInviteConfirmeNo"
     />
 </LinearLayout>

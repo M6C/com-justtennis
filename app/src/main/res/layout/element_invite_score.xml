@@ -23,7 +23,6 @@
 		android:layout_height="wrap_content"
 		android:gravity="center_horizontal"
 		android:editable="false"
-		android:onClick="onClickInviteScore"
 		android:textSize="@dimen/player_field_size"
 		android:hint="@string/txt_score" />
 </LinearLayout>

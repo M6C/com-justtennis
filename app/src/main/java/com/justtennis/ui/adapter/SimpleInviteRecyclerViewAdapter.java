@@ -15,6 +15,8 @@ import com.justtennis.activity.InviteActivity;
 import com.justtennis.adapter.viewholder.InviteViewHolder;
 import com.justtennis.domain.Invite;
 import com.justtennis.helper.InviteViewHelper;
+import com.justtennis.ui.common.CommonEnum;
+import com.justtennis.ui.fragment.InviteFragment;
 import com.justtennis.ui.fragment.ItemDetailFragment;
 
 import java.io.Serializable;
@@ -40,18 +42,21 @@ public class SimpleInviteRecyclerViewAdapter extends RecyclerView.Adapter<Invite
             if (mTwoPane) {
                 Bundle arguments = new Bundle();
                 arguments.putSerializable(InviteActivity.EXTRA_INVITE, (Serializable)item.invite);
-                arguments.putSerializable(InviteActivity.EXTRA_MODE, InviteActivity.MODE.INVITE_DETAIL);
+                arguments.putSerializable(InviteActivity.EXTRA_MODE, CommonEnum.MODE.INVITE_DETAIL);
                 ItemDetailFragment fragment = new ItemDetailFragment();
                 fragment.setArguments(arguments);
                 mParentActivity.getSupportFragmentManager().beginTransaction()
                         .replace(R.id.item_detail_container, fragment)
                         .commit();
             } else {
-                Context context = view.getContext();
-                Intent intent = new Intent(context, InviteActivity.class);
-                intent.putExtra(InviteActivity.EXTRA_INVITE, (Serializable)item.invite);
-                intent.putExtra(InviteActivity.EXTRA_MODE, InviteActivity.MODE.INVITE_DETAIL);
-                context.startActivity(intent);
+                InviteFragment fragment = new InviteFragment();
+                Bundle args = new Bundle();
+                args.putSerializable(InviteActivity.EXTRA_INVITE, (Serializable)item.invite);
+                args.putSerializable(InviteActivity.EXTRA_MODE, CommonEnum.MODE.INVITE_DETAIL);
+                fragment.setArguments(args);
+                mParentActivity.getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.item_detail_container, fragment)
+                        .commit();
             }
         }
     };

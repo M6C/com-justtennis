@@ -35,7 +35,6 @@
 		    android:layout_height="wrap_content"
 	        android:editable="false"
 	        android:gravity="center_vertical|center_horizontal"
-		    android:onClick="onClickInviteDate"
 		/>
 		<EditText
 		    android:id="@+id/inviteTime"
@@ -44,7 +43,6 @@
 			android:layout_marginTop="5dp"
 	        android:editable="false"
 	        android:gravity="center_vertical|center_horizontal"
-		    android:onClick="onClickInviteTime"
 		/>
 	</LinearLayout>
 </LinearLayout>
