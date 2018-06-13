@@ -35,6 +35,7 @@ import com.justtennis.listener.ok.OnClickSendDBListenerOk;
 import com.justtennis.manager.TypeManager;
 import com.justtennis.notifier.NotifierMessageLogger;
 import com.justtennis.tool.DBFeedTool;
+import com.justtennis.tool.ExitTool;
 import com.justtennis.tool.ToolPermission;
 import com.justtennis.ui.common.CommonEnum;
 import com.justtennis.ui.fragment.InviteFragment;
@@ -60,9 +61,6 @@ public class ItemDetailActivity extends AppCompatActivity implements NavigationD
 
     private MainBusiness business;
     private TypeManager mTypeManager;
-
-    private boolean backPressedToExitOnce = false;
-    private Toast toast = null;
 
     /**
      * Used to store the last screen title. For use in {@link #restoreActionBar()}.
@@ -194,20 +192,8 @@ public class ItemDetailActivity extends AppCompatActivity implements NavigationD
 
     @Override
     public void onBackPressed() {
-        if (backPressedToExitOnce) {
+        if (ExitTool.onBackPressed(this)) {
             super.onBackPressed();
-        } else if (this.toast == null) {
-            this.backPressedToExitOnce = true;
-            this.toast = Toast.makeText(this, R.string.press_again_to_exit, Toast.LENGTH_SHORT);
-            this.toast.show();
-            new Handler().postDelayed(new Runnable() {
-
-                @Override
-                public void run() {
-                    backPressedToExitOnce = false;
-                    ItemDetailActivity.this.toast = null;
-                }
-            }, 2000);
         }
     }
 

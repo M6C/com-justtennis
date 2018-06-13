@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Handler;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -34,6 +33,7 @@ import com.justtennis.listener.ok.OnClickSendApkListenerOk;
 import com.justtennis.listener.ok.OnClickSendDBListenerOk;
 import com.justtennis.manager.TypeManager;
 import com.justtennis.manager.TypeManager.TYPE;
+import com.justtennis.tool.ExitTool;
 import com.justtennis.tool.ToolPermission;
 import com.justtennis.ui.common.CommonEnum;
 
@@ -54,8 +54,6 @@ public class MainActivity extends GenericActivity implements INotifierMessage, I
 
 	private View menuOverFlowContent;
 
-	private boolean backPressedToExitOnce = false;
-	private Toast toast = null;
 	private DrawerManager drawerManager;
 	private View layoutRoot;
 	private List<NavigationDrawerData> navigationDrawerTraining = new ArrayList<NavigationDrawerData>();
@@ -200,21 +198,9 @@ public class MainActivity extends GenericActivity implements INotifierMessage, I
 
 	@Override
 	public void onBackPressed() {
-	    if (backPressedToExitOnce) {
-	        super.onBackPressed();
-	    } else if (this.toast == null) {
-	        this.backPressedToExitOnce = true;
-	        this.toast = Toast.makeText(this, R.string.press_again_to_exit, Toast.LENGTH_SHORT);
-	        this.toast.show();
-	        new Handler().postDelayed(new Runnable() {
-
-	            @Override
-	            public void run() {
-	                backPressedToExitOnce = false;
-	                MainActivity.this.toast = null;
-	            }
-	        }, 2000);
-	    }
+		if (ExitTool.onBackPressed(this)) {
+			super.onBackPressed();
+		}
 	}
 
 	@Override
