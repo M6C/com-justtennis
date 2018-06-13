@@ -12,4 +12,11 @@ public class CommonEnum {
         FOR_RESULT,
         INVITE
     };
+
+    public enum PLAYER_MODE {
+        CREATE,
+        MODIFY,
+        DEMANDE_ADD,
+        FOR_RESULT
+    };
 }

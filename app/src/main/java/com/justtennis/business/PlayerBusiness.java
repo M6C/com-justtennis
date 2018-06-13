@@ -1,13 +1,5 @@
 package com.justtennis.business;
 
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Date;
-import java.util.List;
-import java.util.SortedSet;
-import java.util.TreeSet;
-
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -15,7 +7,6 @@ import android.os.Bundle;
 import com.cameleon.common.android.db.sqlite.service.GenericService;
 import com.cameleon.common.android.inotifier.INotifierMessage;
 import com.justtennis.activity.PlayerActivity;
-import com.justtennis.activity.PlayerActivity.MODE;
 import com.justtennis.db.service.PlayerService;
 import com.justtennis.db.service.RankingService;
 import com.justtennis.db.service.RechercheService;
@@ -39,6 +30,15 @@ import com.justtennis.notifier.NotifierMessageLogger;
 import com.justtennis.parser.LocationParser;
 import com.justtennis.parser.PlayerParser;
 import com.justtennis.parser.SmsParser;
+import com.justtennis.ui.common.CommonEnum;
+
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Date;
+import java.util.List;
+import java.util.SortedSet;
+import java.util.TreeSet;
 
 public class PlayerBusiness implements INavigationDrawerRechercheBusiness {
 
@@ -49,7 +49,7 @@ public class PlayerBusiness implements INavigationDrawerRechercheBusiness {
 	};
 
 	protected Player player;
-	protected MODE mode;
+	protected CommonEnum.PLAYER_MODE mode;
 	protected GenericService<Player> playerService;
 
 	private Context context;
@@ -103,7 +103,7 @@ public class PlayerBusiness implements INavigationDrawerRechercheBusiness {
 	}
 
 	public void initialize(Bundle savedInstanceState) {
-		mode = (MODE) savedInstanceState.getSerializable(PlayerActivity.EXTRA_MODE);
+		mode = (CommonEnum.PLAYER_MODE) savedInstanceState.getSerializable(PlayerActivity.EXTRA_MODE);
 		invite = (Invite) savedInstanceState.getSerializable(PlayerActivity.EXTRA_INVITE);
 		player = (Player) savedInstanceState.getSerializable(PlayerActivity.EXTRA_PLAYER);
 		findText = (String) savedInstanceState.getSerializable(PlayerActivity.EXTRA_FIND);
@@ -219,7 +219,7 @@ public class PlayerBusiness implements INavigationDrawerRechercheBusiness {
 		return (player.getIdSaison() == null) ? null : new Saison(player.getIdSaison());
 	}
 
-	public MODE getMode() {
+	public CommonEnum.PLAYER_MODE getMode() {
 		return mode;
 	}
 
@@ -251,7 +251,7 @@ public class PlayerBusiness implements INavigationDrawerRechercheBusiness {
 		this.invite = invite;
 	}
 
-	public void setMode(MODE mode) {
+	public void setMode(CommonEnum.PLAYER_MODE mode) {
 		this.mode = mode;
 	}
 
@@ -314,9 +314,9 @@ public class PlayerBusiness implements INavigationDrawerRechercheBusiness {
 
 	protected void initializeMode(Intent intent) {
 		if (intent.hasExtra(PlayerActivity.EXTRA_MODE)) {
-			mode = (MODE) intent.getSerializableExtra(PlayerActivity.EXTRA_MODE);
+			mode = (CommonEnum.PLAYER_MODE) intent.getSerializableExtra(PlayerActivity.EXTRA_MODE);
 		} else {
-			mode = (player == null || player.getId() == null) ? MODE.CREATE : MODE.MODIFY;
+			mode = (player == null || player.getId() == null) ? CommonEnum.PLAYER_MODE.CREATE : CommonEnum.PLAYER_MODE.MODIFY;
 		}
 	}
 
