@@ -5,6 +5,7 @@ import android.support.v7.app.AppCompatActivity;
 
 import com.justtennis.R;
 import com.justtennis.manager.TypeManager;
+import com.justtennis.tool.FragmentTool;
 import com.justtennis.ui.fragment.InviteFragment;
 
 public class InviteActivity extends AppCompatActivity {
@@ -24,8 +25,6 @@ public class InviteActivity extends AppCompatActivity {
 		typeManager.initializeActivity(findViewById(R.id.layout_main), false);
 
 		InviteFragment fragment = new InviteFragment();
-		getSupportFragmentManager().beginTransaction()
-				.replace(R.id.invite_container, fragment)
-				.commit();
+		FragmentTool.replaceFragment(this, fragment, R.id.item_detail_container);
 	}
 }

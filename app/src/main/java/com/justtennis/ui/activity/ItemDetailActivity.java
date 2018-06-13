@@ -3,11 +3,11 @@ package com.justtennis.ui.activity;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.annotation.IdRes;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.BottomNavigationView;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -16,7 +16,6 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Toast;
 
 import com.cameleon.common.android.factory.FactoryDialog;
 import com.justtennis.R;
@@ -36,6 +35,7 @@ import com.justtennis.manager.TypeManager;
 import com.justtennis.notifier.NotifierMessageLogger;
 import com.justtennis.tool.DBFeedTool;
 import com.justtennis.tool.ExitTool;
+import com.justtennis.tool.FragmentTool;
 import com.justtennis.tool.ToolPermission;
 import com.justtennis.ui.common.CommonEnum;
 import com.justtennis.ui.fragment.InviteFragment;
@@ -192,7 +192,7 @@ public class ItemDetailActivity extends AppCompatActivity implements NavigationD
 
     @Override
     public void onBackPressed() {
-        if (ExitTool.onBackPressed(this)) {
+        if (ExitTool.onBackPressedFragment(this)) {
             super.onBackPressed();
         }
     }
@@ -244,9 +244,7 @@ public class ItemDetailActivity extends AppCompatActivity implements NavigationD
 //        startActivity(intent);
         if (mBottomNavigation.getSelectedItemId() != R.id.navigation_invite) {
             ItemDetailFragment fragment = new ItemDetailFragment();
-            getSupportFragmentManager().beginTransaction()
-                    .replace(R.id.item_detail_container, fragment)
-                    .commit();
+            FragmentTool.replaceFragment(this, fragment, R.id.item_detail_container);
         }
     }
 
@@ -405,8 +403,6 @@ public class ItemDetailActivity extends AppCompatActivity implements NavigationD
         args.putLong(InviteActivity.EXTRA_PLAYER_ID, business.getUnknownPlayerId());
         args.putSerializable(InviteActivity.EXTRA_MODE, CommonEnum.MODE.INVITE_SIMPLE);
         fragment.setArguments(args);
-        getSupportFragmentManager().beginTransaction()
-                .replace(R.id.item_detail_container, fragment)
-                .commit();
+        FragmentTool.replaceFragment(this, fragment, R.id.item_detail_container);
     }
 }

@@ -2,6 +2,8 @@ package com.justtennis.tool;
 
 import android.app.Activity;
 import android.os.Handler;
+import android.support.v4.app.FragmentManager;
+import android.support.v7.app.AppCompatActivity;
 import android.widget.Toast;
 
 import com.justtennis.R;
@@ -12,6 +14,15 @@ public class ExitTool {
     private static Toast toast = null;
 
     private ExitTool() {}
+
+    public static synchronized boolean onBackPressedFragment(AppCompatActivity activity) {
+        FragmentManager fm = activity.getSupportFragmentManager();
+        if (fm.getBackStackEntryCount() > 1) {
+            fm.popBackStack();
+            return false;
+        }
+        return onBackPressed(activity);
+    }
 
     public static synchronized boolean onBackPressed(Activity activity) {
         if (backPressedToExitOnce) {

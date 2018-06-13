@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.justtennis.R;
+import com.justtennis.tool.FragmentTool;
 import com.justtennis.ui.activity.ItemDetailActivity;
 import com.justtennis.ui.activity.dummy.DummyContent;
 import com.justtennis.ui.fragment.ItemDetailFragment;
@@ -42,9 +43,7 @@ public class SimpleItemRecyclerViewAdapter extends RecyclerView.Adapter<SimpleIt
                 arguments.putString(ARG_ITEM_ID, item.id);
                 ItemDetailFragment fragment = new ItemDetailFragment();
                 fragment.setArguments(arguments);
-                mParentActivity.getSupportFragmentManager().beginTransaction()
-                        .replace(R.id.item_detail_container, fragment)
-                        .commit();
+                FragmentTool.replaceFragment(mParentActivity, fragment, R.id.item_detail_container);
             } else {
                 Context context = view.getContext();
                 Intent intent = new Intent(context, ItemDetailActivity.class);

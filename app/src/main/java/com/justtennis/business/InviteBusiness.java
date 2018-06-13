@@ -6,10 +6,12 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
+import java.util.Objects;
 
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -83,43 +85,43 @@ public class InviteBusiness {
 		typeManager = TypeManager.getInstance(context, notificationMessage);
 	}
 
-	public void initializeData(Intent intent) {
+	public void initializeData(@NonNull Intent intent) {
 		user = userService.find();
 
-		invite = new Invite();
-		invite.setUser(getUser());
-		invite.setType(typeManager.getType());
+		initializeData(Objects.requireNonNull(intent.getExtras()));
+	}
 
-		if (intent.hasExtra(InviteActivity.EXTRA_MODE)) {
-			mode = (CommonEnum.MODE) intent.getSerializableExtra(InviteActivity.EXTRA_MODE);
+	public void initializeData(Bundle savedInstanceState) {
+		initializeInvite(savedInstanceState);
+		initializeData();
+	}
+
+	private void initializeInvite(@NonNull Bundle bundle) {
+		if (bundle.containsKey(InviteActivity.EXTRA_MODE)) {
+			mode = (CommonEnum.MODE) bundle.getSerializable(InviteActivity.EXTRA_MODE);
 		}
 
-		if (intent.hasExtra(InviteActivity.EXTRA_USER)) {
-			user = (User) intent.getSerializableExtra(InviteActivity.EXTRA_USER);
+		if (bundle.containsKey(InviteActivity.EXTRA_USER)) {
+			user = (User) bundle.getSerializable(InviteActivity.EXTRA_USER);
 		}
-		if (intent.hasExtra(InviteActivity.EXTRA_INVITE)) {
-			invite = (Invite) intent.getSerializableExtra(InviteActivity.EXTRA_INVITE);
+		if (bundle.containsKey(InviteActivity.EXTRA_INVITE)) {
+			invite = (Invite) bundle.getSerializable(InviteActivity.EXTRA_INVITE);
 			if (getIdRanking()==null) {
 				setIdRanking(rankingService.getRanking(getPlayer(), true).getId());
 			}
 			initializeScores();
+		} else {
+			invite = new Invite();
+			invite.setUser(getUser());
+			invite.setType(typeManager.getType());
 		}
-		if (intent.hasExtra(InviteActivity.EXTRA_PLAYER_ID)) {
-			long id = intent.getLongExtra(InviteActivity.EXTRA_PLAYER_ID, PlayerService.ID_EMPTY_PLAYER);
+		if (bundle.containsKey(InviteActivity.EXTRA_PLAYER_ID)) {
+			long id = bundle.getLong(InviteActivity.EXTRA_PLAYER_ID, PlayerService.ID_EMPTY_PLAYER);
 			if (id != PlayerService.ID_EMPTY_PLAYER) {
 				invite.setPlayer(playerService.find(id));
 				setIdRanking(rankingService.getRanking(getPlayer(), true).getId());
 			}
 		}
-		initializeData(invite);
-	}
-
-	public void initializeData(Bundle savedInstanceState) {
-		mode = (CommonEnum.MODE) savedInstanceState.getSerializable(InviteActivity.EXTRA_MODE);
-		invite = (Invite) savedInstanceState.getSerializable(InviteActivity.EXTRA_INVITE);
-
-		initializeDataRanking();
-		initializeDataSaison();
 	}
 
 	public void updateData() {
@@ -127,12 +129,12 @@ public class InviteBusiness {
 			Invite invite = inviteService.find(this.invite.getId());
 			if (invite != null) {
 				this.invite = invite;
-				initializeData(invite);
+				initializeData();
 			}
 		}
 	}
 	
-	private void initializeData(Invite invite) {
+	private void initializeData() {
 		if (invite.getDate()==null) {
 			Calendar calendar = GregorianCalendar.getInstance(ApplicationConfig.getLocal());
 			calendar.setTime(new Date());

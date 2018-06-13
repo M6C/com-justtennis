@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentManager;
 import android.text.Html;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -131,8 +132,11 @@ public class InviteFragment extends Fragment {
 		NotifierMessageLogger notifier = NotifierMessageLogger.getInstance();
 		business = new InviteBusiness(context, notifier);
 
-		if (savedInstanceState!=null) {
+		if (savedInstanceState != null) {
 			business.initializeData(savedInstanceState);
+		}
+		else if (getArguments() != null) {
+			business.initializeData(getArguments());
 		}
 		else {
 			business.initializeData(activity.getIntent());
@@ -192,7 +196,8 @@ public class InviteFragment extends Fragment {
 					initialize();
 				} else {
 					logMe("Permission Denied ! Cancel initialization");
-					activity.finish();
+//					activity.finish();
+					activity.getSupportFragmentManager().popBackStackImmediate();
 				}
 				break;
 			}
@@ -249,17 +254,21 @@ public class InviteFragment extends Fragment {
 
 	public void onClickOk(View view) {
 		business.modify();
-		activity.finish();
+//		activity.finish();
+		activity.getSupportFragmentManager().popBackStackImmediate();
+
 	}
 
     public void onClickInviteConfirmeYes(View view) {
         business.confirmYes();
-        activity.finish();
+//        activity.finish();
+		activity.getSupportFragmentManager().popBackStackImmediate();
     }
 
     public void onClickInviteConfirmeNo(View view) {
         business.confirmNo();
-        activity.finish();
+//        activity.finish();
+		activity.getSupportFragmentManager().popBackStackImmediate();
     }
 
 	public void onClickInviteDate(final View view) {
