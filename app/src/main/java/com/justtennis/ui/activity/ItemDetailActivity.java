@@ -3,6 +3,7 @@ package com.justtennis.ui.activity;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.IdRes;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.BottomNavigationView;
@@ -15,6 +16,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Toast;
 
 import com.cameleon.common.android.factory.FactoryDialog;
 import com.justtennis.R;
@@ -58,6 +60,9 @@ public class ItemDetailActivity extends AppCompatActivity implements NavigationD
 
     private MainBusiness business;
     private TypeManager mTypeManager;
+
+    private boolean backPressedToExitOnce = false;
+    private Toast toast = null;
 
     /**
      * Used to store the last screen title. For use in {@link #restoreActionBar()}.
@@ -185,6 +190,25 @@ public class ItemDetailActivity extends AppCompatActivity implements NavigationD
         }
 
         return ret;
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (backPressedToExitOnce) {
+            super.onBackPressed();
+        } else if (this.toast == null) {
+            this.backPressedToExitOnce = true;
+            this.toast = Toast.makeText(this, R.string.press_again_to_exit, Toast.LENGTH_SHORT);
+            this.toast.show();
+            new Handler().postDelayed(new Runnable() {
+
+                @Override
+                public void run() {
+                    backPressedToExitOnce = false;
+                    ItemDetailActivity.this.toast = null;
+                }
+            }, 2000);
+        }
     }
 
     public void restoreActionBar() {
