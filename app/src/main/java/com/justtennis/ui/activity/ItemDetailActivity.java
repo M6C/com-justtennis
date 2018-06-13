@@ -7,7 +7,6 @@ import android.support.annotation.IdRes;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.BottomNavigationView;
 import android.support.design.widget.FloatingActionButton;
-import android.support.v4.app.FragmentManager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -58,6 +57,7 @@ public class ItemDetailActivity extends AppCompatActivity implements NavigationD
     private NavigationDrawerFragment mNavigationDrawerFragment;
     private DrawerLayout mDrawerLayout;
     private BottomNavigationView mBottomNavigation;
+    private FloatingActionButton mFab;
 
     private MainBusiness business;
     private TypeManager mTypeManager;
@@ -79,6 +79,7 @@ public class ItemDetailActivity extends AppCompatActivity implements NavigationD
 
         mToolbar = (Toolbar) findViewById(R.id.detail_toolbar);
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+        mFab = findViewById(R.id.fab);
 
         // Set up the drawer.
         mNavigationDrawerFragment.setUp(R.id.navigation_drawer, mDrawerLayout);
@@ -325,49 +326,17 @@ public class ItemDetailActivity extends AppCompatActivity implements NavigationD
 
     private void initializeBottomNavigation() {
         mBottomNavigation = findViewById(R.id.navigationView);
-        mBottomNavigation.setOnNavigationItemSelectedListener(item -> {
-            if (currentBottomNavigationItem == item.getItemId()) {
-                return false;
-            }
-            currentBottomNavigationItem = item.getItemId();
-            switch (currentBottomNavigationItem) {
-                case R.id.navigation_player: {
-                    onClickListPlayer();
-                    return true;
-                }
-                case R.id.navigation_invite: {
-                    onClickListInvite();
-                    return true;
-                }
-                case R.id.navigation_statistic: {
-                    onClickListStatistic();
-                    return true;
-                }
-                default:
-                    return false;
-            }
-        });
+        mBottomNavigation.setOnNavigationItemSelectedListener(this::onNavigationItemSelected);
 
         mBottomNavigation.setSelectedItemId(R.id.navigation_invite);
 
         View toolbar = findViewById(R.id.toolbar_layout);//detail_toolbar
 
-        ((AppBarLayout)toolbar.getParent()).addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
-            @Override
-            public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
-                mBottomNavigation.setTranslationY(verticalOffset*-1);
-            }
-        });
+        ((AppBarLayout)toolbar.getParent()).addOnOffsetChangedListener((appBarLayout, verticalOffset) -> mBottomNavigation.setTranslationY(verticalOffset*-1));
     }
 
     private void initializeFab() {
-        FloatingActionButton fab = findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onClickMatch();
-            }
-        });
+        mFab.setOnClickListener(v -> onClickMatch());
     }
 
     private void doDBBackup() {
@@ -404,5 +373,25 @@ public class ItemDetailActivity extends AppCompatActivity implements NavigationD
         args.putSerializable(InviteActivity.EXTRA_MODE, CommonEnum.MODE.INVITE_SIMPLE);
         fragment.setArguments(args);
         FragmentTool.replaceFragment(this, fragment, R.id.item_detail_container);
+    }
+
+    private boolean onNavigationItemSelected(MenuItem item) {
+        if (currentBottomNavigationItem == item.getItemId()) {
+            return false;
+        }
+        currentBottomNavigationItem = item.getItemId();
+        switch (currentBottomNavigationItem) {
+            case R.id.navigation_player:
+                onClickListPlayer();
+                return true;
+            case R.id.navigation_invite:
+                onClickListInvite();
+                return true;
+            case R.id.navigation_statistic:
+                onClickListStatistic();
+                return true;
+            default:
+                return false;
+        }
     }
 }
