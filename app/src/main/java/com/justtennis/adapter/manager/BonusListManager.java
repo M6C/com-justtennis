@@ -1,7 +1,5 @@
 package com.justtennis.adapter.manager;
 
-import java.util.List;
-
 import android.app.Activity;
 import android.content.Context;
 import android.view.View;
@@ -17,8 +15,14 @@ import com.justtennis.domain.Bonus;
 import com.justtennis.domain.Invite;
 import com.justtennis.notifier.NotifierMessageLogger;
 
+import org.gdocument.gtracergps.launcher.log.Logger;
+
+import java.util.List;
+
 public class BonusListManager {
-	
+
+	private static final String TAG = BonusListManager.class.getSimpleName();
+
 	private static BonusListManager instance;
 
 	private BonusService service;
@@ -61,6 +65,10 @@ public class BonusListManager {
 			@Override
 			public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
 				TextView tv = (TextView)spBonus.findViewById(android.R.id.text1);
+				if (tv == null) {
+					logMe("spBonus.findViewById(android.R.id.text1) ----> return null !!!");
+					return;
+				}
 				Bonus ranking = list.get(position);
 				listener.onSelected(ranking);
 				if (position == 0) {
@@ -120,5 +128,9 @@ public class BonusListManager {
 	 */
 	public interface IBonusListListener {
 		void onSelected(Bonus bonus);
+	}
+
+	private static void logMe(String msg) {
+		Logger.logMe(TAG, msg);
 	}
 }
