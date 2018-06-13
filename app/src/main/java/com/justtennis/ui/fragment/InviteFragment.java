@@ -95,6 +95,7 @@ public class InviteFragment extends Fragment {
 	private TextView tvLastname;
 	private TextView edDate;
 	private TextView edTime;
+	private LinearLayout llPhoto;
 	private ImageView ivPhoto;
 	private Switch swType;
 	private Spinner spRanking;
@@ -435,6 +436,7 @@ public class InviteFragment extends Fragment {
 	}
 
 	private void initializeContentPlayerView() {
+		llPhoto = llPlayer.findViewById(R.id.ll_photo);
 		ivPhoto = llPlayer.findViewById(R.id.iv_photo);
 		tvFirstname = llPlayer.findViewById(R.id.tv_firstname);
 		tvLastname = llPlayer.findViewById(R.id.tv_lastname);
@@ -708,6 +710,7 @@ public class InviteFragment extends Fragment {
         btnInviteConfirmSend.setOnClickListener(this::onClickOk);
         btnInviteConfirmYes.setOnClickListener(this::onClickInviteConfirmeYes);
         btnInviteConfirmNo.setOnClickListener(this::onClickInviteConfirmeNo);
+        llPhoto.setOnClickListener(this::onClickPlayer);
 	}
 
 	private int getTypePosition() {

@@ -21,11 +21,11 @@
 	    android:gravity="top"
 	>
 		<LinearLayout
+			android:id="@+id/ll_photo"
 		    android:layout_width="match_parent"
 		    android:layout_height="90dp"
 		    android:orientation="horizontal"
 		    android:background="@color/form_background_color"
-		    android:onClick="onClickPlayer"
 		>
 			<ImageView
 			    android:id="@+id/iv_photo"
