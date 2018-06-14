@@ -154,6 +154,12 @@ public class NavigationDrawerFragment extends Fragment {
         return mDrawerLayout != null && mDrawerLayout.isDrawerOpen(mFragmentContainerView);
     }
 
+    public void closeDrawer() {
+        if (mDrawerLayout != null) {
+            mDrawerLayout.closeDrawer(mFragmentContainerView);
+        }
+    }
+
     /**
      * Users of this fragment must call this method to set up the navigation drawer interactions.
      *
@@ -292,6 +298,7 @@ public class NavigationDrawerFragment extends Fragment {
                     case R.id.nav_user: {
                         UserFragment fragment = new UserFragment();
                         FragmentTool.replaceFragment(mActivity, fragment, R.id.item_detail_container);
+                        closeDrawer();
                         break;
                     }
                     case R.id.nav_list_club: {
@@ -382,9 +389,7 @@ public class NavigationDrawerFragment extends Fragment {
 //        if (mDrawerListView != null) {
 //            mDrawerListView.setItemChecked(position, true);
 //        }
-        if (mDrawerLayout != null) {
-            mDrawerLayout.closeDrawer(mFragmentContainerView);
-        }
+        closeDrawer();
         if (mCallbacks != null) {
             mCallbacks.onNavigationDrawerItemSelected(position);
         }
