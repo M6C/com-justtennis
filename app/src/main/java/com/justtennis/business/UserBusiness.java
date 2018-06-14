@@ -1,13 +1,10 @@
 package com.justtennis.business;
 
 import android.content.Context;
-import android.content.Intent;
 
 import com.cameleon.common.android.db.sqlite.service.GenericService;
 import com.cameleon.common.android.inotifier.INotifierMessage;
-import com.justtennis.activity.PlayerActivity.MODE;
 import com.justtennis.db.service.MessageService;
-import com.justtennis.db.service.SaisonService;
 import com.justtennis.db.service.UserService;
 import com.justtennis.domain.Message;
 import com.justtennis.domain.Player;

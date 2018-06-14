@@ -1,7 +1,5 @@
 package com.justtennis.receiver;
 
-import org.gdocument.gtracergps.launcher.log.Logger;
-
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -16,7 +14,6 @@ import android.widget.Toast;
 import com.justtennis.ApplicationConfig;
 import com.justtennis.R;
 import com.justtennis.activity.InviteActivity;
-import com.justtennis.activity.InviteDemandeActivity;
 import com.justtennis.activity.InviteDemandeActivity.MODE;
 import com.justtennis.activity.MainActivity;
 import com.justtennis.activity.PlayerActivity;
@@ -31,6 +28,9 @@ import com.justtennis.helper.GCalendarHelper.EVENT_STATUS;
 import com.justtennis.notifier.NotifierMessageLogger;
 import com.justtennis.parser.SmsParser;
 import com.justtennis.parser.SmsParser.MSG_TYPE;
+import com.justtennis.ui.common.CommonEnum;
+
+import org.gdocument.gtracergps.launcher.log.Logger;
 
 public class SmsReceiver extends BroadcastReceiver {
 
@@ -179,7 +179,7 @@ public class SmsReceiver extends BroadcastReceiver {
 			}
 			case PLAYER_ADD: {
 				intent = new Intent(context, PlayerActivity.class);
-				intent.putExtra(PlayerActivity.EXTRA_MODE, PlayerActivity.MODE.DEMANDE_ADD);
+				intent.putExtra(PlayerActivity.EXTRA_MODE, CommonEnum.PLAYER_MODE.DEMANDE_ADD);
 				intent.putExtra(PlayerActivity.EXTRA_INVITE, invite);
 				break;
 			}

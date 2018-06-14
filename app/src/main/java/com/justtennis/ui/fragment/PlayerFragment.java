@@ -12,12 +12,10 @@ import android.support.v4.app.FragmentActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.AdapterView.OnItemSelectedListener;
-import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
@@ -39,17 +37,10 @@ import com.justtennis.adapter.manager.RankingListManager;
 import com.justtennis.business.PlayerBusiness;
 import com.justtennis.domain.Club;
 import com.justtennis.domain.Player;
-import com.justtennis.domain.RechercheResult;
 import com.justtennis.domain.Saison;
 import com.justtennis.domain.Tournament;
-import com.justtennis.drawer.adapter.NavigationDrawerRechercheAdapter;
-import com.justtennis.drawer.business.INavigationDrawerRechercheBusiness;
-import com.justtennis.drawer.data.NavigationDrawerData;
-import com.justtennis.drawer.data.NavigationDrawerRechercheData;
-import com.justtennis.drawer.manager.DrawerManager;
 import com.justtennis.drawer.manager.notifier.IDrawerLayoutSaisonNotifier;
 import com.justtennis.drawer.manager.notifier.IDrawerLayoutTypeNotifier;
-import com.justtennis.drawer.notifier.NavigationDrawerRechercheNotifer.INavigationDrawerRechercheNotifer;
 import com.justtennis.listener.action.TextWatcherFieldEnableView;
 import com.justtennis.listener.ok.OnClickPlayerCreateListenerOk;
 import com.justtennis.manager.TypeManager.TYPE;
@@ -60,7 +51,6 @@ import com.justtennis.ui.common.CommonEnum;
 import org.gdocument.gtracergps.launcher.log.Logger;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.List;
 
 public class PlayerFragment extends Fragment implements IDrawerLayoutTypeNotifier, IDrawerLayoutSaisonNotifier {
@@ -77,12 +67,14 @@ public class PlayerFragment extends Fragment implements IDrawerLayoutTypeNotifie
 	public static final String EXTRA_RANKING = "RANKING";
 	public static final String EXTRA_FIND = "EXTRA_FIND";
 
+	protected View rootView;
+	protected FragmentActivity activity;
+	protected Context context;
+
 	private final Integer[] drawableType = new Integer[] {R.layout.element_invite_type_entrainement, R.layout.element_invite_type_match};
-	private List<NavigationDrawerData> navigationDrawer = new ArrayList<NavigationDrawerData>();
 
 	private Bundle savedInstanceState;
 	private PlayerBusiness business;
-	private DrawerManager drawerManager;
 	private RankingListManager rankingListManager;
 
 	private TextView tvFirstname;
@@ -116,13 +108,16 @@ public class PlayerFragment extends Fragment implements IDrawerLayoutTypeNotifie
 
 	private boolean fromQrCode = false;
 	private Serializable locationFromResult;
-	private View rootView;
-	private FragmentActivity activity;
-	private Context context;
+	private Button btnCreate;
+	private Button btnImport;
+	private Button btnModify;
+	private Button btnAddDemandeYes;
+	private Button btnAddDemandeNo;
+    private Button btnQrCode;
 
-	@Override
+    @Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-		rootView = inflater.inflate(R.layout.player, container, false);
+		rootView = inflater.inflate(R.layout.fragment_player, container, false);
 		if (this.savedInstanceState==null) {
 			this.savedInstanceState = savedInstanceState;
 		}
@@ -130,16 +125,13 @@ public class PlayerFragment extends Fragment implements IDrawerLayoutTypeNotifie
 		activity = getActivity();
 		context = activity.getApplicationContext();
 
-
 		NotifierMessageLogger notifier = NotifierMessageLogger.getInstance();
-		drawerManager = new DrawerManager(activity, notifier);
 
 //		initializeLayoutView();
 		initializeViewById();
 
 		business = createBusiness();
 		rankingListManager = RankingListManager.getInstance(context, notifier);
-		navigationDrawer.add(new NavigationDrawerRechercheData(0, new NavigationDrawerRechercheNotifer()));
 
 		initializeListener();
 		initialize();
@@ -154,11 +146,6 @@ public class PlayerFragment extends Fragment implements IDrawerLayoutTypeNotifie
 		super.onResume();
 
 		initializeData(true);
-
-		drawerManager.onResume();
-		drawerManager.setDrawerLayoutSaisonNotifier(this);
-		drawerManager.setDrawerLayoutTypeNotifier(this);
-		drawerManager.setValue(navigationDrawer);
 	}
 
 	@Override
@@ -243,32 +230,38 @@ public class PlayerFragment extends Fragment implements IDrawerLayoutTypeNotifie
 	}
 
 	protected void initializeViewById() {
-		tvFirstname = (TextView)rootView.findViewById(R.id.tv_firstname);
-		tvLastname = (TextView)rootView.findViewById(R.id.tv_lastname);
-		tvBirthday = (TextView)rootView.findViewById(R.id.tv_birthday);
-		tvPhonenumber = (TextView)rootView.findViewById(R.id.tv_phonenumber);
-		etFirstname = (EditText)rootView.findViewById(R.id.et_firstname);
-		etLastname = (EditText)rootView.findViewById(R.id.et_lastname);
-		etBirthday = (EditText)rootView.findViewById(R.id.et_birthday);
-		etPhonenumber = (EditText)rootView.findViewById(R.id.et_phonenumber);
-		spType = (Spinner)rootView.findViewById(R.id.sp_type);
-		spSaison = (Spinner)rootView.findViewById(R.id.sp_saison);
-		llLastname = (LinearLayout)rootView.findViewById(R.id.ll_lastname);
-		llBirthday = (LinearLayout)rootView.findViewById(R.id.ll_birthday);
-		llPhonenumber = (LinearLayout)rootView.findViewById(R.id.ll_phonenumber);
-		llRanking = (LinearLayout)rootView.findViewById(R.id.ll_ranking);
-		llRankingEstimate = (LinearLayout)rootView.findViewById(R.id.ll_ranking_estimate);
-		llType = (LinearLayout)rootView.findViewById(R.id.ll_type);
-		llCreate = (LinearLayout)rootView.findViewById(R.id.ll_create);
-		llModify = (LinearLayout)rootView.findViewById(R.id.ll_modify);
-		llAddDemande = (LinearLayout)rootView.findViewById(R.id.ll_add_demande);
-		llMessage = (LinearLayout)rootView.findViewById(R.id.ll_message);
-		tvLocation = ((TextView)rootView.findViewById(R.id.tv_location));
-		tvLocationEmpty = ((TextView)rootView.findViewById(R.id.et_location));
-		llLocationDetail = (LinearLayout)rootView.findViewById(R.id.ll_location_detail);
-		tvLocationName = ((TextView)rootView.findViewById(R.id.tv_location_name));
-		tvLocationLine1 = ((TextView)rootView.findViewById(R.id.tv_location_line1));
-		tvLocationLine2 = ((TextView)rootView.findViewById(R.id.tv_location_line2));
+		tvFirstname = rootView.findViewById(R.id.tv_firstname);
+		tvLastname = rootView.findViewById(R.id.tv_lastname);
+		tvBirthday = rootView.findViewById(R.id.tv_birthday);
+		tvPhonenumber = rootView.findViewById(R.id.tv_phonenumber);
+		etFirstname = rootView.findViewById(R.id.et_firstname);
+		etLastname = rootView.findViewById(R.id.et_lastname);
+		etBirthday = rootView.findViewById(R.id.et_birthday);
+		etPhonenumber = rootView.findViewById(R.id.et_phonenumber);
+		spType = rootView.findViewById(R.id.sp_type);
+		spSaison = rootView.findViewById(R.id.sp_saison);
+		llLastname = rootView.findViewById(R.id.ll_lastname);
+		llBirthday = rootView.findViewById(R.id.ll_birthday);
+		llPhonenumber = rootView.findViewById(R.id.ll_phonenumber);
+		llRanking = rootView.findViewById(R.id.ll_ranking);
+		llRankingEstimate = rootView.findViewById(R.id.ll_ranking_estimate);
+		llType = rootView.findViewById(R.id.ll_type);
+		llCreate = rootView.findViewById(R.id.ll_create);
+		llModify = rootView.findViewById(R.id.ll_modify);
+		llAddDemande = rootView.findViewById(R.id.ll_add_demande);
+		llMessage = rootView.findViewById(R.id.ll_message);
+		tvLocation = rootView.findViewById(R.id.tv_location);
+		tvLocationEmpty = rootView.findViewById(R.id.et_location);
+		llLocationDetail = rootView.findViewById(R.id.ll_location_detail);
+		tvLocationName = rootView.findViewById(R.id.tv_location_name);
+		tvLocationLine1 = rootView.findViewById(R.id.tv_location_line1);
+		tvLocationLine2 = rootView.findViewById(R.id.tv_location_line2);
+		btnCreate = rootView.findViewById(R.id.btn_create);
+		btnImport = rootView.findViewById(R.id.btn_import);
+		btnModify = rootView.findViewById(R.id.btn_modify);
+		btnAddDemandeYes = rootView.findViewById(R.id.btn_add_demande_yes);
+		btnAddDemandeNo = rootView.findViewById(R.id.btn_add_demande_no);
+		btnQrCode = rootView.findViewById(R.id.btn_qrcode);
 	}
 
 	public void onClickCreate(View view) {
@@ -450,6 +443,12 @@ public class PlayerFragment extends Fragment implements IDrawerLayoutTypeNotifie
 		etLastname.addTextChangedListener(new TextWatcherFieldEnableView(tvLastname, View.GONE));
 		etBirthday.addTextChangedListener(new TextWatcherFieldEnableView(tvBirthday, View.GONE));
 		etPhonenumber.addTextChangedListener(new TextWatcherFieldEnableView(tvPhonenumber, View.GONE));
+		btnCreate.setOnClickListener(this::onClickCreate);
+		btnImport.setOnClickListener(this::onClickImport);
+		btnModify.setOnClickListener(this::onClickModify);
+		btnAddDemandeYes.setOnClickListener(this::onClickDemandeAddYes);
+		btnAddDemandeNo.setOnClickListener(this::onClickDemandeAddNo);
+		btnQrCode.setOnClickListener(this::onClickQRCode);
 	}
 
 	protected void initializeLocation() {
@@ -615,6 +614,10 @@ public class PlayerFragment extends Fragment implements IDrawerLayoutTypeNotifie
 		}
 	}
 
+	public PlayerBusiness getBusiness() {
+    	return business;
+	}
+
 	private TYPE getType() {
 //		return business.getPlayer() != null ? business.getPlayer().getType() : null;
 		return business.getPlayerType();
@@ -627,46 +630,6 @@ public class PlayerFragment extends Fragment implements IDrawerLayoutTypeNotifie
 		case 1:
 		default:
 			return TYPE.COMPETITION;
-		}
-	}
-
-	public class NavigationDrawerRechercheNotifer implements INavigationDrawerRechercheNotifer {
-
-		@Override
-		public BaseAdapter getAdapter(Context context, List<RechercheResult> list) {
-			return new NavigationDrawerRechercheAdapter(context, list, new NavigationDrawerRechercheItemOnClickListener());
-		}
-
-		@Override
-		public INavigationDrawerRechercheBusiness getBusiness() {
-			return business;
-		}
-	}
-
-	public class NavigationDrawerRechercheItemOnClickListener implements OnClickListener {
-		@Override
-		public void onClick(View v) {
-			RechercheResult item = (RechercheResult) v.getTag();
-			Player player = business.getPlayer();
-			player.setIdTournament(0l);
-			player.setIdClub(0l);
-			player.setIdAddress(0l);
-
-			switch (item.getType()) {
-				case TOURNAMENT:
-					player.setIdTournament(item.getId());
-					break;
-	
-				case CLUB:
-					player.setIdClub(item.getId());
-					break;
-
-				case ADDRESS:
-					player.setIdAddress(item.getId());
-					break;
-			}
-			PlayerFragment.this.initializeLocation();
-			drawerManager.close();
 		}
 	}
 }

@@ -12,6 +12,7 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
@@ -34,6 +35,7 @@ import com.justtennis.activity.UserActivity;
 import com.justtennis.drawer.manager.business.DrawerSaisonBusiness;
 import com.justtennis.manager.TypeManager;
 import com.justtennis.notifier.NotifierMessageLogger;
+import com.justtennis.tool.FragmentTool;
 import com.justtennis.ui.rxjava.RxBus;
 
 import java.util.Objects;
@@ -68,6 +70,7 @@ public class NavigationDrawerFragment extends Fragment {
      */
     private ActionBarDrawerToggle mDrawerToggle;
 
+    private FragmentActivity mActivity;
     private Context mContext;
     private DrawerLayout mDrawerLayout;
 //    private ListView mDrawerListView;
@@ -93,14 +96,15 @@ public class NavigationDrawerFragment extends Fragment {
         super.onCreate(savedInstanceState);
 
         NotifierMessageLogger notifier = NotifierMessageLogger.getInstance();
-        mContext = getActivity().getApplicationContext();
+        mActivity = getActivity();
+        mContext = mActivity.getApplicationContext();
         saisonBusiness = new DrawerSaisonBusiness(mContext, notifier);
         saisonBusiness.initializeData();
         mTypeManager = TypeManager.getInstance(mContext, notifier);
 
         // Read in the flag indicating whether or not the user has demonstrated awareness of the
         // drawer. See PREF_USER_LEARNED_DRAWER for details.
-        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getActivity());
+        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(mActivity);
         mUserLearnedDrawer = sp.getBoolean(PREF_USER_LEARNED_DRAWER, false);
 
         if (savedInstanceState != null) {
@@ -286,8 +290,8 @@ public class NavigationDrawerFragment extends Fragment {
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 switch (item.getItemId()) {
                     case R.id.nav_user: {
-                        Intent intent = new Intent(getActivity().getApplicationContext(), UserActivity.class);
-                        startActivity(intent);
+                        UserFragment fragment = new UserFragment();
+                        FragmentTool.replaceFragment(mActivity, fragment, R.id.item_detail_container);
                         break;
                     }
                     case R.id.nav_list_club: {

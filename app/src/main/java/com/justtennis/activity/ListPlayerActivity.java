@@ -193,10 +193,10 @@ public class ListPlayerActivity extends GenericActivity {
 			intent.putExtras(business.getExtraIn());
 		}
 		if (business.getMode() == CommonEnum.LIST_PLAYER_MODE.FOR_RESULT) {
-			intent.putExtra(PlayerActivity.EXTRA_MODE, PlayerActivity.MODE.FOR_RESULT);
+			intent.putExtra(PlayerActivity.EXTRA_MODE, CommonEnum.LIST_PLAYER_MODE.FOR_RESULT);
 			startActivityForResult(intent, RESULT_PLAYER);
 		} else if (business.getMode() == CommonEnum.LIST_PLAYER_MODE.INVITE) {
-			intent.putExtra(PlayerActivity.EXTRA_MODE, PlayerActivity.MODE.FOR_RESULT);
+			intent.putExtra(PlayerActivity.EXTRA_MODE, CommonEnum.LIST_PLAYER_MODE.FOR_RESULT);
 			startActivityForResult(intent, RESULT_PLAYER_FOR_INFO);
 		} else {
 			intent.removeExtra(EXTRA_MODE);

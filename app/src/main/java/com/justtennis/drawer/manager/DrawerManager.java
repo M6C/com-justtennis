@@ -94,15 +94,19 @@ public class DrawerManager {
 	}
 
 	public void onResume() {
-		initializeLayoutType(drawerLayout);
+		if (drawerLayout != null) {
+			initializeLayoutType(drawerLayout);
+		}
 	}
 
 	public boolean isDrawerOpen() {
-		return mNavigationDrawerFragment.isDrawerOpen();
+		return (mNavigationDrawerFragment == null) ? false : mNavigationDrawerFragment.isDrawerOpen();
 	}
 
 	public void close() {
-		mNavigationDrawerFragment.close();
+		if (mNavigationDrawerFragment != null) {
+			mNavigationDrawerFragment.close();
+		}
 	}
 
 	public void setDrawerLayoutTypeNotifier(IDrawerLayoutTypeNotifier drawerLayoutTypeNotifier) {
@@ -114,23 +118,29 @@ public class DrawerManager {
 	}
 
 	public void setValue(List<NavigationDrawerData> value) {
-		mNavigationDrawerFragment.setValue(value);
+		if (mNavigationDrawerFragment != null) {
+			mNavigationDrawerFragment.setValue(value);
+		}
 	}
 
 	public void updValue() {
-		mNavigationDrawerFragment.updValue();
+		if (mNavigationDrawerFragment != null) {
+			mNavigationDrawerFragment.updValue();
+		}
 	}
 
 	private void initializeDrawer() {
 		drawerLayout = activity.findViewById(R.id.drawer_layout);
 
-		mNavigationDrawerFragment = (NavigationDrawerFragment) activity.getFragmentManager().findFragmentById(R.id.navigation_drawer);
-		mNavigationDrawerFragment.setUp(R.id.navigation_drawer, (DrawerLayout) drawerLayout);
+		if (drawerLayout != null) {
+			mNavigationDrawerFragment = (NavigationDrawerFragment) activity.getFragmentManager().findFragmentById(R.id.navigation_drawer);
+			mNavigationDrawerFragment.setUp(R.id.navigation_drawer, (DrawerLayout) drawerLayout);
 
-		NavigationDrawerData header = new NavigationDrawerData(0, R.layout.fragment_navigation_drawer_header_saison, notiferSaison);
-		NavigationDrawerData footer = new NavigationDrawerData(1, R.layout.fragment_navigation_drawer_footer_type, new NavigationDrawerTypeNotifer(this));
-		mNavigationDrawerFragment.setHeader(header);
-		mNavigationDrawerFragment.setFooter(footer);
+			NavigationDrawerData header = new NavigationDrawerData(0, R.layout.fragment_navigation_drawer_header_saison, notiferSaison);
+			NavigationDrawerData footer = new NavigationDrawerData(1, R.layout.fragment_navigation_drawer_footer_type, new NavigationDrawerTypeNotifer(this));
+			mNavigationDrawerFragment.setHeader(header);
+			mNavigationDrawerFragment.setFooter(footer);
+		}
 	}
 
 	public void initializeLayoutType(View view) {

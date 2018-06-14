@@ -10,7 +10,7 @@
     android:paddingLeft="@dimen/player_horizontal_margin"
     android:paddingRight="@dimen/player_horizontal_margin"
     android:paddingTop="@dimen/player_vertical_margin"
-    tools:context=".UserActivity" >
+    tools:context=".activity.UserActivity" >
 
     <ScrollView
         android:layout_width="match_parent"
@@ -56,9 +56,9 @@
 				android:orientation="horizontal" >
 	
 		        <ImageView
+					android:id="@+id/iv_ajout_champ"
 		            android:layout_width="48dp"
 		            android:layout_height="48dp"
-		            android:onClick="onClickMenuAjoutChamp"
 		            android:src="@drawable/menu_overflow_01" />
 
 	          <EditText
@@ -93,12 +93,12 @@
 	    android:gravity="bottom"
 	>
 	    <Button
+			android:id="@+id/btn_create"
 		    android:layout_width="wrap_content"
 		    android:layout_height="wrap_content"
 		    android:layout_weight=".5"
 	    	android:layout_marginRight="5dp"
 	        android:text="@string/button_text_ok"
-	        android:onClick="onClickCreate"
 	    />
 	    <Button
 	        android:id="@+id/btn_import"
@@ -106,7 +106,6 @@
 		    android:layout_height="wrap_content"
 		    android:layout_weight=".5"
 	        android:text="@string/button_text_import"
-	        android:onClick="onClickImport"
 	    />
 	</LinearLayout>
 
@@ -118,12 +117,12 @@
 	    android:gravity="bottom"
 	>
 	    <Button
+			android:id="@+id/btn_modify"
 		    android:layout_width="wrap_content"
 		    android:layout_height="wrap_content"
 		    android:layout_weight=".5"
 	    	android:layout_marginRight="5dp"
 	        android:text="@string/button_text_ok"
-	        android:onClick="onClickModify"
 	    />
 	    <Button
 	        android:id="@+id/btn_qrcode"
@@ -131,7 +130,6 @@
 		    android:layout_height="wrap_content"
 		    android:layout_weight=".5"
 	        android:text="@string/button_text_qrcode"
-	        android:onClick="onClickQRCode"
 	    />
 	</LinearLayout>
 
@@ -149,7 +147,6 @@
 		    android:layout_weight=".5"
 	    	android:layout_marginRight="5dp"
 	        android:text="@string/button_text_yes"
-	        android:onClick="onClickDemandeAddYes"
 	    />
 	    <Button
 	        android:id="@+id/btn_add_demande_no"
@@ -157,7 +154,6 @@
 		    android:layout_height="wrap_content"
 		    android:layout_weight=".5"
 	        android:text="@string/button_text_no"
-	        android:onClick="onClickDemandeAddNo"
 	    />
 	</LinearLayout>
 </LinearLayout>
