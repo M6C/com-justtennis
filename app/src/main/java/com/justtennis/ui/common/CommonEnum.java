@@ -19,4 +19,9 @@ public class CommonEnum {
         DEMANDE_ADD,
         FOR_RESULT
     };
+
+
+    public enum LIST_MODE_VIEW {
+        MODIFY, READ;
+    }
 }

@@ -1,12 +1,6 @@
 package com.justtennis.adapter;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-
-import org.gdocument.gtracergps.launcher.log.Logger;
-
+import android.app.Activity;
 import android.os.Handler;
 import android.text.Html;
 import android.view.LayoutInflater;
@@ -18,9 +12,9 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.justtennis.ApplicationConfig;
-import com.justtennis.activity.ListPlayerActivity;
+import com.justtennis.R;
 import com.justtennis.adapter.manager.RankingViewManager;
-import com.justtennis.business.ListPlayerBusiness;
+import com.justtennis.db.service.PlayerService;
 import com.justtennis.db.service.RankingService;
 import com.justtennis.domain.Player;
 import com.justtennis.domain.Ranking;
@@ -28,7 +22,13 @@ import com.justtennis.filter.ListPlayerByTypeFilter;
 import com.justtennis.manager.ContactManager;
 import com.justtennis.notifier.NotifierMessageLogger;
 import com.justtennis.parser.LocationParser;
-import com.justtennis.R;
+
+import org.gdocument.gtracergps.launcher.log.Logger;
+
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
 
 public class ListPlayerAdapter extends ArrayAdapter<Player> {
 
@@ -39,7 +39,7 @@ public class ListPlayerAdapter extends ArrayAdapter<Player> {
 	private Handler handler = new Handler();
 
 	private List<Player> value;
-	private ListPlayerActivity activity;
+	private Activity activity;
 	private Filter filter = null;
 	private ArrayList<Player> valueOld;
 	private ArrayList<Integer> valuePosition = new ArrayList<Integer>();
@@ -47,7 +47,7 @@ public class ListPlayerAdapter extends ArrayAdapter<Player> {
 	private LocationParser locationParser;
 	private RankingViewManager rankingViewManager;
 
-	public ListPlayerAdapter(ListPlayerActivity activity, List<Player> value) {
+	public ListPlayerAdapter(Activity activity, List<Player> value) {
 		super(activity, R.layout.list_player_row, android.R.id.text1, value);
 		logMe("Constructor BEGIN");
 
@@ -100,14 +100,13 @@ public class ListPlayerAdapter extends ArrayAdapter<Player> {
 			this.valuePosition.add(position);
 	
 			final Player v = value.get(position);
-			ListPlayerBusiness business = activity.getBusiness();
 //			if (rowView == null) {
 				LayoutInflater inflater = activity.getLayoutInflater();
 				rowView = inflater.inflate(R.layout.list_player_row, null);
 //			}
 			rowView.setTag(v.getId());
 	
-			int iVisibility = (business.isUnknownPlayer(v) ? View.GONE : View.VISIBLE);
+			int iVisibility = (isUnknownPlayer(v) ? View.GONE : View.VISIBLE);
 	
 			ImageView imagePlayer = (ImageView) rowView.findViewById(R.id.iv_player);
 	//		ImageView imageSend = (ImageView) rowView.findViewById(R.id.iv_send);
@@ -192,6 +191,10 @@ public class ListPlayerAdapter extends ArrayAdapter<Player> {
 
 		this.valuePosition.clear();
 		logMe("setValue END");
+	}
+
+	private boolean isUnknownPlayer(Player player) {
+		return PlayerService.isUnknownPlayer(player);
 	}
 
 	private void initializeLocation(final Player v, TextView clubName) {

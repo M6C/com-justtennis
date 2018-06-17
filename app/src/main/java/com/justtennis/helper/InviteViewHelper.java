@@ -13,19 +13,17 @@ import com.justtennis.db.service.ScoreSetService;
 import com.justtennis.domain.Invite;
 import com.justtennis.notifier.NotifierMessageLogger;
 import com.justtennis.parser.LocationParser;
+import com.justtennis.ui.common.CommonEnum;
+import com.justtennis.ui.common.CommonEnum.LIST_MODE_VIEW;
 
 import java.text.SimpleDateFormat;
 
 public class InviteViewHelper {
 
-    public enum INVITE_MODE_VIEW {
-        MODIFY, READ;
-    }
-
     @SuppressLint("SimpleDateFormat")
     private final static SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm");
 
-    public static void initializeView(Context context, InviteViewHolder viewHolder, INVITE_MODE_VIEW mode) {
+    public static void initializeView(Context context, InviteViewHolder viewHolder, CommonEnum.LIST_MODE_VIEW mode) {
 
         NotifierMessageLogger notifier = NotifierMessageLogger.getInstance();
         LocationParser locationParser = LocationParser.getInstance(context, notifier);

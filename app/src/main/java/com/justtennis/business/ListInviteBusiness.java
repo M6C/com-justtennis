@@ -9,8 +9,7 @@ import org.gdocument.gtracergps.launcher.log.Logger;
 import android.content.Context;
 
 import com.cameleon.common.android.inotifier.INotifierMessage;
-import com.justtennis.activity.ListInviteActivity;
-import com.justtennis.activity.interfaces.IListInviteActivity;
+import com.justtennis.activity.interfaces.ICommonListActivity;
 import com.justtennis.db.service.InviteService;
 import com.justtennis.db.service.PlayerService;
 import com.justtennis.db.service.ScoreSetService;
@@ -26,7 +25,7 @@ public class ListInviteBusiness {
 	private static final String TAG = ListInviteBusiness.class.getSimpleName();
 	
 	private Context context;
-	private IListInviteActivity iActivity;
+	private ICommonListActivity iActivity;
 
 	private InviteService inviteService;
 	private ScoreSetService scoreService;
@@ -39,7 +38,7 @@ public class ListInviteBusiness {
 	private List<Player> listPlayer = new ArrayList<Player>();
 	private String[] listPlayerName;
 
-	public ListInviteBusiness(Context context, IListInviteActivity iActivity, INotifierMessage notificationMessage) {
+	public ListInviteBusiness(Context context, ICommonListActivity iActivity, INotifierMessage notificationMessage) {
 		this.context = context;
 		this.iActivity = iActivity;
 		playerService = new PlayerService(context, notificationMessage);

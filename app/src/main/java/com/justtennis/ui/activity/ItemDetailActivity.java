@@ -20,7 +20,6 @@ import com.cameleon.common.android.factory.FactoryDialog;
 import com.justtennis.R;
 import com.justtennis.activity.InviteActivity;
 import com.justtennis.activity.ListPersonActivity;
-import com.justtennis.activity.ListPlayerActivity;
 import com.justtennis.activity.MainActivity;
 import com.justtennis.activity.MessageActivity;
 import com.justtennis.activity.PalmaresFastActivity;
@@ -39,8 +38,9 @@ import com.justtennis.tool.ToolPermission;
 import com.justtennis.ui.common.CommonEnum;
 import com.justtennis.ui.fragment.InviteFragment;
 import com.justtennis.ui.fragment.ItemDetailFragment;
+import com.justtennis.ui.fragment.ListPlayerFragment;
 import com.justtennis.ui.fragment.NavigationDrawerFragment;
-import com.justtennis.ui.rxjava.RxBus;
+import com.justtennis.ui.rxjava.RxNavigationDrawer;
 
 
 /**
@@ -54,6 +54,7 @@ public class ItemDetailActivity extends AppCompatActivity implements NavigationD
     /**
      * Fragment managing the behaviors, interactions and presentation of the navigation drawer.
      */
+    private NotifierMessageLogger notifier;
     private NavigationDrawerFragment mNavigationDrawerFragment;
     private DrawerLayout mDrawerLayout;
     private BottomNavigationView mBottomNavigation;
@@ -86,7 +87,7 @@ public class ItemDetailActivity extends AppCompatActivity implements NavigationD
 
         DBFeedTool.feed(getApplicationContext());
 
-        NotifierMessageLogger notifier = NotifierMessageLogger.getInstance();
+        notifier = NotifierMessageLogger.getInstance();
         business = new MainBusiness(this, notifier);
         mTypeManager = TypeManager.getInstance(this, notifier);
 
@@ -112,7 +113,7 @@ public class ItemDetailActivity extends AppCompatActivity implements NavigationD
 
     @Override
     protected void onDestroy() {
-        RxBus.unregister(this);
+        RxNavigationDrawer.unregister(this);
         super.onDestroy();
     }
 
@@ -208,7 +209,7 @@ public class ItemDetailActivity extends AppCompatActivity implements NavigationD
     }
 
     private void initializeSubscribeChangeType() {
-        RxBus.subscribe(RxBus.SUBJECT_CHANGE_TYPE, this, o -> {
+        RxNavigationDrawer.subscribe(RxNavigationDrawer.SUBJECT_CHANGE_TYPE, this, o -> {
             TypeManager.TYPE type = (TypeManager.TYPE)o;
             mTypeManager.setType(type);
 
@@ -250,9 +251,11 @@ public class ItemDetailActivity extends AppCompatActivity implements NavigationD
     }
 
     private void onClickListPlayer() {
-        Intent intent = new Intent(getApplicationContext(), ListPlayerActivity.class);
-        intent.putExtra(ListPlayerActivity.EXTRA_MODE, CommonEnum.LIST_PLAYER_MODE.EDIT);
-        startActivity(intent);
+//        Intent intent = new Intent(getApplicationContext(), ListPlayerActivity.class);
+//        intent.putExtra(ListPlayerActivity.EXTRA_MODE, CommonEnum.LIST_PLAYER_MODE.EDIT);
+//        startActivity(intent);
+        ListPlayerFragment fragment = ListPlayerFragment.buildForEdit(this, notifier);
+        FragmentTool.replaceFragment(this, fragment, R.id.item_detail_container);
     }
 
     private void onClickListStatistic() {

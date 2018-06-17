@@ -22,13 +22,13 @@ import java.util.List;
 public class ContactManager extends GenericCursorManager<Contact, ContactMapper> {
 
 	private static ContactManager instance = null;
-	private Activity context;
+	private Context context;
 
-	public ContactManager(Activity context) {
+	public ContactManager(Context context) {
 		this.context = context;
 	}
 
-	public static ContactManager getInstance(Activity context) {
+	public static ContactManager getInstance(Context context) {
 		if (instance == null) {
 			instance = new ContactManager(context);
 		}
@@ -46,7 +46,7 @@ public class ContactManager extends GenericCursorManager<Contact, ContactMapper>
 	public Bitmap getPhoto(Long contactId) {
 		ContentResolver contentResolver = context.getContentResolver();
 
-		if (!ToolPermission.checkPermissionREAD_CONTACTS(context, false)) {
+		if (context instanceof Activity &&!ToolPermission.checkPermissionREAD_CONTACTS((Activity) context, false)) {
 			return null;
 		}
 		

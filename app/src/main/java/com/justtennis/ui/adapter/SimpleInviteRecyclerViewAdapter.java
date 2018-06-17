@@ -1,9 +1,8 @@
 package com.justtennis.ui.adapter;
 
 
-import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.FragmentActivity;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -58,6 +57,7 @@ public class SimpleInviteRecyclerViewAdapter extends RecyclerView.Adapter<Invite
         }
     };
 
+    @NonNull
     @Override
     public InviteViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
@@ -72,8 +72,7 @@ public class SimpleInviteRecyclerViewAdapter extends RecyclerView.Adapter<Invite
     public void onBindViewHolder(final InviteViewHolder holder, int position) {
         holder.invite = mValues.get(position);
 
-        InviteViewHelper.INVITE_MODE_VIEW mode = InviteViewHelper.INVITE_MODE_VIEW.MODIFY;
-        InviteViewHelper.initializeView(mParentActivity, holder, mode);
+        InviteViewHelper.initializeView(mParentActivity, holder, CommonEnum.LIST_MODE_VIEW.MODIFY);
     }
 
     @Override

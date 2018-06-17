@@ -1,5 +1,6 @@
 package com.justtennis.business;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -19,6 +20,7 @@ import com.justtennis.manager.SmsManager;
 import com.justtennis.notifier.NotifierMessageLogger;
 import com.justtennis.parser.SmsParser;
 import com.justtennis.ui.common.CommonEnum;
+import com.justtennis.ui.rxjava.RxListPlayer;
 
 import org.gdocument.gtracergps.launcher.log.Logger;
 
@@ -28,6 +30,8 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 
+import io.reactivex.Observable;
+
 public class ListPlayerBusiness implements INavigationDrawerRechercheBusiness {
 
 	private static final String TAG = ListPlayerBusiness.class.getSimpleName();
@@ -36,7 +40,7 @@ public class ListPlayerBusiness implements INavigationDrawerRechercheBusiness {
 	private UserService userService;
 	private InviteService inviteService;
 	private List<Player> list = new ArrayList<Player>();
-	private ListPlayerActivity context;
+	private Activity context;
 	private User user;
 	private Bundle extraIn = null;
 
@@ -44,7 +48,7 @@ public class ListPlayerBusiness implements INavigationDrawerRechercheBusiness {
 
 	private String findText;
 
-	public ListPlayerBusiness(ListPlayerActivity context, INotifierMessage notificationMessage) {
+	public ListPlayerBusiness(Activity context, INotifierMessage notificationMessage) {
 		this.context = context;
 		playerService = new PlayerService(context, notificationMessage);
 		userService = new UserService(context, NotifierMessageLogger.getInstance());
@@ -101,7 +105,7 @@ public class ListPlayerBusiness implements INavigationDrawerRechercheBusiness {
 		playerService.delete(player);
 
 		refreshData();
-		context.refresh();
+		RxListPlayer.publish(RxListPlayer.SUBJECT_REFRESH, Observable.empty());
 	}
 
 	public void send(Player player) {

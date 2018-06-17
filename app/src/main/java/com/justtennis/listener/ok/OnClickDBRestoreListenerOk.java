@@ -18,7 +18,7 @@ import com.justtennis.db.sqlite.helper.DBTournamentHelper;
 import com.justtennis.db.sqlite.helper.DBUserHelper;
 import com.cameleon.common.android.db.sqlite.helper.GenericDBHelper;
 import com.justtennis.notifier.NotifierMessageLogger;
-import com.justtennis.ui.rxjava.RxBus;
+import com.justtennis.ui.rxjava.RxNavigationDrawer;
 
 import io.reactivex.Observable;
 
@@ -55,7 +55,7 @@ public class OnClickDBRestoreListenerOk implements OnClickListener {
 				}
 			}
 
-			RxBus.publish(RxBus.SUBJECT_DB_RESTORED, Observable.empty());
+			RxNavigationDrawer.publish(RxNavigationDrawer.SUBJECT_DB_RESTORED, Observable.empty());
 
 		}
 	}

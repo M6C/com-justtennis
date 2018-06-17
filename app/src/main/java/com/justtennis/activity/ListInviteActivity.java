@@ -12,7 +12,7 @@ import android.widget.ListView;
 
 import com.cameleon.common.android.factory.FactoryDialog;
 import com.justtennis.R;
-import com.justtennis.activity.interfaces.IListInviteActivity;
+import com.justtennis.activity.interfaces.ICommonListActivity;
 import com.justtennis.adapter.ListInviteAdapter;
 import com.justtennis.business.ListInviteBusiness;
 import com.justtennis.domain.Invite;
@@ -21,7 +21,7 @@ import com.justtennis.listener.ok.OnClickInviteDeleteListenerOk;
 import com.justtennis.manager.TypeManager;
 import com.justtennis.notifier.NotifierMessageLogger;
 
-public class ListInviteActivity extends GenericActivity implements IListInviteActivity {
+public class ListInviteActivity extends GenericActivity implements ICommonListActivity {
 
 	@SuppressWarnings("unused")
 	private static final String TAG = ListInviteActivity.class.getSimpleName();

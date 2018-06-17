@@ -3,22 +3,21 @@ package com.justtennis.ui.fragment;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.justtennis.R;
-import com.justtennis.activity.interfaces.IListInviteActivity;
+import com.justtennis.activity.interfaces.ICommonListActivity;
 import com.justtennis.business.ListInviteBusiness;
 import com.justtennis.domain.Saison;
 import com.justtennis.notifier.NotifierMessageLogger;
 import com.justtennis.ui.adapter.SimpleInviteRecyclerViewAdapter;
 import com.justtennis.ui.manager.DrawerManager;
-import com.justtennis.ui.rxjava.RxBus;
+import com.justtennis.ui.rxjava.RxNavigationDrawer;
 
-public class ItemDetailFragment extends Fragment implements IListInviteActivity {
+public class ItemDetailFragment extends Fragment implements ICommonListActivity {
 
     /**
      * Whether or not the activity is in two-pane mode, i.e. running on a tablet
@@ -77,21 +76,21 @@ public class ItemDetailFragment extends Fragment implements IListInviteActivity 
     }
 
 //    private void initializeSubscribeChangeType() {
-//        RxBus.subscribe(RxBus.SUBJECT_CHANGE_TYPE, this, o -> {
+//        RxNavigationDrawer.subscribe(RxNavigationDrawer.SUBJECT_CHANGE_TYPE, this, o -> {
 //            business.refreshData();
 //            adapter.notifyDataSetChanged();
 //        });
 //    }
 
     private void initializeSubscribeDbRestored() {
-        RxBus.subscribe(RxBus.SUBJECT_DB_RESTORED, this, o -> {
+        RxNavigationDrawer.subscribe(RxNavigationDrawer.SUBJECT_DB_RESTORED, this, o -> {
             business.refreshData();
             adapter.notifyDataSetChanged();
         });
     }
 
     private void initializeSubscribeSelectSaison() {
-        RxBus.subscribe(RxBus.SUBJECT_SELECT_SAISON, this, o -> {
+        RxNavigationDrawer.subscribe(RxNavigationDrawer.SUBJECT_SELECT_SAISON, this, o -> {
             Saison saison = (Saison) o;
             business.setSaison(saison);
             business.refreshData();
@@ -101,7 +100,7 @@ public class ItemDetailFragment extends Fragment implements IListInviteActivity 
 
     @Override
     public void onDestroy() {
-        RxBus.unregister(this);
+        RxNavigationDrawer.unregister(this);
         super.onDestroy();
     }
 

@@ -31,12 +31,11 @@ import android.widget.Toast;
 
 import com.justtennis.R;
 import com.justtennis.activity.PalmaresFastActivity;
-import com.justtennis.activity.UserActivity;
 import com.justtennis.drawer.manager.business.DrawerSaisonBusiness;
 import com.justtennis.manager.TypeManager;
 import com.justtennis.notifier.NotifierMessageLogger;
 import com.justtennis.tool.FragmentTool;
-import com.justtennis.ui.rxjava.RxBus;
+import com.justtennis.ui.rxjava.RxNavigationDrawer;
 
 import java.util.Objects;
 
@@ -146,7 +145,7 @@ public class NavigationDrawerFragment extends Fragment {
 
     @Override
     public void onDestroy() {
-        RxBus.unregister(this);
+        RxNavigationDrawer.unregister(this);
         super.onDestroy();
     }
 
@@ -330,12 +329,12 @@ public class NavigationDrawerFragment extends Fragment {
 
             mSpSaison.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                 public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                    RxBus.publish(RxBus.SUBJECT_SELECT_SAISON, saisonBusiness.getListSaison().get(position));
+                    RxNavigationDrawer.publish(RxNavigationDrawer.SUBJECT_SELECT_SAISON, saisonBusiness.getListSaison().get(position));
                 }
 
                 @Override
                 public void onNothingSelected(AdapterView<?> parent) {
-                    RxBus.publish(RxBus.SUBJECT_SELECT_SAISON, saisonBusiness.getEmptySaison());
+                    RxNavigationDrawer.publish(RxNavigationDrawer.SUBJECT_SELECT_SAISON, saisonBusiness.getEmptySaison());
                 }
             });
         }
@@ -349,13 +348,13 @@ public class NavigationDrawerFragment extends Fragment {
             mButtonTypeMatch = navigationDrawerBottom.findViewById(R.id.btn_type_match);
             mButtonTypeMatchDisable = navigationDrawerBottom.findViewById(R.id.btn_type_match_disable);
 
-            mButtonTypeTrainingDisable.setOnClickListener(v -> RxBus.publish(RxBus.SUBJECT_CHANGE_TYPE, TypeManager.TYPE.TRAINING));
-            mButtonTypeMatchDisable.setOnClickListener(v -> RxBus.publish(RxBus.SUBJECT_CHANGE_TYPE, TypeManager.TYPE.COMPETITION));
+            mButtonTypeTrainingDisable.setOnClickListener(v -> RxNavigationDrawer.publish(RxNavigationDrawer.SUBJECT_CHANGE_TYPE, TypeManager.TYPE.TRAINING));
+            mButtonTypeMatchDisable.setOnClickListener(v -> RxNavigationDrawer.publish(RxNavigationDrawer.SUBJECT_CHANGE_TYPE, TypeManager.TYPE.COMPETITION));
         }
     }
 
     private void initializeSubscribeDbRestored() {
-        RxBus.subscribe(RxBus.SUBJECT_DB_RESTORED, this, new Consumer<Object>() {
+        RxNavigationDrawer.subscribe(RxNavigationDrawer.SUBJECT_DB_RESTORED, this, new Consumer<Object>() {
             @Override
             public void accept(Object o) throws Exception {
                 saisonBusiness.initializeData();

@@ -1,6 +1,7 @@
 package com.justtennis.adapter;
 
 import android.app.Activity;
+import android.support.annotation.NonNull;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +13,7 @@ import com.justtennis.adapter.viewholder.InviteViewHolder;
 import com.justtennis.domain.Invite;
 import com.justtennis.filter.ListInviteByPlayerFilter;
 import com.justtennis.helper.InviteViewHelper;
+import com.justtennis.ui.common.CommonEnum;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,31 +23,29 @@ public class ListInviteAdapter extends ArrayAdapter<Invite> {
 	private List<Invite> value;
 	private ArrayList<Invite> valueOld;
 	private Activity activity;
-	private InviteViewHelper.INVITE_MODE_VIEW mode;
+	private CommonEnum.LIST_MODE_VIEW mode;
 	private Filter filter = null;
 
 	public ListInviteAdapter(Activity activity, List<Invite> value) {
-		this(activity, value, InviteViewHelper.INVITE_MODE_VIEW.MODIFY);
+		this(activity, value, CommonEnum.LIST_MODE_VIEW.MODIFY);
 	}
 
-	public ListInviteAdapter(Activity activity, List<Invite> value, InviteViewHelper.INVITE_MODE_VIEW mode) {
+	private ListInviteAdapter(Activity activity, List<Invite> value, CommonEnum.LIST_MODE_VIEW mode) {
 		super(activity, R.layout.list_invite_row, android.R.id.text1, value);
 
 		this.activity = activity;
 		this.value = value;
 		this.mode = mode;
-		this.valueOld = new ArrayList<Invite>(value);
+		this.valueOld = new ArrayList<>(value);
 		
-		this.filter = new ListInviteByPlayerFilter(new ListInviteByPlayerFilter.IValueNotifier() {
-			@Override
-			public void setValue(List<Invite> value) {
-				ListInviteAdapter.this.value.clear();
-				ListInviteAdapter.this.value.addAll(value);
-				notifyDataSetChanged();
-			}
-		}, valueOld);
+		this.filter = new ListInviteByPlayerFilter(value1 -> {
+            ListInviteAdapter.this.value.clear();
+            ListInviteAdapter.this.value.addAll(value1);
+            notifyDataSetChanged();
+        }, valueOld);
 	}
 
+	@NonNull
 	@Override
 	public Filter getFilter() {
 		if (filter!=null) {
@@ -59,13 +59,14 @@ public class ListInviteAdapter extends ArrayAdapter<Invite> {
 		this.filter = filter;
 	}
 
+	@NonNull
 	@Override
-	public View getView(int position, View convertView, ViewGroup parent) {
+	public View getView(int position, View convertView, @NonNull ViewGroup parent) {
 		Invite v = value.get(position);
 		View rowView = convertView;
 		if (rowView == null) {
 			LayoutInflater inflater = activity.getLayoutInflater();
-			rowView = inflater.inflate(R.layout.list_invite_row, null);
+			rowView = inflater.inflate(R.layout.list_invite_row, parent);
 		}
 
 		InviteViewHolder viewHolder = new InviteViewHolder(rowView);

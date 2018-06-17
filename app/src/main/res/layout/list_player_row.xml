@@ -98,7 +98,6 @@
 	    android:src="@drawable/player_delete"
 	    android:layout_gravity="center_vertical|center_horizontal"
 	    android:contentDescription="@string/button_desctiption_delete"
-	    android:onClick="onClickDelete"
 	/>
 
 <!-- 
