@@ -17,7 +17,7 @@ import java.util.List;
 
 public class CommonListRecyclerViewAdapter <DATA extends GenericDBPojo<Long>> extends RecyclerView.Adapter<CommonListViewHolder> {
 
-    private final List<DATA> mValues;
+    private List<DATA> mValues;
     private @LayoutRes int mItemLayoutId;
     private IFactoryViewHolder factoryViewHolder;
 

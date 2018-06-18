@@ -10,7 +10,7 @@ public abstract class CommonListViewHolder <D extends GenericDBPojo<Long>> exten
     public D data;
     public CommonEnum.LIST_MODE_VIEW mode;
 
-    protected CommonListViewHolder(View itemView) {
+    CommonListViewHolder(View itemView) {
         super(itemView);
     }
 

@@ -20,11 +20,11 @@ public class InviteViewHolder extends RecyclerView.ViewHolder {
 
     public InviteViewHolder(View itemView) {
         super(itemView);
-        tvPlayer = (TextView) itemView.findViewById(R.id.tv_player);
-        tvDate = (TextView) itemView.findViewById(R.id.tv_date);
-        tvScore = (TextView) itemView.findViewById(R.id.tv_score);
-        tvClubName = (TextView) itemView.findViewById(R.id.tv_club_name);
-        imageDelete = (ImageView) itemView.findViewById(R.id.iv_delete);
+        tvPlayer = itemView.findViewById(R.id.tv_player);
+        tvDate = itemView.findViewById(R.id.tv_date);
+        tvScore = itemView.findViewById(R.id.tv_score);
+        tvClubName = itemView.findViewById(R.id.tv_club_name);
+        imageDelete = itemView.findViewById(R.id.iv_delete);
         vTypeEntrainement = itemView.findViewById(R.id.tv_type_entrainement);
         vTypeMatch = itemView.findViewById(R.id.tv_type_match);
     }

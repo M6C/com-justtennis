@@ -56,12 +56,6 @@ public class CommonListFragment <DATA extends GenericDBPojo<Long>> extends Fragm
     }
 
     @Override
-    public void onResume() {
-        super.onResume();
-        adapter.notifyDataSetChanged();
-    }
-
-    @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.item_detail, container, false);
 
@@ -72,6 +66,12 @@ public class CommonListFragment <DATA extends GenericDBPojo<Long>> extends Fragm
         setupRecyclerView();
 
         return rootView;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        adapter.notifyDataSetChanged();
     }
 
     public void setFactoryViewHolder(CommonListRecyclerViewAdapter.IFactoryViewHolder factoryViewHolder) {

@@ -38,6 +38,7 @@ import com.justtennis.tool.ToolPermission;
 import com.justtennis.ui.common.CommonEnum;
 import com.justtennis.ui.fragment.InviteFragment;
 import com.justtennis.ui.fragment.ItemDetailFragment;
+import com.justtennis.ui.fragment.ListInviteFragment;
 import com.justtennis.ui.fragment.ListPlayerFragment;
 import com.justtennis.ui.fragment.NavigationDrawerFragment;
 import com.justtennis.ui.rxjava.RxNavigationDrawer;
@@ -249,7 +250,8 @@ public class ItemDetailActivity extends AppCompatActivity implements NavigationD
 //        }
 //        startActivity(intent);
         if (mBottomNavigation.getSelectedItemId() != R.id.navigation_invite) {
-            ItemDetailFragment fragment = new ItemDetailFragment();
+//            ItemDetailFragment fragment = new ItemDetailFragment();
+            ListInviteFragment fragment = ListInviteFragment.build();
             FragmentTool.replaceFragment(this, fragment, R.id.item_detail_container);
         }
     }
