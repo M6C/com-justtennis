@@ -122,7 +122,7 @@ public class ListPlayerBusiness implements INavigationDrawerRechercheBusiness {
 		return inviteService.countByIdPlayer(player.getId());
 	}
 
-	private void refreshData() {
+	public void refreshData() {
 		list.clear();
 		if (!CommonEnum.LIST_PLAYER_MODE.EDIT.equals(mode)) {
 			list.add(playerService.getUnknownPlayer());

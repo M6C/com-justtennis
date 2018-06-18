@@ -5,9 +5,6 @@ import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 
 import com.justtennis.ApplicationConfig;
-import com.justtennis.activity.InviteActivity;
-import com.justtennis.activity.InviteDemandeActivity;
-import com.justtennis.activity.PlayerActivity;
 import com.justtennis.db.service.InviteService;
 import com.justtennis.db.service.PlayerService;
 import com.justtennis.db.service.SaisonService;
@@ -22,9 +19,12 @@ import com.justtennis.notifier.NotifierMessageLogger;
 
 import org.gdocument.gtracergps.launcher.log.Logger;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.List;
+import java.util.Random;
 
 public class DBFeedTool {
 
@@ -54,10 +54,26 @@ public class DBFeedTool {
             user = createUser(saison);
             userService.createOrUpdate(user);
         }
+        List<Player> listPlayer;
+        if (playerService.getCount() <= 0) {
+            listPlayer = new ArrayList<>();
+            listPlayer.add(playerService.getUnknownPlayer());
+            for (int i=0 ; i<10 ; i++) {
+                Player player = new Player();
+                player.setFirstName("Player " + i);
+                player.setLastName("Name" + i);
+                player.setType(TypeManager.getInstance().getType());
+                playerService.createOrUpdate(player);
+                listPlayer.add(player);
+            }
+        } else {
+            listPlayer = playerService.getList();
+        }
+        int nbPlayer = listPlayer.size();
+        Random rnd = new Random();
         if (inviteService.getCount() < 10) {
-            Player player = playerService.getUnknownPlayer();
-
             for(int i=0 ; i<10 ; i++) {
+                Player player = listPlayer.get(rnd.nextInt(nbPlayer - 1));
                 Invite invite = createInvite(saison, user, player);
                 inviteService.createOrUpdate(invite);
             }
@@ -87,7 +103,7 @@ public class DBFeedTool {
         Invite invite = new Invite();
         invite.setSaison(saison);
         invite.setUser(user);
-        invite.setType(TypeManager.TYPE.TRAINING);
+        invite.setType(TypeManager.getInstance().getType());
         invite.setPlayer(player);
 
         Calendar calendar = GregorianCalendar.getInstance(ApplicationConfig.getLocal());

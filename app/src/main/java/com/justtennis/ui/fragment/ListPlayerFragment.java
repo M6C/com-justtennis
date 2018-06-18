@@ -26,6 +26,7 @@ import com.justtennis.ui.rxjava.RxListPlayer;
 
 import org.gdocument.gtracergps.launcher.log.Logger;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -36,7 +37,6 @@ public class ListPlayerFragment extends CommonListFragment<Player> {
 
 	private static ListPlayerBusiness business;
 
-	//	boolean checkPermission = true;
 	private AdapterView.OnItemClickListener onItemClick;
 
 	public static ListPlayerFragment buildForEdit(Activity activity, NotifierMessageLogger notifier) {
@@ -44,6 +44,11 @@ public class ListPlayerFragment extends CommonListFragment<Player> {
 	}
 
 	public static ListPlayerFragment buildForEdit(Activity activity, NotifierMessageLogger notifier, CommonEnum.LIST_PLAYER_MODE mode) {
+		return initialize(activity, notifier, mode);
+	}
+
+	@NonNull
+	private static ListPlayerFragment initialize(Activity activity, NotifierMessageLogger notifier, CommonEnum.LIST_PLAYER_MODE mode) {
 		business = new ListPlayerBusiness(activity, notifier);
 		business.initialize();
 		List<Player> list = business.getList();
@@ -53,56 +58,33 @@ public class ListPlayerFragment extends CommonListFragment<Player> {
 		ListPlayerFragment fragment = new ListPlayerFragment();
 		Bundle args = new Bundle();
 		args.putSerializable(EXTRA_MODE, mode);
-		args.putSerializable(EXTRA_LIST, new ArrayList<>(list));
+		args.putSerializable(EXTRA_LIST, (Serializable) list);
 		args.putInt(EXTRA_ITEM_LAYOUT , R.layout.list_player_row);
 		fragment.setArguments(args);
 		return fragment;
 	}
 
-    @Override
+	@Override
 	public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		View rootView = super.onCreateView(inflater, container, savedInstanceState);
 
 		setFactoryViewHolder(ListPlayerViewHolder::build);
 
-		initialize();
+		initializeListener();
+		initializeSubscribeListPlayer();
+		initializeSubscribeCommonList();
 
         return rootView;
 	}
 
 	@Override
-	public void onDestroy() {
+	public void onPause() {
 		RxListPlayer.unregister(this);
 		RxCommonList.unregister(this);
-		super.onDestroy();
+		super.onPause();
 	}
 
-//    @Override
-//	public void onResume() {
-//		super.onResume();
-//
-//		if (checkPermission && ToolPermission.checkPermissionREAD_CONTACTS(activity, true)) {
-//			initialize();
-//		}
-//	}
-//
-//	@Override
-//	public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
-//		switch (requestCode) {
-//			case ToolPermission.MY_PERMISSIONS_REQUEST: {
-//				checkPermission = false;
-//				initialize();
-//				// If request is cancelled, the result arrays are empty.
-//				if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-//				} else {
-//					logMe("Permission Denied ! Cancel initialization");
-//				}
-//				return;
-//			}
-//		}
-//	}
-
-	private void initialize() {
+	private void initializeListener() {
 		FragmentActivity activity = getActivity();
 		switch (getMode()) {
 			case EDIT:
@@ -115,8 +97,6 @@ public class ListPlayerFragment extends CommonListFragment<Player> {
 				onItemClick = new OnItemClickListPlayerForResult(activity);
 				break;
 		}
-		initializeSubscribeListPlayer();
-		initializeSubscribeCommonList();
 	}
 
 	private void initializeSubscribeListPlayer() {
@@ -126,6 +106,12 @@ public class ListPlayerFragment extends CommonListFragment<Player> {
 
 	private void initializeSubscribeCommonList() {
 		RxCommonList.subscribe(RxCommonList.SUBJECT_ON_CLICK_ITEM, this, o -> onItemClick.onItemClick(null, (View) o, 0, 0));
+	}
+
+	@Override
+	public void refresh() {
+		business.refreshData();
+		adapter.notifyDataSetChanged();
 	}
 
 	private void onClickDelete(View view) {

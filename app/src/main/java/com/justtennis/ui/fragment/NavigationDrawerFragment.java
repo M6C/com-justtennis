@@ -144,9 +144,9 @@ public class NavigationDrawerFragment extends Fragment {
     }
 
     @Override
-    public void onDestroy() {
+    public void onPause() {
         RxNavigationDrawer.unregister(this);
-        super.onDestroy();
+        super.onPause();
     }
 
     public boolean isDrawerOpen() {

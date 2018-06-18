@@ -99,9 +99,9 @@ public class ItemDetailFragment extends Fragment implements ICommonListActivity 
     }
 
     @Override
-    public void onDestroy() {
+    public void onPause() {
         RxNavigationDrawer.unregister(this);
-        super.onDestroy();
+        super.onPause();
     }
 
     private void setupRecyclerView() {

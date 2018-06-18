@@ -105,9 +105,9 @@ public class ListPlayerFragment2 extends Fragment {
 	}
 
 	@Override
-	public void onDestroy() {
+	public void onPause() {
 		RxListPlayer.unregister(this);
-		super.onDestroy();
+		super.onPause();
 	}
 
     private void iniitializeViewId() {

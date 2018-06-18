@@ -81,7 +81,8 @@ public class ListPlayerViewHolder extends CommonListViewHolder<Player> {
             clubName.setText(address[0]);
             clubName.setVisibility(View.VISIBLE);
         } else {
-            clubName.setVisibility(View.GONE);
+            clubName.setText("");
+            clubName.setVisibility(View.INVISIBLE);
         }
     }
 }

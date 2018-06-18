@@ -23,7 +23,7 @@ public class CommonListFragment <DATA extends GenericDBPojo<Long>> extends Fragm
     public static final String EXTRA_LIST = "LIST";
     protected static final String EXTRA_ITEM_LAYOUT = "ITEM_LAYOUT";
 
-    private CommonListRecyclerViewAdapter<DATA> adapter;
+    protected CommonListRecyclerViewAdapter<DATA> adapter;
     private RecyclerView mRecyclerView;
     private View mEmptyView;
     private CommonEnum.LIST_PLAYER_MODE mode;

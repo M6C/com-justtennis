@@ -7,7 +7,7 @@
     android:paddingRight="@dimen/list_item_horizontal_margin"
     android:paddingTop="@dimen/list_item_vertical_margin"
     android:background="@color/list_item_background_color"
-    android:layout_margin="12dp"
+    android:layout_margin="@dimen/list_item_margin"
     android:orientation="vertical"
 >
     <LinearLayout

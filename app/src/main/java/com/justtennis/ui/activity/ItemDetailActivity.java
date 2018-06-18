@@ -42,6 +42,8 @@ import com.justtennis.ui.fragment.ListPlayerFragment;
 import com.justtennis.ui.fragment.NavigationDrawerFragment;
 import com.justtennis.ui.rxjava.RxNavigationDrawer;
 
+import org.gdocument.gtracergps.launcher.log.Logger;
+
 
 /**
  * An activity representing a single Item detail screen. This
@@ -50,6 +52,8 @@ import com.justtennis.ui.rxjava.RxNavigationDrawer;
  * in a {@link ItemListActivity}.
  */
 public class ItemDetailActivity extends AppCompatActivity implements NavigationDrawerFragment.NavigationDrawerCallbacks {
+
+    private static final String TAG = ItemDetailActivity.class.getSimpleName();
 
     /**
      * Fragment managing the behaviors, interactions and presentation of the navigation drawer.
@@ -112,9 +116,9 @@ public class ItemDetailActivity extends AppCompatActivity implements NavigationD
     }
 
     @Override
-    protected void onDestroy() {
+    protected void onPause() {
         RxNavigationDrawer.unregister(this);
-        super.onDestroy();
+        super.onPause();
     }
 
     @Override
@@ -255,7 +259,11 @@ public class ItemDetailActivity extends AppCompatActivity implements NavigationD
 //        intent.putExtra(ListPlayerActivity.EXTRA_MODE, CommonEnum.LIST_PLAYER_MODE.EDIT);
 //        startActivity(intent);
         ListPlayerFragment fragment = ListPlayerFragment.buildForEdit(this, notifier);
-        FragmentTool.replaceFragment(this, fragment, R.id.item_detail_container);
+        if (fragment != null) {
+            FragmentTool.replaceFragment(this, fragment, R.id.item_detail_container);
+        } else {
+            logMe("!!!!!!!!!!!!!!!!!!!!!! ListPlayerFragment is null");
+        }
     }
 
     private void onClickListStatistic() {
@@ -396,5 +404,9 @@ public class ItemDetailActivity extends AppCompatActivity implements NavigationD
             default:
                 return false;
         }
+    }
+
+    protected static void logMe(String msg) {
+        Logger.logMe(TAG, msg);
     }
 }
