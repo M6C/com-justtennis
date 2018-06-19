@@ -37,9 +37,9 @@ import com.justtennis.notifier.NotifierMessageLogger;
 import com.justtennis.tool.FragmentTool;
 import com.justtennis.ui.rxjava.RxNavigationDrawer;
 
-import java.util.Objects;
+import org.gdocument.gtracergps.launcher.log.Logger;
 
-import io.reactivex.functions.Consumer;
+import java.util.Objects;
 
 /**
  * Fragment used for managing interactions for and presentation of a navigation drawer.
@@ -47,6 +47,8 @@ import io.reactivex.functions.Consumer;
  * design guidelines</a> for a complete explanation of the behaviors implemented here.
  */
 public class NavigationDrawerFragment extends Fragment {
+
+    private static final String TAG = NavigationDrawerFragment.class.getSimpleName();
 
     /**
      * Remember the position of the selected item.
@@ -144,9 +146,9 @@ public class NavigationDrawerFragment extends Fragment {
     }
 
     @Override
-    public void onPause() {
+    public void onDestroy() {
         RxNavigationDrawer.unregister(this);
-        super.onPause();
+        super.onDestroy();
     }
 
     public boolean isDrawerOpen() {
@@ -294,20 +296,17 @@ public class NavigationDrawerFragment extends Fragment {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 switch (item.getItemId()) {
-                    case R.id.nav_user: {
+                    case R.id.nav_user:
                         UserFragment fragment = new UserFragment();
                         FragmentTool.replaceFragment(mActivity, fragment, R.id.item_detail_container);
                         closeDrawer();
                         break;
-                    }
-                    case R.id.nav_list_club: {
+                    case R.id.nav_list_club:
                         break;
-                    }
-                    case R.id.nav_palmares_fast: {
+                    case R.id.nav_palmares_fast:
                         Intent intent = new Intent(getActivity().getApplicationContext(), PalmaresFastActivity.class);
                         startActivity(intent);
                         break;
-                    }
                 }
                 return false;
             }
@@ -354,18 +353,15 @@ public class NavigationDrawerFragment extends Fragment {
     }
 
     private void initializeSubscribeDbRestored() {
-        RxNavigationDrawer.subscribe(RxNavigationDrawer.SUBJECT_DB_RESTORED, this, new Consumer<Object>() {
-            @Override
-            public void accept(Object o) throws Exception {
-                saisonBusiness.initializeData();
-                mAdapterSaison.notifyDataSetChanged();
+        RxNavigationDrawer.subscribe(RxNavigationDrawer.SUBJECT_DB_RESTORED, this, o -> {
+            saisonBusiness.initializeData();
+            mAdapterSaison.notifyDataSetChanged();
 
-                // Select 1st Saison Active
-                AdapterView.OnItemSelectedListener onItemSelectedListener = mSpSaison.getOnItemSelectedListener();
-                mSpSaison.setOnItemSelectedListener(null);
-                mSpSaison.setSelection(saisonBusiness.getSaisonActivePosition());
-                mSpSaison.setOnItemSelectedListener(onItemSelectedListener);
-            }
+            // Select 1st Saison Active
+            AdapterView.OnItemSelectedListener onItemSelectedListener = mSpSaison.getOnItemSelectedListener();
+            mSpSaison.setOnItemSelectedListener(null);
+            mSpSaison.setSelection(saisonBusiness.getSaisonActivePosition());
+            mSpSaison.setOnItemSelectedListener(onItemSelectedListener);
         });
     }
 
@@ -409,6 +405,10 @@ public class NavigationDrawerFragment extends Fragment {
 
     private ActionBar getActionBar() {
         return ((AppCompatActivity) Objects.requireNonNull(getActivity())).getSupportActionBar();
+    }
+
+    private static void logMe(String msg) {
+        Logger.logMe(TAG, msg);
     }
 
     /**

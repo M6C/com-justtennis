@@ -1,5 +1,6 @@
 package com.justtennis.adapter.viewholder;
 
+import android.app.Activity;
 import android.content.Context;
 import android.text.Html;
 import android.view.View;
@@ -18,6 +19,7 @@ import com.justtennis.ui.rxjava.RxListPlayer;
 
 public class ListPlayerViewHolder extends CommonListViewHolder<Player> {
 
+    private Activity activity;
     private Context context;
     private final LocationParser locationParser;
     private final RankingViewManager rankingViewManager;
@@ -27,14 +29,15 @@ public class ListPlayerViewHolder extends CommonListViewHolder<Player> {
     private TextView name;
     private TextView clubName;
 
-    protected ListPlayerViewHolder(View itemView) {
+    private ListPlayerViewHolder(Activity activity, View itemView) {
         super(itemView);
 
+        this.activity = activity;
         context = itemView.getContext().getApplicationContext();
         NotifierMessageLogger notifier = NotifierMessageLogger.getInstance();
         locationParser = LocationParser.getInstance(context, notifier);
         rankingViewManager = RankingViewManager.getInstance(context, notifier);
-        contactManager = ContactManager.getInstance(context);
+        contactManager = ContactManager.getInstance();
 
         imagePlayer = itemView.findViewById(R.id.iv_player);
         imageDelete = itemView.findViewById(R.id.iv_delete);
@@ -42,8 +45,8 @@ public class ListPlayerViewHolder extends CommonListViewHolder<Player> {
         clubName = itemView.findViewById(R.id.tv_club_name);
     }
 
-    public static ListPlayerViewHolder build(View view) {
-        return new ListPlayerViewHolder(view);
+    public static ListPlayerViewHolder build(Activity activity, View view) {
+        return new ListPlayerViewHolder(activity, view);
     }
 
     @Override
@@ -64,7 +67,7 @@ public class ListPlayerViewHolder extends CommonListViewHolder<Player> {
         initializeLocation(player, clubName);
 
         if (player.getIdGoogle()!=null && player.getIdGoogle() > 0L) {
-            imagePlayer.setImageBitmap(contactManager.getPhoto(player.getIdGoogle()));
+            imagePlayer.setImageBitmap(contactManager.getPhoto(activity, player.getIdGoogle()));
         }
         else {
             imagePlayer.setImageResource(R.drawable.player_unknow_2);

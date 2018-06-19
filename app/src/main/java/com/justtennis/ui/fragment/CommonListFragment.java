@@ -15,24 +15,26 @@ import com.justtennis.ui.adapter.CommonListRecyclerViewAdapter;
 import com.justtennis.ui.common.CommonEnum;
 import com.justtennis.ui.manager.DrawerManager;
 
+import org.gdocument.gtracergps.launcher.log.Logger;
+
 import java.util.List;
 
-public class CommonListFragment <DATA extends GenericDBPojo<Long>> extends Fragment implements ICommonListActivity {
+public class CommonListFragment <D extends GenericDBPojo<Long>> extends Fragment implements ICommonListActivity {
+
+    private static final String TAG = CommonListFragment.class.getSimpleName();
 
     public static final String EXTRA_MODE = "MODE";
     public static final String EXTRA_LIST = "LIST";
     protected static final String EXTRA_ITEM_LAYOUT = "ITEM_LAYOUT";
 
-    protected CommonListRecyclerViewAdapter<DATA> adapter;
+    protected CommonListRecyclerViewAdapter<D> adapter;
     private RecyclerView mRecyclerView;
     private View mEmptyView;
     private CommonEnum.LIST_PLAYER_MODE mode;
 
-    /**
-     * Mandatory empty constructor for the fragment manager to instantiate the
-     * fragment (e.g. upon screen orientation changes).
-     */
     public CommonListFragment() {
+        // Mandatory empty constructor for the fragment manager to instantiate the
+        // fragment (e.g. upon screen orientation changes).
     }
 
     @Override
@@ -40,10 +42,10 @@ public class CommonListFragment <DATA extends GenericDBPojo<Long>> extends Fragm
         super.onCreate(savedInstanceState);
 
         Bundle bundle = (savedInstanceState != null) ? savedInstanceState : getArguments();
-        List<DATA> list = null;
+        List<D> list = null;
         int itemLayoutId = -1;
         if (bundle != null) {
-            list = (List<DATA>) bundle.getSerializable(EXTRA_LIST);
+            list = (List<D>) bundle.getSerializable(EXTRA_LIST);
             itemLayoutId = bundle.getInt(EXTRA_ITEM_LAYOUT);
             mode = (CommonEnum.LIST_PLAYER_MODE) bundle.getSerializable(EXTRA_MODE);
         }
@@ -109,5 +111,9 @@ public class CommonListFragment <DATA extends GenericDBPojo<Long>> extends Fragm
 
     public CommonEnum.LIST_PLAYER_MODE getMode() {
         return mode;
+    }
+
+    private static void logMe(String msg) {
+        Logger.logMe(TAG, msg);
     }
 }

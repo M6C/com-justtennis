@@ -1,11 +1,5 @@
 package com.justtennis.business;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-
-import org.gdocument.gtracergps.launcher.log.Logger;
-
 import android.content.Context;
 
 import com.cameleon.common.android.inotifier.INotifierMessage;
@@ -21,6 +15,12 @@ import com.justtennis.manager.SmsManager;
 import com.justtennis.notifier.NotifierMessageLogger;
 import com.justtennis.parser.SmsParser;
 
+import org.gdocument.gtracergps.launcher.log.Logger;
+
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+
 public class ListPersonBusiness {
 
 	private static final String TAG = ListPersonBusiness.class.getSimpleName();
@@ -34,8 +34,7 @@ public class ListPersonBusiness {
 
 	public ListPersonBusiness(ListPersonActivity listPersonActivity, INotifierMessage notificationMessage) {
 		this.context = listPersonActivity;
-//		contactManager = ContactManager.getInstance();
-		contactManager = ContactManager.getInstance(context);
+		contactManager = ContactManager.getInstance();
 		playerService = new PlayerService(context, notificationMessage);
 		userService = new UserService(listPersonActivity, NotifierMessageLogger.getInstance());
 		user = userService.find();
@@ -74,7 +73,7 @@ public class ListPersonBusiness {
 //		separator.setId(0l);
 //		separator.setFirstName("[ ** Contacts ** ]");
 //		list.add(separator);
-		list.addAll(contactManager.getListContact());
+		list.addAll(contactManager.getListContact(context));
 	}
 
 	public void send(Player player) {

@@ -12,6 +12,7 @@ import android.widget.Toast;
 
 import com.cameleon.common.android.factory.FactoryDialog;
 import com.justtennis.R;
+import com.justtennis.adapter.viewholder.CommonListViewHolder;
 import com.justtennis.adapter.viewholder.ListPlayerViewHolder;
 import com.justtennis.business.ListPlayerBusiness;
 import com.justtennis.domain.Player;
@@ -20,6 +21,7 @@ import com.justtennis.listener.itemclick.OnItemClickListPlayerForResult;
 import com.justtennis.listener.itemclick.OnItemClickListPlayerInvite;
 import com.justtennis.listener.ok.OnClickPlayerDeleteListenerOk;
 import com.justtennis.notifier.NotifierMessageLogger;
+import com.justtennis.ui.adapter.CommonListRecyclerViewAdapter;
 import com.justtennis.ui.common.CommonEnum;
 import com.justtennis.ui.rxjava.RxCommonList;
 import com.justtennis.ui.rxjava.RxListPlayer;
@@ -68,7 +70,7 @@ public class ListPlayerFragment extends CommonListFragment<Player> {
 	public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		View rootView = super.onCreateView(inflater, container, savedInstanceState);
 
-		setFactoryViewHolder(ListPlayerViewHolder::build);
+		setFactoryViewHolder(view -> ListPlayerViewHolder.build(getActivity(), view));
 
 		initializeListener();
 		initializeSubscribeListPlayer();

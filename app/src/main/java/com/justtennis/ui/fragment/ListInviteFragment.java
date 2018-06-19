@@ -61,7 +61,6 @@ public class ListInviteFragment extends CommonListFragment<Player> {
         mTwoPane = false;
 
         initializeSubscribeSelectSaison();
-        initializeSubscribeDbRestored();
         initializeSubscribeListPlayer();
         initializeSubscribeCommonList();
 
@@ -73,8 +72,7 @@ public class ListInviteFragment extends CommonListFragment<Player> {
         super.onActivityCreated(savedInstanceState);
         business = new ListInviteBusiness(getContext(), this, NotifierMessageLogger.getInstance());
         business.onCreate();
-        mList.addAll(business.getList());
-        adapter.notifyDataSetChanged();
+        refresh();
     }
 
     @Override
@@ -90,6 +88,14 @@ public class ListInviteFragment extends CommonListFragment<Player> {
         super.onPause();
     }
 
+    @Override
+    public void refresh() {
+        business.refreshData();
+        mList.clear();
+        mList.addAll(business.getList());
+        adapter.notifyDataSetChanged();
+    }
+
     private void initializeSubscribeListPlayer() {
         RxListPlayer.subscribe(RxListPlayer.SUBJECT_REFRESH, this, o -> refresh());
         RxListPlayer.subscribe(RxListPlayer.SUBJECT_ON_CLICK_DELETE_ITEM, this, o -> onClickDelete((View) o));
@@ -99,26 +105,11 @@ public class ListInviteFragment extends CommonListFragment<Player> {
         RxCommonList.subscribe(RxCommonList.SUBJECT_ON_CLICK_ITEM, this, o -> onClickItem((View) o));
     }
 
-    private void initializeSubscribeDbRestored() {
-        RxNavigationDrawer.subscribe(RxNavigationDrawer.SUBJECT_DB_RESTORED, this, o -> {
-            business.refreshData();
-            adapter.notifyDataSetChanged();
-        });
-    }
-
     private void initializeSubscribeSelectSaison() {
         RxNavigationDrawer.subscribe(RxNavigationDrawer.SUBJECT_SELECT_SAISON, this, o -> {
-            Saison saison = (Saison) o;
-            business.setSaison(saison);
-            business.refreshData();
-            adapter.notifyDataSetChanged();
+            business.setSaison((Saison) o);
+            refresh();
         });
-    }
-
-    @Override
-    public void refresh() {
-        business.refreshData();
-        adapter.notifyDataSetChanged();
     }
 
     private void onClickItem(View view) {

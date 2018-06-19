@@ -22,31 +22,27 @@ import java.util.List;
 public class ContactManager extends GenericCursorManager<Contact, ContactMapper> {
 
 	private static ContactManager instance = null;
-	private Context context;
 
-	public ContactManager(Context context) {
-		this.context = context;
+	private ContactManager(){
 	}
 
-	public static ContactManager getInstance(Context context) {
+	public static ContactManager getInstance() {
 		if (instance == null) {
-			instance = new ContactManager(context);
+			instance = new ContactManager();
 		}
 		return instance;
 	}
 
-	public List<Contact> getListContact() {
-//		String selection = ContactsContract.Contacts.IN_VISIBLE_GROUP + " = '" + ("1") + "'";
-
+	public List<Contact> getListContact(Context context) {
 	    String where = ContactsContract.Contacts.IN_VISIBLE_GROUP + " = ?";
 	    String[] whereParameters = new String[]{"1"};
 		return getList(context, where, whereParameters);
 	}
 
-	public Bitmap getPhoto(Long contactId) {
-		ContentResolver contentResolver = context.getContentResolver();
+	public Bitmap getPhoto(Activity activity, Long contactId) {
+		ContentResolver contentResolver = activity.getContentResolver();
 
-		if (context instanceof Activity &&!ToolPermission.checkPermissionREAD_CONTACTS((Activity) context, false)) {
+		if (!ToolPermission.checkPermissionREAD_CONTACTS(activity, true)) {
 			return null;
 		}
 		
@@ -54,8 +50,7 @@ public class ContactManager extends GenericCursorManager<Contact, ContactMapper>
 
 	    // contactPhotoUri --> content://com.android.contacts/contacts/1557
 	    InputStream photoDataStream = Contacts.openContactPhotoInputStream(contentResolver,contactPhotoUri); // <-- always null
-	    Bitmap photo = BitmapFactory.decodeStream(photoDataStream);
-	    return photo;
+		return BitmapFactory.decodeStream(photoDataStream);
 	}
 
 	@Override

@@ -71,7 +71,7 @@ public class DBFeedTool {
         }
         int nbPlayer = listPlayer.size();
         Random rnd = new Random();
-        if (inviteService.getCount() < 10) {
+        if (inviteService.getCount() <= 0) {
             for(int i=0 ; i<10 ; i++) {
                 Player player = listPlayer.get(rnd.nextInt(nbPlayer - 1));
                 Invite invite = createInvite(saison, user, player);
