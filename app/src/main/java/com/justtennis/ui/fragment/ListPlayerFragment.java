@@ -3,6 +3,7 @@ package com.justtennis.ui.fragment;
 import android.app.Activity;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentActivity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -28,38 +29,42 @@ import com.justtennis.ui.viewmodel.PlayerViewModel;
 import org.gdocument.gtracergps.launcher.log.Logger;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 
 public class ListPlayerFragment extends CommonListFragment<Player> {
 
 	private static final String TAG = ListPlayerFragment.class.getSimpleName();
 	public static final String EXTRA_VIEW_MODEL = "EXTRA_VIEW_MODEL";
 
-	private static ListPlayerBusiness business;
+	private static List<Player> mList = new ArrayList<>();
 
+	private ListPlayerBusiness business;
 	private AdapterView.OnItemClickListener onItemClick;
 	private PlayerViewModel model;
 
 	public static ListPlayerFragment build(Activity activity, NotifierMessageLogger notifier, CommonEnum.LIST_PLAYER_MODE mode) {
-		return initialize(activity, notifier, mode);
+		return initialize(mode);
 	}
 
 	@NonNull
-	private static ListPlayerFragment initialize(Activity activity, NotifierMessageLogger notifier, CommonEnum.LIST_PLAYER_MODE mode) {
-		business = new ListPlayerBusiness(activity, notifier);
-		business.initialize();
-		List<Player> list = business.getList();
-
-		assert list != null;
-
+	private static ListPlayerFragment initialize(CommonEnum.LIST_PLAYER_MODE mode) {
 		ListPlayerFragment fragment = new ListPlayerFragment();
 		Bundle args = new Bundle();
 		args.putSerializable(EXTRA_MODE, mode);
-		args.putSerializable(EXTRA_LIST, (Serializable) list);
+		args.putSerializable(EXTRA_LIST, (Serializable) mList);
 		args.putInt(EXTRA_ITEM_LAYOUT , R.layout.list_player_row);
 		fragment.setArguments(args);
 		return fragment;
+	}
+
+	@Override
+	public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+		super.onActivityCreated(savedInstanceState);
+		business = new ListPlayerBusiness(getActivity(), NotifierMessageLogger.getInstance());
+		business.initialize();
 	}
 
 	@Override
@@ -73,6 +78,12 @@ public class ListPlayerFragment extends CommonListFragment<Player> {
 		initializeSubscribeCommonList();
 
         return rootView;
+	}
+
+	@Override
+	public void onResume() {
+		super.onResume();
+		refresh();
 	}
 
 	@Override
@@ -97,7 +108,10 @@ public class ListPlayerFragment extends CommonListFragment<Player> {
 			case FOR_RESULT_FRAGMENT:
 				assert getArguments() != null;
 				model = (PlayerViewModel)getArguments().getSerializable(EXTRA_VIEW_MODEL);
-				onItemClick = (parent, view, position, id) -> model.select(list.get(position));
+				onItemClick = (parent, view, position, id) -> {
+					model.select(((ListPlayerViewHolder)view.getTag()).data);
+					Objects.requireNonNull(getActivity()).onBackPressed();
+				};
 		}
 	}
 
@@ -113,6 +127,8 @@ public class ListPlayerFragment extends CommonListFragment<Player> {
 	@Override
 	public void refresh() {
 		business.refreshData();
+		mList.clear();
+		mList.addAll(business.getList());
 		adapter.notifyDataSetChanged();
 	}
 

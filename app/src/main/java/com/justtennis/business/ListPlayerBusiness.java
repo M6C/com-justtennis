@@ -40,7 +40,7 @@ public class ListPlayerBusiness implements INavigationDrawerRechercheBusiness {
 	private UserService userService;
 	private InviteService inviteService;
 	private List<Player> list = new ArrayList<Player>();
-	private Activity context;
+	private Activity activity;
 	private User user;
 	private Bundle extraIn = null;
 
@@ -48,25 +48,23 @@ public class ListPlayerBusiness implements INavigationDrawerRechercheBusiness {
 
 	private String findText;
 
-	public ListPlayerBusiness(Activity context, INotifierMessage notificationMessage) {
-		this.context = context;
-		playerService = new PlayerService(context, notificationMessage);
-		userService = new UserService(context, NotifierMessageLogger.getInstance());
-		inviteService = new InviteService(context, NotifierMessageLogger.getInstance());
+	public ListPlayerBusiness(Activity activity, INotifierMessage notificationMessage) {
+		this.activity = activity;
+		playerService = new PlayerService(activity, notificationMessage);
+		userService = new UserService(activity, NotifierMessageLogger.getInstance());
+		inviteService = new InviteService(activity, NotifierMessageLogger.getInstance());
 		user = userService.find();
-		extraIn = context.getIntent().getExtras();
+		extraIn = activity.getIntent().getExtras();
 	}
 
 	public void initialize() {
 
-		Intent intent = context.getIntent();
+		Intent intent = activity.getIntent();
 		mode = CommonEnum.LIST_PLAYER_MODE.EDIT;
 
 		if (intent.hasExtra(ListPlayerActivity.EXTRA_MODE)) {
 			mode = (CommonEnum.LIST_PLAYER_MODE) intent.getSerializableExtra(ListPlayerActivity.EXTRA_MODE);
 		}
-
-		refreshData();
 	}
 
 	@Override
@@ -88,8 +86,8 @@ public class ListPlayerBusiness implements INavigationDrawerRechercheBusiness {
 		return list;
 	}
 	
-	public Context getContext() {
-		return context;
+	public Context getActivity() {
+		return activity;
 	}
 
 	public CommonEnum.LIST_PLAYER_MODE getMode() {
@@ -110,8 +108,8 @@ public class ListPlayerBusiness implements INavigationDrawerRechercheBusiness {
 
 	public void send(Player player) {
 		Invite invite = new Invite(user, player, new Date());
-		String message = SmsParser.getInstance(context).toMessageAdd(invite);
-		SmsManager.getInstance().send(context, player.getPhonenumber(), message);
+		String message = SmsParser.getInstance(activity).toMessageAdd(invite);
+		SmsManager.getInstance().send(activity, player.getPhonenumber(), message);
 	}
 
 	public boolean isUnknownPlayer(Player player) {

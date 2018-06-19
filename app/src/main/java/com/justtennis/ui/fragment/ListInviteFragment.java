@@ -71,7 +71,6 @@ public class ListInviteFragment extends CommonListFragment<Player> {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         business = new ListInviteBusiness(getContext(), this, NotifierMessageLogger.getInstance());
-        business.onCreate();
         refresh();
     }
 

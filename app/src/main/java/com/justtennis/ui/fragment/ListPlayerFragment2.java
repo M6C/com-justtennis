@@ -179,6 +179,7 @@ public class ListPlayerFragment2 extends Fragment {
 
 	private void initialize() {
 		business.initialize();
+		business.refreshData();
 
 		refresh();
 
@@ -231,7 +232,7 @@ public class ListPlayerFragment2 extends Fragment {
 		} else {
 			OnClickPlayerDeleteListenerOk listener = new OnClickPlayerDeleteListenerOk(business, player);
 			FactoryDialog.getInstance()
-				.buildOkCancelDialog(business.getContext(), listener, R.string.dialog_player_delete_title, R.string.dialog_player_delete_message)
+				.buildOkCancelDialog(business.getActivity(), listener, R.string.dialog_player_delete_title, R.string.dialog_player_delete_message)
 				.show();
 		}
 	}
@@ -259,7 +260,7 @@ public class ListPlayerFragment2 extends Fragment {
 		Player player = (Player)view.getTag();
 		OnClickPlayerSendListenerOk listener = new OnClickPlayerSendListenerOk(business, player);
 		FactoryDialog.getInstance()
-			.buildOkCancelDialog(business.getContext(), listener, R.string.dialog_player_send_title, R.string.dialog_player_send_message)
+			.buildOkCancelDialog(business.getActivity(), listener, R.string.dialog_player_send_title, R.string.dialog_player_send_message)
 			.show();
 	}
 

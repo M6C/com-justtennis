@@ -324,10 +324,9 @@ public class InviteFragment extends Fragment {
 		}
 
         model = new ViewModelProvider.NewInstanceFactory().create(PlayerViewModel.class);
-		model.getSelected().observe(this, player -> {
+		model.getSelected().observe(this, (Player player) -> {
 			business.getInvite().setPlayer(player);
 			initializeDataPlayer();
-			Objects.requireNonNull(getActivity()).getSupportFragmentManager().popBackStackImmediate();
 		});
 
         args.putSerializable(ListPlayerFragment.EXTRA_VIEW_MODEL, model);
