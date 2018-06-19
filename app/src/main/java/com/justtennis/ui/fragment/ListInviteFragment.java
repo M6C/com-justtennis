@@ -115,10 +115,10 @@ public class ListInviteFragment extends CommonListFragment<Player> {
     private void onClickItem(View view) {
         Invite item = (Invite)((CommonListViewHolder)view.getTag()).data;
         if (mTwoPane) {
+            InviteFragment fragment = new InviteFragment();
             Bundle arguments = new Bundle();
             arguments.putSerializable(InviteActivity.EXTRA_INVITE, item);
             arguments.putSerializable(InviteActivity.EXTRA_MODE, CommonEnum.MODE.INVITE_DETAIL);
-            ItemDetailFragment fragment = new ItemDetailFragment();
             fragment.setArguments(arguments);
             FragmentTool.replaceFragment(Objects.requireNonNull(getActivity()), fragment, R.id.item_detail_container);
         } else {

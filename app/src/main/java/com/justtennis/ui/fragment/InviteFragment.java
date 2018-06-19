@@ -1,6 +1,7 @@
 package com.justtennis.ui.fragment;
 
 import android.app.Activity;
+import android.arch.lifecycle.ViewModelProvider;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -51,8 +52,10 @@ import com.justtennis.listener.action.TextWatcherFieldEnableView;
 import com.justtennis.manager.ContactManager;
 import com.justtennis.manager.TypeManager;
 import com.justtennis.notifier.NotifierMessageLogger;
+import com.justtennis.tool.FragmentTool;
 import com.justtennis.tool.ToolPermission;
 import com.justtennis.ui.common.CommonEnum;
+import com.justtennis.ui.viewmodel.PlayerViewModel;
 
 import org.gdocument.gtracergps.launcher.log.Logger;
 
@@ -64,6 +67,7 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Locale;
+import java.util.Objects;
 
 public class InviteFragment extends Fragment {
 
@@ -81,9 +85,11 @@ public class InviteFragment extends Fragment {
 	private static final int RESULT_SCORE = 4;
 
 	private InviteBusiness business;
+	private NotifierMessageLogger notifier;
 	private Long idPlayerFromResult = null;
 	private Serializable locationFromResult;
 	private Serializable locationClubFromResult;
+	private PlayerViewModel model;
 
 	private Context context;
 	private FragmentActivity activity;
@@ -130,7 +136,7 @@ public class InviteFragment extends Fragment {
 		activity = getActivity();
 		context = activity.getApplicationContext();
 
-		NotifierMessageLogger notifier = NotifierMessageLogger.getInstance();
+		notifier = NotifierMessageLogger.getInstance();
 		business = new InviteBusiness(context, notifier);
 
 		if (savedInstanceState != null) {
@@ -309,20 +315,26 @@ public class InviteFragment extends Fragment {
 	}
 
 	public void onClickPlayer(View view) {
-		Intent intent = new Intent(context, ListPlayerActivity.class);
-		intent.putExtra(ListPlayerActivity.EXTRA_MODE, CommonEnum.LIST_PLAYER_MODE.FOR_RESULT);
-		TypeManager.TYPE playerType = TypeManager.TYPE.TRAINING;
-		switch(business.getType()) {
-			case TRAINING:
-				playerType = TypeManager.TYPE.TRAINING;
-				break;
-			case COMPETITION:
-				playerType = TypeManager.TYPE.COMPETITION;
-				break;
+		ListPlayerFragment fragment = ListPlayerFragment.build(getActivity(), notifier, CommonEnum.LIST_PLAYER_MODE.FOR_RESULT_FRAGMENT);
+
+		Bundle args = fragment.getArguments();
+		if (args == null) {
+			args = new Bundle();
+			fragment.setArguments(args);
 		}
-		intent.putExtra(PlayerActivity.EXTRA_TYPE, playerType);
-		intent.putExtra(PlayerActivity.EXTRA_RANKING, business.getIdRanking());
-		startActivityForResult(intent, RESULT_PLAYER);
+
+        model = new ViewModelProvider.NewInstanceFactory().create(PlayerViewModel.class);
+		model.getSelected().observe(this, player -> {
+			business.getInvite().setPlayer(player);
+			initializeDataPlayer();
+			Objects.requireNonNull(getActivity()).getSupportFragmentManager().popBackStackImmediate();
+		});
+
+        args.putSerializable(ListPlayerFragment.EXTRA_VIEW_MODEL, model);
+        args.putSerializable(PlayerActivity.EXTRA_TYPE, business.getType());
+        args.putLong(PlayerActivity.EXTRA_RANKING, business.getIdRanking());
+
+		FragmentTool.replaceFragment(getActivity(), fragment, R.id.item_detail_container);
 	}
 
 	public void onClickLocation(View view) {

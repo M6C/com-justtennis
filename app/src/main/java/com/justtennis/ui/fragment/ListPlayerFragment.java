@@ -12,7 +12,6 @@ import android.widget.Toast;
 
 import com.cameleon.common.android.factory.FactoryDialog;
 import com.justtennis.R;
-import com.justtennis.adapter.viewholder.CommonListViewHolder;
 import com.justtennis.adapter.viewholder.ListPlayerViewHolder;
 import com.justtennis.business.ListPlayerBusiness;
 import com.justtennis.domain.Player;
@@ -21,31 +20,28 @@ import com.justtennis.listener.itemclick.OnItemClickListPlayerForResult;
 import com.justtennis.listener.itemclick.OnItemClickListPlayerInvite;
 import com.justtennis.listener.ok.OnClickPlayerDeleteListenerOk;
 import com.justtennis.notifier.NotifierMessageLogger;
-import com.justtennis.ui.adapter.CommonListRecyclerViewAdapter;
 import com.justtennis.ui.common.CommonEnum;
 import com.justtennis.ui.rxjava.RxCommonList;
 import com.justtennis.ui.rxjava.RxListPlayer;
+import com.justtennis.ui.viewmodel.PlayerViewModel;
 
 import org.gdocument.gtracergps.launcher.log.Logger;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 public class ListPlayerFragment extends CommonListFragment<Player> {
 
 	private static final String TAG = ListPlayerFragment.class.getSimpleName();
+	public static final String EXTRA_VIEW_MODEL = "EXTRA_VIEW_MODEL";
 
 	private static ListPlayerBusiness business;
 
 	private AdapterView.OnItemClickListener onItemClick;
+	private PlayerViewModel model;
 
-	public static ListPlayerFragment buildForEdit(Activity activity, NotifierMessageLogger notifier) {
-		return buildForEdit(activity, notifier, CommonEnum.LIST_PLAYER_MODE.EDIT);
-	}
-
-	public static ListPlayerFragment buildForEdit(Activity activity, NotifierMessageLogger notifier, CommonEnum.LIST_PLAYER_MODE mode) {
+	public static ListPlayerFragment build(Activity activity, NotifierMessageLogger notifier, CommonEnum.LIST_PLAYER_MODE mode) {
 		return initialize(activity, notifier, mode);
 	}
 
@@ -98,6 +94,10 @@ public class ListPlayerFragment extends CommonListFragment<Player> {
 			case FOR_RESULT:
 				onItemClick = new OnItemClickListPlayerForResult(activity);
 				break;
+			case FOR_RESULT_FRAGMENT:
+				assert getArguments() != null;
+				model = (PlayerViewModel)getArguments().getSerializable(EXTRA_VIEW_MODEL);
+				onItemClick = (parent, view, position, id) -> model.select(list.get(position));
 		}
 	}
 

@@ -17,7 +17,6 @@ import com.justtennis.helper.InviteViewHelper;
 import com.justtennis.tool.FragmentTool;
 import com.justtennis.ui.common.CommonEnum;
 import com.justtennis.ui.fragment.InviteFragment;
-import com.justtennis.ui.fragment.ItemDetailFragment;
 
 import java.io.Serializable;
 import java.util.List;
@@ -43,7 +42,7 @@ public class SimpleInviteRecyclerViewAdapter extends RecyclerView.Adapter<Invite
                 Bundle arguments = new Bundle();
                 arguments.putSerializable(InviteActivity.EXTRA_INVITE, (Serializable)item.invite);
                 arguments.putSerializable(InviteActivity.EXTRA_MODE, CommonEnum.MODE.INVITE_DETAIL);
-                ItemDetailFragment fragment = new ItemDetailFragment();
+                InviteFragment fragment = new InviteFragment();
                 fragment.setArguments(arguments);
                 FragmentTool.replaceFragment(mParentActivity, fragment, R.id.item_detail_container);
             } else {

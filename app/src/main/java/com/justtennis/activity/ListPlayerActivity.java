@@ -35,7 +35,7 @@ public class ListPlayerActivity extends AbsctractFragmentActivity {
 
 	@Override
 	protected Fragment createFragment() {
-		return ListPlayerFragment.buildForEdit(this, notifier);
+		return ListPlayerFragment.build(this, notifier, CommonEnum.LIST_PLAYER_MODE.EDIT);
 	}
 
 	@Override

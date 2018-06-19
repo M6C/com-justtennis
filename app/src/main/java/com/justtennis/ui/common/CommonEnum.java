@@ -10,7 +10,7 @@ public class CommonEnum {
     public enum LIST_PLAYER_MODE {
         EDIT,
         FOR_RESULT,
-        INVITE
+        FOR_RESULT_FRAGMENT, INVITE
     };
 
     public enum PLAYER_MODE {

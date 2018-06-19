@@ -15,7 +15,7 @@ import com.justtennis.R;
 import com.justtennis.tool.FragmentTool;
 import com.justtennis.ui.activity.ItemDetailActivity;
 import com.justtennis.ui.activity.dummy.DummyContent;
-import com.justtennis.ui.fragment.ItemDetailFragment;
+import com.justtennis.ui.fragment.InviteFragment;
 
 import java.util.List;
 
@@ -41,7 +41,7 @@ public class SimpleItemRecyclerViewAdapter extends RecyclerView.Adapter<SimpleIt
             if (mTwoPane) {
                 Bundle arguments = new Bundle();
                 arguments.putString(ARG_ITEM_ID, item.id);
-                ItemDetailFragment fragment = new ItemDetailFragment();
+                InviteFragment fragment = new InviteFragment();
                 fragment.setArguments(arguments);
                 FragmentTool.replaceFragment(mParentActivity, fragment, R.id.item_detail_container);
             } else {

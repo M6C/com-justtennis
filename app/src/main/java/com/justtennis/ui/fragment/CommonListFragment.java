@@ -28,6 +28,7 @@ public class CommonListFragment <D extends GenericDBPojo<Long>> extends Fragment
     protected static final String EXTRA_ITEM_LAYOUT = "ITEM_LAYOUT";
 
     protected CommonListRecyclerViewAdapter<D> adapter;
+    protected List<D> list = null;
     private RecyclerView mRecyclerView;
     private View mEmptyView;
     private CommonEnum.LIST_PLAYER_MODE mode;
@@ -42,7 +43,6 @@ public class CommonListFragment <D extends GenericDBPojo<Long>> extends Fragment
         super.onCreate(savedInstanceState);
 
         Bundle bundle = (savedInstanceState != null) ? savedInstanceState : getArguments();
-        List<D> list = null;
         int itemLayoutId = -1;
         if (bundle != null) {
             list = (List<D>) bundle.getSerializable(EXTRA_LIST);

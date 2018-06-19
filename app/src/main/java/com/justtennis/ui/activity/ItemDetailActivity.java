@@ -37,7 +37,6 @@ import com.justtennis.tool.FragmentTool;
 import com.justtennis.tool.ToolPermission;
 import com.justtennis.ui.common.CommonEnum;
 import com.justtennis.ui.fragment.InviteFragment;
-import com.justtennis.ui.fragment.ItemDetailFragment;
 import com.justtennis.ui.fragment.ListInviteFragment;
 import com.justtennis.ui.fragment.ListPlayerFragment;
 import com.justtennis.ui.fragment.NavigationDrawerFragment;
@@ -260,7 +259,7 @@ public class ItemDetailActivity extends AppCompatActivity implements NavigationD
 //        Intent intent = new Intent(getApplicationContext(), ListPlayerActivity.class);
 //        intent.putExtra(ListPlayerActivity.EXTRA_MODE, CommonEnum.LIST_PLAYER_MODE.EDIT);
 //        startActivity(intent);
-        ListPlayerFragment fragment = ListPlayerFragment.buildForEdit(this, notifier);
+        ListPlayerFragment fragment = ListPlayerFragment.build(this, notifier, CommonEnum.LIST_PLAYER_MODE.EDIT);
         if (fragment != null) {
             FragmentTool.replaceFragment(this, fragment, R.id.item_detail_container);
         } else {
