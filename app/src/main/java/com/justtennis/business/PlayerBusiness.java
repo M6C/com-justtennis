@@ -1,7 +1,6 @@
 package com.justtennis.business;
 
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 
 import com.cameleon.common.android.db.sqlite.service.GenericService;
@@ -79,19 +78,19 @@ public class PlayerBusiness implements INavigationDrawerRechercheBusiness {
 		typeManager = TypeManager.getInstance();
 	}
 
-	public void initialize(Intent intent) {
+	public void initialize(Bundle bundle) {
 		user = userService.find();
 
-		initializePlayer(intent);
-		initializeInvite(intent);
-		initializeMode(intent);
+		initializePlayer(bundle);
+		initializeInvite(bundle);
+		initializeMode(bundle);
 
-		if (intent.hasExtra(PlayerActivity.EXTRA_TYPE)) {
-			player.setType((TypeManager.TYPE) intent.getSerializableExtra(PlayerActivity.EXTRA_TYPE));
+		if (bundle.containsKey(PlayerActivity.EXTRA_TYPE)) {
+			player.setType((TypeManager.TYPE) bundle.getSerializable(PlayerActivity.EXTRA_TYPE));
 		}
 		
-		if (intent.hasExtra(PlayerActivity.EXTRA_RANKING)) {
-			long idRanking = intent.getLongExtra(PlayerActivity.EXTRA_RANKING, -1);
+		if (bundle.containsKey(PlayerActivity.EXTRA_RANKING)) {
+			long idRanking = bundle.getLong(PlayerActivity.EXTRA_RANKING, -1);
 			if (idRanking != -1)  {
 				player.setIdRanking(idRanking);
 			}
@@ -102,7 +101,7 @@ public class PlayerBusiness implements INavigationDrawerRechercheBusiness {
 		initializePlayerSaison();
 	}
 
-	public void initialize(Bundle savedInstanceState) {
+	public void initializeSavedState(Bundle savedInstanceState) {
 		mode = (CommonEnum.PLAYER_MODE) savedInstanceState.getSerializable(PlayerActivity.EXTRA_MODE);
 		invite = (Invite) savedInstanceState.getSerializable(PlayerActivity.EXTRA_INVITE);
 		player = (Player) savedInstanceState.getSerializable(PlayerActivity.EXTRA_PLAYER);
@@ -312,30 +311,30 @@ public class PlayerBusiness implements INavigationDrawerRechercheBusiness {
 		return (GenericService<P>) new PlayerService(context, notificationMessage);
 	}
 
-	protected void initializeMode(Intent intent) {
-		if (intent.hasExtra(PlayerActivity.EXTRA_MODE)) {
-			mode = (CommonEnum.PLAYER_MODE) intent.getSerializableExtra(PlayerActivity.EXTRA_MODE);
+	protected void initializeMode(Bundle intent) {
+		if (intent.containsKey(PlayerActivity.EXTRA_MODE)) {
+			mode = (CommonEnum.PLAYER_MODE) intent.getSerializable(PlayerActivity.EXTRA_MODE);
 		} else {
 			mode = (player == null || player.getId() == null) ? CommonEnum.PLAYER_MODE.CREATE : CommonEnum.PLAYER_MODE.MODIFY;
 		}
 	}
 
-	protected void initializeInvite(Intent intent) {
+	protected void initializeInvite(Bundle intent) {
 		invite = null;
-		if (intent.hasExtra(PlayerActivity.EXTRA_INVITE)) {
-			invite = (Invite) intent.getSerializableExtra(PlayerActivity.EXTRA_INVITE);
+		if (intent.containsKey(PlayerActivity.EXTRA_INVITE)) {
+			invite = (Invite) intent.getSerializable(PlayerActivity.EXTRA_INVITE);
 		}
 	}
 
-	protected void initializePlayer(Intent intent) {
-		if (intent.hasExtra(PlayerActivity.EXTRA_PLAYER_ID)) {
-			long playerId = intent.getLongExtra(PlayerActivity.EXTRA_PLAYER_ID, PlayerService.ID_EMPTY_PLAYER);
+	protected void initializePlayer(Bundle intent) {
+		if (intent.containsKey(PlayerActivity.EXTRA_PLAYER_ID)) {
+			long playerId = intent.getLong(PlayerActivity.EXTRA_PLAYER_ID, PlayerService.ID_EMPTY_PLAYER);
 			if (playerId != PlayerService.ID_EMPTY_PLAYER) {
 				player = findPlayer(playerId);
 			}
 		}
-		if (intent.hasExtra(PlayerActivity.EXTRA_PLAYER)) {
-			player = (Player) intent.getSerializableExtra(PlayerActivity.EXTRA_PLAYER);
+		if (intent.containsKey(PlayerActivity.EXTRA_PLAYER)) {
+			player = (Player) intent.getSerializable(PlayerActivity.EXTRA_PLAYER);
 		}
 		if (player == null) {
 			player = buildPlayer();

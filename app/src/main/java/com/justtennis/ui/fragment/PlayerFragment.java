@@ -31,6 +31,7 @@ import com.justtennis.activity.ListPersonActivity;
 import com.justtennis.activity.LocationActivity;
 import com.justtennis.activity.LocationClubActivity;
 import com.justtennis.activity.LocationTournamentActivity;
+import com.justtennis.activity.PlayerActivity;
 import com.justtennis.activity.QRCodeActivity;
 import com.justtennis.adapter.CustomArrayAdapter;
 import com.justtennis.adapter.manager.RankingListManager;
@@ -115,6 +116,14 @@ public class PlayerFragment extends Fragment implements IDrawerLayoutTypeNotifie
 	private Button btnAddDemandeNo;
     private Button btnQrCode;
 
+	public static PlayerFragment build(long idPlayer) {
+		PlayerFragment fragment = new PlayerFragment();
+		Bundle args = new Bundle();
+		args.putLong(PlayerActivity.EXTRA_PLAYER_ID, idPlayer);
+		fragment.setArguments(args);
+		return fragment;
+	}
+
     @Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		rootView = inflater.inflate(R.layout.fragment_player, container, false);
@@ -150,7 +159,7 @@ public class PlayerFragment extends Fragment implements IDrawerLayoutTypeNotifie
 
 	@Override
 	public void onDrawerLayoutSaisonChange(AdapterView<?> parent, View view, int position, long id, Saison item) {
-		business.initialize(new Intent());
+		business.initialize(new Bundle());
 
 		initializeData(false);
 	}
@@ -164,7 +173,7 @@ public class PlayerFragment extends Fragment implements IDrawerLayoutTypeNotifie
 		((Button)rootView.findViewById(R.id.btn_add_demande_yes)).setTypeface(Typeface.DEFAULT, style);
 		((Button)rootView.findViewById(R.id.btn_add_demande_no)).setTypeface(Typeface.DEFAULT, style);
 
-		business.initialize(new Intent());
+		business.initialize(new Bundle());
 
 		initializeData(false);
 	}
@@ -410,10 +419,11 @@ public class PlayerFragment extends Fragment implements IDrawerLayoutTypeNotifie
 	protected void initialize() {
 		Intent intent = activity.getIntent();
 		if (savedInstanceState!=null) {
-			business.initialize(savedInstanceState);
+			business.initializeSavedState(savedInstanceState);
 		}
 		else {
-			business.initialize(intent);
+			Bundle bundle = (getArguments() != null) ? getArguments() : intent.getExtras();
+			business.initialize(bundle);
 		}
 
 		CommonEnum.PLAYER_MODE mode = business.getMode();
