@@ -116,9 +116,9 @@ public class ItemDetailActivity extends AppCompatActivity implements NavigationD
     }
 
     @Override
-    protected void onPause() {
+    protected void onDestroy() {
         RxNavigationDrawer.unregister(this);
-        super.onPause();
+        super.onDestroy();
     }
 
     @Override

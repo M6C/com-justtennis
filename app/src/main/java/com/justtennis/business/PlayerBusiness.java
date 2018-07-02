@@ -312,7 +312,7 @@ public class PlayerBusiness implements INavigationDrawerRechercheBusiness {
 	}
 
 	protected void initializeMode(Bundle intent) {
-		if (intent.containsKey(PlayerActivity.EXTRA_MODE)) {
+		if (intent != null && intent.containsKey(PlayerActivity.EXTRA_MODE)) {
 			mode = (CommonEnum.PLAYER_MODE) intent.getSerializable(PlayerActivity.EXTRA_MODE);
 		} else {
 			mode = (player == null || player.getId() == null) ? CommonEnum.PLAYER_MODE.CREATE : CommonEnum.PLAYER_MODE.MODIFY;
@@ -321,20 +321,22 @@ public class PlayerBusiness implements INavigationDrawerRechercheBusiness {
 
 	protected void initializeInvite(Bundle intent) {
 		invite = null;
-		if (intent.containsKey(PlayerActivity.EXTRA_INVITE)) {
+		if (intent != null && intent.containsKey(PlayerActivity.EXTRA_INVITE)) {
 			invite = (Invite) intent.getSerializable(PlayerActivity.EXTRA_INVITE);
 		}
 	}
 
 	protected void initializePlayer(Bundle intent) {
-		if (intent.containsKey(PlayerActivity.EXTRA_PLAYER_ID)) {
-			long playerId = intent.getLong(PlayerActivity.EXTRA_PLAYER_ID, PlayerService.ID_EMPTY_PLAYER);
-			if (playerId != PlayerService.ID_EMPTY_PLAYER) {
-				player = findPlayer(playerId);
+		if (intent != null) {
+			if (intent.containsKey(PlayerActivity.EXTRA_PLAYER_ID)) {
+				long playerId = intent.getLong(PlayerActivity.EXTRA_PLAYER_ID, PlayerService.ID_EMPTY_PLAYER);
+				if (playerId != PlayerService.ID_EMPTY_PLAYER) {
+					player = findPlayer(playerId);
+				}
 			}
-		}
-		if (intent.containsKey(PlayerActivity.EXTRA_PLAYER)) {
-			player = (Player) intent.getSerializable(PlayerActivity.EXTRA_PLAYER);
+			if (intent.containsKey(PlayerActivity.EXTRA_PLAYER)) {
+				player = (Player) intent.getSerializable(PlayerActivity.EXTRA_PLAYER);
+			}
 		}
 		if (player == null) {
 			player = buildPlayer();
