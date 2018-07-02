@@ -85,14 +85,16 @@ public class PlayerBusiness implements INavigationDrawerRechercheBusiness {
 		initializeInvite(bundle);
 		initializeMode(bundle);
 
-		if (bundle.containsKey(PlayerActivity.EXTRA_TYPE)) {
-			player.setType((TypeManager.TYPE) bundle.getSerializable(PlayerActivity.EXTRA_TYPE));
-		}
-		
-		if (bundle.containsKey(PlayerActivity.EXTRA_RANKING)) {
-			long idRanking = bundle.getLong(PlayerActivity.EXTRA_RANKING, -1);
-			if (idRanking != -1)  {
-				player.setIdRanking(idRanking);
+		if (bundle != null) {
+			if (bundle.containsKey(PlayerActivity.EXTRA_TYPE)) {
+				player.setType((TypeManager.TYPE) bundle.getSerializable(PlayerActivity.EXTRA_TYPE));
+			}
+
+			if (bundle.containsKey(PlayerActivity.EXTRA_RANKING)) {
+				long idRanking = bundle.getLong(PlayerActivity.EXTRA_RANKING, -1);
+				if (idRanking != -1) {
+					player.setIdRanking(idRanking);
+				}
 			}
 		}
 		
