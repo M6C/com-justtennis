@@ -74,8 +74,6 @@ public class ListPlayerFragment extends CommonListFragment<Player> {
 		setFactoryViewHolder(view -> ListPlayerViewHolder.build(getActivity(), view));
 
 		initializeListener();
-		initializeSubscribeListPlayer();
-		initializeSubscribeCommonList();
 
         return rootView;
 	}
@@ -84,6 +82,8 @@ public class ListPlayerFragment extends CommonListFragment<Player> {
 	public void onResume() {
 		super.onResume();
 		refresh();
+		initializeSubscribeListPlayer();
+		initializeSubscribeCommonList();
 	}
 
 	@Override

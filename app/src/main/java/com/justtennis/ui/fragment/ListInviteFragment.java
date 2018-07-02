@@ -60,10 +60,6 @@ public class ListInviteFragment extends CommonListFragment<Player> {
         View rootView = super.onCreateView(inflater, container, savedInstanceState);
         mTwoPane = false;
 
-        initializeSubscribeSelectSaison();
-        initializeSubscribeListPlayer();
-        initializeSubscribeCommonList();
-
         return rootView;
     }
 
@@ -78,6 +74,10 @@ public class ListInviteFragment extends CommonListFragment<Player> {
     public void onResume() {
         super.onResume();
         business.onResume();
+
+        initializeSubscribeSelectSaison();
+        initializeSubscribeListPlayer();
+        initializeSubscribeCommonList();
     }
 
     @Override
