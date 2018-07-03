@@ -83,9 +83,9 @@ public class PlayerActivity extends AbsctractFragmentActivity {
 		public void onClick(View v) {
 			RechercheResult item = (RechercheResult) v.getTag();
 			Player player = business.getPlayer();
-			player.setIdTournament(0l);
-			player.setIdClub(0l);
-			player.setIdAddress(0l);
+			player.setIdTournament(0L);
+			player.setIdClub(0L);
+			player.setIdAddress(0L);
 
 			switch (item.getType()) {
 				case TOURNAMENT:

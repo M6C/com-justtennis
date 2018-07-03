@@ -3,7 +3,6 @@ package com.justtennis.ui.fragment;
 
 import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.os.Bundle;
@@ -30,7 +29,6 @@ import android.widget.Button;
 import android.widget.Toast;
 
 import com.justtennis.R;
-import com.justtennis.activity.PalmaresFastActivity;
 import com.justtennis.drawer.manager.business.DrawerSaisonBusiness;
 import com.justtennis.manager.TypeManager;
 import com.justtennis.notifier.NotifierMessageLogger;
@@ -292,24 +290,21 @@ public class NavigationDrawerFragment extends Fragment {
 
     private void initializeMenu(View rootView) {
         NavigationView navView = rootView.findViewById(R.id.nav_menu);
-        navView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
-            @Override
-            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                switch (item.getItemId()) {
-                    case R.id.nav_user:
-                        UserFragment fragment = new UserFragment();
-                        FragmentTool.replaceFragment(mActivity, fragment, R.id.item_detail_container);
-                        closeDrawer();
-                        break;
-                    case R.id.nav_list_club:
-                        break;
-                    case R.id.nav_palmares_fast:
-                        Intent intent = new Intent(getActivity().getApplicationContext(), PalmaresFastActivity.class);
-                        startActivity(intent);
-                        break;
-                }
-                return false;
+        navView.setNavigationItemSelectedListener(item -> {
+            Fragment fragment = null;
+            int i = item.getItemId();
+            if (i == R.id.nav_user) {
+                fragment = new UserFragment();
+            } else if (i == R.id.nav_list_club) {
+                // Create List Club Fragment
+            } else if (i == R.id.nav_palmares_fast) {
+                fragment = new PalmaresFastFragment();
             }
+            if (fragment != null) {
+                FragmentTool.replaceFragment(mActivity, fragment, R.id.item_detail_container);
+                closeDrawer();
+            }
+            return false;
         });
     }
 

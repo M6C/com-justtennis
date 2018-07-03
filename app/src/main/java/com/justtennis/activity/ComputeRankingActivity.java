@@ -1,7 +1,5 @@
 package com.justtennis.activity;
 
-import java.io.Serializable;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
@@ -19,6 +17,9 @@ import com.justtennis.domain.Ranking;
 import com.justtennis.listener.itemclick.OnItemClickListInvite;
 import com.justtennis.manager.TypeManager;
 import com.justtennis.notifier.NotifierMessageLogger;
+import com.justtennis.ui.fragment.PalmaresFastFragment;
+
+import java.io.Serializable;
 
 public class ComputeRankingActivity extends GenericActivity {
 
@@ -48,13 +49,13 @@ public class ComputeRankingActivity extends GenericActivity {
 		adapter = new ComputeRankingListInviteAdapter(this, business.getList());
 		rankingListManager = RankingListManager.getInstance(this, notifier);
 
-		tvSumPoint = (TextView) findViewById(R.id.tv_sum_point);
-		tvNbVictory = (TextView) findViewById(R.id.tv_nb_victory);
-		tvNbVictoryDetail = (TextView) findViewById(R.id.tv_nb_victory_detail);
+		tvSumPoint = findViewById(R.id.tv_sum_point);
+		tvNbVictory = findViewById(R.id.tv_nb_victory);
+		tvNbVictoryDetail = findViewById(R.id.tv_nb_victory_detail);
 
 		adapter.setValue(business.getList());
 
-		list = (ListView)findViewById(R.id.list);
+		list = findViewById(R.id.list);
 		list.setOnItemClickListener(new OnItemClickListInvite(this, RESULT_ITEM_CLICK));
 		list.setAdapter(adapter);
 
@@ -91,7 +92,7 @@ public class ComputeRankingActivity extends GenericActivity {
 
 		if (item.getItemId() == R.id.action_palmares_fast) {
 			Intent intent = new Intent(this, PalmaresFastActivity.class);
-			intent.putExtra(PalmaresFastActivity.EXTRA_PALMARES, (Serializable)business.getPalmares());
+			intent.putExtra(PalmaresFastFragment.EXTRA_PALMARES, (Serializable)business.getPalmares());
 			startActivity(intent);
 			return true;
 		} else {
@@ -102,9 +103,6 @@ public class ComputeRankingActivity extends GenericActivity {
 	public void refresh() {
 		initializePalmaresPoint();
 		initializePalmaresNbVictory();
-	}
-
-	public void onClickPoint(View view) {
 	}
 
 	public void refreshData() {

@@ -1,10 +1,7 @@
 package com.justtennis.adapter;
 
-import java.util.List;
-
-import org.gdocument.gtracergps.launcher.log.Logger;
-
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
@@ -16,18 +13,21 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.justtennis.R;
-import com.justtennis.activity.PalmaresFastActivity;
 import com.justtennis.domain.Invite;
 import com.justtennis.domain.PalmaresFastValue;
+
+import org.gdocument.gtracergps.launcher.log.Logger;
+
+import java.util.List;
 
 public class PalmaresFastAdapter extends BaseAdapter {
 
 	private static final String TAG = PalmaresFastAdapter.class.getSimpleName();
 
 	private List<PalmaresFastValue> value;
-	private PalmaresFastActivity activity;
+	private Activity activity;
 
-	public PalmaresFastAdapter(PalmaresFastActivity activity, List<PalmaresFastValue> value) {
+	public PalmaresFastAdapter(Activity activity, List<PalmaresFastValue> value) {
 		super();
 
 		this.activity = activity;

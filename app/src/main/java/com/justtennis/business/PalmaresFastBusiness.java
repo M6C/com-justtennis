@@ -1,19 +1,11 @@
 package com.justtennis.business;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.SortedSet;
-import java.util.TreeSet;
-
-import org.gdocument.gtracergps.launcher.log.Logger;
-
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 
 import com.cameleon.common.android.inotifier.INotifierMessage;
 import com.justtennis.R;
-import com.justtennis.activity.PalmaresFastActivity;
 import com.justtennis.business.sub.ComputeRankSubService;
 import com.justtennis.db.service.PlayerService;
 import com.justtennis.db.service.RankingService;
@@ -28,12 +20,21 @@ import com.justtennis.domain.comparator.PalmaresFastValueComparatorByRanking;
 import com.justtennis.domain.comparator.RankingComparatorByOrder;
 import com.justtennis.notifier.NotifierMessageLogger;
 import com.justtennis.tool.ListTool;
+import com.justtennis.ui.fragment.PalmaresFastFragment;
+
+import org.gdocument.gtracergps.launcher.log.Logger;
+
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.SortedSet;
+import java.util.TreeSet;
 
 public class PalmaresFastBusiness {
 
 	private static final String TAG = PalmaresFastBusiness.class.getSimpleName();
 
-	private PalmaresFastActivity context;
+	private Context context;
 
 	private ComputeRankSubService computeRankService;
 
@@ -50,7 +51,7 @@ public class PalmaresFastBusiness {
 	private PalmaresFastValueComparatorByRanking fastValueComparatorByRanking = new PalmaresFastValueComparatorByRanking();
 
 
-	public PalmaresFastBusiness(PalmaresFastActivity context, INotifierMessage notificationMessage) {
+	public PalmaresFastBusiness(Context context, INotifierMessage notificationMessage) {
 		this.context = context;
 
 		computeRankService = new ComputeRankSubService(context, notificationMessage);
@@ -62,10 +63,13 @@ public class PalmaresFastBusiness {
 		if (idRanking == null) {
 			idRanking = userService.find().getIdRanking();
 		}
+		if (idRanking == null) {
+			idRanking = rankingService.getNC().getId();
+		}
 	}
 
-	public void onCreate() {
-		initializeData();
+	public void onCreate(Activity activity) {
+		initializeData(activity);
 		initializePalmaresFastValue();
 		refreshData();
 	}
@@ -87,10 +91,10 @@ Logger.logMe(TAG, "PALMARES FAST - PalmaresFastBusiness - refreshData");
 	}
 
 	@SuppressWarnings("unchecked")
-	private void initializeData() {
-		Intent intent = context.getIntent();
-		if (intent.hasExtra(PalmaresFastActivity.EXTRA_PALMARES)) {
-			listInitialize = (List<PalmaresFastValue>) intent.getSerializableExtra(PalmaresFastActivity.EXTRA_PALMARES);
+	private void initializeData(Activity activity) {
+		Intent intent = activity.getIntent();
+		if (intent.hasExtra(PalmaresFastFragment.EXTRA_PALMARES)) {
+			listInitialize = (List<PalmaresFastValue>) intent.getSerializableExtra(PalmaresFastFragment.EXTRA_PALMARES);
 		}
 		
 	}

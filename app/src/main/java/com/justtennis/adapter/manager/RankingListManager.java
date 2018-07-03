@@ -1,10 +1,5 @@
 package com.justtennis.adapter.manager;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.SortedSet;
-import java.util.TreeSet;
-
 import android.app.Activity;
 import android.content.Context;
 import android.view.ContextThemeWrapper;
@@ -19,11 +14,16 @@ import android.widget.TextView;
 import com.cameleon.common.android.factory.FactoryDialog;
 import com.cameleon.common.android.inotifier.INotifierMessage;
 import com.justtennis.ApplicationConfig;
+import com.justtennis.R;
 import com.justtennis.db.service.RankingService;
 import com.justtennis.domain.Player;
 import com.justtennis.domain.Ranking;
 import com.justtennis.domain.comparator.RankingComparatorByOrder;
-import com.justtennis.R;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.SortedSet;
+import java.util.TreeSet;
 
 public class RankingListManager {
 	
