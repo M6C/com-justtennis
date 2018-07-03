@@ -43,6 +43,10 @@ public class UserFragment extends PlayerFragment {
 
 	private Serializable addressFromResult;
 
+	public static UserFragment build() {
+		return new UserFragment();
+	}
+
 	@Override
 	public void onResume() {
 		super.onResume();

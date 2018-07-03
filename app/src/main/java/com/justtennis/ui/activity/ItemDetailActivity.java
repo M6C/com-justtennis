@@ -40,6 +40,7 @@ import com.justtennis.ui.fragment.InviteFragment;
 import com.justtennis.ui.fragment.ListInviteFragment;
 import com.justtennis.ui.fragment.ListPlayerFragment;
 import com.justtennis.ui.fragment.NavigationDrawerFragment;
+import com.justtennis.ui.fragment.PieChartFragment;
 import com.justtennis.ui.rxjava.RxNavigationDrawer;
 
 import org.gdocument.gtracergps.launcher.log.Logger;
@@ -249,27 +250,20 @@ public class ItemDetailActivity extends AppCompatActivity implements NavigationD
 //        }
 //        startActivity(intent);
         if (mBottomNavigation.getSelectedItemId() != R.id.navigation_invite) {
-//            ItemDetailFragment fragment = new ItemDetailFragment();
             ListInviteFragment fragment = ListInviteFragment.build();
             FragmentTool.replaceFragment(this, fragment, R.id.item_detail_container);
         }
     }
 
     private void onClickListPlayer() {
-//        Intent intent = new Intent(getApplicationContext(), ListPlayerActivity.class);
-//        intent.putExtra(ListPlayerActivity.EXTRA_MODE, CommonEnum.LIST_PLAYER_MODE.EDIT);
-//        startActivity(intent);
         ListPlayerFragment fragment = ListPlayerFragment.build(this, notifier, CommonEnum.LIST_PLAYER_MODE.EDIT);
-        if (fragment != null) {
-            FragmentTool.replaceFragment(this, fragment, R.id.item_detail_container);
-        } else {
-            logMe("!!!!!!!!!!!!!!!!!!!!!! ListPlayerFragment is null");
-        }
+        FragmentTool.replaceFragment(this, fragment, R.id.item_detail_container);
     }
 
     private void onClickListStatistic() {
-        Intent intent = new Intent(getApplicationContext(), PieChartActivity.class);
-        startActivity(intent);
+//        startActivity(new Intent(getApplicationContext(), PieChartActivity2.class));
+        PieChartFragment fragment = PieChartFragment.build();
+        FragmentTool.replaceFragment(this, fragment, R.id.item_detail_container);
     }
 
     public void onClickFastPalmares(View view) {

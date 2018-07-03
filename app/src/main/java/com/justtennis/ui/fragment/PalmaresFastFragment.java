@@ -49,6 +49,9 @@ public class PalmaresFastFragment extends Fragment {
 	private View rootView;
 	private View swCompute;
 
+	public static PalmaresFastFragment build() {
+		return new PalmaresFastFragment();
+	}
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {

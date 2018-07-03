@@ -294,11 +294,11 @@ public class NavigationDrawerFragment extends Fragment {
             Fragment fragment = null;
             int i = item.getItemId();
             if (i == R.id.nav_user) {
-                fragment = new UserFragment();
+                fragment = UserFragment.build();
             } else if (i == R.id.nav_list_club) {
                 // Create List Club Fragment
             } else if (i == R.id.nav_palmares_fast) {
-                fragment = new PalmaresFastFragment();
+                fragment = PalmaresFastFragment.build();
             }
             if (fragment != null) {
                 FragmentTool.replaceFragment(mActivity, fragment, R.id.item_detail_container);
