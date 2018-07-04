@@ -50,7 +50,8 @@
         android:layout_margin="@dimen/fab_margin"
         app:layout_anchor="@id/item_detail_container"
         app:layout_anchorGravity="top|end"
-        app:srcCompat="@android:drawable/stat_notify_chat" />
+        app:srcCompat="@android:drawable/ic_input_add"
+        android:tint="@android:color/white" />
 
     <android.support.design.widget.BottomNavigationView
         android:id="@+id/navigationView"

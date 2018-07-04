@@ -18,12 +18,10 @@ import android.view.View;
 
 import com.cameleon.common.android.factory.FactoryDialog;
 import com.justtennis.R;
-import com.justtennis.activity.InviteActivity;
 import com.justtennis.activity.ListPersonActivity;
 import com.justtennis.activity.MainActivity;
 import com.justtennis.activity.MessageActivity;
 import com.justtennis.activity.PalmaresFastActivity;
-import com.justtennis.activity.PieChartActivity;
 import com.justtennis.business.MainBusiness;
 import com.justtennis.listener.ok.OnClickDBBackupListenerOk;
 import com.justtennis.listener.ok.OnClickDBRestoreListenerOk;
@@ -36,7 +34,6 @@ import com.justtennis.tool.ExitTool;
 import com.justtennis.tool.FragmentTool;
 import com.justtennis.tool.ToolPermission;
 import com.justtennis.ui.common.CommonEnum;
-import com.justtennis.ui.fragment.InviteFragment;
 import com.justtennis.ui.fragment.ListInviteFragment;
 import com.justtennis.ui.fragment.ListPlayerFragment;
 import com.justtennis.ui.fragment.NavigationDrawerFragment;
@@ -111,7 +108,6 @@ public class ItemDetailActivity extends AppCompatActivity implements NavigationD
         }
 
         initializeActionBar();
-        initializeFab();
         initializeBottomNavigation();
         initializeSubscribeChangeType();
     }
@@ -340,10 +336,6 @@ public class ItemDetailActivity extends AppCompatActivity implements NavigationD
         ((AppBarLayout)toolbar.getParent()).addOnOffsetChangedListener((appBarLayout, verticalOffset) -> mBottomNavigation.setTranslationY(verticalOffset*-1));
     }
 
-    private void initializeFab() {
-        mFab.setOnClickListener(v -> onClickMatch());
-    }
-
     private void doDBBackup() {
         post(() -> {
             OnClickDBBackupListenerOk listener = new OnClickDBBackupListenerOk(this);
@@ -364,20 +356,6 @@ public class ItemDetailActivity extends AppCompatActivity implements NavigationD
 
     private void post(Runnable o) {
         findViewById(R.id.container).postDelayed(o, 1000);
-    }
-
-    private void onClickMatch() {
-//        Intent intent = new Intent(getApplicationContext(), InviteActivity.class);
-//        intent.putExtra(InviteActivity.EXTRA_PLAYER_ID, business.getUnknownPlayerId());
-//        intent.putExtra(InviteActivity.EXTRA_MODE, CommonEnum.MODE.INVITE_SIMPLE);
-//        startActivity(intent);
-
-        InviteFragment fragment = new InviteFragment();
-        Bundle args = new Bundle();
-        args.putLong(InviteActivity.EXTRA_PLAYER_ID, business.getUnknownPlayerId());
-        args.putSerializable(InviteActivity.EXTRA_MODE, CommonEnum.MODE.INVITE_SIMPLE);
-        fragment.setArguments(args);
-        FragmentTool.replaceFragment(this, fragment, R.id.item_detail_container);
     }
 
     private boolean onNavigationItemSelected(MenuItem item) {

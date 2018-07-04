@@ -66,6 +66,7 @@ public class ListInviteFragment extends CommonListFragment<Player> {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+
         business = new ListInviteBusiness(getContext(), this, NotifierMessageLogger.getInstance());
         refresh();
     }
@@ -93,6 +94,11 @@ public class ListInviteFragment extends CommonListFragment<Player> {
         mList.clear();
         mList.addAll(business.getList());
         adapter.notifyDataSetChanged();
+    }
+
+    @Override
+    protected void initializeFab() {
+        FragmentTool.onClickFab(activity, v -> onClickMatch());
     }
 
     private void initializeSubscribeListPlayer() {
@@ -136,6 +142,15 @@ public class ListInviteFragment extends CommonListFragment<Player> {
         FactoryDialog.getInstance()
                 .buildOkCancelDialog(business.getContext(), listener, R.string.dialog_player_delete_title, R.string.dialog_player_delete_message)
                 .show();
+    }
+
+    private void onClickMatch() {
+        InviteFragment fragment = new InviteFragment();
+        Bundle args = new Bundle();
+        args.putLong(InviteActivity.EXTRA_PLAYER_ID, business.getUnknownPlayerId());
+        args.putSerializable(InviteActivity.EXTRA_MODE, CommonEnum.MODE.INVITE_SIMPLE);
+        fragment.setArguments(args);
+        FragmentTool.replaceFragment(activity, fragment, R.id.item_detail_container);
     }
 
     protected void logMe(String msg, Date dateStart) {

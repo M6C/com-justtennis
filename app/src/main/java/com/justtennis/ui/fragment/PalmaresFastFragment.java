@@ -22,6 +22,7 @@ import com.justtennis.adapter.manager.RankingListManager.IRankingListListener;
 import com.justtennis.business.PalmaresFastBusiness;
 import com.justtennis.domain.Ranking;
 import com.justtennis.notifier.NotifierMessageLogger;
+import com.justtennis.tool.FragmentTool;
 
 import org.gdocument.gtracergps.launcher.log.Logger;
 
@@ -48,6 +49,8 @@ public class PalmaresFastFragment extends Fragment {
 	private boolean bComputeVisible = true;
 	private View rootView;
 	private View swCompute;
+	private Context context;
+	private FragmentActivity activity;
 
 	public static PalmaresFastFragment build() {
 		return new PalmaresFastFragment();
@@ -57,8 +60,12 @@ public class PalmaresFastFragment extends Fragment {
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		rootView = inflater.inflate(R.layout.list_palmares_fast, container, false);
 
-		FragmentActivity activity = getActivity();
-		Context context = getContext();
+		context = getContext();
+		activity = getActivity();
+
+		assert context != null;
+		assert activity != null;
+
 		NotifierMessageLogger notifier = NotifierMessageLogger.getInstance();
 		business = new PalmaresFastBusiness(context, notifier);
 		adapter = new PalmaresFastAdapter(activity, business.getList());
@@ -80,7 +87,8 @@ public class PalmaresFastFragment extends Fragment {
 		list.setItemsCanFocus(true);
 
 		business.onCreate(activity);
-	
+
+		initializeFab();
 		initializeRankingList();
 		intializeBonusList();
 		initializeVisibility();
@@ -128,6 +136,10 @@ public class PalmaresFastFragment extends Fragment {
 
 		adapter.notifyDataSetChanged();
 		refresh();
+	}
+
+	private void initializeFab() {
+		FragmentTool.hideFab(activity);
 	}
 
 	private void initializeRankingList() {

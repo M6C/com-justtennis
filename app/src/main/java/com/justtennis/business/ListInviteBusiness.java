@@ -120,6 +120,10 @@ public class ListInviteBusiness {
 		return player;
 	}
 
+	public Long getUnknownPlayerId() {
+		return playerService.getUnknownPlayer().getId();
+	}
+
 	public List<Player> getListPlayer() {
 		return listPlayer;
 	}

@@ -24,6 +24,7 @@ import com.justtennis.business.PieChartBusiness;
 import com.justtennis.business.PieChartBusiness.CHART_DATA_TYPE;
 import com.justtennis.business.PieChartBusiness.CHART_SCORE_RESULT;
 import com.justtennis.notifier.NotifierMessageLogger;
+import com.justtennis.tool.FragmentTool;
 
 import org.achartengine.ChartFactory;
 import org.achartengine.GraphicalView;
@@ -87,6 +88,7 @@ public class PieChartFragment extends Fragment {
 		assert context != null;
 		assert activity != null;
 
+		initializeFab();
         initializeTypeData();
         initializeScoreData();
 
@@ -105,6 +107,10 @@ public class PieChartFragment extends Fragment {
 		}
 
 		initializeChartView();
+	}
+
+	private void initializeFab() {
+		FragmentTool.hideFab(activity);
 	}
 
 	@Override

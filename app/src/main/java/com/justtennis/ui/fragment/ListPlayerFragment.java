@@ -21,6 +21,7 @@ import com.justtennis.listener.itemclick.OnItemClickListPlayerForResult;
 import com.justtennis.listener.itemclick.OnItemClickListPlayerInvite;
 import com.justtennis.listener.ok.OnClickPlayerDeleteListenerOk;
 import com.justtennis.notifier.NotifierMessageLogger;
+import com.justtennis.tool.FragmentTool;
 import com.justtennis.ui.common.CommonEnum;
 import com.justtennis.ui.rxjava.RxCommonList;
 import com.justtennis.ui.rxjava.RxListPlayer;
@@ -93,6 +94,11 @@ public class ListPlayerFragment extends CommonListFragment<Player> {
 		super.onPause();
 	}
 
+	@Override
+	protected void initializeFab() {
+		FragmentTool.onClickFab(activity, v -> onClickAdd());
+	}
+
 	private void initializeListener() {
 		FragmentActivity activity = getActivity();
 		switch (getMode()) {
@@ -130,6 +136,23 @@ public class ListPlayerFragment extends CommonListFragment<Player> {
 		mList.clear();
 		mList.addAll(business.getList());
 		adapter.notifyDataSetChanged();
+	}
+
+	public void onClickAdd() {
+		Bundle args = new Bundle();
+		if (business.getExtraIn() != null) {
+			args.putAll(business.getExtraIn());
+		}
+		if (business.getMode() == CommonEnum.LIST_PLAYER_MODE.FOR_RESULT) {
+			args.putSerializable(PlayerFragment.EXTRA_MODE, CommonEnum.PLAYER_MODE.FOR_RESULT);
+		} else if (business.getMode() == CommonEnum.LIST_PLAYER_MODE.INVITE) {
+			args.putSerializable(PlayerFragment.EXTRA_MODE, CommonEnum.PLAYER_MODE.FOR_RESULT);
+		} else {
+			args.remove(EXTRA_MODE);
+		}
+
+		PlayerFragment fragment = PlayerFragment.build(args);
+		FragmentTool.replaceFragment((FragmentActivity) context, fragment, R.id.item_detail_container);
 	}
 
 	private void onClickDelete(View view) {

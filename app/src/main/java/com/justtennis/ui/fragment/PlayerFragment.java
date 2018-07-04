@@ -116,6 +116,12 @@ public class PlayerFragment extends Fragment implements IDrawerLayoutTypeNotifie
 	private Button btnAddDemandeNo;
     private Button btnQrCode;
 
+	public static PlayerFragment build(Bundle args) {
+		PlayerFragment fragment = new PlayerFragment();
+		fragment.setArguments(args);
+		return fragment;
+	}
+
 	public static PlayerFragment build(long idPlayer) {
 		PlayerFragment fragment = new PlayerFragment();
 		Bundle args = new Bundle();
