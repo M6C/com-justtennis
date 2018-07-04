@@ -261,7 +261,6 @@ public class ItemDetailActivity extends AppCompatActivity implements NavigationD
     }
 
     private void onClickListStatistic() {
-//        startActivity(new Intent(getApplicationContext(), PieChartActivity2.class));
         PieChartFragment fragment = PieChartFragment.build();
         FragmentTool.replaceFragment(this, fragment, R.id.item_detail_container);
     }
