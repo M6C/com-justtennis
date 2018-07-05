@@ -92,7 +92,6 @@ public class CommonListFragment <D extends GenericDBPojo<Long>> extends Fragment
         super.onResume();
 
         initializeFab();
-
         adapter.notifyDataSetChanged();
     }
 
@@ -126,6 +125,7 @@ public class CommonListFragment <D extends GenericDBPojo<Long>> extends Fragment
     }
 
     protected void initializeFab() {
+        FragmentTool.initializeFabDrawable(activity, FragmentTool.INIT_FAB_IMAGE.ADD);
         FragmentTool.hideFab(activity);
     }
 

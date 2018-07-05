@@ -96,6 +96,7 @@ public class ListPlayerFragment extends CommonListFragment<Player> {
 
 	@Override
 	protected void initializeFab() {
+		super.initializeFab();
 		FragmentTool.onClickFab(activity, v -> onClickAdd());
 	}
 

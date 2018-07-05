@@ -23,6 +23,7 @@ import com.justtennis.adapter.manager.RankingListManager;
 import com.justtennis.adapter.manager.RankingListManager.IRankingListListener;
 import com.justtennis.business.PalmaresFastBusiness;
 import com.justtennis.notifier.NotifierMessageLogger;
+import com.justtennis.tool.FragmentTool;
 
 import org.gdocument.gtracergps.launcher.log.Logger;
 
@@ -87,7 +88,6 @@ public class PalmaresFastFragment extends Fragment {
 
 		business.onCreate(activity);
 
-		initializeFab();
 		initializeRankingList();
 		intializeBonusList();
 		initializeVisibility();
@@ -98,6 +98,7 @@ public class PalmaresFastFragment extends Fragment {
 	@Override
 	public void onResume() {
 		super.onResume();
+		initializeFab();
 		business.onResume();
 		refresh();
 	}
@@ -108,14 +109,12 @@ public class PalmaresFastFragment extends Fragment {
 		initializePalmaresNbVictory();
 	}
 
-	private void initializeFocus() {
-		Logger.logMe(TAG, "PALMARES FAST - PalmaresFastActivity - initializeFocus");
-		list.smoothScrollToPosition(business.getRankingPosition());
-	}
+	public void refreshData() {
+		Logger.logMe(TAG, "PALMARES FAST - PalmaresFastActivity - refreshData");
+		business.refreshData();
 
-	private void initializeVisibility() {
-		llCompute.setVisibility(bComputeVisible ? View.VISIBLE : View.GONE);
-		llScore.setVisibility(!bComputeVisible ? View.VISIBLE : View.GONE);
+		adapter.notifyDataSetChanged();
+		refresh();
 	}
 
 	public void onClickCompute(View view) {
@@ -128,20 +127,19 @@ public class PalmaresFastFragment extends Fragment {
 		}
 	}
 
-	public void refreshData() {
-		Logger.logMe(TAG, "PALMARES FAST - PalmaresFastActivity - refreshData");
-		business.refreshData();
-
-		adapter.notifyDataSetChanged();
-		refresh();
+	private void initializeFocus() {
+		Logger.logMe(TAG, "PALMARES FAST - PalmaresFastActivity - initializeFocus");
+		list.smoothScrollToPosition(business.getRankingPosition());
 	}
 
 	private void initializeFab() {
-		FloatingActionButton fab = activity.findViewById(R.id.fab);
-		if (fab != null) {
-			fab.setOnClickListener(this::onClickCompute);
-			fab.setVisibility(View.VISIBLE);
-		}
+		FragmentTool.onClickFab(activity, this::onClickCompute);
+	}
+
+	private void initializeVisibility() {
+		llCompute.setVisibility(bComputeVisible ? View.VISIBLE : View.GONE);
+		llScore.setVisibility(!bComputeVisible ? View.VISIBLE : View.GONE);
+		FragmentTool.initializeFabDrawable(activity, bComputeVisible ? R.drawable.ic_check_black_24dp : R.drawable.ic_arrow_back_black_24dp);
 	}
 
 	private void initializeRankingList() {

@@ -10,7 +10,6 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
-import android.support.v4.app.FragmentManager;
 import android.text.Html;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -67,7 +66,6 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Locale;
-import java.util.Objects;
 
 public class InviteFragment extends Fragment {
 
@@ -444,6 +442,7 @@ public class InviteFragment extends Fragment {
 		}
 		initializeData();
 		initializeListener();
+		initializeFab();
 	}
 
 	private void initializeContentPlayerView() {
@@ -500,6 +499,10 @@ public class InviteFragment extends Fragment {
 				edTime.setEnabled(true);
 				break;
 		}
+	}
+
+	private void initializeFab() {
+		FragmentTool.initializeFabDrawable(activity, FragmentTool.INIT_FAB_IMAGE.VALIDATE);
 	}
 
 	private void initializeData() {

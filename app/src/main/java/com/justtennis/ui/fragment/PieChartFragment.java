@@ -88,7 +88,6 @@ public class PieChartFragment extends Fragment {
 		assert context != null;
 		assert activity != null;
 
-		initializeFab();
         initializeTypeData();
         initializeScoreData();
 
@@ -107,6 +106,12 @@ public class PieChartFragment extends Fragment {
 		}
 
 		initializeChartView();
+	}
+
+	@Override
+	public void onResume() {
+		super.onResume();
+		initializeFab();
 	}
 
 	private void initializeFab() {

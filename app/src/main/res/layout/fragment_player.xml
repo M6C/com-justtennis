@@ -91,6 +91,7 @@
 			android:layout_weight=".5"
 			android:layout_marginRight="5dp"
 			android:text="@string/button_text_ok"
+			android:visibility="gone"
 		/>
 		<Button
 			android:id="@+id/btn_import"
@@ -115,6 +116,7 @@
 			android:layout_weight=".5"
 			android:layout_marginRight="5dp"
 			android:text="@string/button_text_ok"
+			android:visibility="gone"
 		/>
 		<Button
 			android:id="@+id/btn_qrcode"
@@ -139,6 +141,7 @@
 			android:layout_weight=".5"
 			android:layout_marginRight="5dp"
 			android:text="@string/button_text_yes"
+			android:visibility="gone"
 		/>
 		<Button
 			android:id="@+id/btn_add_demande_no"

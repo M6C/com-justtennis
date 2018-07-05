@@ -47,6 +47,7 @@ import com.justtennis.listener.ok.OnClickPlayerCreateListenerOk;
 import com.justtennis.manager.TypeManager.TYPE;
 import com.justtennis.notifier.NotifierMessageLogger;
 import com.justtennis.parser.PlayerParser;
+import com.justtennis.tool.FragmentTool;
 import com.justtennis.ui.common.CommonEnum;
 
 import org.gdocument.gtracergps.launcher.log.Logger;
@@ -160,6 +161,7 @@ public class PlayerFragment extends Fragment implements IDrawerLayoutTypeNotifie
 	public void onResume() {
 		super.onResume();
 
+        initializeFab();
 		initializeData(true);
 	}
 
@@ -450,6 +452,24 @@ public class PlayerFragment extends Fragment implements IDrawerLayoutTypeNotifie
 				llCreate.setVisibility(View.GONE);
 				llModify.setVisibility(View.GONE);
 				llAddDemande.setVisibility(View.VISIBLE);
+				break;
+		}
+	}
+
+	private void initializeFab() {
+		CommonEnum.PLAYER_MODE mode = business.getMode();
+
+		FragmentTool.initializeFabDrawable(activity, FragmentTool.INIT_FAB_IMAGE.VALIDATE);
+		switch (mode) {
+			case FOR_RESULT:
+			case CREATE:
+				FragmentTool.onClickFab(activity, this::onClickCreate);
+				break;
+			case MODIFY:
+				FragmentTool.onClickFab(activity, this::onClickModify);
+				break;
+			case DEMANDE_ADD:
+				FragmentTool.onClickFab(activity, this::onClickDemandeAddYes);
 				break;
 		}
 	}

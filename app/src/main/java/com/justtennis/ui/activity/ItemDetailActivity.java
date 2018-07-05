@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.support.annotation.IdRes;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.BottomNavigationView;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -60,7 +59,6 @@ public class ItemDetailActivity extends AppCompatActivity implements NavigationD
     private NavigationDrawerFragment mNavigationDrawerFragment;
     private DrawerLayout mDrawerLayout;
     private BottomNavigationView mBottomNavigation;
-    private FloatingActionButton mFab;
 
     private MainBusiness business;
     private TypeManager mTypeManager;
@@ -82,7 +80,6 @@ public class ItemDetailActivity extends AppCompatActivity implements NavigationD
 
         mToolbar = (Toolbar) findViewById(R.id.detail_toolbar);
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
-        mFab = findViewById(R.id.fab);
 
         // Set up the drawer.
         mNavigationDrawerFragment.setUp(R.id.navigation_drawer, mDrawerLayout);

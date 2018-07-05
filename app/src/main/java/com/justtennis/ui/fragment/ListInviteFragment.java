@@ -98,6 +98,7 @@ public class ListInviteFragment extends CommonListFragment<Player> {
 
     @Override
     protected void initializeFab() {
+        super.initializeFab();
         FragmentTool.onClickFab(activity, v -> onClickMatch());
     }
 
