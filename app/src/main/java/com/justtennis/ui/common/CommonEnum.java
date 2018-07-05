@@ -1,7 +1,7 @@
 package com.justtennis.ui.common;
 
 public class CommonEnum {
-    public enum MODE {
+    public enum INVITE_MODE {
         INVITE_SIMPLE,
         INVITE_DETAIL,
         INVITE_CONFIRM
@@ -20,7 +20,7 @@ public class CommonEnum {
         FOR_RESULT
     }
 
-    public enum LIST_MODE_VIEW {
+    public enum LIST_VIEW_MODE {
         MODIFY, READ
     }
 }

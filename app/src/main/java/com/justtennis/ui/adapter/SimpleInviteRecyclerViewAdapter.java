@@ -41,7 +41,7 @@ public class SimpleInviteRecyclerViewAdapter extends RecyclerView.Adapter<Invite
             if (mTwoPane) {
                 Bundle arguments = new Bundle();
                 arguments.putSerializable(InviteActivity.EXTRA_INVITE, (Serializable)item.invite);
-                arguments.putSerializable(InviteActivity.EXTRA_MODE, CommonEnum.MODE.INVITE_DETAIL);
+                arguments.putSerializable(InviteActivity.EXTRA_MODE, CommonEnum.INVITE_MODE.INVITE_DETAIL);
                 InviteFragment fragment = new InviteFragment();
                 fragment.setArguments(arguments);
                 FragmentTool.replaceFragment(mParentActivity, fragment, R.id.item_detail_container);
@@ -49,7 +49,7 @@ public class SimpleInviteRecyclerViewAdapter extends RecyclerView.Adapter<Invite
                 InviteFragment fragment = new InviteFragment();
                 Bundle args = new Bundle();
                 args.putSerializable(InviteActivity.EXTRA_INVITE, (Serializable)item.invite);
-                args.putSerializable(InviteActivity.EXTRA_MODE, CommonEnum.MODE.INVITE_DETAIL);
+                args.putSerializable(InviteActivity.EXTRA_MODE, CommonEnum.INVITE_MODE.INVITE_DETAIL);
                 fragment.setArguments(args);
                 FragmentTool.replaceFragment(mParentActivity, fragment, R.id.item_detail_container);
             }
@@ -71,7 +71,7 @@ public class SimpleInviteRecyclerViewAdapter extends RecyclerView.Adapter<Invite
     public void onBindViewHolder(final InviteViewHolder holder, int position) {
         holder.invite = mValues.get(position);
 
-        InviteViewHelper.initializeView(mParentActivity, holder, CommonEnum.LIST_MODE_VIEW.MODIFY);
+        InviteViewHelper.initializeView(mParentActivity, holder, CommonEnum.LIST_VIEW_MODE.MODIFY);
     }
 
     @Override

@@ -124,14 +124,14 @@ public class ListInviteFragment extends CommonListFragment<Player> {
             InviteFragment fragment = new InviteFragment();
             Bundle arguments = new Bundle();
             arguments.putSerializable(InviteActivity.EXTRA_INVITE, item);
-            arguments.putSerializable(InviteActivity.EXTRA_MODE, CommonEnum.MODE.INVITE_DETAIL);
+            arguments.putSerializable(InviteActivity.EXTRA_MODE, CommonEnum.INVITE_MODE.INVITE_DETAIL);
             fragment.setArguments(arguments);
             FragmentTool.replaceFragment(Objects.requireNonNull(getActivity()), fragment, R.id.item_detail_container);
         } else {
             InviteFragment fragment = new InviteFragment();
             Bundle args = new Bundle();
             args.putSerializable(InviteActivity.EXTRA_INVITE, item);
-            args.putSerializable(InviteActivity.EXTRA_MODE, CommonEnum.MODE.INVITE_DETAIL);
+            args.putSerializable(InviteActivity.EXTRA_MODE, CommonEnum.INVITE_MODE.INVITE_DETAIL);
             fragment.setArguments(args);
             FragmentTool.replaceFragment(Objects.requireNonNull(getActivity()), fragment, R.id.item_detail_container);
         }
@@ -149,7 +149,7 @@ public class ListInviteFragment extends CommonListFragment<Player> {
         InviteFragment fragment = new InviteFragment();
         Bundle args = new Bundle();
         args.putLong(InviteActivity.EXTRA_PLAYER_ID, business.getUnknownPlayerId());
-        args.putSerializable(InviteActivity.EXTRA_MODE, CommonEnum.MODE.INVITE_SIMPLE);
+        args.putSerializable(InviteActivity.EXTRA_MODE, CommonEnum.INVITE_MODE.INVITE_SIMPLE);
         fragment.setArguments(args);
         FragmentTool.replaceFragment(activity, fragment, R.id.item_detail_container);
     }

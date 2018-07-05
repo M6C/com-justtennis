@@ -27,7 +27,7 @@ public class CommonListFragment <D extends GenericDBPojo<Long>> extends Fragment
 
     private static final String TAG = CommonListFragment.class.getSimpleName();
 
-    public static final String EXTRA_MODE = "MODE";
+    public static final String EXTRA_MODE = "INVITE_MODE";
     public static final String EXTRA_LIST = "LIST";
     protected static final String EXTRA_ITEM_LAYOUT = "ITEM_LAYOUT";
 

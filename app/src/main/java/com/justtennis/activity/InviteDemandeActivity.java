@@ -49,7 +49,7 @@ public class InviteDemandeActivity extends GenericActivity {
 		INVITE_DEMANDE,
 		INVITE_CONFIRM
 	};
-	public static final String EXTRA_MODE = "MODE";
+	public static final String EXTRA_MODE = "INVITE_MODE";
 	public static final String EXTRA_INVITE = "INVITE";
 	public static final String EXTRA_PLAYER_ID = "PLAYER_ID";
 	private static final int RESULT_PLAYER = 1;
@@ -234,7 +234,7 @@ public class InviteDemandeActivity extends GenericActivity {
 	
 	public void onClickDetail(View view) {
 		Intent intent = new Intent(this, InviteActivity.class);
-		intent.putExtra(InviteActivity.EXTRA_MODE, CommonEnum.MODE.INVITE_DETAIL);
+		intent.putExtra(InviteActivity.EXTRA_MODE, CommonEnum.INVITE_MODE.INVITE_DETAIL);
 		intent.putExtra(InviteActivity.EXTRA_INVITE, business.getInvite());
 		startActivityForResult(intent, RESULT_PLAYER);
 		finish();
@@ -245,7 +245,7 @@ public class InviteDemandeActivity extends GenericActivity {
 			Intent intent = new Intent(this, ListPlayerActivity.class);
 			intent.putExtra(ListPlayerActivity.EXTRA_MODE, CommonEnum.LIST_PLAYER_MODE.FOR_RESULT);
 //			Intent intent = new Intent(this, PlayerActivity.class);
-//			intent.putExtra(PlayerActivity.EXTRA_MODE, PlayerActivity.MODE.FOR_RESULT);
+//			intent.putExtra(PlayerActivity.EXTRA_MODE, PlayerActivity.INVITE_MODE.FOR_RESULT);
 			startActivityForResult(intent, RESULT_PLAYER);
 		}
 	}

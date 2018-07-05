@@ -25,7 +25,7 @@ import java.util.List;
 
 public class ListPlayerActivity extends AbsctractFragmentActivity {
 
-	public static final String EXTRA_MODE = "MODE";
+	public static final String EXTRA_MODE = "INVITE_MODE";
 	public static final String EXTRA_PLAYER_ID = "EXTRA_PLAYER_ID";
 
 	private NotifierMessageLogger notifier;

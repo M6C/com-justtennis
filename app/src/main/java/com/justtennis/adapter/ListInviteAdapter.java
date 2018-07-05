@@ -23,14 +23,14 @@ public class ListInviteAdapter extends ArrayAdapter<Invite> {
 	private List<Invite> value;
 	private ArrayList<Invite> valueOld;
 	private Activity activity;
-	private CommonEnum.LIST_MODE_VIEW mode;
+	private CommonEnum.LIST_VIEW_MODE mode;
 	private Filter filter = null;
 
 	public ListInviteAdapter(Activity activity, List<Invite> value) {
-		this(activity, value, CommonEnum.LIST_MODE_VIEW.MODIFY);
+		this(activity, value, CommonEnum.LIST_VIEW_MODE.MODIFY);
 	}
 
-	private ListInviteAdapter(Activity activity, List<Invite> value, CommonEnum.LIST_MODE_VIEW mode) {
+	private ListInviteAdapter(Activity activity, List<Invite> value, CommonEnum.LIST_VIEW_MODE mode) {
 		super(activity, R.layout.list_invite_row, android.R.id.text1, value);
 
 		this.activity = activity;

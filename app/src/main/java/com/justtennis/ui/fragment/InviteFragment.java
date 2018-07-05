@@ -73,7 +73,7 @@ public class InviteFragment extends Fragment {
 	@SuppressWarnings("unused")
 	private static final String KEY_LOCATION_FROM_RESULT = "KEY_LOCATION_FROM_RESULT";
 
-	public static final String EXTRA_MODE = "MODE";
+	public static final String EXTRA_MODE = "INVITE_MODE";
 	public static final String EXTRA_INVITE = "INVITE";
 	public static final String EXTRA_USER = "USER";
 	public static final String EXTRA_PLAYER_ID = "PLAYER_ID";
@@ -402,7 +402,7 @@ public class InviteFragment extends Fragment {
 	}
 
 	public void onClickDetail(View view) {
-		business.setMode(business.getMode() == CommonEnum.MODE.INVITE_DETAIL ? CommonEnum.MODE.INVITE_SIMPLE : CommonEnum.MODE.INVITE_DETAIL);
+		business.setMode(business.getMode() == CommonEnum.INVITE_MODE.INVITE_DETAIL ? CommonEnum.INVITE_MODE.INVITE_SIMPLE : CommonEnum.INVITE_MODE.INVITE_DETAIL);
 
 		initializeContentPlayer();
 		initializeContentPlayerView();
@@ -416,9 +416,9 @@ public class InviteFragment extends Fragment {
 	}
 
 	private void initializeContentPlayer() {
-		CommonEnum.MODE mode = business.getMode();
+		CommonEnum.INVITE_MODE mode = business.getMode();
 
-		if (CommonEnum.MODE.INVITE_DETAIL == mode) {
+		if (CommonEnum.INVITE_MODE.INVITE_DETAIL == mode) {
 			initializeContentViewPlayer(R.layout.element_invite_player_detail);
 		} else {
 			initializeContentViewPlayer(R.layout.element_invite_player);
@@ -464,7 +464,7 @@ public class InviteFragment extends Fragment {
 	}
 
 	private void initializeVisibility() {
-		CommonEnum.MODE mode = business.getMode();
+		CommonEnum.INVITE_MODE mode = business.getMode();
 
 		switch(mode) {
 			case INVITE_CONFIRM:
@@ -503,6 +503,18 @@ public class InviteFragment extends Fragment {
 
 	private void initializeFab() {
 		FragmentTool.initializeFabDrawable(activity, FragmentTool.INIT_FAB_IMAGE.VALIDATE);
+
+		CommonEnum.INVITE_MODE mode = business.getMode();
+		switch(mode) {
+			case INVITE_CONFIRM:
+				FragmentTool.onClickFab(activity, this::onClickInviteConfirmeYes);
+				break;
+			case INVITE_SIMPLE:
+			case INVITE_DETAIL:
+			default:
+				FragmentTool.onClickFab(activity, this::onClickOk);
+				break;
+		}
 	}
 
 	private void initializeData() {

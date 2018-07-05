@@ -48,7 +48,7 @@ import java.util.Date;
 public class ListPlayerFragment2 extends Fragment {
 
 	private static final String TAG = ListPlayerFragment2.class.getSimpleName();
-	public static final String EXTRA_MODE = "MODE";
+	public static final String EXTRA_MODE = "INVITE_MODE";
 	public static final String EXTRA_PLAYER_ID = "EXTRA_PLAYER_ID";
 	private static final int RESULT_PLAYER = 1;
 	private static final int RESULT_PLAYER_FOR_INFO = 2;
@@ -150,7 +150,7 @@ public class ListPlayerFragment2 extends Fragment {
 					if (id != PlayerService.ID_EMPTY_PLAYER) {
 						Intent intent = new Intent(context, InviteActivity.class);
 						intent.putExtra(InviteActivity.EXTRA_PLAYER_ID, id);
-						intent.putExtra(InviteActivity.EXTRA_MODE, CommonEnum.MODE.INVITE_DETAIL);
+						intent.putExtra(InviteActivity.EXTRA_MODE, CommonEnum.INVITE_MODE.INVITE_DETAIL);
 						startActivity(intent);
 					}
 				}
@@ -250,7 +250,7 @@ public class ListPlayerFragment2 extends Fragment {
 
 		Intent intent = new Intent(context, InviteActivity.class);
 		intent.putExtra(InviteActivity.EXTRA_PLAYER_ID, player.getId());
-		intent.putExtra(InviteActivity.EXTRA_MODE, CommonEnum.MODE.INVITE_SIMPLE);
+		intent.putExtra(InviteActivity.EXTRA_MODE, CommonEnum.INVITE_MODE.INVITE_SIMPLE);
 		startActivity(intent);
 		
 //		finish();

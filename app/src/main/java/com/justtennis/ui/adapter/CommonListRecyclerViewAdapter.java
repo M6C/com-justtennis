@@ -42,7 +42,7 @@ public class CommonListRecyclerViewAdapter <DATA extends GenericDBPojo<Long>> ex
     @Override
     public void onBindViewHolder(@NonNull final CommonListViewHolder holder, int position) {
         DATA data = mValues.get(position);
-        holder.mode = CommonEnum.LIST_MODE_VIEW.MODIFY;
+        holder.mode = CommonEnum.LIST_VIEW_MODE.MODIFY;
         holder.data = data;
         holder.showData(data);
     }

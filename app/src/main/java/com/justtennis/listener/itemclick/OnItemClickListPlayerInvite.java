@@ -19,7 +19,7 @@ public class OnItemClickListPlayerInvite implements OnItemClickListener {
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 		Intent intent = new Intent(context, InviteActivity.class);
-		intent.putExtra(InviteActivity.EXTRA_MODE, CommonEnum.MODE.INVITE_SIMPLE);
+		intent.putExtra(InviteActivity.EXTRA_MODE, CommonEnum.INVITE_MODE.INVITE_SIMPLE);
 		intent.putExtra(InviteActivity.EXTRA_PLAYER_ID, ((Long)view.getTag()));
 		context.startActivity(intent);
     }

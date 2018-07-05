@@ -8,7 +8,7 @@ import com.justtennis.ui.common.CommonEnum;
 
 public abstract class CommonListViewHolder <D extends GenericDBPojo<Long>> extends RecyclerView.ViewHolder {
     public D data;
-    public CommonEnum.LIST_MODE_VIEW mode;
+    public CommonEnum.LIST_VIEW_MODE mode;
 
     CommonListViewHolder(View itemView) {
         super(itemView);

@@ -63,7 +63,7 @@ public class InviteBusiness {
 	private TypeManager typeManager;
 	private User user;
 	private Invite invite;
-	private CommonEnum.MODE mode = CommonEnum.MODE.INVITE_SIMPLE;
+	private CommonEnum.INVITE_MODE mode = CommonEnum.INVITE_MODE.INVITE_SIMPLE;
 	private List<Ranking> listRanking;
 	private List<String> listTxtRankings;
 	private List<Saison> listSaison = new ArrayList<Saison>();
@@ -98,7 +98,7 @@ public class InviteBusiness {
 
 	private void initializeInvite(@NonNull Bundle bundle) {
 		if (bundle.containsKey(InviteActivity.EXTRA_MODE)) {
-			mode = (CommonEnum.MODE) bundle.getSerializable(InviteActivity.EXTRA_MODE);
+			mode = (CommonEnum.INVITE_MODE) bundle.getSerializable(InviteActivity.EXTRA_MODE);
 		}
 
 		if (bundle.containsKey(InviteActivity.EXTRA_USER)) {
@@ -341,11 +341,11 @@ public class InviteBusiness {
 		setClub((Club)location);
 	}
 
-	public CommonEnum.MODE getMode() {
+	public CommonEnum.INVITE_MODE getMode() {
 		return mode;
 	}
 
-	public void setMode(CommonEnum.MODE mode) { 
+	public void setMode(CommonEnum.INVITE_MODE mode) {
 		this.mode = mode;
 	}
 

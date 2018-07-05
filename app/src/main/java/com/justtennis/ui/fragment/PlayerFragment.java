@@ -64,7 +64,7 @@ public class PlayerFragment extends Fragment implements IDrawerLayoutTypeNotifie
 	public static final String EXTRA_PLAYER = "PLAYER";
 	public static final String EXTRA_PLAYER_ID = "PLAYER_ID";
 	public static final String EXTRA_INVITE = "INVITE";
-	public static final String EXTRA_MODE = "MODE";
+	public static final String EXTRA_MODE = "INVITE_MODE";
 	public static final String EXTRA_TYPE = "TYPE";
 	public static final String EXTRA_RANKING = "RANKING";
 	public static final String EXTRA_FIND = "EXTRA_FIND";

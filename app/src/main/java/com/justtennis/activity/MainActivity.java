@@ -299,7 +299,7 @@ public class MainActivity extends GenericActivity implements INotifierMessage, I
 	public void onClickMatch(View view) {
 		Intent intent = new Intent(getApplicationContext(), InviteActivity.class);
 		intent.putExtra(InviteActivity.EXTRA_PLAYER_ID, business.getUnknownPlayerId());
-		intent.putExtra(InviteActivity.EXTRA_MODE, CommonEnum.MODE.INVITE_SIMPLE);
+		intent.putExtra(InviteActivity.EXTRA_MODE, CommonEnum.INVITE_MODE.INVITE_SIMPLE);
 		startActivity(intent);
 	}
 
