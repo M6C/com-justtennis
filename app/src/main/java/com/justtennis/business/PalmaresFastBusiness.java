@@ -16,6 +16,7 @@ import com.justtennis.domain.Invite.SCORE_RESULT;
 import com.justtennis.domain.PalmaresFastValue;
 import com.justtennis.domain.Player;
 import com.justtennis.domain.Ranking;
+import com.justtennis.domain.User;
 import com.justtennis.domain.comparator.PalmaresFastValueComparatorByRanking;
 import com.justtennis.domain.comparator.RankingComparatorByOrder;
 import com.justtennis.notifier.NotifierMessageLogger;
@@ -58,10 +59,13 @@ public class PalmaresFastBusiness {
 		userService = new UserService(context, notificationMessage);
 		rankingService = new RankingService(context, notificationMessage);
 		playerService = new PlayerService(context, NotifierMessageLogger.getInstance());
-	
-		idRanking = userService.find().getIdRankingEstimate();
-		if (idRanking == null) {
-			idRanking = userService.find().getIdRanking();
+
+		User user = userService.find();
+		if (user != null) {
+			idRanking = user.getIdRankingEstimate();
+			if (idRanking == null) {
+				idRanking = user.getIdRanking();
+			}
 		}
 		if (idRanking == null) {
 			idRanking = rankingService.getNC().getId();

@@ -18,6 +18,7 @@ import com.justtennis.domain.PalmaresFastValue;
 
 import org.gdocument.gtracergps.launcher.log.Logger;
 
+import java.text.MessageFormat;
 import java.util.List;
 
 public class PalmaresFastAdapter extends BaseAdapter {
@@ -68,9 +69,9 @@ public class PalmaresFastAdapter extends BaseAdapter {
 		}
 		rowView.setTag(v);
 
-		TextView tvRanking = (TextView) rowView.findViewById(R.id.tv_ranking);
-		EditText etNbVictory = (EditText) rowView.findViewById(R.id.et_nb_victory);
-		EditText etNbDefeat = (EditText) rowView.findViewById(R.id.et_nb_defeat);
+		TextView tvRanking = rowView.findViewById(R.id.tv_ranking);
+		EditText etNbVictory = rowView.findViewById(R.id.et_nb_victory);
+		EditText etNbDefeat = rowView.findViewById(R.id.et_nb_defeat);
 
 		etNbVictory.setTag(position);
 		etNbDefeat.setTag(position);
@@ -78,10 +79,12 @@ public class PalmaresFastAdapter extends BaseAdapter {
 		tvRanking.setText(v.getRanking().getRanking());
 		etNbVictory.setText(Integer.toString(v.getNbVictory()));
 		etNbDefeat.setText(Integer.toString(v.getNbDefeat()));
-		Logger.logMe(TAG, "PALMARES FAST - PalmaresFastAdapter - onFocusChange setNbVictory data:" + v + " ranking:" + v.getRanking().getRanking() + " nbVictory:" + v.getNbVictory() + " nbDefeat:" + v.getNbDefeat());
+		Logger.logMe(TAG, MessageFormat.format("PALMARES FAST - PalmaresFastAdapter - onFocusChange setNbVictory data:{0} ranking:{1} nbVictory:{2} nbDefeat:{3}", v, v.getRanking().getRanking(), v.getNbVictory(), v.getNbDefeat()));
 
 		etNbVictory.addTextChangedListener(new EditTextWatcher(etNbVictory, true));
 		etNbDefeat.addTextChangedListener(new EditTextWatcher(etNbDefeat, false));
+		etNbVictory.setOnFocusChangeListener((v1, hasFocus) -> {if (hasFocus) {((EditText) v1).selectAll();}});
+		etNbDefeat.setOnFocusChangeListener((v1, hasFocus) -> {if (hasFocus) {((EditText) v1).selectAll();}});
 
 		return rowView;
 	}

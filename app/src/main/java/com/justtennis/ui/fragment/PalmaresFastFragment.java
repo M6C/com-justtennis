@@ -2,6 +2,8 @@ package com.justtennis.ui.fragment;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.view.LayoutInflater;
@@ -20,11 +22,11 @@ import com.justtennis.adapter.PalmaresFastAdapter;
 import com.justtennis.adapter.manager.RankingListManager;
 import com.justtennis.adapter.manager.RankingListManager.IRankingListListener;
 import com.justtennis.business.PalmaresFastBusiness;
-import com.justtennis.domain.Ranking;
 import com.justtennis.notifier.NotifierMessageLogger;
-import com.justtennis.tool.FragmentTool;
 
 import org.gdocument.gtracergps.launcher.log.Logger;
+
+import java.text.MessageFormat;
 
 public class PalmaresFastFragment extends Fragment {
 
@@ -48,7 +50,6 @@ public class PalmaresFastFragment extends Fragment {
 
 	private boolean bComputeVisible = true;
 	private View rootView;
-	private View swCompute;
 	private Context context;
 	private FragmentActivity activity;
 
@@ -57,7 +58,7 @@ public class PalmaresFastFragment extends Fragment {
 	}
 
 	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+	public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		rootView = inflater.inflate(R.layout.list_palmares_fast, container, false);
 
 		context = getContext();
@@ -78,8 +79,6 @@ public class PalmaresFastFragment extends Fragment {
 		tvNbVictoryDetail = rootView.findViewById(R.id.tv_nb_victory_detail);
 		tvVE2I5G = rootView.findViewById(R.id.tv_ve2i5g);
 		spBonus = rootView.findViewById(R.id.sp_bonus);
-		swCompute = rootView.findViewById(R.id.sw_compute);
-		swCompute.setOnClickListener(this::onClickCompute);
 
 		list = rootView.findViewById(R.id.list);
 
@@ -92,7 +91,6 @@ public class PalmaresFastFragment extends Fragment {
 		initializeRankingList();
 		intializeBonusList();
 		initializeVisibility();
-//		TypeManager.getInstance().initializeActivity(rootView.findViewById(R.id.layout_main), false);
 
 		return rootView;
 	}
@@ -139,31 +137,31 @@ public class PalmaresFastFragment extends Fragment {
 	}
 
 	private void initializeFab() {
-		FragmentTool.hideFab(activity);
+		FloatingActionButton fab = activity.findViewById(R.id.fab);
+		if (fab != null) {
+			fab.setOnClickListener(this::onClickCompute);
+			fab.setVisibility(View.VISIBLE);
+		}
 	}
 
 	private void initializeRankingList() {
 		Logger.logMe(TAG, "PALMARES FAST - PalmaresFastActivity - initializeRankingList");
-		IRankingListListener listener = new IRankingListListener() {
-			@Override
-			public void onRankingSelected(Ranking ranking) {
-				business.setIdRanking(ranking.getId());
-				refreshData();
-//				initializeFocus();
-			}
-		};
-		rankingListManager.manageRanking(getActivity(), rootView, listener, business.getIdRanking(), false);
+		IRankingListListener listener = ranking -> {
+            business.setIdRanking(ranking.getId());
+            refreshData();
+        };
+		rankingListManager.manageRanking(activity, rootView, listener, business.getIdRanking(), false);
 	}
 
 	private void intializeBonusList() {
-		ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(getActivity(), R.layout.spinner_item_bonus, LIST_BONUS);
+		ArrayAdapter<String> dataAdapter = new ArrayAdapter<>(activity, R.layout.spinner_item_bonus, LIST_BONUS);
 		dataAdapter.setDropDownViewResource(R.layout.spinner_item_bonus);
 		spBonus.setAdapter(dataAdapter);
 
 		spBonus.setOnItemSelectedListener(new OnItemSelectedListener() {
 			@Override
 			public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-				TextView tv = (TextView)spBonus.getRootView().findViewById(android.R.id.text1);
+				TextView tv = spBonus.getRootView().findViewById(android.R.id.text1);
 				tv.setTextColor(PalmaresFastFragment.this.getResources().getColor(position == 0 ? R.color.spinner_color_hint : android.R.color.black));
 
 				business.setPointBonus(Integer.parseInt(LIST_BONUS[position]));
@@ -172,6 +170,7 @@ public class PalmaresFastFragment extends Fragment {
 
 			@Override
 			public void onNothingSelected(AdapterView<?> arg0) {
+				/* Empty because Nothing to do */
 			}
 		});
 	}
@@ -187,8 +186,8 @@ public class PalmaresFastFragment extends Fragment {
 	}
 
 	private void initializePalmaresNbVictory() {
-		tvNbVictory.setText(business.getNbVictoryCalculate() + "/" + business.getNbVictorySum());
-		tvNbVictoryDetail.setText("("+ business.getNbVictoryAdditional() + ")");
-		tvVE2I5G.setText(Integer.toString(business.getVE2I5G()));
+		tvNbVictory.setText(MessageFormat.format("{0}/{1}", business.getNbVictoryCalculate(), business.getNbVictorySum()));
+		tvNbVictoryDetail.setText(MessageFormat.format("({0})", business.getNbVictoryAdditional()));
+		tvVE2I5G.setText(MessageFormat.format("{0}", business.getVE2I5G()));
 	}
 }
