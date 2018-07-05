@@ -6,6 +6,7 @@
     <dimen name="list_item_horizontal_margin">8dp</dimen>
     <dimen name="list_item_vertical_margin">8dp</dimen>
     <dimen name="list_item_margin">12dp</dimen>
+    <dimen name="separator_horizontal_margin">2dp</dimen>
 
     <dimen name="fab_margin">16dp</dimen>
     <dimen name="app_bar_height">150dp</dimen>

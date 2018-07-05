@@ -14,5 +14,7 @@
     <string name="txt_wo_vitory">WO Victory</string>
     <string name="txt_wo_defeat">WO Defeat</string>
     <string name="txt_score">Score</string>
-    
+
+    <string name="dialog_invite_delete_title">Delete invite</string>
+    <string name="dialog_invite_delete_message">Delete ?</string>
 </resources>

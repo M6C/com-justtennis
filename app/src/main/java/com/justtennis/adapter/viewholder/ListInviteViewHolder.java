@@ -4,7 +4,7 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.text.Html;
 import android.view.View;
-import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.justtennis.ApplicationConfig;
@@ -14,6 +14,7 @@ import com.justtennis.db.service.ScoreSetService;
 import com.justtennis.domain.Invite;
 import com.justtennis.notifier.NotifierMessageLogger;
 import com.justtennis.parser.LocationParser;
+import com.justtennis.ui.rxjava.RxListInvite;
 
 import java.text.SimpleDateFormat;
 
@@ -27,7 +28,7 @@ public class ListInviteViewHolder extends CommonListViewHolder<Invite> {
     private TextView tvDate;
     private TextView tvScore;
     private TextView tvClubName;
-    private ImageView imageDelete;
+    private LinearLayout llDelete;
     private View vTypeEntrainement;
     private View vTypeMatch;
 
@@ -39,7 +40,7 @@ public class ListInviteViewHolder extends CommonListViewHolder<Invite> {
         tvDate = itemView.findViewById(R.id.tv_date);
         tvScore = itemView.findViewById(R.id.tv_score);
         tvClubName = itemView.findViewById(R.id.tv_club_name);
-        imageDelete = itemView.findViewById(R.id.iv_delete);
+        llDelete = itemView.findViewById(R.id.ll_delete);
         vTypeEntrainement = itemView.findViewById(R.id.tv_type_entrainement);
         vTypeMatch = itemView.findViewById(R.id.tv_type_match);
     }
@@ -49,27 +50,28 @@ public class ListInviteViewHolder extends CommonListViewHolder<Invite> {
     }
 
     @Override
-    public void showData(Invite v) {
+    public void showData(Invite invite) {
 
         NotifierMessageLogger notifier = NotifierMessageLogger.getInstance();
         LocationParser locationParser = LocationParser.getInstance(context, notifier);
         ScoreSetService scoreSetService = new ScoreSetService(context, notifier);
         RankingViewManager rankingViewManager = RankingViewManager.getInstance(context, notifier);
 
-        tvPlayer.setText(v.getPlayer() == null ? "" : Html.fromHtml("<b>" + v.getPlayer().getFirstName() + "</b> " + v.getPlayer().getLastName()));
-        tvDate.setText(v.getDate() == null ? "" : sdf.format(v.getDate()));
-        imageDelete.setTag(v);
+        tvPlayer.setText(invite.getPlayer() == null ? "" : Html.fromHtml("<b>" + invite.getPlayer().getFirstName() + "</b> " + invite.getPlayer().getLastName()));
+        tvDate.setText(invite.getDate() == null ? "" : sdf.format(invite.getDate()));
+        llDelete.setTag(invite);
+        llDelete.setOnClickListener(v -> RxListInvite.publish(RxListInvite.SUBJECT_ON_CLICK_DELETE_ITEM, v));
 
-        rankingViewManager.manageRanking(itemView, v, true);
+        rankingViewManager.manageRanking(itemView, invite, true);
 
         if (ApplicationConfig.SHOW_ID) {
-            tvPlayer.setText(tvPlayer.getText() + " [id:" + v.getPlayer().getId() + "|idExt:" + v.getPlayer().getIdExternal() + "]");
-            tvDate.setText(tvDate.getText() + " [id:" + v.getId() + "|idExt:" + v.getIdExternal() + "]");
+            tvPlayer.setText(tvPlayer.getText() + " [id:" + invite.getPlayer().getId() + "|idExt:" + invite.getPlayer().getIdExternal() + "]");
+            tvDate.setText(tvDate.getText() + " [id:" + invite.getId() + "|idExt:" + invite.getIdExternal() + "]");
         }
 
-        initializeLocation(locationParser, v, tvClubName);
+        initializeLocation(locationParser, invite, tvClubName);
 
-        String textScore = scoreSetService.buildTextScore(v);
+        String textScore = scoreSetService.buildTextScore(invite);
         if (textScore != null) {
             tvScore.setVisibility(View.VISIBLE);
             tvScore.setText(Html.fromHtml(textScore));
@@ -77,7 +79,7 @@ public class ListInviteViewHolder extends CommonListViewHolder<Invite> {
             tvScore.setVisibility(View.GONE);
         }
 //		int iRessource = R.drawable.check_yellow;
-//		switch(v.getStatus()) {
+//		switch(invite.getStatus()) {
 //			case ACCEPT:
 //				iRessource = R.drawable.check_green;
 //				break;
@@ -87,7 +89,7 @@ public class ListInviteViewHolder extends CommonListViewHolder<Invite> {
 //			default:
 //		}
 //		ivStatus.setImageDrawable(activity.getResources().getDrawable(iRessource));
-        switch (v.getScoreResult()) {
+        switch (invite.getScoreResult()) {
             case VICTORY:
                 break;
             case DEFEAT:
@@ -97,15 +99,15 @@ public class ListInviteViewHolder extends CommonListViewHolder<Invite> {
 
         switch (mode) {
             case READ:
-                imageDelete.setVisibility(View.GONE);
+                llDelete.setVisibility(View.GONE);
                 break;
             case MODIFY:
             default:
-                imageDelete.setVisibility(View.VISIBLE);
+                llDelete.setVisibility(View.VISIBLE);
                 break;
         }
 
-        switch (v.getType()) {
+        switch (invite.getType()) {
             case COMPETITION:
                 vTypeEntrainement.setVisibility(View.GONE);
                 vTypeMatch.setVisibility(View.VISIBLE);

@@ -5,6 +5,7 @@ import android.content.Context;
 import android.text.Html;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.justtennis.ApplicationConfig;
@@ -24,8 +25,8 @@ public class ListPlayerViewHolder extends CommonListViewHolder<Player> {
     private final LocationParser locationParser;
     private final RankingViewManager rankingViewManager;
     private final ContactManager contactManager;
+    private LinearLayout llDelete;
     private ImageView imagePlayer;
-    private ImageView imageDelete;
     private TextView name;
     private TextView clubName;
 
@@ -39,8 +40,8 @@ public class ListPlayerViewHolder extends CommonListViewHolder<Player> {
         rankingViewManager = RankingViewManager.getInstance(context, notifier);
         contactManager = ContactManager.getInstance();
 
+        llDelete = itemView.findViewById(R.id.ll_delete);
         imagePlayer = itemView.findViewById(R.id.iv_player);
-        imageDelete = itemView.findViewById(R.id.iv_delete);
         name = itemView.findViewById(R.id.tv_name);
         clubName = itemView.findViewById(R.id.tv_club_name);
     }
@@ -55,11 +56,11 @@ public class ListPlayerViewHolder extends CommonListViewHolder<Player> {
         boolean isUnknownPlayer = PlayerService.isUnknownPlayer(player);
         int iVisibility = isUnknownPlayer ? View.GONE : View.VISIBLE;
 
-        imageDelete.setVisibility(iVisibility);
-        imageDelete.setOnClickListener(v -> RxListPlayer.publish(RxListPlayer.SUBJECT_ON_CLICK_DELETE_ITEM, v));
+        llDelete.setVisibility(iVisibility);
+        llDelete.setOnClickListener(v -> RxListPlayer.publish(RxListPlayer.SUBJECT_ON_CLICK_DELETE_ITEM, v));
 
         imagePlayer.setTag(player);
-        imageDelete.setTag(player);
+        llDelete.setTag(player);
         name.setText(Html.fromHtml("<b>" + player.getFirstName() + "</b> " + player.getLastName()));
 
         rankingViewManager.manageRanking(itemView, player, true);

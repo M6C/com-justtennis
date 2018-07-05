@@ -21,7 +21,7 @@ import com.justtennis.notifier.NotifierMessageLogger;
 import com.justtennis.tool.FragmentTool;
 import com.justtennis.ui.common.CommonEnum;
 import com.justtennis.ui.rxjava.RxCommonList;
-import com.justtennis.ui.rxjava.RxListPlayer;
+import com.justtennis.ui.rxjava.RxListInvite;
 import com.justtennis.ui.rxjava.RxNavigationDrawer;
 
 import org.gdocument.gtracergps.launcher.log.Logger;
@@ -83,7 +83,7 @@ public class ListInviteFragment extends CommonListFragment<Player> {
 
     @Override
     public void onPause() {
-        RxListPlayer.unregister(this);
+        RxListInvite.unregister(this);
         RxCommonList.unregister(this);
         super.onPause();
     }
@@ -103,8 +103,8 @@ public class ListInviteFragment extends CommonListFragment<Player> {
     }
 
     private void initializeSubscribeListPlayer() {
-        RxListPlayer.subscribe(RxListPlayer.SUBJECT_REFRESH, this, o -> refresh());
-        RxListPlayer.subscribe(RxListPlayer.SUBJECT_ON_CLICK_DELETE_ITEM, this, o -> onClickDelete((View) o));
+        RxListInvite.subscribe(RxListInvite.SUBJECT_REFRESH, this, o -> refresh());
+        RxListInvite.subscribe(RxListInvite.SUBJECT_ON_CLICK_DELETE_ITEM, this, o -> onClickDelete((View) o));
     }
 
     private void initializeSubscribeCommonList() {
@@ -141,7 +141,7 @@ public class ListInviteFragment extends CommonListFragment<Player> {
         Invite invite = (Invite)view.getTag();
         OnClickInviteDeleteListenerOk listener = new OnClickInviteDeleteListenerOk(business, invite);
         FactoryDialog.getInstance()
-                .buildOkCancelDialog(business.getContext(), listener, R.string.dialog_player_delete_title, R.string.dialog_player_delete_message)
+                .buildOkCancelDialog(business.getContext(), listener, R.string.dialog_invite_delete_title, R.string.dialog_invite_delete_message)
                 .show();
     }
 
