@@ -134,22 +134,22 @@ Logger.logMe(TAG, "PALMARES FAST - PalmaresFastBusiness - initializePalmaresFast
 		List<Ranking> listRanking = rankingService.getList();
 		setRanking.addAll(listRanking);
 
-		Ranking rankingWO = new Ranking();
-		rankingWO.setRanking(context.getString(R.string.txt_wo));
-		list.add(new PalmaresFastValue(rankingWO, 0, 0));
-
 		for(Ranking ranking : setRanking) {
 			addPalmares(ranking);
 		}
+
+		Ranking rankingWO = new Ranking();
+		rankingWO.setRanking(context.getString(R.string.txt_wo));
+		addPalmares(rankingWO);
 	}
 
 	private void addPalmares(Ranking ranking) {
-		PalmaresFastValue ret = null;
-		if (listInitialize != null && !listInitialize.isEmpty()) {
-			ret = ListTool.get(listInitialize, ranking, fastValueComparatorByRanking);
-		}
+		PalmaresFastValue ret = ListTool.get(listInitialize, ranking, fastValueComparatorByRanking);
 		if (ret == null) {
 			ret = new PalmaresFastValue(ranking, 0, 0);
+		}
+		if (ret.getId() == null) {
+			ret.setId((long)list.size());
 		}
 		list.add(ret);
 	}

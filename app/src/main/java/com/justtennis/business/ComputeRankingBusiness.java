@@ -1,8 +1,5 @@
 package com.justtennis.business;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import android.content.Context;
 
 import com.cameleon.common.android.inotifier.INotifierMessage;
@@ -23,6 +20,9 @@ import com.justtennis.domain.User;
 import com.justtennis.domain.comparator.PalmaresFastValueComparatorByRanking;
 import com.justtennis.tool.ListTool;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class ComputeRankingBusiness {
 
 	@SuppressWarnings("unused")
@@ -32,7 +32,6 @@ public class ComputeRankingBusiness {
 
 	private ComputeRankSubService computeRankService;
 
-	private UserService userService;
 	private InviteService inviteService;
 	private ScoreSetService scoreService;
 	private PlayerService playerService;
@@ -40,14 +39,14 @@ public class ComputeRankingBusiness {
 
 	private ComputeDataRanking computeDataRanking;
 
-	private List<Invite> list = new ArrayList<Invite>();
+	private List<Invite> list = new ArrayList<>();
 	private Long idRanking;
 
 	public ComputeRankingBusiness(ComputeRankingActivity context, INotifierMessage notificationMessage) {
 		this.context = context;
 		computeRankService = new ComputeRankSubService(context, notificationMessage);
 
-		userService = new UserService(context, notificationMessage);
+		UserService userService = new UserService(context, notificationMessage);
 		playerService = new PlayerService(context, notificationMessage);
 		inviteService = new InviteService(context, notificationMessage);
 		scoreService = new ScoreSetService(context, notificationMessage);
@@ -87,7 +86,7 @@ public class ComputeRankingBusiness {
 	}
 
 	public List<PalmaresFastValue> getPalmares() {
-		List<PalmaresFastValue> ret = new ArrayList<PalmaresFastValue>();
+		List<PalmaresFastValue> ret = new ArrayList<>();
 
 		List<Invite> listVictory = inviteService.getByScoreResult(SCORE_RESULT.VICTORY);
 		List<Invite> listDefeat = inviteService.getByScoreResult(SCORE_RESULT.DEFEAT);

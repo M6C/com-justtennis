@@ -88,7 +88,10 @@ public class PalmaresFastFragment extends Fragment {
 		list = rootView.findViewById(R.id.list);
 
 		// Fix : Recyclerview not call any Adapter method :onCreateViewHolder,onBindViewHolder,
-		list.setLayoutManager(new LinearLayoutManager(getContext()));
+		list.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
+		list.setNestedScrollingEnabled(false);
+//		list.setHasFixedSize(false);
+//		list.setLayoutManager(new SnappingLinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
 		list.setAdapter(adapter);
 
 		initializeRankingList();
@@ -130,7 +133,7 @@ public class PalmaresFastFragment extends Fragment {
 
 	private void initializeFocus() {
 		Logger.logMe(TAG, "PALMARES FAST - PalmaresFastActivity - initializeFocus");
-		list.smoothScrollToPosition(business.getRankingPosition());
+		list.smoothScrollToPosition(business.getIdRanking().intValue());
 	}
 
 	private void initializeFab() {
