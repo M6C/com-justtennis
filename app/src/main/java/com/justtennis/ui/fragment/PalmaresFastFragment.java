@@ -3,17 +3,16 @@ package com.justtennis.ui.fragment;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
 import android.widget.LinearLayout;
-import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -37,7 +36,7 @@ public class PalmaresFastFragment extends Fragment {
 
 	private PalmaresFastBusiness business;
 
-	private ListView list;
+	private RecyclerView list;
 	private PalmaresFastAdapter adapter;
 	private LinearLayout llCompute;
 	private LinearLayout llScore;
@@ -51,7 +50,6 @@ public class PalmaresFastFragment extends Fragment {
 
 	private boolean bComputeVisible = true;
 	private View rootView;
-	private Context context;
 	private FragmentActivity activity;
 
 	public static PalmaresFastFragment build() {
@@ -59,19 +57,26 @@ public class PalmaresFastFragment extends Fragment {
 	}
 
 	@Override
-	public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-		rootView = inflater.inflate(R.layout.list_palmares_fast, container, false);
+	public void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
 
-		context = getContext();
+		Context context = getContext();
 		activity = getActivity();
 
 		assert context != null;
 		assert activity != null;
 
 		NotifierMessageLogger notifier = NotifierMessageLogger.getInstance();
-		business = new PalmaresFastBusiness(context, notifier);
-		adapter = new PalmaresFastAdapter(activity, business.getList());
 		rankingListManager = RankingListManager.getInstance(context, notifier);
+		business = new PalmaresFastBusiness(context, notifier);
+		business.onCreate(activity);
+
+		adapter = new PalmaresFastAdapter(business.getList());
+	}
+
+	@Override
+	public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+		rootView = inflater.inflate(R.layout.list_palmares_fast, container, false);
 
 		llCompute = rootView.findViewById(R.id.ll_compute);
 		llScore = rootView.findViewById(R.id.ll_score);
@@ -80,13 +85,11 @@ public class PalmaresFastFragment extends Fragment {
 		tvNbVictoryDetail = rootView.findViewById(R.id.tv_nb_victory_detail);
 		tvVE2I5G = rootView.findViewById(R.id.tv_ve2i5g);
 		spBonus = rootView.findViewById(R.id.sp_bonus);
-
 		list = rootView.findViewById(R.id.list);
 
+		// Fix : Recyclerview not call any Adapter method :onCreateViewHolder,onBindViewHolder,
+		list.setLayoutManager(new LinearLayoutManager(getContext()));
 		list.setAdapter(adapter);
-		list.setItemsCanFocus(true);
-
-		business.onCreate(activity);
 
 		initializeRankingList();
 		intializeBonusList();
@@ -99,22 +102,20 @@ public class PalmaresFastFragment extends Fragment {
 	public void onResume() {
 		super.onResume();
 		initializeFab();
-		business.onResume();
-		refresh();
-	}
-
-	public void refresh() {
-		Logger.logMe(TAG, "PALMARES FAST - PalmaresFastActivity - refresh");
-		initializePalmaresPoint();
-		initializePalmaresNbVictory();
 	}
 
 	public void refreshData() {
 		Logger.logMe(TAG, "PALMARES FAST - PalmaresFastActivity - refreshData");
 		business.refreshData();
 
-		adapter.notifyDataSetChanged();
 		refresh();
+		adapter.notifyDataSetChanged();
+	}
+
+	public void refresh() {
+		Logger.logMe(TAG, "PALMARES FAST - PalmaresFastActivity - refresh");
+		initializePalmaresPoint();
+		initializePalmaresNbVictory();
 	}
 
 	public void onClickCompute(View view) {
@@ -156,7 +157,7 @@ public class PalmaresFastFragment extends Fragment {
 		dataAdapter.setDropDownViewResource(R.layout.spinner_item_bonus);
 		spBonus.setAdapter(dataAdapter);
 
-		spBonus.setOnItemSelectedListener(new OnItemSelectedListener() {
+		spBonus.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
 			@Override
 			public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
 				TextView tv = spBonus.getRootView().findViewById(android.R.id.text1);

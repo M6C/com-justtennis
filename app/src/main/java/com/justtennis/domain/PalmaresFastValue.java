@@ -1,8 +1,10 @@
 package com.justtennis.domain;
 
+import com.cameleon.common.android.model.GenericDBPojo;
+
 import java.io.Serializable;
 
-public class PalmaresFastValue implements Serializable {
+public class PalmaresFastValue extends GenericDBPojo<Long> implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 	

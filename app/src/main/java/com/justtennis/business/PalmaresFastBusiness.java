@@ -39,14 +39,13 @@ public class PalmaresFastBusiness {
 
 	private ComputeRankSubService computeRankService;
 
-	private UserService userService;
 	private PlayerService playerService;
 	private RankingService rankingService;
 
 	private ComputeDataRanking computeDataRanking;
 
 	private List<PalmaresFastValue> listInitialize;
-	private List<PalmaresFastValue> list = new ArrayList<PalmaresFastValue>();
+	private List<PalmaresFastValue> list = new ArrayList<>();
 	private Long idRanking;
 	private int pointBonus = 0;
 	private PalmaresFastValueComparatorByRanking fastValueComparatorByRanking = new PalmaresFastValueComparatorByRanking();
@@ -55,8 +54,8 @@ public class PalmaresFastBusiness {
 	public PalmaresFastBusiness(Context context, INotifierMessage notificationMessage) {
 		this.context = context;
 
+		UserService userService = new UserService(context, notificationMessage);
 		computeRankService = new ComputeRankSubService(context, notificationMessage);
-		userService = new UserService(context, notificationMessage);
 		rankingService = new RankingService(context, notificationMessage);
 		playerService = new PlayerService(context, NotifierMessageLogger.getInstance());
 
@@ -79,6 +78,7 @@ public class PalmaresFastBusiness {
 	}
 
 	public void onResume() {
+		// Empty in case of...
 	}
 
 	public List<PalmaresFastValue> getList() {
@@ -106,8 +106,8 @@ Logger.logMe(TAG, "PALMARES FAST - PalmaresFastBusiness - refreshData");
 	private void refreshComputeDataRanking() {
 		Ranking rankingNC = rankingService.getNC();
 		Player playerUnknow = playerService.getUnknownPlayer();
-		List<Invite> listVictory = new ArrayList<Invite>();
-		List<Invite> listDefeat = new ArrayList<Invite>();
+		List<Invite> listVictory = new ArrayList<>();
+		List<Invite> listDefeat = new ArrayList<>();
 		for(PalmaresFastValue value : list) {
 			addInviteFromPalmares(listVictory, value.getNbVictory(), value.getRanking().getId(), rankingNC, SCORE_RESULT.VICTORY, SCORE_RESULT.WO_VICTORY, playerUnknow);
 			addInviteFromPalmares(listDefeat, value.getNbDefeat(), value.getRanking().getId(), rankingNC, SCORE_RESULT.DEFEAT, SCORE_RESULT.WO_DEFEAT, playerUnknow);
@@ -130,7 +130,7 @@ Logger.logMe(TAG, "PALMARES FAST - PalmaresFastBusiness - refreshData");
 Logger.logMe(TAG, "PALMARES FAST - PalmaresFastBusiness - initializePalmaresFastValue");
 		list.clear();
 
-		SortedSet<Ranking> setRanking = new TreeSet<Ranking>(new RankingComparatorByOrder(true));
+		SortedSet<Ranking> setRanking = new TreeSet<>(new RankingComparatorByOrder(true));
 		List<Ranking> listRanking = rankingService.getList();
 		setRanking.addAll(listRanking);
 
@@ -145,7 +145,7 @@ Logger.logMe(TAG, "PALMARES FAST - PalmaresFastBusiness - initializePalmaresFast
 
 	private void addPalmares(Ranking ranking) {
 		PalmaresFastValue ret = null;
-		if (listInitialize != null && listInitialize.size() > 0) {
+		if (listInitialize != null && !listInitialize.isEmpty()) {
 			ret = ListTool.get(listInitialize, ranking, fastValueComparatorByRanking);
 		}
 		if (ret == null) {
