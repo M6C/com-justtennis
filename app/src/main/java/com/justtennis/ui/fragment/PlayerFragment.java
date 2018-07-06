@@ -291,12 +291,12 @@ public class PlayerFragment extends Fragment implements IDrawerLayoutTypeNotifie
 				Intent intent = new Intent();
 				intent.putExtra(EXTRA_PLAYER_ID, business.getPlayer().getId());
 //				setResult(0, intent);
-//				finish();
+				finish();
 				break;
 			default:
 				if (fromQrCode) {
 					business.create(true);
-//					finish();
+					finish();
 				}
 				else {
 					if (business.sendMessageConfirmation()) {
@@ -306,10 +306,14 @@ public class PlayerFragment extends Fragment implements IDrawerLayoutTypeNotifie
 							.show();
 					} else {
 						business.create(false);
-//						finish();
+						finish();
 					}
 				}
 			}
+	}
+
+	private void finish() {
+		FragmentTool.finish(activity);
 	}
 
 	public void onClickModify(View view) {
@@ -317,7 +321,7 @@ public class PlayerFragment extends Fragment implements IDrawerLayoutTypeNotifie
 
 		business.modify();
 
-//		finish();
+		finish();
 	}
 
 	public void onClickQRCode(View view) {
@@ -354,12 +358,12 @@ public class PlayerFragment extends Fragment implements IDrawerLayoutTypeNotifie
 
 	public void onClickDemandeAddYes(View view) {
 		business.demandeAddYes();
-//		finish();
+		finish();
 	}
 
 	public void onClickDemandeAddNo(View view) {
 		business.demandeAddNo();
-//		finish();
+		finish();
 	}
 
 	public void onClickLocation(View view) {

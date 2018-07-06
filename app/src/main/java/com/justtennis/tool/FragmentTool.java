@@ -1,5 +1,6 @@
 package com.justtennis.tool;
 
+import android.app.Activity;
 import android.support.annotation.DrawableRes;
 import android.support.annotation.IdRes;
 import android.support.annotation.NonNull;
@@ -11,6 +12,8 @@ import android.view.View;
 import com.justtennis.R;
 
 import org.gdocument.gtracergps.launcher.log.Logger;
+
+import java.util.Objects;
 
 public class FragmentTool {
 
@@ -43,6 +46,10 @@ public class FragmentTool {
         if (fab != null) {
             fab.setVisibility(View.GONE);
         }
+    }
+
+    public static void finish(Activity activity) {
+        Objects.requireNonNull(activity).onBackPressed();
     }
 
     public static void onClickFab(@NonNull FragmentActivity activity, View.OnClickListener listener) {

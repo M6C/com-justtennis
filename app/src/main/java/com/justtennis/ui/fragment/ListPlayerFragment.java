@@ -33,7 +33,6 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Objects;
 
 public class ListPlayerFragment extends CommonListFragment<Player> {
 
@@ -117,9 +116,13 @@ public class ListPlayerFragment extends CommonListFragment<Player> {
 				model = (PlayerViewModel)getArguments().getSerializable(EXTRA_VIEW_MODEL);
 				onItemClick = (parent, view, position, id) -> {
 					model.select(((ListPlayerViewHolder)view.getTag()).data);
-					Objects.requireNonNull(getActivity()).onBackPressed();
+					finish();
 				};
 		}
+	}
+
+	private void finish() {
+		FragmentTool.finish(activity);
 	}
 
 	private void initializeSubscribeListPlayer() {
