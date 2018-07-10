@@ -70,6 +70,10 @@ public class LocationParser extends GenericParser {
 		return ret;
 	}
 
+	public String[] toAddress(Club club) {
+		return getAddress(club);
+	}
+
 	public String[] toAddress(Player player) {
 		String[] ret = null;
 		if (player != null) {

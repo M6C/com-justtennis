@@ -105,6 +105,10 @@ public class DBInviteDataSource extends GenericDBDataSourceByType<Invite> {
 		return countById(DBInviteHelper.COLUMN_ID_SAISON, idSaison);
 	}
 
+	public int countByIdClub(Long idClub) {
+		return countById(DBInviteHelper.COLUMN_ID_CLUB, idClub);
+	}
+
 	/**
 	 * Return Count Invite by Ranking
 	 * @return Count Invite by Ranking

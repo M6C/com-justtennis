@@ -166,4 +166,5 @@
     <string name="drawer_open">Open navigation drawer</string>
     <string name="drawer_close">Close navigation drawer</string>
     <string name="list_player_item_name_with_id">%s [id:%d|idExt:%d]</string>
+    <string name="list_club_item_name_with_id">%s [id:%d]</string>
 </resources>

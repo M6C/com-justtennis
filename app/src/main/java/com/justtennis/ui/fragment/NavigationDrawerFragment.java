@@ -297,6 +297,8 @@ public class NavigationDrawerFragment extends Fragment {
                 fragment = UserFragment.build();
             } else if (i == R.id.nav_list_club) {
                 // Create List Club Fragment
+                NotifierMessageLogger notifier = NotifierMessageLogger.getInstance();
+                fragment = ListClubFragment.build(mActivity, notifier);
             } else if (i == R.id.nav_palmares_fast) {
                 fragment = PalmaresFastFragment.build();
             }
