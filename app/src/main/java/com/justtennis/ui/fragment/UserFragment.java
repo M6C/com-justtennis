@@ -3,6 +3,7 @@ package com.justtennis.ui.fragment;
 
 import android.app.Dialog;
 import android.content.Intent;
+import android.os.Bundle;
 import android.view.View;
 import android.view.Window;
 import android.widget.AdapterView;
@@ -25,6 +26,7 @@ import com.justtennis.domain.User;
 import com.justtennis.listener.action.TextWatcherFieldEnableView;
 import com.justtennis.notifier.NotifierMessageLogger;
 import com.justtennis.parser.SmsParser;
+import com.justtennis.ui.common.CommonEnum;
 
 import java.io.Serializable;
 
@@ -44,7 +46,11 @@ public class UserFragment extends PlayerFragment {
 	private Serializable addressFromResult;
 
 	public static UserFragment build() {
-		return new UserFragment();
+		UserFragment fragment = new UserFragment();
+		Bundle args = new Bundle();
+		args.putSerializable(PlayerFragment.EXTRA_MODE, CommonEnum.PLAYER_MODE.FOR_RESULT);
+		fragment.setArguments(args);
+		return fragment;
 	}
 
 	@Override
@@ -111,14 +117,6 @@ public class UserFragment extends PlayerFragment {
 		super.initializeListener();
 		etMessage.addTextChangedListener(new TextWatcherFieldEnableView(tvMessage, View.GONE));
 		ivAjoutChamp.setOnClickListener(this::onClickMenuAjoutChamp);
-	}
-
-	@Override
-	public void onClickCreate(View view) {
-		super.onClickCreate(view);
-
-		Intent intent = new Intent(context, MainActivity.class);
-		startActivity(intent);
 	}
 
 	@Override
