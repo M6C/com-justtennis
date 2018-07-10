@@ -107,6 +107,7 @@ public class CommonListFragment <D extends GenericDBPojo<Long>> extends Fragment
             }
         });
         mRecyclerView.setAdapter(adapter);
+        mRecyclerView.setNestedScrollingEnabled(false);
         setViewVisbility();
     }
 
