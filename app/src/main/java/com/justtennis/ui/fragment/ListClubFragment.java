@@ -97,9 +97,8 @@ public class ListClubFragment extends CommonListFragment<Club> {
 	private void initializeListener() {
 		onItemClick = (parent, view, position, id) -> {
 			Club club = ((ListClubViewHolder)view.getTag()).data;
-			Intent intent = new Intent(context, LocationClubActivity.class);
-			intent.putExtra(GenericSpinnerFormActivity.EXTRA_DATA, club);
-			startActivity(intent);
+			ClubFragment fragment = ClubFragment.build(club);
+			FragmentTool.replaceFragment(activity, fragment, R.id.item_detail_container);
 		};
 	}
 
@@ -121,7 +120,8 @@ public class ListClubFragment extends CommonListFragment<Club> {
 	}
 
 	public void onClickAdd() {
-		startActivity(new Intent(context, LocationClubActivity.class));
+		ClubFragment fragment = ClubFragment.build();
+		FragmentTool.replaceFragment(activity, fragment, R.id.item_detail_container);
 	}
 
 	private void onClickDelete(View view) {

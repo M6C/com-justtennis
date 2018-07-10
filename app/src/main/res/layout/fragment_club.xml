@@ -1,0 +1,80 @@
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+
+	<data>
+		<variable name="club" type="com.justtennis.domain.Club"/>
+		<variable name="address" type="com.justtennis.domain.Address"/>
+	</data>
+
+	<LinearLayout
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:orientation="vertical"
+		android:baselineAligned="false" >
+
+		<LinearLayout
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:gravity="center_vertical"
+			android:orientation="vertical" >
+
+			<android.support.design.widget.TextInputLayout
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content">
+				<EditText
+					android:id="@+id/et_club_name"
+					android:layout_width="match_parent"
+					android:layout_height="wrap_content"
+					android:hint="@string/hint_club_name"
+					android:text="@{club.getName()}"
+					android:maxLines="1" />
+			</android.support.design.widget.TextInputLayout>
+
+
+			<android.support.design.widget.TextInputLayout
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content">
+				<EditText
+					android:id="@+id/et_address_line_1"
+					android:layout_width="match_parent"
+					android:layout_height="wrap_content"
+					android:hint="@string/hint_address_line_1"
+					android:text="@{address.getLine1()}"
+					android:maxLines="1" />
+			</android.support.design.widget.TextInputLayout>
+
+			<LinearLayout
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:layout_marginTop="2dp"
+				android:orientation="horizontal">
+
+				<android.support.design.widget.TextInputLayout
+					android:layout_width="75dp"
+					android:layout_height="wrap_content">
+					<EditText
+						android:id="@+id/et_address_postal_code"
+						android:layout_width="match_parent"
+						android:layout_height="wrap_content"
+						android:maxLength="5"
+						android:maxLines="1"
+						android:text="@{address.getPostalCode()}"
+						android:hint="@string/hint_address_postal_code" />
+				</android.support.design.widget.TextInputLayout>
+
+				<android.support.design.widget.TextInputLayout
+					android:layout_width="match_parent"
+					android:layout_height="wrap_content">
+					<EditText
+						android:id="@+id/et_address_city"
+						android:layout_width="match_parent"
+						android:layout_height="wrap_content"
+						android:maxLines="1"
+						android:text="@{address.getCity()}"
+						android:hint="@string/hint_address_city" />
+				</android.support.design.widget.TextInputLayout>
+			</LinearLayout>
+
+		</LinearLayout>
+
+	</LinearLayout>
+</layout>
