@@ -28,21 +28,20 @@ public class ListPlayerActivity extends AbsctractFragmentActivity {
 	public static final String EXTRA_MODE = "INVITE_MODE";
 	public static final String EXTRA_PLAYER_ID = "EXTRA_PLAYER_ID";
 
-	private NotifierMessageLogger notifier;
 	private DrawerManager drawerManager;
 	private List<NavigationDrawerData> navigationDrawer = new ArrayList<>();
 	private ListPlayerBusiness business;
 
 	@Override
 	protected Fragment createFragment() {
-		return ListPlayerFragment.build(this, notifier, CommonEnum.LIST_FRAGMENT_MODE.EDIT);
+		return ListPlayerFragment.build(CommonEnum.LIST_FRAGMENT_MODE.EDIT);
 	}
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
-		notifier = NotifierMessageLogger.getInstance();
+		NotifierMessageLogger notifier = NotifierMessageLogger.getInstance();
 		drawerManager = new DrawerManager(this, notifier);
 		drawerManager.setContentView(R.layout.list_player);
 

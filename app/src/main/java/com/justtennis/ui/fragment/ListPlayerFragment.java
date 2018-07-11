@@ -1,6 +1,5 @@
 package com.justtennis.ui.fragment;
 
-import android.app.Activity;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -25,7 +24,6 @@ import com.justtennis.tool.FragmentTool;
 import com.justtennis.ui.common.CommonEnum;
 import com.justtennis.ui.rxjava.RxCommonList;
 import com.justtennis.ui.rxjava.RxListPlayer;
-import com.justtennis.ui.viewmodel.PlayerViewModel;
 
 import org.gdocument.gtracergps.launcher.log.Logger;
 
@@ -37,15 +35,13 @@ import java.util.List;
 public class ListPlayerFragment extends CommonListFragment<Player> {
 
 	private static final String TAG = ListPlayerFragment.class.getSimpleName();
-	public static final String EXTRA_VIEW_MODEL = "EXTRA_VIEW_MODEL";
 
 	private static List<Player> mList = new ArrayList<>();
 
 	private ListPlayerBusiness business;
 	private AdapterView.OnItemClickListener onItemClick;
-	private PlayerViewModel model;
 
-	public static ListPlayerFragment build(Activity activity, NotifierMessageLogger notifier, CommonEnum.LIST_FRAGMENT_MODE mode) {
+	public static ListPlayerFragment build(CommonEnum.LIST_FRAGMENT_MODE mode) {
 		return initialize(mode);
 	}
 
@@ -113,8 +109,7 @@ public class ListPlayerFragment extends CommonListFragment<Player> {
 				break;
 			case FOR_RESULT_FRAGMENT:
 				assert getArguments() != null;
-				model = (PlayerViewModel)getArguments().getSerializable(EXTRA_VIEW_MODEL);
-				onItemClick = (parent, view, position, id) -> {
+				onItemClick = (AdapterView<?> parent, View view, int position, long id) -> {
 					model.select(((ListPlayerViewHolder)view.getTag()).data);
 					finish();
 				};

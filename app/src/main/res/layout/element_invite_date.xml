@@ -1,6 +1,7 @@
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
+	xmlns:tools="http://schemas.android.com/tools"
+	android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginTop="5dp"
     android:orientation="vertical"
@@ -33,15 +34,17 @@
 		    android:id="@+id/inviteDate"
 		    android:layout_width="match_parent"
 		    android:layout_height="wrap_content"
-	        android:editable="false"
+			android:focusable="false"
+			android:inputType="none"
 	        android:gravity="center_vertical|center_horizontal"
-		/>
+			tools:ignore="TextFields" />
 		<EditText
 		    android:id="@+id/inviteTime"
 		    android:layout_width="match_parent"
 		    android:layout_height="wrap_content"
 			android:layout_marginTop="5dp"
-	        android:editable="false"
+			android:focusable="false"
+			android:inputType="none"
 	        android:gravity="center_vertical|center_horizontal"
 		/>
 	</LinearLayout>

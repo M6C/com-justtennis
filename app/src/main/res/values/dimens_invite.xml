@@ -1,11 +1,11 @@
 <resources>
 
-    <dimen name="invite_text_size">16dp</dimen>
-    <dimen name="invite_field_size">22dp</dimen>
-    <dimen name="invite_field_size_small_1">18dp</dimen>
-    <dimen name="invite_field_size_small_2">16dp</dimen>
+    <dimen name="invite_text_size">16sp</dimen>
+    <dimen name="invite_field_size">22sp</dimen>
+    <dimen name="invite_field_size_small_1">18sp</dimen>
+    <dimen name="invite_field_size_small_2">16sp</dimen>
     
     <dimen name="invite_layout_field_marging_bottom">5dp</dimen>
     <dimen name="invite_layout_field_padding">5dp</dimen>
-    <dimen name="invite_field_margin_left">35dp</dimen>
+    <dimen name="invite_field_margin_left">35sp</dimen>
 </resources>

@@ -8,6 +8,7 @@ import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.text.Html;
@@ -43,6 +44,7 @@ import com.justtennis.adapter.CustomArrayAdapter;
 import com.justtennis.adapter.manager.BonusListManager;
 import com.justtennis.business.InviteBusiness;
 import com.justtennis.db.service.PlayerService;
+import com.justtennis.domain.Club;
 import com.justtennis.domain.Player;
 import com.justtennis.domain.Ranking;
 import com.justtennis.domain.Saison;
@@ -54,6 +56,7 @@ import com.justtennis.notifier.NotifierMessageLogger;
 import com.justtennis.tool.FragmentTool;
 import com.justtennis.tool.ToolPermission;
 import com.justtennis.ui.common.CommonEnum;
+import com.justtennis.ui.viewmodel.ClubViewModel;
 import com.justtennis.ui.viewmodel.PlayerViewModel;
 
 import org.gdocument.gtracergps.launcher.log.Logger;
@@ -87,7 +90,8 @@ public class InviteFragment extends Fragment {
 	private Long idPlayerFromResult = null;
 	private Serializable locationFromResult;
 	private Serializable locationClubFromResult;
-	private PlayerViewModel model;
+	private PlayerViewModel modelPlayer;
+	private ClubViewModel modelClub;
 
 	private Context context;
 	private FragmentActivity activity;
@@ -179,6 +183,8 @@ public class InviteFragment extends Fragment {
 		etScore.addTextChangedListener(new TextWatcherFieldEnableView(tvScore, View.GONE));
 
 		initializeVisibility();
+		initializeListener();
+		initializeFab();
 
 		return rootView;
 	}
@@ -313,7 +319,9 @@ public class InviteFragment extends Fragment {
 	}
 
 	public void onClickPlayer(View view) {
-		ListPlayerFragment fragment = ListPlayerFragment.build(getActivity(), notifier, CommonEnum.LIST_FRAGMENT_MODE.FOR_RESULT_FRAGMENT);
+		saveInstanceState();
+
+		ListPlayerFragment fragment = ListPlayerFragment.build(CommonEnum.LIST_FRAGMENT_MODE.FOR_RESULT_FRAGMENT);
 
 		Bundle args = fragment.getArguments();
 		if (args == null) {
@@ -321,48 +329,60 @@ public class InviteFragment extends Fragment {
 			fragment.setArguments(args);
 		}
 
-        model = new ViewModelProvider.NewInstanceFactory().create(PlayerViewModel.class);
-		model.getSelected().observe(this, (Player player) -> {
+        modelPlayer = new ViewModelProvider.NewInstanceFactory().create(PlayerViewModel.class);
+		modelPlayer.getSelected().observe(this, (Player player) -> {
 			business.getInvite().setPlayer(player);
 			initializeDataPlayer();
 		});
 
-        args.putSerializable(ListPlayerFragment.EXTRA_VIEW_MODEL, model);
+        args.putSerializable(ListPlayerFragment.EXTRA_VIEW_MODEL, modelPlayer);
         args.putSerializable(PlayerActivity.EXTRA_TYPE, business.getType());
         args.putLong(PlayerActivity.EXTRA_RANKING, business.getIdRanking());
 
-		FragmentTool.replaceFragment(getActivity(), fragment, R.id.item_detail_container);
+		FragmentTool.replaceFragment(activity, fragment, R.id.item_detail_container);
 	}
 
-	public void onClickLocation(View view) {
-		Intent intent = null;
-		switch(business.getType()) {
-			case TRAINING:
-				intent = new Intent(context, LocationClubActivity.class);
-				if (business.getInvite().getClub() != null) {
-					intent.putExtra(GenericSpinnerFormActivity.EXTRA_DATA, business.getInvite().getClub());
-				}
-				break;
-			case COMPETITION:
-				intent = new Intent(context, LocationTournamentActivity.class);
-				if (business.getInvite().getTournament() != null) {
-					intent.putExtra(GenericSpinnerFormActivity.EXTRA_DATA, business.getInvite().getTournament());
-				}
-				break;
-		}
-		intent.putExtra(LocationActivity.EXTRA_INVITE, business.getInvite());
-		startActivityForResult(intent, RESULT_LOCATION);
-	}
+//	public void onClickLocation(View view) {
+//		Intent intent;
+//		switch(business.getType()) {
+//			case COMPETITION:
+//				intent = new Intent(context, LocationTournamentActivity.class);
+//				if (business.getInvite().getTournament() != null) {
+//					intent.putExtra(GenericSpinnerFormActivity.EXTRA_DATA, business.getInvite().getTournament());
+//				}
+//				break;
+//			case TRAINING:
+//			default:
+//				intent = new Intent(context, LocationClubActivity.class);
+//				if (business.getInvite().getClub() != null) {
+//					intent.putExtra(GenericSpinnerFormActivity.EXTRA_DATA, business.getInvite().getClub());
+//				}
+//				break;
+//		}
+//		intent.putExtra(LocationActivity.EXTRA_INVITE, business.getInvite());
+//		startActivityForResult(intent, RESULT_LOCATION);
+//	}
 
 	public void onClickLocationDetail(View view) {
-		if (business.getType() == TypeManager.TYPE.COMPETITION) {
-			Intent intent = new Intent(context, LocationClubActivity.class);
-			if (business.getInvite().getClub() != null) {
-				intent.putExtra(GenericSpinnerFormActivity.EXTRA_DATA, business.getInvite().getClub());
-			}
-			intent.putExtra(LocationActivity.EXTRA_INVITE, business.getInvite());
-			startActivityForResult(intent, RESULT_LOCATION_DETAIL);
+		saveInstanceState();
+
+		ListClubFragment fragment = ListClubFragment.build(CommonEnum.LIST_FRAGMENT_MODE.FOR_RESULT_FRAGMENT);
+
+		Bundle args = fragment.getArguments();
+		if (args == null) {
+			args = new Bundle();
+			fragment.setArguments(args);
 		}
+
+		modelClub = new ViewModelProvider.NewInstanceFactory().create(ClubViewModel.class);
+		modelClub.getSelected().observe(this, (Club club) -> {
+			business.getInvite().setClub(club);
+			initializeDataPlayer();
+		});
+
+		args.putSerializable(ListPlayerFragment.EXTRA_VIEW_MODEL, modelClub);
+
+		FragmentTool.replaceFragment(activity, fragment, R.id.item_detail_container);
 	}
 
 	public void onClickLocationMap(View view) {
@@ -441,8 +461,6 @@ public class InviteFragment extends Fragment {
 			locationFromResult = null;
 		}
 		initializeData();
-		initializeListener();
-		initializeFab();
 	}
 
 	private void initializeContentPlayerView() {
@@ -697,24 +715,8 @@ public class InviteFragment extends Fragment {
 	}
 
 	private void initializeListener() {
-		edDate.setOnFocusChangeListener(new OnFocusChangeListener() {
-			private boolean first = true;
-			@Override
-			public void onFocusChange(View v, boolean hasFocus) {
-				if (first) {
-					first = false;
-					return;
-				}
-				if (hasFocus) {
-					onClickInviteDate(v);
-				}
-			}
-		});
-		edTime.setOnFocusChangeListener((v, hasFocus) -> {
-			if (hasFocus) {
-				onClickInviteTime(v);
-			}
-		});
+		edDate.setOnClickListener(this::onClickInviteDate);
+		edTime.setOnClickListener(this::onClickInviteTime);
 		etScore.setOnFocusChangeListener((v, hasFocus) -> {
 			if (hasFocus) {
 				onClickInviteScore(v);
@@ -722,16 +724,16 @@ public class InviteFragment extends Fragment {
 		});
 		tvLocationEmpty.setOnFocusChangeListener((v, hasFocus) -> {
 			if (hasFocus) {
-				onClickLocation(v);
+				onClickLocationDetail(v);
 			}
 		});
 		swType.setOnCheckedChangeListener((buttonView, isChecked) -> business.setType(isChecked ? TypeManager.TYPE.TRAINING : TypeManager.TYPE.COMPETITION));
 
 		btnDetail.setOnClickListener(this::onClickDetail);
-		llLocation.setOnClickListener(this::onClickLocation);
+//		llLocation.setOnClickListener(this::onClickLocation);
         llLocationDetail.setOnClickListener(this::onClickLocationDetail);
         ivLocationMap.setOnClickListener(this::onClickLocationMap);
-        tvLocationEmpty.setOnClickListener(this::onClickLocation);
+        tvLocationEmpty.setOnClickListener(this::onClickLocationDetail);
         etScore.setOnClickListener(this::onClickInviteScore);
         btnInviteConfirmSend.setOnClickListener(this::onClickOk);
         btnInviteConfirmYes.setOnClickListener(this::onClickInviteConfirmeYes);
@@ -761,6 +763,14 @@ public class InviteFragment extends Fragment {
 			}
 		}
 		return score;
+	}
+
+	private void saveInstanceState() {
+		Bundle bundle = getArguments();
+		if (bundle != null) {
+			bundle.clear();
+			business.onSaveInstanceState(bundle);
+		}
 	}
 
 	private static void logMe(String msg) {

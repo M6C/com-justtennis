@@ -18,6 +18,7 @@ import com.justtennis.tool.FragmentTool;
 import com.justtennis.ui.adapter.CommonListRecyclerViewAdapter;
 import com.justtennis.ui.common.CommonEnum;
 import com.justtennis.ui.manager.DrawerManager;
+import com.justtennis.ui.viewmodel.GenericPojoViewModel;
 
 import org.gdocument.gtracergps.launcher.log.Logger;
 
@@ -30,6 +31,7 @@ public class CommonListFragment <D extends GenericDBPojo<Long>> extends Fragment
     public static final String EXTRA_MODE = "INVITE_MODE";
     public static final String EXTRA_LIST = "LIST";
     protected static final String EXTRA_ITEM_LAYOUT = "ITEM_LAYOUT";
+    protected static final String EXTRA_VIEW_MODEL = "EXTRA_VIEW_MODEL";
 
     protected CommonListRecyclerViewAdapter<D> adapter;
     protected List<D> list = null;
@@ -38,6 +40,7 @@ public class CommonListFragment <D extends GenericDBPojo<Long>> extends Fragment
     private CommonEnum.LIST_FRAGMENT_MODE mode;
     protected Context context;
     protected FragmentActivity activity;
+    protected GenericPojoViewModel<D> model;
 
     public CommonListFragment() {
         // Mandatory empty constructor for the fragment manager to instantiate the
@@ -54,6 +57,12 @@ public class CommonListFragment <D extends GenericDBPojo<Long>> extends Fragment
             list = (List<D>) bundle.getSerializable(EXTRA_LIST);
             itemLayoutId = bundle.getInt(EXTRA_ITEM_LAYOUT);
             mode = (CommonEnum.LIST_FRAGMENT_MODE) bundle.getSerializable(EXTRA_MODE);
+            if (CommonEnum.LIST_FRAGMENT_MODE.FOR_RESULT_FRAGMENT.equals(mode)) {
+                model = (GenericPojoViewModel<D>) bundle.getSerializable(EXTRA_VIEW_MODEL);
+            }
+        }
+        if (mode == null) {
+            mode = CommonEnum.LIST_FRAGMENT_MODE.EDIT;
         }
         assert list != null;
         if (itemLayoutId == -1) throw new AssertionError("itemLayoutId not initialized");

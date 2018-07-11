@@ -1,8 +1,6 @@
 package com.justtennis.ui.fragment;
 
-import android.app.Activity;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -14,13 +12,12 @@ import android.widget.Toast;
 
 import com.cameleon.common.android.factory.FactoryDialog;
 import com.justtennis.R;
-import com.justtennis.activity.GenericSpinnerFormActivity;
-import com.justtennis.activity.LocationClubActivity;
 import com.justtennis.adapter.viewholder.ListClubViewHolder;
 import com.justtennis.domain.Club;
 import com.justtennis.notifier.NotifierMessageLogger;
 import com.justtennis.tool.FragmentTool;
 import com.justtennis.ui.business.ListClubBusiness;
+import com.justtennis.ui.common.CommonEnum;
 import com.justtennis.ui.rxjava.RxCommonList;
 import com.justtennis.ui.rxjava.RxListPlayer;
 
@@ -34,22 +31,26 @@ import java.util.List;
 public class ListClubFragment extends CommonListFragment<Club> {
 
 	private static final String TAG = ListClubFragment.class.getSimpleName();
-	public static final String EXTRA_VIEW_MODEL = "EXTRA_VIEW_MODEL";
 
 	private static List<Club> mList = new ArrayList<>();
 
 	private ListClubBusiness business;
 	private AdapterView.OnItemClickListener onItemClick;
 
-	public static ListClubFragment build(Activity activity, NotifierMessageLogger notifier) {
-		return initialize();
+	public static ListClubFragment build() {
+		return initialize(CommonEnum.LIST_FRAGMENT_MODE.EDIT);
+	}
+
+	public static ListClubFragment build(CommonEnum.LIST_FRAGMENT_MODE mode) {
+		return initialize(mode);
 	}
 
 	@NonNull
-	private static ListClubFragment initialize() {
+	private static ListClubFragment initialize(CommonEnum.LIST_FRAGMENT_MODE mode) {
 		ListClubFragment fragment = new ListClubFragment();
 		Bundle args = new Bundle();
 		args.putSerializable(EXTRA_LIST, (Serializable) mList);
+		args.putSerializable(EXTRA_MODE, mode);
 		args.putInt(EXTRA_ITEM_LAYOUT , R.layout.list_club_row);
 		fragment.setArguments(args);
 		return fragment;
@@ -95,11 +96,23 @@ public class ListClubFragment extends CommonListFragment<Club> {
 	}
 
 	private void initializeListener() {
-		onItemClick = (parent, view, position, id) -> {
-			Club club = ((ListClubViewHolder)view.getTag()).data;
-			ClubFragment fragment = ClubFragment.build(club);
-			FragmentTool.replaceFragment(activity, fragment, R.id.item_detail_container);
-		};
+		switch (getMode()) {
+			case FOR_RESULT_FRAGMENT:
+				assert getArguments() != null;
+				onItemClick = (parent, view, position, id) -> {
+					model.select(((ListClubViewHolder)view.getTag()).data);
+					finish();
+				};
+				break;
+			case EDIT:
+			default:
+				onItemClick = (parent, view, position, id) -> {
+					Club club = ((ListClubViewHolder)view.getTag()).data;
+					ClubFragment fragment = ClubFragment.build(club);
+					FragmentTool.replaceFragment(activity, fragment, R.id.item_detail_container);
+				};
+				break;
+		}
 	}
 
 	private void initializeSubscribeListPlayer() {
@@ -139,6 +152,10 @@ public class ListClubFragment extends CommonListFragment<Club> {
 	private void delete(Club club) {
 		business.delete(club);
 		refresh();
+	}
+
+	private void finish() {
+		FragmentTool.finish(activity);
 	}
 
 	protected void logMe(String msg, Date dateStart) {
