@@ -44,7 +44,7 @@ public class ListPlayerBusiness implements INavigationDrawerRechercheBusiness {
 	private User user;
 	private Bundle extraIn = null;
 
-	private CommonEnum.LIST_PLAYER_MODE mode;
+	private CommonEnum.LIST_FRAGMENT_MODE mode;
 
 	private String findText;
 
@@ -60,10 +60,10 @@ public class ListPlayerBusiness implements INavigationDrawerRechercheBusiness {
 	public void initialize() {
 
 		Intent intent = activity.getIntent();
-		mode = CommonEnum.LIST_PLAYER_MODE.EDIT;
+		mode = CommonEnum.LIST_FRAGMENT_MODE.EDIT;
 
 		if (intent.hasExtra(ListPlayerActivity.EXTRA_MODE)) {
-			mode = (CommonEnum.LIST_PLAYER_MODE) intent.getSerializableExtra(ListPlayerActivity.EXTRA_MODE);
+			mode = (CommonEnum.LIST_FRAGMENT_MODE) intent.getSerializableExtra(ListPlayerActivity.EXTRA_MODE);
 		}
 	}
 
@@ -90,7 +90,7 @@ public class ListPlayerBusiness implements INavigationDrawerRechercheBusiness {
 		return activity;
 	}
 
-	public CommonEnum.LIST_PLAYER_MODE getMode() {
+	public CommonEnum.LIST_FRAGMENT_MODE getMode() {
 		return mode;
 	}
 
@@ -122,7 +122,7 @@ public class ListPlayerBusiness implements INavigationDrawerRechercheBusiness {
 
 	public void refreshData() {
 		list.clear();
-		if (!CommonEnum.LIST_PLAYER_MODE.EDIT.equals(mode)) {
+		if (!CommonEnum.LIST_FRAGMENT_MODE.EDIT.equals(mode)) {
 			list.add(playerService.getUnknownPlayer());
 		}
 		list.addAll(sortPlayer(playerService.getList()));

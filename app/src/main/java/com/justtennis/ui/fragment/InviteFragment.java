@@ -313,7 +313,7 @@ public class InviteFragment extends Fragment {
 	}
 
 	public void onClickPlayer(View view) {
-		ListPlayerFragment fragment = ListPlayerFragment.build(getActivity(), notifier, CommonEnum.LIST_PLAYER_MODE.FOR_RESULT_FRAGMENT);
+		ListPlayerFragment fragment = ListPlayerFragment.build(getActivity(), notifier, CommonEnum.LIST_FRAGMENT_MODE.FOR_RESULT_FRAGMENT);
 
 		Bundle args = fragment.getArguments();
 		if (args == null) {

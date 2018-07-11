@@ -35,7 +35,7 @@ public class CommonListFragment <D extends GenericDBPojo<Long>> extends Fragment
     protected List<D> list = null;
     private RecyclerView mRecyclerView;
     private View mEmptyView;
-    private CommonEnum.LIST_PLAYER_MODE mode;
+    private CommonEnum.LIST_FRAGMENT_MODE mode;
     protected Context context;
     protected FragmentActivity activity;
 
@@ -53,7 +53,7 @@ public class CommonListFragment <D extends GenericDBPojo<Long>> extends Fragment
         if (bundle != null) {
             list = (List<D>) bundle.getSerializable(EXTRA_LIST);
             itemLayoutId = bundle.getInt(EXTRA_ITEM_LAYOUT);
-            mode = (CommonEnum.LIST_PLAYER_MODE) bundle.getSerializable(EXTRA_MODE);
+            mode = (CommonEnum.LIST_FRAGMENT_MODE) bundle.getSerializable(EXTRA_MODE);
         }
         assert list != null;
         if (itemLayoutId == -1) throw new AssertionError("itemLayoutId not initialized");
@@ -134,7 +134,7 @@ public class CommonListFragment <D extends GenericDBPojo<Long>> extends Fragment
         new DrawerManager().initializeDrawerToogle(getActivity());
     }
 
-    public CommonEnum.LIST_PLAYER_MODE getMode() {
+    public CommonEnum.LIST_FRAGMENT_MODE getMode() {
         return mode;
     }
 

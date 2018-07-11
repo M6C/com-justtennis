@@ -243,7 +243,7 @@ public class InviteDemandeActivity extends GenericActivity {
 	public void onClickPlayer(View view) {
 		if (business.isUnknownPlayer()) {
 			Intent intent = new Intent(this, ListPlayerActivity.class);
-			intent.putExtra(ListPlayerActivity.EXTRA_MODE, CommonEnum.LIST_PLAYER_MODE.FOR_RESULT);
+			intent.putExtra(ListPlayerActivity.EXTRA_MODE, CommonEnum.LIST_FRAGMENT_MODE.FOR_RESULT);
 //			Intent intent = new Intent(this, PlayerActivity.class);
 //			intent.putExtra(PlayerActivity.EXTRA_MODE, PlayerActivity.INVITE_MODE.FOR_RESULT);
 			startActivityForResult(intent, RESULT_PLAYER);

@@ -7,7 +7,7 @@ public class CommonEnum {
         INVITE_CONFIRM
     }
 
-    public enum LIST_PLAYER_MODE {
+    public enum LIST_FRAGMENT_MODE {
         EDIT,
         FOR_RESULT,
         FOR_RESULT_FRAGMENT, INVITE

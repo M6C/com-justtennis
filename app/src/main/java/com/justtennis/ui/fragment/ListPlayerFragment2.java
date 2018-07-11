@@ -72,7 +72,7 @@ public class ListPlayerFragment2 extends Fragment {
     public static ListPlayerFragment2 buildForEdit() {
 		ListPlayerFragment2 fragment = new ListPlayerFragment2();
 		Bundle args = new Bundle();
-		args.putSerializable(EXTRA_MODE, CommonEnum.LIST_PLAYER_MODE.EDIT);
+		args.putSerializable(EXTRA_MODE, CommonEnum.LIST_FRAGMENT_MODE.EDIT);
 		fragment.setArguments(args);
 		return fragment;
 	}
@@ -213,11 +213,11 @@ public class ListPlayerFragment2 extends Fragment {
 		if (business.getExtraIn() != null) {
 			intent.putExtras(business.getExtraIn());
 		}
-		if (business.getMode() == CommonEnum.LIST_PLAYER_MODE.FOR_RESULT) {
-			intent.putExtra(PlayerActivity.EXTRA_MODE, CommonEnum.LIST_PLAYER_MODE.FOR_RESULT);
+		if (business.getMode() == CommonEnum.LIST_FRAGMENT_MODE.FOR_RESULT) {
+			intent.putExtra(PlayerActivity.EXTRA_MODE, CommonEnum.LIST_FRAGMENT_MODE.FOR_RESULT);
 			startActivityForResult(intent, RESULT_PLAYER);
-		} else if (business.getMode() == CommonEnum.LIST_PLAYER_MODE.INVITE) {
-			intent.putExtra(PlayerActivity.EXTRA_MODE, CommonEnum.LIST_PLAYER_MODE.FOR_RESULT);
+		} else if (business.getMode() == CommonEnum.LIST_FRAGMENT_MODE.INVITE) {
+			intent.putExtra(PlayerActivity.EXTRA_MODE, CommonEnum.LIST_FRAGMENT_MODE.FOR_RESULT);
 			startActivityForResult(intent, RESULT_PLAYER_FOR_INFO);
 		} else {
 			intent.removeExtra(EXTRA_MODE);
@@ -274,7 +274,7 @@ public class ListPlayerFragment2 extends Fragment {
 		}
 	}
 
-	public CommonEnum.LIST_PLAYER_MODE getMode() {
+	public CommonEnum.LIST_FRAGMENT_MODE getMode() {
 		return business.getMode();
 	}
 	

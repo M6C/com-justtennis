@@ -285,13 +285,13 @@ public class MainActivity extends GenericActivity implements INotifierMessage, I
 
 	public void onClickListPlayer(View view) {
 		Intent intent = new Intent(getApplicationContext(), ListPlayerActivity.class);
-		intent.putExtra(ListPlayerActivity.EXTRA_MODE, CommonEnum.LIST_PLAYER_MODE.EDIT);
+		intent.putExtra(ListPlayerActivity.EXTRA_MODE, CommonEnum.LIST_FRAGMENT_MODE.EDIT);
 		startActivity(intent);
 	}
 
 	public void onClickListPlayerInvite(View view) {
 		Intent intent = new Intent(getApplicationContext(), ListPlayerActivity.class);
-		intent.putExtra(ListPlayerActivity.EXTRA_MODE, CommonEnum.LIST_PLAYER_MODE.INVITE);
+		intent.putExtra(ListPlayerActivity.EXTRA_MODE, CommonEnum.LIST_FRAGMENT_MODE.INVITE);
 //		intent = new Intent(getApplicationContext(), MatchActivity.class);
 		startActivity(intent);
 	}

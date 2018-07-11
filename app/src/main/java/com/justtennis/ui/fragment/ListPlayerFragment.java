@@ -45,12 +45,12 @@ public class ListPlayerFragment extends CommonListFragment<Player> {
 	private AdapterView.OnItemClickListener onItemClick;
 	private PlayerViewModel model;
 
-	public static ListPlayerFragment build(Activity activity, NotifierMessageLogger notifier, CommonEnum.LIST_PLAYER_MODE mode) {
+	public static ListPlayerFragment build(Activity activity, NotifierMessageLogger notifier, CommonEnum.LIST_FRAGMENT_MODE mode) {
 		return initialize(mode);
 	}
 
 	@NonNull
-	private static ListPlayerFragment initialize(CommonEnum.LIST_PLAYER_MODE mode) {
+	private static ListPlayerFragment initialize(CommonEnum.LIST_FRAGMENT_MODE mode) {
 		ListPlayerFragment fragment = new ListPlayerFragment();
 		Bundle args = new Bundle();
 		args.putSerializable(EXTRA_MODE, mode);
@@ -147,9 +147,9 @@ public class ListPlayerFragment extends CommonListFragment<Player> {
 		if (business.getExtraIn() != null) {
 			args.putAll(business.getExtraIn());
 		}
-		if (business.getMode() == CommonEnum.LIST_PLAYER_MODE.FOR_RESULT) {
+		if (business.getMode() == CommonEnum.LIST_FRAGMENT_MODE.FOR_RESULT) {
 			args.putSerializable(PlayerFragment.EXTRA_MODE, CommonEnum.PLAYER_MODE.FOR_RESULT);
-		} else if (business.getMode() == CommonEnum.LIST_PLAYER_MODE.INVITE) {
+		} else if (business.getMode() == CommonEnum.LIST_FRAGMENT_MODE.INVITE) {
 			args.putSerializable(PlayerFragment.EXTRA_MODE, CommonEnum.PLAYER_MODE.FOR_RESULT);
 		} else {
 			args.remove(EXTRA_MODE);

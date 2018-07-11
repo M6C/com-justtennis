@@ -249,7 +249,7 @@ public class ItemDetailActivity extends AppCompatActivity implements NavigationD
     }
 
     private void onClickListPlayer() {
-        ListPlayerFragment fragment = ListPlayerFragment.build(this, notifier, CommonEnum.LIST_PLAYER_MODE.EDIT);
+        ListPlayerFragment fragment = ListPlayerFragment.build(this, notifier, CommonEnum.LIST_FRAGMENT_MODE.EDIT);
         FragmentTool.replaceFragment(this, fragment, R.id.item_detail_container);
     }
 
