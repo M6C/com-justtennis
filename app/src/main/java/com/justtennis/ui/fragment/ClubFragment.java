@@ -1,4 +1,3 @@
-
 package com.justtennis.ui.fragment;
 
 import android.content.Context;

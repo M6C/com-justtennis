@@ -3,11 +3,11 @@ package com.justtennis.listener.action;
 import android.graphics.Typeface;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.widget.EditText;
 
 public class TextWatcherFieldScoreSetBold implements TextWatcher {
 
-	@SuppressWarnings("unused")
 	private static final String TAG = TextWatcherFieldScoreSetBold.class.getSimpleName();
 	private EditText etScore2;
 	private EditText etScore1;
@@ -19,10 +19,12 @@ public class TextWatcherFieldScoreSetBold implements TextWatcher {
 
 	@Override
 	public void afterTextChanged(Editable editor) {
+		/* Empty because nothing to do */
 	}
 
 	@Override
 	public void beforeTextChanged(CharSequence arg0, int arg1, int arg2, int arg3) {
+		/* Empty because nothing to do */
 	}
 
 	@Override
@@ -32,19 +34,19 @@ public class TextWatcherFieldScoreSetBold implements TextWatcher {
 			try {
 				int score1 = Integer.parseInt(txt.toString());
 				int score2 = Integer.parseInt(value2);
-				
+
 				if (score1 == score2) {
 					etScore1.setTypeface(null, Typeface.NORMAL);
 					etScore2.setTypeface(null, Typeface.NORMAL);
 				} else if (score1 > score2) {
 					etScore1.setTypeface(null, Typeface.BOLD);
 					etScore2.setTypeface(null, Typeface.NORMAL);
-				} else if (score1 < score2) {
+				} else {
 					etScore1.setTypeface(null, Typeface.NORMAL);
 					etScore2.setTypeface(null, Typeface.BOLD);
 				}
 			} catch (NumberFormatException ex) {
-				ex.printStackTrace();
+				Log.e(TAG, "onTextChanged", ex);
 			}
 		}
 	}

@@ -8,14 +8,12 @@ import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.text.Html;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.View.OnFocusChangeListener;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.Button;
@@ -33,11 +31,8 @@ import com.cameleon.common.android.factory.FactoryDialog;
 import com.cameleon.common.tool.StringTool;
 import com.justtennis.ApplicationConfig;
 import com.justtennis.R;
-import com.justtennis.activity.GenericSpinnerFormActivity;
 import com.justtennis.activity.ListPlayerActivity;
 import com.justtennis.activity.LocationActivity;
-import com.justtennis.activity.LocationClubActivity;
-import com.justtennis.activity.LocationTournamentActivity;
 import com.justtennis.activity.PlayerActivity;
 import com.justtennis.activity.ScoreActivity;
 import com.justtennis.adapter.CustomArrayAdapter;
@@ -58,6 +53,7 @@ import com.justtennis.tool.ToolPermission;
 import com.justtennis.ui.common.CommonEnum;
 import com.justtennis.ui.viewmodel.ClubViewModel;
 import com.justtennis.ui.viewmodel.PlayerViewModel;
+import com.justtennis.ui.viewmodel.ScoreViewModel;
 
 import org.gdocument.gtracergps.launcher.log.Logger;
 
@@ -313,9 +309,25 @@ public class InviteFragment extends Fragment {
 	}
 
 	public void onClickInviteScore(View view) {
-		Intent intent = new Intent(context,  ScoreActivity.class);
-		intent.putExtra(ScoreActivity.EXTRA_SCORE, business.getScores());
-		startActivityForResult(intent, RESULT_SCORE);
+		ScoreFragment fragment = ScoreFragment.build(business.getScores());
+
+		Bundle args = fragment.getArguments();
+		if (args == null) {
+			args = new Bundle();
+			fragment.setArguments(args);
+		}
+
+		ScoreViewModel model = new ViewModelProvider.NewInstanceFactory().create(ScoreViewModel.class);
+		model.getSelected().observe(this, (score) -> {
+			business.setScores(score);
+			List<ScoreSet> listScoreSet = business.computeScoreSet(score);
+			business.getInvite().setListScoreSet(listScoreSet);
+			business.getInvite().setScoreResult(business.computeScoreResult(listScoreSet));
+			initializeDataScore();
+		});
+		args.putSerializable(ScoreFragment.EXTRA_VIEW_MODEL, model);
+
+		FragmentTool.replaceFragment(activity, fragment);
 	}
 
 	public void onClickPlayer(View view) {

@@ -1,0 +1,19 @@
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+	<LinearLayout
+		android:id="@+id/layout_main"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:orientation="vertical"
+	>
+		<LinearLayout
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:layout_marginBottom="5dp"
+			android:orientation="vertical"
+			android:gravity="top"
+			android:padding="2dp"
+		>
+			<include layout="@layout/element_score" />
+		</LinearLayout>
+	</LinearLayout>
+</layout>

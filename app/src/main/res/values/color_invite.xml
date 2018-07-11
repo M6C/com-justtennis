@@ -4,6 +4,8 @@
 
     <color name="invite_score_title_background_color">@color/bleu_transparent_4</color>
     <color name="invite_score_field_background_color_1">@color/bleu_transparent_3</color>
-    <color name="invite_score_field_background_color_2">@color/blanc_transparent_5</color>
+    <color name="invite_score_field_background_color_2">@color/gris_9_transparent_5</color>
+    <color name="invite_score_field_text_color_1">@color/white</color>
+    <color name="invite_score_field_text_color_2">@color/gris_1</color>
 
 </resources>
