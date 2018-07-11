@@ -10,10 +10,10 @@ import android.support.v4.app.FragmentActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.EditText;
 
 import com.justtennis.R;
 import com.justtennis.databinding.FragmentClubBinding;
+import com.justtennis.domain.Address;
 import com.justtennis.domain.Club;
 import com.justtennis.notifier.NotifierMessageLogger;
 import com.justtennis.tool.FragmentTool;
@@ -23,11 +23,7 @@ import com.justtennis.ui.business.ClubBusiness;
 public class ClubFragment extends Fragment {
 
 	private ClubBusiness business;
-
-	private EditText tvClubName;
-	private EditText tvAddressLine1;
-	private EditText tvAddressPostalCode;
-	private EditText tvAddressCity;
+	private FragmentClubBinding binding;
 	private FragmentActivity activity;
 
 	public static ClubFragment build() {
@@ -60,12 +56,11 @@ public class ClubFragment extends Fragment {
 
 	@Override
 	public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-		FragmentClubBinding binding = DataBindingUtil.inflate(inflater, R.layout.fragment_club, container, false);
+		binding = DataBindingUtil.inflate(inflater, R.layout.fragment_club, container, false);
 
 		binding.setClub(business.getClub());
 		binding.setAddress(business.getAddress());
 
-		initializeViewById(binding.getRoot());
 		return binding.getRoot();
 	}
 
@@ -81,14 +76,15 @@ public class ClubFragment extends Fragment {
 	}
 
 	private void onClickValidate() {
+		Club club = business.getClub();
+		club.setName(binding.etClubName.getText().toString());
+
+		Address address = business.getAddress();
+		address.setCity(binding.etAddressCity.getText().toString());
+		address.setLine1(binding.etAddressLine1.getText().toString());
+		address.setPostalCode(binding.etAddressPostalCode.getText().toString());
+
 		business.validate();
 		FragmentTool.finish(activity);
-	}
-
-	protected void initializeViewById(View rootView) {
-		tvClubName = rootView.findViewById(R.id.et_club_name);
-		tvAddressLine1 = rootView.findViewById(R.id.et_address_line_1);
-		tvAddressPostalCode = rootView.findViewById(R.id.et_address_postal_code);
-		tvAddressCity = rootView.findViewById(R.id.et_address_city);
 	}
 }
