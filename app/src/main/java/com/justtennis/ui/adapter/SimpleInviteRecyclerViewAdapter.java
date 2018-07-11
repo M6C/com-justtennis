@@ -44,14 +44,14 @@ public class SimpleInviteRecyclerViewAdapter extends RecyclerView.Adapter<Invite
                 arguments.putSerializable(InviteActivity.EXTRA_MODE, CommonEnum.INVITE_MODE.INVITE_DETAIL);
                 InviteFragment fragment = new InviteFragment();
                 fragment.setArguments(arguments);
-                FragmentTool.replaceFragment(mParentActivity, fragment, R.id.item_detail_container);
+                FragmentTool.replaceFragment(mParentActivity, fragment);
             } else {
                 InviteFragment fragment = new InviteFragment();
                 Bundle args = new Bundle();
                 args.putSerializable(InviteActivity.EXTRA_INVITE, (Serializable)item.invite);
                 args.putSerializable(InviteActivity.EXTRA_MODE, CommonEnum.INVITE_MODE.INVITE_DETAIL);
                 fragment.setArguments(args);
-                FragmentTool.replaceFragment(mParentActivity, fragment, R.id.item_detail_container);
+                FragmentTool.replaceFragment(mParentActivity, fragment);
             }
         }
     };

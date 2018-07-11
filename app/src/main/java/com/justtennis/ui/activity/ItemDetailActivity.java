@@ -244,18 +244,18 @@ public class ItemDetailActivity extends AppCompatActivity implements NavigationD
 //        startActivity(intent);
         if (mBottomNavigation.getSelectedItemId() != R.id.navigation_invite) {
             ListInviteFragment fragment = ListInviteFragment.build();
-            FragmentTool.replaceFragment(this, fragment, R.id.item_detail_container);
+            FragmentTool.replaceFragment(this, fragment);
         }
     }
 
     private void onClickListPlayer() {
         ListPlayerFragment fragment = ListPlayerFragment.build(CommonEnum.LIST_FRAGMENT_MODE.EDIT);
-        FragmentTool.replaceFragment(this, fragment, R.id.item_detail_container);
+        FragmentTool.replaceFragment(this, fragment);
     }
 
     private void onClickListStatistic() {
         PieChartFragment fragment = PieChartFragment.build();
-        FragmentTool.replaceFragment(this, fragment, R.id.item_detail_container);
+        FragmentTool.replaceFragment(this, fragment);
     }
 
     public void onClickFastPalmares(View view) {

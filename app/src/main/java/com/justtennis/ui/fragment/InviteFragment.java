@@ -339,7 +339,7 @@ public class InviteFragment extends Fragment {
         args.putSerializable(PlayerActivity.EXTRA_TYPE, business.getType());
         args.putLong(PlayerActivity.EXTRA_RANKING, business.getIdRanking());
 
-		FragmentTool.replaceFragment(activity, fragment, R.id.item_detail_container);
+		FragmentTool.replaceFragment(activity, fragment);
 	}
 
 //	public void onClickLocation(View view) {
@@ -382,7 +382,7 @@ public class InviteFragment extends Fragment {
 
 		args.putSerializable(ListPlayerFragment.EXTRA_VIEW_MODEL, modelClub);
 
-		FragmentTool.replaceFragment(activity, fragment, R.id.item_detail_container);
+		FragmentTool.replaceFragment(activity, fragment);
 	}
 
 	public void onClickLocationMap(View view) {

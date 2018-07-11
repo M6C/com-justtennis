@@ -302,7 +302,7 @@ public class NavigationDrawerFragment extends Fragment {
                 fragment = PalmaresFastFragment.build();
             }
             if (fragment != null) {
-                FragmentTool.replaceFragment(mActivity, fragment, R.id.item_detail_container);
+                FragmentTool.replaceFragment(mActivity, fragment);
                 closeDrawer();
             }
             return false;

@@ -151,7 +151,7 @@ public class ListPlayerFragment extends CommonListFragment<Player> {
 		}
 
 		PlayerFragment fragment = PlayerFragment.build(args);
-		FragmentTool.replaceFragment((FragmentActivity) context, fragment, R.id.item_detail_container);
+		FragmentTool.replaceFragment((FragmentActivity) context, fragment);
 	}
 
 	private void onClickDelete(View view) {

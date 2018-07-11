@@ -43,7 +43,7 @@ public class SimpleItemRecyclerViewAdapter extends RecyclerView.Adapter<SimpleIt
                 arguments.putString(ARG_ITEM_ID, item.id);
                 InviteFragment fragment = new InviteFragment();
                 fragment.setArguments(arguments);
-                FragmentTool.replaceFragment(mParentActivity, fragment, R.id.item_detail_container);
+                FragmentTool.replaceFragment(mParentActivity, fragment);
             } else {
                 Context context = view.getContext();
                 Intent intent = new Intent(context, ItemDetailActivity.class);

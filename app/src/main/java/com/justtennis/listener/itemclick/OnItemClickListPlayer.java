@@ -22,6 +22,6 @@ public class OnItemClickListPlayer implements OnItemClickListener {
     public void onItemClick(AdapterView<?> parent, View view, int position, long idDumb) {
 		long id = (long)((CommonListViewHolder)view.getTag()).data.getId();
 		PlayerFragment fragment = PlayerFragment.build(id);
-		FragmentTool.replaceFragment((FragmentActivity) context, fragment, R.id.item_detail_container);
+		FragmentTool.replaceFragment((FragmentActivity) context, fragment);
     }
 }

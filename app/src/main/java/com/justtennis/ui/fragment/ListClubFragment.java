@@ -109,7 +109,7 @@ public class ListClubFragment extends CommonListFragment<Club> {
 				onItemClick = (parent, view, position, id) -> {
 					Club club = ((ListClubViewHolder)view.getTag()).data;
 					ClubFragment fragment = ClubFragment.build(club);
-					FragmentTool.replaceFragment(activity, fragment, R.id.item_detail_container);
+					FragmentTool.replaceFragment(activity, fragment);
 				};
 				break;
 		}
@@ -134,7 +134,7 @@ public class ListClubFragment extends CommonListFragment<Club> {
 
 	public void onClickAdd() {
 		ClubFragment fragment = ClubFragment.build();
-		FragmentTool.replaceFragment(activity, fragment, R.id.item_detail_container);
+		FragmentTool.replaceFragment(activity, fragment);
 	}
 
 	private void onClickDelete(View view) {

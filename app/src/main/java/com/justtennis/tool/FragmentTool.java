@@ -32,6 +32,10 @@ public class FragmentTool {
         }
     }
 
+    public static void replaceFragment(@NonNull FragmentActivity activity, @NonNull Fragment fragment) {
+        replaceFragment(activity, fragment, R.id.item_detail_container);
+    }
+
     public static void replaceFragment(@NonNull FragmentActivity activity, @NonNull Fragment fragment, @IdRes int idRes) {
         String tag = fragment.getClass().getName();
         logMe("replaceFragment tag:" + tag);
