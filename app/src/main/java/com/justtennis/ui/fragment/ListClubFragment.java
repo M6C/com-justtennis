@@ -129,11 +129,16 @@ public class ListClubFragment extends CommonListFragment<Club> {
 		if (business.getInviteCount(club) > 0) {
 			Toast.makeText(getActivity(), R.string.dialog_club_error_delete_have_invite, Toast.LENGTH_LONG).show();
 		} else {
-			DialogInterface.OnClickListener listener = (dialog, which) -> business.delete(club);
+			DialogInterface.OnClickListener listener = (dialog, which) -> delete(club);
 			FactoryDialog.getInstance()
 					.buildOkCancelDialog(getContext(), listener, R.string.dialog_player_delete_title, R.string.dialog_player_delete_message)
 					.show();
 		}
+	}
+
+	private void delete(Club club) {
+		business.delete(club);
+		refresh();
 	}
 
 	protected void logMe(String msg, Date dateStart) {
