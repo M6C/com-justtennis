@@ -93,8 +93,6 @@ public class InviteFragment extends Fragment {
 	private FragmentActivity activity;
 	private View rootView;
 
-	private LinearLayout llInviteDemande;
-	private LinearLayout llInviteConfirm;
 	private TextView tvFirstname;
 	private TextView tvLastname;
 	private TextView edDate;
@@ -107,9 +105,6 @@ public class InviteFragment extends Fragment {
 	private TextView tvLocation;
 	private TextView tvLocationEmpty;
 	private Button btnDetail;
-    private Button btnInviteConfirmSend;
-    private Button btnInviteConfirmYes;
-    private Button btnInviteConfirmNo;
 
 	private LinearLayout llLocation;
 	private LinearLayout llLocationDetail;
@@ -152,8 +147,6 @@ public class InviteFragment extends Fragment {
 		initializeContentPlayerView();
 
 		btnDetail = rootView.findViewById(R.id.btn_detail);
-		llInviteDemande = rootView.findViewById(R.id.ll_invite_demande);
-		llInviteConfirm = rootView.findViewById(R.id.ll_invite_confirm);
 		edDate = rootView.findViewById(R.id.inviteDate);
 		edTime = rootView.findViewById(R.id.inviteTime);
 		swType = rootView.findViewById(R.id.sw_type);
@@ -170,9 +163,6 @@ public class InviteFragment extends Fragment {
 		etScore = rootView.findViewById(R.id.et_score);
 		llDetail = rootView.findViewById(R.id.ll_detail);
 		llBonusPoint = rootView.findViewById(R.id.ll_bonus_point);
-        btnInviteConfirmSend = rootView.findViewById(R.id.btn_invite_confirm_send);
-        btnInviteConfirmYes = rootView.findViewById(R.id.btn_invite_confirm_no);
-        btnInviteConfirmNo = rootView.findViewById(R.id.btn_invite_confirm_yes);
 
 		bonusListManager = BonusListManager.getInstance(context, notifier);
 
@@ -516,15 +506,12 @@ public class InviteFragment extends Fragment {
 
 		switch(mode) {
 			case INVITE_CONFIRM:
-				llInviteDemande.setVisibility(View.GONE);
-				llInviteConfirm.setVisibility(View.VISIBLE);
 				edDate.setEnabled(false);
 				edTime.setEnabled(false);
 				break;
 			case INVITE_SIMPLE:
 			case INVITE_DETAIL:
 			default:
-				llInviteDemande.setVisibility(View.VISIBLE);
 				edDate.setEnabled(true);
 				edTime.setEnabled(true);
 				break;
@@ -696,13 +683,13 @@ public class InviteFragment extends Fragment {
 	private void initializeDataLocation() {
 		Log.d(TAG, "initializeDataLocation");
 		String[] location = business.getLocationLine();
-		if (business.getType() == TypeManager.TYPE.TRAINING) {
+//		if (business.getType() == TypeManager.TYPE.TRAINING) {
 			tvLocation.setText(getString(R.string.txt_club));
 			tvLocationEmpty.setText(getString(R.string.txt_club));
-		} else {
-			tvLocation.setText(getString(R.string.txt_tournament));
-			tvLocationEmpty.setText(getString(R.string.txt_tournament));
-		}
+//		} else {
+//			tvLocation.setText(getString(R.string.txt_tournament));
+//			tvLocationEmpty.setText(getString(R.string.txt_tournament));
+//		}
 		tvLocationEmpty.setTextColor(tvLocationEmpty.getCurrentHintTextColor());
 
 		if (location != null) {
@@ -747,9 +734,6 @@ public class InviteFragment extends Fragment {
         ivLocationMap.setOnClickListener(this::onClickLocationMap);
         tvLocationEmpty.setOnClickListener(this::onClickLocationDetail);
         etScore.setOnClickListener(this::onClickInviteScore);
-        btnInviteConfirmSend.setOnClickListener(this::onClickOk);
-        btnInviteConfirmYes.setOnClickListener(this::onClickInviteConfirmeYes);
-        btnInviteConfirmNo.setOnClickListener(this::onClickInviteConfirmeNo);
         llPhoto.setOnClickListener(this::onClickPlayer);
 	}
 

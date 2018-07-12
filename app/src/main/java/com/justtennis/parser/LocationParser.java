@@ -45,12 +45,12 @@ public class LocationParser extends GenericParser {
 					ret = getAddress(new Club(invite.getClub().getId()));
 				}
 			} else {
-				if (invite.getTournament() != null) {
-					Tournament tournament = tournamentService.find(invite.getTournament().getId());
-					if (tournament != null) {
-						ret = getAddress(tournament);
-					}
-				}
+//				if (invite.getTournament() != null) {
+//					Tournament tournament = tournamentService.find(invite.getTournament().getId());
+//					if (tournament != null) {
+//						ret = getAddress(tournament);
+//					}
+//				}
 				if (invite.getClub() != null && invite.getClub().getId() != null) {
 					String[] clubAddress = getAddress(new Club(invite.getClub().getId()));
 					if (clubAddress != null) {
@@ -140,18 +140,18 @@ public class LocationParser extends GenericParser {
 
 	private String[] getLocationLine(Invite invite) {
 		if (invite != null) {
-			if (invite.getType() == TypeManager.TYPE.TRAINING) {
+//			if (invite.getType() == TypeManager.TYPE.TRAINING) {
 				if (invite.getClub() != null && invite.getClub().getId() != null) {
 					return getAddress(new Club(invite.getClub().getId()));
 				}
-			} else {
-				if (invite.getTournament() != null) {
-					Tournament tournament = tournamentService.find(invite.getTournament().getId());
-					if (tournament != null) {
-						return getAddress(tournament);
-					}
-				}
-			}
+//			} else {
+//				if (invite.getTournament() != null) {
+//					Tournament tournament = tournamentService.find(invite.getTournament().getId());
+//					if (tournament != null) {
+//						return getAddress(tournament);
+//					}
+//				}
+//			}
 		}
 		return null;
 	}
