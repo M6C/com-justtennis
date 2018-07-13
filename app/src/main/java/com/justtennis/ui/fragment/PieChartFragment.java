@@ -25,6 +25,7 @@ import com.justtennis.business.PieChartBusiness.CHART_DATA_TYPE;
 import com.justtennis.business.PieChartBusiness.CHART_SCORE_RESULT;
 import com.justtennis.notifier.NotifierMessageLogger;
 import com.justtennis.tool.FragmentTool;
+import com.justtennis.ui.rxjava.RxFragment;
 
 import org.achartengine.ChartFactory;
 import org.achartengine.GraphicalView;
@@ -37,6 +38,9 @@ import java.util.HashMap;
 
 //http://code.google.com/p/achartengine/source/browse/trunk/achartengine/
 public class PieChartFragment extends Fragment {
+
+	private static final String TAG = PieChartFragment.class.getSimpleName();
+
 	public static final String EXTRA_DATA = "EXTRA_DATA";
 
 	/** Colors to be used for the pie slices. */
@@ -112,6 +116,7 @@ public class PieChartFragment extends Fragment {
 	public void onResume() {
 		super.onResume();
 		initializeFab();
+		RxFragment.publish(RxFragment.SUBJECT_ON_SHOW, TAG);
 	}
 
 	private void initializeFab() {

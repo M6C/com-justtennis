@@ -51,6 +51,7 @@ import com.justtennis.notifier.NotifierMessageLogger;
 import com.justtennis.tool.FragmentTool;
 import com.justtennis.tool.ToolPermission;
 import com.justtennis.ui.common.CommonEnum;
+import com.justtennis.ui.rxjava.RxFragment;
 import com.justtennis.ui.viewmodel.ClubViewModel;
 import com.justtennis.ui.viewmodel.PlayerViewModel;
 import com.justtennis.ui.viewmodel.ScoreViewModel;
@@ -463,6 +464,7 @@ public class InviteFragment extends Fragment {
 			locationFromResult = null;
 		}
 		initializeData();
+		RxFragment.publish(RxFragment.SUBJECT_ON_SHOW, TAG);
 	}
 
 	private void initializeContentPlayerView() {

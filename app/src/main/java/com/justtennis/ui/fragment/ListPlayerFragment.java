@@ -23,6 +23,7 @@ import com.justtennis.notifier.NotifierMessageLogger;
 import com.justtennis.tool.FragmentTool;
 import com.justtennis.ui.common.CommonEnum;
 import com.justtennis.ui.rxjava.RxCommonList;
+import com.justtennis.ui.rxjava.RxFragment;
 import com.justtennis.ui.rxjava.RxListPlayer;
 
 import org.gdocument.gtracergps.launcher.log.Logger;
@@ -80,6 +81,7 @@ public class ListPlayerFragment extends CommonListFragment<Player> {
 		refresh();
 		initializeSubscribeListPlayer();
 		initializeSubscribeCommonList();
+		RxFragment.publish(RxFragment.SUBJECT_ON_SHOW, TAG);
 	}
 
 	@Override

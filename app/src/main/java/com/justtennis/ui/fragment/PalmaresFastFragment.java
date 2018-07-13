@@ -23,6 +23,7 @@ import com.justtennis.adapter.manager.RankingListManager.IRankingListListener;
 import com.justtennis.business.PalmaresFastBusiness;
 import com.justtennis.notifier.NotifierMessageLogger;
 import com.justtennis.tool.FragmentTool;
+import com.justtennis.ui.rxjava.RxFragment;
 
 import org.gdocument.gtracergps.launcher.log.Logger;
 
@@ -105,6 +106,7 @@ public class PalmaresFastFragment extends Fragment {
 	public void onResume() {
 		super.onResume();
 		initializeFab();
+		RxFragment.publish(RxFragment.SUBJECT_ON_SHOW, TAG);
 	}
 
 	public void refreshData() {

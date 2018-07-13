@@ -10,6 +10,7 @@ import android.support.v4.app.FragmentActivity;
 import android.view.View;
 
 import com.justtennis.R;
+import com.justtennis.ui.rxjava.RxFragment;
 
 import org.gdocument.gtracergps.launcher.log.Logger;
 

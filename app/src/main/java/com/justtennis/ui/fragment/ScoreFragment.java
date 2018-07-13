@@ -18,6 +18,7 @@ import com.justtennis.listener.action.TextWatcherFieldScoreSetBold;
 import com.justtennis.notifier.NotifierMessageLogger;
 import com.justtennis.tool.FragmentTool;
 import com.justtennis.ui.business.ScoreBusiness;
+import com.justtennis.ui.rxjava.RxFragment;
 import com.justtennis.ui.viewmodel.ScoreViewModel;
 
 
@@ -86,7 +87,13 @@ public class ScoreFragment extends Fragment {
         return rootView;
 	}
 
-	private void initializeFab() {
+    @Override
+    public void onResume() {
+        super.onResume();
+        RxFragment.publish(RxFragment.SUBJECT_ON_SHOW, TAG);
+    }
+
+    private void initializeFab() {
 		FragmentTool.initializeFabDrawable(activity, FragmentTool.INIT_FAB_IMAGE.VALIDATE);
 		FragmentTool.onClickFab(activity, v -> this.onClickValidate());
 	}

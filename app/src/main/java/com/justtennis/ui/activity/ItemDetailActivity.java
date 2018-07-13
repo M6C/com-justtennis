@@ -37,6 +37,7 @@ import com.justtennis.ui.fragment.ListInviteFragment;
 import com.justtennis.ui.fragment.ListPlayerFragment;
 import com.justtennis.ui.fragment.NavigationDrawerFragment;
 import com.justtennis.ui.fragment.PieChartFragment;
+import com.justtennis.ui.rxjava.RxFragment;
 import com.justtennis.ui.rxjava.RxNavigationDrawer;
 
 import org.gdocument.gtracergps.launcher.log.Logger;
@@ -107,6 +108,7 @@ public class ItemDetailActivity extends AppCompatActivity implements NavigationD
         initializeActionBar();
         initializeBottomNavigation();
         initializeSubscribeChangeType();
+        initializeSubscribeFragment();
     }
 
     @Override
@@ -220,6 +222,25 @@ public class ItemDetailActivity extends AppCompatActivity implements NavigationD
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             finish();
             startActivity(intent);
+        });
+    }
+
+    private void initializeSubscribeFragment() {
+        RxFragment.subscribe(RxFragment.SUBJECT_ON_SHOW, this, o -> {
+            String tag = (String)o;
+
+            mBottomNavigation.setOnNavigationItemSelectedListener(null);
+
+            if (tag.equals(ListPlayerFragment.class.getName())) {
+                mBottomNavigation.setSelectedItemId(R.id.navigation_player);
+            } else if (tag.equals(ListInviteFragment.class.getName())) {
+                mBottomNavigation.setSelectedItemId(R.id.navigation_invite);
+            } else if (tag.equals(PieChartFragment.class.getName())) {
+                mBottomNavigation.setSelectedItemId(R.id.navigation_statistic);
+            }
+            currentBottomNavigationItem = mBottomNavigation.getSelectedItemId();
+
+            mBottomNavigation.setOnNavigationItemSelectedListener(this::onNavigationItemSelected);
         });
     }
 

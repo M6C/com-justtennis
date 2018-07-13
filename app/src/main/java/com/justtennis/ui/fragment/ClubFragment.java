@@ -17,9 +17,12 @@ import com.justtennis.domain.Club;
 import com.justtennis.notifier.NotifierMessageLogger;
 import com.justtennis.tool.FragmentTool;
 import com.justtennis.ui.business.ClubBusiness;
+import com.justtennis.ui.rxjava.RxFragment;
 
 
 public class ClubFragment extends Fragment {
+
+	private static final String TAG = ClubFragment.class.getName();
 
 	private ClubBusiness business;
 	private FragmentClubBinding binding;
@@ -67,6 +70,7 @@ public class ClubFragment extends Fragment {
 	public void onResume() {
 		super.onResume();
 		initializeFab();
+		RxFragment.publish(RxFragment.SUBJECT_ON_SHOW, TAG);
 	}
 
 	private void initializeFab() {

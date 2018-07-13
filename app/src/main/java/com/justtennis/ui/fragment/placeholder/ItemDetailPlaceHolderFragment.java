@@ -1,6 +1,5 @@
 package com.justtennis.ui.fragment.placeholder;
 
-import android.app.Activity;
 import android.app.Fragment;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -8,8 +7,6 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.justtennis.R;
-import com.justtennis.ui.activity.ItemDetailActivity;
-import com.justtennis.ui.activity.UiMainActivity;
 
 public class ItemDetailPlaceHolderFragment extends Fragment {
     /**

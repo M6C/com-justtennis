@@ -49,6 +49,7 @@ import com.justtennis.notifier.NotifierMessageLogger;
 import com.justtennis.parser.PlayerParser;
 import com.justtennis.tool.FragmentTool;
 import com.justtennis.ui.common.CommonEnum;
+import com.justtennis.ui.rxjava.RxFragment;
 
 import org.gdocument.gtracergps.launcher.log.Logger;
 
@@ -163,6 +164,7 @@ public class PlayerFragment extends Fragment implements IDrawerLayoutTypeNotifie
 
         initializeFab();
 		initializeData(true);
+		RxFragment.publish(RxFragment.SUBJECT_ON_SHOW, TAG);
 	}
 
 	@Override

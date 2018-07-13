@@ -33,6 +33,7 @@ import com.justtennis.drawer.manager.business.DrawerSaisonBusiness;
 import com.justtennis.manager.TypeManager;
 import com.justtennis.notifier.NotifierMessageLogger;
 import com.justtennis.tool.FragmentTool;
+import com.justtennis.ui.rxjava.RxFragment;
 import com.justtennis.ui.rxjava.RxNavigationDrawer;
 
 import org.gdocument.gtracergps.launcher.log.Logger;
@@ -87,6 +88,8 @@ public class NavigationDrawerFragment extends Fragment {
     private DrawerSaisonBusiness saisonBusiness;
     private TypeManager mTypeManager;
 
+    private NavigationView navView;
+
     public NavigationDrawerFragment() {
     }
 
@@ -130,6 +133,7 @@ public class NavigationDrawerFragment extends Fragment {
         initializeSaison(rootView);
         initializeType(rootView);
         initializeSubscribeDbRestored();
+        initializeSubscribeFragment();
 
         return rootView;
     }
@@ -141,6 +145,7 @@ public class NavigationDrawerFragment extends Fragment {
 
         saisonBusiness.onResume();
         mAdapterSaison.notifyDataSetChanged();
+        RxFragment.publish(RxFragment.SUBJECT_ON_SHOW, TAG);
     }
 
     @Override
@@ -289,24 +294,8 @@ public class NavigationDrawerFragment extends Fragment {
     }
 
     private void initializeMenu(View rootView) {
-        NavigationView navView = rootView.findViewById(R.id.nav_menu);
-        navView.setNavigationItemSelectedListener(item -> {
-            Fragment fragment = null;
-            int i = item.getItemId();
-            if (i == R.id.nav_user) {
-                fragment = UserFragment.build();
-            } else if (i == R.id.nav_list_club) {
-                // Create List Club Fragment
-                fragment = ListClubFragment.build();
-            } else if (i == R.id.nav_palmares_fast) {
-                fragment = PalmaresFastFragment.build();
-            }
-            if (fragment != null) {
-                FragmentTool.replaceFragment(mActivity, fragment);
-                closeDrawer();
-            }
-            return false;
-        });
+        navView = rootView.findViewById(R.id.nav_menu);
+        navView.setNavigationItemSelectedListener(this::onNavigationItemSelected);
     }
 
     private void initializeSaison(View rootView) {
@@ -361,6 +350,38 @@ public class NavigationDrawerFragment extends Fragment {
         });
     }
 
+    private void initializeSubscribeFragment() {
+        RxFragment.subscribe(RxFragment.SUBJECT_ON_SHOW, this, o -> {
+            String tag = (String)o;
+
+            navView.setNavigationItemSelectedListener(null);
+
+            int id = 0;
+            if (tag.equals(UserFragment.class.getName())) {
+                id = R.id.nav_user;
+            } else if (tag.equals(ListClubFragment.class.getName())) {
+                id = R.id.nav_list_club;
+            } else if (tag.equals(PalmaresFastFragment.class.getName())) {
+                id = R.id.nav_palmares_fast;
+            }
+
+            View user = navView.findViewById(R.id.nav_user);
+            if (user != null) {
+                user.setSelected(id == R.id.nav_user);
+            }
+            View club = navView.findViewById(R.id.nav_list_club);
+            if (club != null) {
+                club.setSelected(id == R.id.nav_list_club);
+            }
+            View palmares = navView.findViewById(R.id.nav_palmares_fast);
+            if (palmares != null) {
+                palmares.setSelected(id == R.id.nav_palmares_fast);
+            }
+
+            navView.setNavigationItemSelectedListener(this::onNavigationItemSelected);
+        });
+    }
+
     private void managerVisibilityType(TypeManager.TYPE o) {
         if (TypeManager.TYPE.TRAINING == o) {
             mButtonTypeTraining.setVisibility(View.VISIBLE);
@@ -405,6 +426,24 @@ public class NavigationDrawerFragment extends Fragment {
 
     private static void logMe(String msg) {
         Logger.logMe(TAG, msg);
+    }
+
+    private boolean onNavigationItemSelected(MenuItem item) {
+        Fragment fragment = null;
+        int i = item.getItemId();
+        if (i == R.id.nav_user) {
+            fragment = UserFragment.build();
+        } else if (i == R.id.nav_list_club) {
+            // Create List Club Fragment
+            fragment = ListClubFragment.build();
+        } else if (i == R.id.nav_palmares_fast) {
+            fragment = PalmaresFastFragment.build();
+        }
+        if (fragment != null) {
+            FragmentTool.replaceFragment(mActivity, fragment);
+            closeDrawer();
+        }
+        return false;
     }
 
     /**

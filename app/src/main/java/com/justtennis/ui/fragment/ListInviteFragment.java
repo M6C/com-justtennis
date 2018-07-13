@@ -21,6 +21,7 @@ import com.justtennis.notifier.NotifierMessageLogger;
 import com.justtennis.tool.FragmentTool;
 import com.justtennis.ui.common.CommonEnum;
 import com.justtennis.ui.rxjava.RxCommonList;
+import com.justtennis.ui.rxjava.RxFragment;
 import com.justtennis.ui.rxjava.RxListInvite;
 import com.justtennis.ui.rxjava.RxNavigationDrawer;
 
@@ -79,6 +80,7 @@ public class ListInviteFragment extends CommonListFragment<Player> {
         initializeSubscribeSelectSaison();
         initializeSubscribeListPlayer();
         initializeSubscribeCommonList();
+        RxFragment.publish(RxFragment.SUBJECT_ON_SHOW, TAG);
     }
 
     @Override

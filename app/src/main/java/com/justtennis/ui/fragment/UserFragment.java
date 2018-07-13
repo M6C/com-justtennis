@@ -18,7 +18,6 @@ import com.justtennis.R;
 import com.justtennis.activity.GenericSpinnerFormActivity;
 import com.justtennis.activity.LocationActivity;
 import com.justtennis.activity.LocationAddressActivity;
-import com.justtennis.activity.MainActivity;
 import com.justtennis.business.PlayerBusiness;
 import com.justtennis.business.UserBusiness;
 import com.justtennis.domain.Address;
@@ -27,11 +26,14 @@ import com.justtennis.listener.action.TextWatcherFieldEnableView;
 import com.justtennis.notifier.NotifierMessageLogger;
 import com.justtennis.parser.SmsParser;
 import com.justtennis.ui.common.CommonEnum;
+import com.justtennis.ui.rxjava.RxFragment;
 
 import java.io.Serializable;
 
 
 public class UserFragment extends PlayerFragment {
+
+	private static final String TAG = UserFragment.class.getSimpleName();
 
 	private static final int RESULT_LOCATION_DETAIL = 3;
 
@@ -57,6 +59,7 @@ public class UserFragment extends PlayerFragment {
 	public void onResume() {
 		super.onResume();
 		etMessage.setText(business.getMessage());
+		RxFragment.publish(RxFragment.SUBJECT_ON_SHOW, TAG);
 	}
 
 	@Override
