@@ -229,18 +229,21 @@ public class ItemDetailActivity extends AppCompatActivity implements NavigationD
         RxFragment.subscribe(RxFragment.SUBJECT_ON_SHOW, this, o -> {
             String tag = (String)o;
 
-            mBottomNavigation.setOnNavigationItemSelectedListener(null);
-
-            if (tag.equals(ListPlayerFragment.class.getName())) {
-                mBottomNavigation.setSelectedItemId(R.id.navigation_player);
-            } else if (tag.equals(ListInviteFragment.class.getName())) {
-                mBottomNavigation.setSelectedItemId(R.id.navigation_invite);
-            } else if (tag.equals(PieChartFragment.class.getName())) {
-                mBottomNavigation.setSelectedItemId(R.id.navigation_statistic);
+            int id = 0;
+            if (tag.equals(ListPlayerFragment.TAG)) {
+                id = R.id.navigation_player;
+            } else if (tag.equals(ListInviteFragment.TAG)) {
+                id = R.id.navigation_invite;
+            } else if (tag.equals(PieChartFragment.TAG)) {
+                id = R.id.navigation_statistic;
             }
-            currentBottomNavigationItem = mBottomNavigation.getSelectedItemId();
 
-            mBottomNavigation.setOnNavigationItemSelectedListener(this::onNavigationItemSelected);
+            if (id > 0) {
+                mBottomNavigation.setOnNavigationItemSelectedListener(null);
+                mBottomNavigation.setSelectedItemId(id);
+                currentBottomNavigationItem = mBottomNavigation.getSelectedItemId();
+                mBottomNavigation.setOnNavigationItemSelectedListener(this::onNavigationItemSelected);
+            }
         });
     }
 

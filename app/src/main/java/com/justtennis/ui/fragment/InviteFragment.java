@@ -69,7 +69,7 @@ import java.util.Locale;
 
 public class InviteFragment extends Fragment {
 
-	private static final String TAG = InviteFragment.class.getSimpleName();
+	public static final String TAG = InviteFragment.class.getSimpleName();
 	@SuppressWarnings("unused")
 	private static final String KEY_LOCATION_FROM_RESULT = "KEY_LOCATION_FROM_RESULT";
 

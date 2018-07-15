@@ -31,7 +31,7 @@ import java.util.List;
 
 public class ListClubFragment extends CommonListFragment<Club> {
 
-	private static final String TAG = ListClubFragment.class.getSimpleName();
+	public static final String TAG = ListClubFragment.class.getSimpleName();
 
 	private static List<Club> mList = new ArrayList<>();
 

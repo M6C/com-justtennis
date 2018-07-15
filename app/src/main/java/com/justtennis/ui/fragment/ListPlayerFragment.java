@@ -35,7 +35,7 @@ import java.util.List;
 
 public class ListPlayerFragment extends CommonListFragment<Player> {
 
-	private static final String TAG = ListPlayerFragment.class.getSimpleName();
+	public static final String TAG = ListPlayerFragment.class.getSimpleName();
 
 	private static List<Player> mList = new ArrayList<>();
 

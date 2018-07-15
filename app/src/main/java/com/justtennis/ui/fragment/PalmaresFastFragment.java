@@ -31,7 +31,7 @@ import java.text.MessageFormat;
 
 public class PalmaresFastFragment extends Fragment {
 
-	private static final String TAG = PalmaresFastFragment.class.getSimpleName();
+	public static final String TAG = PalmaresFastFragment.class.getSimpleName();
 	private static final String[] LIST_BONUS = new String[]{"0", "15", "30", "45"};
 	public static final String EXTRA_PALMARES = "EXTRA_PALMARES";
 

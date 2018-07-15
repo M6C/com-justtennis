@@ -24,7 +24,7 @@ import com.justtennis.ui.viewmodel.ScoreViewModel;
 
 public class ScoreFragment extends Fragment {
 
-    private static final String TAG = ScoreFragment.class.getSimpleName();
+    public static final String TAG = ScoreFragment.class.getSimpleName();
 
     protected static final String EXTRA_VIEW_MODEL = "EXTRA_VIEW_MODEL";
 

@@ -26,7 +26,7 @@ import java.util.List;
 
 public class CommonListFragment <D extends GenericDBPojo<Long>> extends Fragment implements ICommonListActivity {
 
-    private static final String TAG = CommonListFragment.class.getSimpleName();
+    public static final String TAG = CommonListFragment.class.getSimpleName();
 
     public static final String EXTRA_MODE = "INVITE_MODE";
     public static final String EXTRA_LIST = "LIST";

@@ -47,7 +47,7 @@ import java.util.Objects;
  */
 public class NavigationDrawerFragment extends Fragment {
 
-    private static final String TAG = NavigationDrawerFragment.class.getSimpleName();
+    public static final String TAG = NavigationDrawerFragment.class.getSimpleName();
 
     /**
      * Remember the position of the selected item.
@@ -357,25 +357,27 @@ public class NavigationDrawerFragment extends Fragment {
             navView.setNavigationItemSelectedListener(null);
 
             int id = 0;
-            if (tag.equals(UserFragment.class.getName())) {
+            if (tag.equals(UserFragment.TAG)) {
                 id = R.id.nav_user;
-            } else if (tag.equals(ListClubFragment.class.getName())) {
+            } else if (tag.equals(ListClubFragment.TAG)) {
                 id = R.id.nav_list_club;
-            } else if (tag.equals(PalmaresFastFragment.class.getName())) {
+            } else if (tag.equals(PalmaresFastFragment.TAG)) {
                 id = R.id.nav_palmares_fast;
             }
 
-            View user = navView.findViewById(R.id.nav_user);
-            if (user != null) {
-                user.setSelected(id == R.id.nav_user);
-            }
-            View club = navView.findViewById(R.id.nav_list_club);
-            if (club != null) {
-                club.setSelected(id == R.id.nav_list_club);
-            }
-            View palmares = navView.findViewById(R.id.nav_palmares_fast);
-            if (palmares != null) {
-                palmares.setSelected(id == R.id.nav_palmares_fast);
+            if (id != 0) {
+                View user = navView.findViewById(R.id.nav_user);
+                if (user != null) {
+                    user.setSelected(id == R.id.nav_user);
+                }
+                View club = navView.findViewById(R.id.nav_list_club);
+                if (club != null) {
+                    club.setSelected(id == R.id.nav_list_club);
+                }
+                View palmares = navView.findViewById(R.id.nav_palmares_fast);
+                if (palmares != null) {
+                    palmares.setSelected(id == R.id.nav_palmares_fast);
+                }
             }
 
             navView.setNavigationItemSelectedListener(this::onNavigationItemSelected);

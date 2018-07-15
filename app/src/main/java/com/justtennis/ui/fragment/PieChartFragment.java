@@ -39,7 +39,7 @@ import java.util.HashMap;
 //http://code.google.com/p/achartengine/source/browse/trunk/achartengine/
 public class PieChartFragment extends Fragment {
 
-	private static final String TAG = PieChartFragment.class.getSimpleName();
+	public static final String TAG = PieChartFragment.class.getSimpleName();
 
 	public static final String EXTRA_DATA = "EXTRA_DATA";
 

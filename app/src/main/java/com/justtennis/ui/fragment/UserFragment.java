@@ -33,7 +33,7 @@ import java.io.Serializable;
 
 public class UserFragment extends PlayerFragment {
 
-	private static final String TAG = UserFragment.class.getSimpleName();
+	public static final String TAG = UserFragment.class.getSimpleName();
 
 	private static final int RESULT_LOCATION_DETAIL = 3;
 

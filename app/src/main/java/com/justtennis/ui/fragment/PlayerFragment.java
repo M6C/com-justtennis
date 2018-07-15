@@ -58,7 +58,7 @@ import java.util.List;
 
 public class PlayerFragment extends Fragment implements IDrawerLayoutTypeNotifier, IDrawerLayoutSaisonNotifier {
 
-	private static final String TAG = PlayerFragment.class.getSimpleName();
+	public static final String TAG = PlayerFragment.class.getSimpleName();
 	private static final int RESULT_CODE_QRCODE_SCAN = 0;
 	private static final int RESULT_CODE_GOOGLE = 1;
 	private static final int RESULT_LOCATION = 2;

@@ -22,7 +22,7 @@ import com.justtennis.ui.rxjava.RxFragment;
 
 public class ClubFragment extends Fragment {
 
-	private static final String TAG = ClubFragment.class.getName();
+	public static final String TAG = ClubFragment.class.getSimpleName();
 
 	private ClubBusiness business;
 	private FragmentClubBinding binding;
