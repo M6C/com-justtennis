@@ -33,7 +33,7 @@ final class RxBus {
      * <b>Note:</b> Make sure to call {@link RxBus#unregister(Object)} to avoid memory leaks.
      */
     void subscribe(int subject, @NonNull Object lifecycle, @NonNull Consumer<Object> action) {
-        Log.i(this.getClass().getName(), "-----------------------> subscribe subject:" + subject + " lifecycle:" + lifecycle + " action:" + action);
+        Log.i(this.getClass().getName(), "subscribe subject:" + subject + " lifecycle:" + lifecycle + " action:" + action);
         Disposable disposable = getSubject(subject).subscribe(action);
         getCompositeDisposable(lifecycle).add(disposable);
     }
@@ -42,7 +42,7 @@ final class RxBus {
      * Publish an object to the specified subject for all subscribers of that subject.
      */
     void publish(int subject, @NonNull Object message) {
-        Log.i(this.getClass().getName(), "-----------------------> publish subject:" + subject + " message:" + message);
+        Log.i(this.getClass().getName(), "publish subject:" + subject + " message:" + message);
         getSubject(subject).onNext(message);
     }
 
@@ -51,7 +51,7 @@ final class RxBus {
      * This should be called when the object is going to go out of memory.
      */
     void unregister(@NonNull Object lifecycle) {
-        Log.e(this.getClass().getName(), "-----------------------> unregister " + lifecycle.getClass().getName());
+        Log.e(this.getClass().getName(), "unregister " + lifecycle.getClass().getName());
         //We have to remove the composition from the map, because once you dispose it can't be used anymore
         CompositeDisposable compositeDisposable = sSubscriptionsMap.remove(lifecycle);
         if (compositeDisposable != null) {
