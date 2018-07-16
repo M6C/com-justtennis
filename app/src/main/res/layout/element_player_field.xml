@@ -4,117 +4,73 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
 >
-       <LinearLayout
-          android:id="@+id/ll_firstname"
-          android:layout_width="match_parent"
-          android:layout_height="wrap_content"
-          android:layout_marginBottom="@dimen/player_layout_field_marging_bottom"
-          android:background="@color/player_form_field_background_color"
-          android:orientation="vertical"
-          android:padding="@dimen/player_layout_field_padding" >
+    <android.support.design.widget.TextInputLayout
+        android:id="@+id/ll_firstname"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/player_layout_field_marging_bottom"
+        android:padding="@dimen/player_layout_field_padding">
+        <EditText
+            android:id="@+id/et_firstname"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:textSize="@dimen/player_field_size"
+            android:hint="@string/txt_firstname"
+            android:maxLines="1"
+            android:inputType="textCapWords" />
+    </android.support.design.widget.TextInputLayout>
 
-          <TextView
-              android:id="@+id/tv_firstname"
-              android:layout_width="match_parent"
-              android:layout_height="wrap_content"
-              android:text="@string/txt_firstname"
-              android:textSize="@dimen/player_text_size"
-              android:textStyle="bold"
-              android:textColor="@android:color/secondary_text_light_nodisable"
-              android:visibility="gone" />
+    <android.support.design.widget.TextInputLayout
+        android:id="@+id/ll_lastname"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/player_layout_field_marging_bottom"
+        android:padding="@dimen/player_layout_field_padding">
+        <EditText
+            android:id="@+id/et_lastname"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:textSize="@dimen/player_field_size"
+            android:hint="@string/txt_lastname"
+            android:maxLines="1"
+            android:inputType="textCapWords" />
+    </android.support.design.widget.TextInputLayout>
 
-          <EditText
-              android:id="@+id/et_firstname"
-              android:layout_width="match_parent"
-              android:layout_height="wrap_content"
-              android:gravity="center_horizontal"
-              android:textSize="@dimen/player_field_size"
-              android:hint="@string/txt_firstname" />
-      </LinearLayout>
+    <android.support.design.widget.TextInputLayout
+        android:id="@+id/ll_birthday"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/player_layout_field_marging_bottom"
+        android:padding="@dimen/player_layout_field_padding">
+        <EditText
+            android:id="@+id/et_birthday"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:textSize="@dimen/player_field_size"
+            android:hint="@string/txt_birthday"
+            android:focusable="false"
+            android:inputType="none" />
+    </android.support.design.widget.TextInputLayout>
 
-      <LinearLayout
-          android:id="@+id/ll_lastname"
-          android:layout_width="match_parent"
-          android:layout_height="wrap_content"
-          android:layout_marginBottom="@dimen/player_layout_field_marging_bottom"
-          android:background="@color/player_form_field_background_color"
-          android:orientation="vertical"
-          android:padding="@dimen/player_layout_field_padding" >
-
-          <TextView
-              android:id="@+id/tv_lastname"
-              android:layout_width="match_parent"
-              android:layout_height="wrap_content"
-              android:text="@string/txt_lastname"
-              android:textSize="@dimen/player_text_size"
-              android:textStyle="bold"
-              android:textColor="@android:color/secondary_text_light_nodisable"
-              android:visibility="gone" />
-
-          <EditText
-              android:id="@+id/et_lastname"
-              android:layout_width="match_parent"
-              android:layout_height="wrap_content"
-              android:gravity="center_horizontal"
-              android:textSize="@dimen/player_field_size"
-              android:hint="@string/txt_lastname" />
-      </LinearLayout>
-
-      <LinearLayout
-          android:id="@+id/ll_birthday"
-          android:layout_width="match_parent"
-          android:layout_height="wrap_content"
-          android:layout_marginBottom="@dimen/player_layout_field_marging_bottom"
-          android:background="@color/player_form_field_background_color"
-          android:orientation="vertical"
-          android:padding="@dimen/player_layout_field_padding" >
-
-          <TextView
-              android:id="@+id/tv_birthday"
-              android:layout_width="match_parent"
-              android:layout_height="wrap_content"
-              android:text="@string/txt_birthday"
-              android:textSize="@dimen/player_text_size"
-              android:textStyle="bold"
-              android:textColor="@android:color/secondary_text_light_nodisable"
-              android:visibility="gone" />
-
-          <EditText
-              android:id="@+id/et_birthday"
-              android:layout_width="match_parent"
-              android:layout_height="wrap_content"
-              android:gravity="center_horizontal"
-              android:textSize="@dimen/player_field_size"
-              android:hint="@string/txt_birthday" />
-          </LinearLayout>
-
-      <LinearLayout
-          android:id="@+id/ll_phonenumber"
-          android:layout_width="match_parent"
-          android:layout_height="wrap_content"
-          android:layout_marginBottom="@dimen/player_layout_field_marging_bottom"
-          android:background="@color/player_form_field_background_color"
-          android:orientation="vertical"
-          android:padding="@dimen/player_layout_field_padding" >
-
-          <TextView
-              android:id="@+id/tv_phonenumber"
-              android:layout_width="match_parent"
-              android:layout_height="wrap_content"
-              android:text="@string/txt_phonenumber"
-              android:textSize="@dimen/player_text_size"
-              android:textStyle="bold"
-              android:textColor="@android:color/secondary_text_light_nodisable"
-              android:visibility="gone" />
-
-          <EditText
-              android:id="@+id/et_phonenumber"
-              android:layout_width="match_parent"
-              android:layout_height="wrap_content"
-              android:gravity="center_horizontal"
-              android:textSize="@dimen/player_field_size"
-              android:hint="@string/txt_phonenumber" />
-      </LinearLayout>
+    <android.support.design.widget.TextInputLayout
+        android:id="@+id/ll_phonenumber"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/player_layout_field_marging_bottom"
+        android:padding="@dimen/player_layout_field_padding">
+        <EditText
+            android:id="@+id/et_phonenumber"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:textSize="@dimen/player_field_size"
+            android:hint="@string/txt_phonenumber"
+            android:maxLines="1"
+            android:inputType="phone" />
+    </android.support.design.widget.TextInputLayout>
 
       <LinearLayout
           android:id="@+id/ll_ranking"
@@ -225,8 +181,7 @@
          android:layout_marginBottom="@dimen/invite_layout_field_marging_bottom"
          android:background="@color/player_form_field_background_color"
          android:orientation="vertical"
-         android:padding="@dimen/invite_layout_field_padding"
-         android:onClick="onClickLocation" >
+         android:padding="@dimen/invite_layout_field_padding" >
           
          <TextView
              android:id="@+id/tv_location"

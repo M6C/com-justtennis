@@ -18,6 +18,7 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
@@ -39,7 +40,6 @@ import com.justtennis.domain.Player;
 import com.justtennis.domain.Saison;
 import com.justtennis.drawer.manager.notifier.IDrawerLayoutSaisonNotifier;
 import com.justtennis.drawer.manager.notifier.IDrawerLayoutTypeNotifier;
-import com.justtennis.listener.action.TextWatcherFieldEnableView;
 import com.justtennis.listener.ok.OnClickPlayerCreateListenerOk;
 import com.justtennis.manager.TypeManager.TYPE;
 import com.justtennis.notifier.NotifierMessageLogger;
@@ -50,6 +50,11 @@ import com.justtennis.ui.viewmodel.ClubViewModel;
 
 import org.gdocument.gtracergps.launcher.log.Logger;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.List;
 
 public class PlayerFragment extends Fragment implements IDrawerLayoutTypeNotifier, IDrawerLayoutSaisonNotifier {
@@ -76,10 +81,6 @@ public class PlayerFragment extends Fragment implements IDrawerLayoutTypeNotifie
 	private PlayerBusiness business;
 	private RankingListManager rankingListManager;
 
-	private TextView tvFirstname;
-	private TextView tvLastname;
-	private TextView tvBirthday;
-	private TextView tvPhonenumber;
 	private EditText etFirstname;
 	private EditText etLastname;
 	private EditText etBirthday;
@@ -92,7 +93,6 @@ public class PlayerFragment extends Fragment implements IDrawerLayoutTypeNotifie
 	private LinearLayout llPhonenumber;
 	private LinearLayout llRanking;
 	private LinearLayout llRankingEstimate;
-	private LinearLayout llType;
 	private LinearLayout llCreate;
 	private LinearLayout llModify;
 	private LinearLayout llAddDemande;
@@ -245,10 +245,6 @@ public class PlayerFragment extends Fragment implements IDrawerLayoutTypeNotifie
 	}
 
 	protected void initializeViewById() {
-		tvFirstname = rootView.findViewById(R.id.tv_firstname);
-		tvLastname = rootView.findViewById(R.id.tv_lastname);
-		tvBirthday = rootView.findViewById(R.id.tv_birthday);
-		tvPhonenumber = rootView.findViewById(R.id.tv_phonenumber);
 		etFirstname = rootView.findViewById(R.id.et_firstname);
 		etLastname = rootView.findViewById(R.id.et_lastname);
 		etBirthday = rootView.findViewById(R.id.et_birthday);
@@ -260,7 +256,6 @@ public class PlayerFragment extends Fragment implements IDrawerLayoutTypeNotifie
 		llPhonenumber = rootView.findViewById(R.id.ll_phonenumber);
 		llRanking = rootView.findViewById(R.id.ll_ranking);
 		llRankingEstimate = rootView.findViewById(R.id.ll_ranking_estimate);
-		llType = rootView.findViewById(R.id.ll_type);
 		llCreate = rootView.findViewById(R.id.ll_create);
 		llModify = rootView.findViewById(R.id.ll_modify);
 		llAddDemande = rootView.findViewById(R.id.ll_add_demande);
@@ -495,10 +490,6 @@ public class PlayerFragment extends Fragment implements IDrawerLayoutTypeNotifie
 	}
 
 	protected void initializeListener() {
-		etFirstname.addTextChangedListener(new TextWatcherFieldEnableView(tvFirstname, View.GONE));
-		etLastname.addTextChangedListener(new TextWatcherFieldEnableView(tvLastname, View.GONE));
-		etBirthday.addTextChangedListener(new TextWatcherFieldEnableView(tvBirthday, View.GONE));
-		etPhonenumber.addTextChangedListener(new TextWatcherFieldEnableView(tvPhonenumber, View.GONE));
 		btnCreate.setOnClickListener(this::onClickCreate);
 		btnImport.setOnClickListener(this::onClickImport);
 		btnModify.setOnClickListener(this::onClickModify);
@@ -507,6 +498,19 @@ public class PlayerFragment extends Fragment implements IDrawerLayoutTypeNotifie
 		btnQrCode.setOnClickListener(this::onClickQRCode);
 		llLocationDetail.setOnClickListener(this::onClickLocationDetail);
 		tvLocationEmpty.setOnClickListener(this::onClickLocationDetail);
+		etBirthday.setOnClickListener(this::onClickBirthday);
+	}
+
+	private void onClickBirthday(View view) {
+		FactoryDialog.getInstance().buildDatePickerDialog(activity, (dialog, view2, which) -> {
+			DatePicker datePicker = (DatePicker)view2;
+
+			Calendar calendar = GregorianCalendar.getInstance(ApplicationConfig.getLocal());
+			calendar.set(datePicker.getYear(), datePicker.getMonth(), datePicker.getDayOfMonth());
+
+			DateFormat sdf = new SimpleDateFormat(getString(R.string.msg_common_format_date), ApplicationConfig.getLocal());
+			etBirthday.setText(sdf.format(calendar.getTime()));
+		}, -1, new Date()).show();
 	}
 
 	protected void initializeLocation() {
@@ -586,7 +590,6 @@ public class PlayerFragment extends Fragment implements IDrawerLayoutTypeNotifie
 		llPhonenumber.setVisibility(iVisibility);
 		llRanking.setVisibility(iVisibility);
 		llRankingEstimate.setVisibility(iVisibility);
-		llType.setVisibility(iVisibility);
 
 		etFirstname.setText(firstname);
 		etLastname.setText(lastname);

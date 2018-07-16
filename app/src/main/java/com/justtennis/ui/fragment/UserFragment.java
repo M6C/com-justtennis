@@ -26,7 +26,6 @@ import com.justtennis.listener.action.TextWatcherFieldEnableView;
 import com.justtennis.notifier.NotifierMessageLogger;
 import com.justtennis.parser.SmsParser;
 import com.justtennis.ui.common.CommonEnum;
-import com.justtennis.ui.rxjava.RxFragment;
 
 import java.io.Serializable;
 
@@ -39,7 +38,6 @@ public class UserFragment extends PlayerFragment {
 
 	private TextView tvMessage;
 	private EditText etMessage;
-	private LinearLayout llType;
 	private LinearLayout llMessage;
 	private Spinner spSaison;
 	private ImageView ivAjoutChamp;
@@ -81,7 +79,6 @@ public class UserFragment extends PlayerFragment {
 		tvMessage = rootView.findViewById(R.id.tv_message);
 		etMessage = rootView.findViewById(R.id.et_message);
 		spSaison = rootView.findViewById(R.id.sp_saison);
-		llType = rootView.findViewById(R.id.ll_type);
 		llMessage = rootView.findViewById(R.id.ll_message);
 		ivAjoutChamp = rootView.findViewById(R.id.iv_ajout_champ);
 	}
@@ -89,7 +86,6 @@ public class UserFragment extends PlayerFragment {
 	@Override
 	protected void initializeView() {
 		super.initializeView();
-		llType.setVisibility(View.GONE);
 		llMessage.setVisibility(View.VISIBLE);
 	}
 
