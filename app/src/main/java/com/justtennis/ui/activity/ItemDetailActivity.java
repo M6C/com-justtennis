@@ -386,12 +386,15 @@ public class ItemDetailActivity extends AppCompatActivity implements NavigationD
         currentBottomNavigationItem = item.getItemId();
         switch (currentBottomNavigationItem) {
             case R.id.navigation_player:
+                FragmentTool.clearBackStackEntry(this);
                 onClickListPlayer();
                 return true;
             case R.id.navigation_invite:
+                FragmentTool.clearBackStackEntry(this);
                 onClickListInvite();
                 return true;
             case R.id.navigation_statistic:
+                FragmentTool.clearBackStackEntry(this);
                 onClickListStatistic();
                 return true;
             default:

@@ -7,6 +7,7 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentManager;
 import android.view.View;
 
 import com.justtennis.R;
@@ -40,10 +41,23 @@ public class FragmentTool {
     public static void replaceFragment(@NonNull FragmentActivity activity, @NonNull Fragment fragment, @IdRes int idRes) {
         String tag = fragment.getClass().getName();
         logMe("replaceFragment tag:" + tag);
-        activity.getSupportFragmentManager().beginTransaction()
+        FragmentManager fragmentManager = activity.getSupportFragmentManager();
+        fragmentManager.beginTransaction()
                 .replace(idRes, fragment, tag)
                 .addToBackStack(tag)
                 .commit();
+    }
+
+    public static void clearBackStackEntry(@NonNull FragmentActivity activity) {
+        FragmentManager fragmentManager = activity.getSupportFragmentManager();
+
+        int cntBack = fragmentManager.getBackStackEntryCount();
+        logMe("clearBackStackEntry BackStackEntry Count:"+ cntBack);
+        for(int i=0 ; i<cntBack ; i++) {
+            FragmentManager.BackStackEntry back = fragmentManager.getBackStackEntryAt(i);
+            logMe("clearBackStackEntry BackStackEntry Pop name:" + back.getName());
+            fragmentManager.popBackStack(back.getId(), FragmentManager.POP_BACK_STACK_INCLUSIVE);
+        }
     }
 
     public static void hideFab(@NonNull FragmentActivity activity) {
