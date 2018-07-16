@@ -194,7 +194,7 @@ public class ItemDetailActivity extends AppCompatActivity implements NavigationD
     @Override
     public void onBackPressed() {
         if (ExitTool.onBackPressedFragment(this)) {
-            super.onBackPressed();
+            finish();
         }
     }
 
