@@ -88,7 +88,6 @@ public class InviteFragment extends Fragment {
 	private Serializable locationFromResult;
 	private Serializable locationClubFromResult;
 	private PlayerViewModel modelPlayer;
-	private ClubViewModel modelClub;
 
 	private Context context;
 	private FragmentActivity activity;
@@ -377,7 +376,7 @@ public class InviteFragment extends Fragment {
 			fragment.setArguments(args);
 		}
 
-		modelClub = new ViewModelProvider.NewInstanceFactory().create(ClubViewModel.class);
+		ClubViewModel modelClub = new ViewModelProvider.NewInstanceFactory().create(ClubViewModel.class);
 		modelClub.getSelected().observe(this, (Club club) -> {
 			business.getInvite().setClub(club);
 			initializeDataPlayer();

@@ -3,6 +3,7 @@ package com.justtennis.ui.fragment;
 
 import android.app.Activity;
 import android.app.Dialog;
+import android.arch.lifecycle.ViewModelProvider;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Typeface;
@@ -28,9 +29,6 @@ import com.justtennis.ApplicationConfig;
 import com.justtennis.R;
 import com.justtennis.activity.GenericSpinnerFormActivity;
 import com.justtennis.activity.ListPersonActivity;
-import com.justtennis.activity.LocationActivity;
-import com.justtennis.activity.LocationClubActivity;
-import com.justtennis.activity.LocationTournamentActivity;
 import com.justtennis.activity.PlayerActivity;
 import com.justtennis.activity.QRCodeActivity;
 import com.justtennis.adapter.CustomArrayAdapter;
@@ -39,7 +37,6 @@ import com.justtennis.business.PlayerBusiness;
 import com.justtennis.domain.Club;
 import com.justtennis.domain.Player;
 import com.justtennis.domain.Saison;
-import com.justtennis.domain.Tournament;
 import com.justtennis.drawer.manager.notifier.IDrawerLayoutSaisonNotifier;
 import com.justtennis.drawer.manager.notifier.IDrawerLayoutTypeNotifier;
 import com.justtennis.listener.action.TextWatcherFieldEnableView;
@@ -49,11 +46,10 @@ import com.justtennis.notifier.NotifierMessageLogger;
 import com.justtennis.parser.PlayerParser;
 import com.justtennis.tool.FragmentTool;
 import com.justtennis.ui.common.CommonEnum;
-import com.justtennis.ui.rxjava.RxFragment;
+import com.justtennis.ui.viewmodel.ClubViewModel;
 
 import org.gdocument.gtracergps.launcher.log.Logger;
 
-import java.io.Serializable;
 import java.util.List;
 
 public class PlayerFragment extends Fragment implements IDrawerLayoutTypeNotifier, IDrawerLayoutSaisonNotifier {
@@ -110,7 +106,7 @@ public class PlayerFragment extends Fragment implements IDrawerLayoutTypeNotifie
 	private TextView tvLocationLine2;
 
 	private boolean fromQrCode = false;
-	private Serializable locationFromResult;
+//	private Serializable locationFromResult;
 	private Button btnCreate;
 	private Button btnImport;
 	private Button btnModify;
@@ -217,10 +213,10 @@ public class PlayerFragment extends Fragment implements IDrawerLayoutTypeNotifie
 			} else if (resultCode == Activity.RESULT_CANCELED) {
 				// Handle cancel
 			}
-		} else if (requestCode==RESULT_LOCATION) {
-			if (resultCode == Activity.RESULT_OK && data != null) {
-				locationFromResult = data.getSerializableExtra(LocationActivity.EXTRA_OUT_LOCATION);
-			}
+//		} else if (requestCode==RESULT_LOCATION) {
+//			if (resultCode == Activity.RESULT_OK && data != null) {
+//				locationFromResult = data.getSerializableExtra(LocationActivity.EXTRA_OUT_LOCATION);
+//			}
 		}
 	}
 
@@ -370,24 +366,42 @@ public class PlayerFragment extends Fragment implements IDrawerLayoutTypeNotifie
 
 	public void onClickLocation(View view) {
 		updatePlayerData();
-		Intent intent = null;
-		switch(getType()) {
-			case TRAINING:
-				intent = new Intent(context, LocationClubActivity.class);
-				if (business.getPlayer().getIdClub() != null) {
-					intent.putExtra(GenericSpinnerFormActivity.EXTRA_DATA, new Club(business.getPlayer().getIdClub()));
-				}
-				break;
-			case COMPETITION:
-				intent = new Intent(context, LocationTournamentActivity.class);
-				if (business.getPlayer().getIdTournament() != null) {
-					intent.putExtra(GenericSpinnerFormActivity.EXTRA_DATA, new Tournament(business.getPlayer().getIdTournament()));
-				}
-				break;
+//		Intent intent = null;
+//		switch(getType()) {
+//			case TRAINING:
+//				intent = new Intent(context, LocationClubActivity.class);
+//				if (business.getPlayer().getIdClub() != null) {
+//					intent.putExtra(GenericSpinnerFormActivity.EXTRA_DATA, new Club(business.getPlayer().getIdClub()));
+//				}
+//				break;
+//			case COMPETITION:
+//				intent = new Intent(context, LocationTournamentActivity.class);
+//				if (business.getPlayer().getIdTournament() != null) {
+//					intent.putExtra(GenericSpinnerFormActivity.EXTRA_DATA, new Tournament(business.getPlayer().getIdTournament()));
+//				}
+//				break;
+//		}
+//		if (intent != null) {
+//			startActivityForResult(intent, RESULT_LOCATION);
+//		}
+
+		ListClubFragment fragment = ListClubFragment.build(CommonEnum.LIST_FRAGMENT_MODE.FOR_RESULT_FRAGMENT);
+		Bundle args = fragment.getArguments();
+		if (args == null) {
+			args = new Bundle();
+			fragment.setArguments(args);
 		}
-		if (intent != null) {
-			startActivityForResult(intent, RESULT_LOCATION);
-		}
+
+		ClubViewModel  modelClub = new ViewModelProvider.NewInstanceFactory().create(ClubViewModel.class);
+		modelClub.getSelected().observe(this, (Club club) -> {
+			business.setLocation(club);
+			initializeLocation();
+		});
+
+		args.putSerializable(GenericSpinnerFormActivity.EXTRA_DATA, new Club(business.getPlayer().getIdClub()));
+		args.putSerializable(ListPlayerFragment.EXTRA_VIEW_MODEL, modelClub);
+
+		FragmentTool.replaceFragment(activity, fragment);
 	}
 
 	public void onClickLocationDetail(View view) {
@@ -491,14 +505,16 @@ public class PlayerFragment extends Fragment implements IDrawerLayoutTypeNotifie
 		btnAddDemandeYes.setOnClickListener(this::onClickDemandeAddYes);
 		btnAddDemandeNo.setOnClickListener(this::onClickDemandeAddNo);
 		btnQrCode.setOnClickListener(this::onClickQRCode);
+		llLocationDetail.setOnClickListener(this::onClickLocationDetail);
+		tvLocationEmpty.setOnClickListener(this::onClickLocationDetail);
 	}
 
 	protected void initializeLocation() {
 		Log.d(TAG, "initializeDataLocation");
-		if (locationFromResult != null) {
-			business.setLocation(locationFromResult);
-			locationFromResult = null;
-		}
+//		if (locationFromResult != null) {
+//			business.setLocation(locationFromResult);
+//			locationFromResult = null;
+//		}
 
 		String[] location = business.getLocationLine();
 		if (getType() == TYPE.COMPETITION) {

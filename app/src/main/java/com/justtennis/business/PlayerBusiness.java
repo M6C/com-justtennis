@@ -297,11 +297,11 @@ public class PlayerBusiness implements INavigationDrawerRechercheBusiness {
 	}
 
 	public void setLocation(Serializable location) {
-		if (getPlayerType() == TypeManager.TYPE.COMPETITION) {
-			player.setIdTournament(((Tournament)location).getId());
-		} else {
+//		if (getPlayerType() == TypeManager.TYPE.COMPETITION) {
+//			player.setIdTournament(((Tournament)location).getId());
+//		} else {
 			player.setIdClub(((Club)location).getId());
-		}
+//		}
 	}
 
 	public String[] getLocationLine() {
