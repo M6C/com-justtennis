@@ -464,7 +464,7 @@ public class InviteFragment extends Fragment {
 			locationFromResult = null;
 		}
 		initializeData();
-		RxFragment.publish(RxFragment.SUBJECT_ON_SHOW, TAG);
+		//RxFragment.publish(RxFragment.SUBJECT_ON_SHOW, TAG);
 	}
 
 	private void initializeContentPlayerView() {

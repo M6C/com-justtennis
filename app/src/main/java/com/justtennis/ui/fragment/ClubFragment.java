@@ -70,7 +70,7 @@ public class ClubFragment extends Fragment {
 	public void onResume() {
 		super.onResume();
 		initializeFab();
-		RxFragment.publish(RxFragment.SUBJECT_ON_SHOW, TAG);
+		//RxFragment.publish(RxFragment.SUBJECT_ON_SHOW, TAG);
 	}
 
 	private void initializeFab() {

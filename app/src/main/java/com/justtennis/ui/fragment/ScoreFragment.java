@@ -90,7 +90,7 @@ public class ScoreFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        RxFragment.publish(RxFragment.SUBJECT_ON_SHOW, TAG);
+        //RxFragment.publish(RxFragment.SUBJECT_ON_SHOW, TAG);
     }
 
     private void initializeFab() {

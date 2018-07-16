@@ -37,7 +37,6 @@ import com.justtennis.ui.fragment.ListInviteFragment;
 import com.justtennis.ui.fragment.ListPlayerFragment;
 import com.justtennis.ui.fragment.NavigationDrawerFragment;
 import com.justtennis.ui.fragment.PieChartFragment;
-import com.justtennis.ui.rxjava.RxFragment;
 import com.justtennis.ui.rxjava.RxNavigationDrawer;
 
 import org.gdocument.gtracergps.launcher.log.Logger;
@@ -108,7 +107,7 @@ public class ItemDetailActivity extends AppCompatActivity implements NavigationD
         initializeActionBar();
         initializeBottomNavigation();
         initializeSubscribeChangeType();
-        initializeSubscribeFragment();
+//        initializeSubscribeFragment();
     }
 
     @Override
@@ -225,27 +224,27 @@ public class ItemDetailActivity extends AppCompatActivity implements NavigationD
         });
     }
 
-    private void initializeSubscribeFragment() {
-        RxFragment.subscribe(RxFragment.SUBJECT_ON_SHOW, this, o -> {
-            String tag = (String)o;
-
-            int id = 0;
-            if (tag.equals(ListPlayerFragment.TAG)) {
-                id = R.id.navigation_player;
-            } else if (tag.equals(ListInviteFragment.TAG)) {
-                id = R.id.navigation_invite;
-            } else if (tag.equals(PieChartFragment.TAG)) {
-                id = R.id.navigation_statistic;
-            }
-
-            if (id > 0) {
-                mBottomNavigation.setOnNavigationItemSelectedListener(null);
-                mBottomNavigation.setSelectedItemId(id);
-                currentBottomNavigationItem = mBottomNavigation.getSelectedItemId();
-                mBottomNavigation.setOnNavigationItemSelectedListener(this::onNavigationItemSelected);
-            }
-        });
-    }
+//    private void initializeSubscribeFragment() {
+//        RxFragment.subscribe(RxFragment.SUBJECT_ON_SHOW, this, o -> {
+//            String tag = (String)o;
+//
+//            int id = 0;
+//            if (tag.equals(ListPlayerFragment.TAG)) {
+//                id = R.id.navigation_player;
+//            } else if (tag.equals(ListInviteFragment.TAG)) {
+//                id = R.id.navigation_invite;
+//            } else if (tag.equals(PieChartFragment.TAG)) {
+//                id = R.id.navigation_statistic;
+//            }
+//
+//            if (id > 0) {
+//                mBottomNavigation.setOnNavigationItemSelectedListener(null);
+//                mBottomNavigation.setSelectedItemId(id);
+//                currentBottomNavigationItem = mBottomNavigation.getSelectedItemId();
+//                mBottomNavigation.setOnNavigationItemSelectedListener(this::onNavigationItemSelected);
+//            }
+//        });
+//    }
 
     @Override
     public Resources.Theme getTheme() {

@@ -80,7 +80,7 @@ public class ListInviteFragment extends CommonListFragment<Player> {
         initializeSubscribeSelectSaison();
         initializeSubscribeListPlayer();
         initializeSubscribeCommonList();
-        RxFragment.publish(RxFragment.SUBJECT_ON_SHOW, TAG);
+        //RxFragment.publish(RxFragment.SUBJECT_ON_SHOW, TAG);
     }
 
     @Override

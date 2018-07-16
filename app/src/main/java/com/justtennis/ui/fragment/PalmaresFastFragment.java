@@ -106,7 +106,7 @@ public class PalmaresFastFragment extends Fragment {
 	public void onResume() {
 		super.onResume();
 		initializeFab();
-		RxFragment.publish(RxFragment.SUBJECT_ON_SHOW, TAG);
+		//RxFragment.publish(RxFragment.SUBJECT_ON_SHOW, TAG);
 	}
 
 	public void refreshData() {

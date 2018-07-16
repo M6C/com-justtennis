@@ -164,7 +164,7 @@ public class PlayerFragment extends Fragment implements IDrawerLayoutTypeNotifie
 
         initializeFab();
 		initializeData(true);
-		RxFragment.publish(RxFragment.SUBJECT_ON_SHOW, TAG);
+		//RxFragment.publish(RxFragment.SUBJECT_ON_SHOW, TAG);
 	}
 
 	@Override

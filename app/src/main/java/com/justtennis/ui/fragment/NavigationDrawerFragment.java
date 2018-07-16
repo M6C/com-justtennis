@@ -133,7 +133,7 @@ public class NavigationDrawerFragment extends Fragment {
         initializeSaison(rootView);
         initializeType(rootView);
         initializeSubscribeDbRestored();
-        initializeSubscribeFragment();
+//        initializeSubscribeFragment();
 
         return rootView;
     }
@@ -145,7 +145,7 @@ public class NavigationDrawerFragment extends Fragment {
 
         saisonBusiness.onResume();
         mAdapterSaison.notifyDataSetChanged();
-        RxFragment.publish(RxFragment.SUBJECT_ON_SHOW, TAG);
+        //RxFragment.publish(RxFragment.SUBJECT_ON_SHOW, TAG);
     }
 
     @Override
@@ -350,39 +350,39 @@ public class NavigationDrawerFragment extends Fragment {
         });
     }
 
-    private void initializeSubscribeFragment() {
-        RxFragment.subscribe(RxFragment.SUBJECT_ON_SHOW, this, o -> {
-            String tag = (String)o;
-
-            navView.setNavigationItemSelectedListener(null);
-
-            int id = 0;
-            if (tag.equals(UserFragment.TAG)) {
-                id = R.id.nav_user;
-            } else if (tag.equals(ListClubFragment.TAG)) {
-                id = R.id.nav_list_club;
-            } else if (tag.equals(PalmaresFastFragment.TAG)) {
-                id = R.id.nav_palmares_fast;
-            }
-
-            if (id != 0) {
-                View user = navView.findViewById(R.id.nav_user);
-                if (user != null) {
-                    user.setSelected(id == R.id.nav_user);
-                }
-                View club = navView.findViewById(R.id.nav_list_club);
-                if (club != null) {
-                    club.setSelected(id == R.id.nav_list_club);
-                }
-                View palmares = navView.findViewById(R.id.nav_palmares_fast);
-                if (palmares != null) {
-                    palmares.setSelected(id == R.id.nav_palmares_fast);
-                }
-            }
-
-            navView.setNavigationItemSelectedListener(this::onNavigationItemSelected);
-        });
-    }
+//    private void initializeSubscribeFragment() {
+//        RxFragment.subscribe(RxFragment.SUBJECT_ON_SHOW, this, o -> {
+//            String tag = (String)o;
+//
+//            navView.setNavigationItemSelectedListener(null);
+//
+//            int id = 0;
+//            if (tag.equals(UserFragment.TAG)) {
+//                id = R.id.nav_user;
+//            } else if (tag.equals(ListClubFragment.TAG)) {
+//                id = R.id.nav_list_club;
+//            } else if (tag.equals(PalmaresFastFragment.TAG)) {
+//                id = R.id.nav_palmares_fast;
+//            }
+//
+//            if (id != 0) {
+//                View user = navView.findViewById(R.id.nav_user);
+//                if (user != null) {
+//                    user.setSelected(id == R.id.nav_user);
+//                }
+//                View club = navView.findViewById(R.id.nav_list_club);
+//                if (club != null) {
+//                    club.setSelected(id == R.id.nav_list_club);
+//                }
+//                View palmares = navView.findViewById(R.id.nav_palmares_fast);
+//                if (palmares != null) {
+//                    palmares.setSelected(id == R.id.nav_palmares_fast);
+//                }
+//            }
+//
+//            navView.setNavigationItemSelectedListener(this::onNavigationItemSelected);
+//        });
+//    }
 
     private void managerVisibilityType(TypeManager.TYPE o) {
         if (TypeManager.TYPE.TRAINING == o) {

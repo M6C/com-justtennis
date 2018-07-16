@@ -59,7 +59,7 @@ public class UserFragment extends PlayerFragment {
 	public void onResume() {
 		super.onResume();
 		etMessage.setText(business.getMessage());
-		RxFragment.publish(RxFragment.SUBJECT_ON_SHOW, TAG);
+		//RxFragment.publish(RxFragment.SUBJECT_ON_SHOW, TAG);
 	}
 
 	@Override

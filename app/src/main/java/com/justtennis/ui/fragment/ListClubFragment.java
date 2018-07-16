@@ -81,7 +81,7 @@ public class ListClubFragment extends CommonListFragment<Club> {
 		refresh();
 		initializeSubscribeListPlayer();
 		initializeSubscribeCommonList();
-		RxFragment.publish(RxFragment.SUBJECT_ON_SHOW, TAG);
+		//RxFragment.publish(RxFragment.SUBJECT_ON_SHOW, TAG);
 	}
 
 	@Override
