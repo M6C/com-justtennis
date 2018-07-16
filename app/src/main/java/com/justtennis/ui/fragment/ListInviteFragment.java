@@ -35,7 +35,7 @@ import java.util.Objects;
 
 public class ListInviteFragment extends CommonListFragment<Player> {
 
-    public static final String TAG = ListPlayerFragment.class.getSimpleName();
+    public static final String TAG = ListInviteFragment.class.getSimpleName();
 
     private static List<Invite> mList = new ArrayList<>();
     private ListInviteBusiness business;
