@@ -265,10 +265,10 @@ public class ItemDetailActivity extends AppCompatActivity implements NavigationD
 //                break;
 //        }
 //        startActivity(intent);
-        if (mBottomNavigation.getSelectedItemId() != R.id.navigation_invite) {
+//        if (mBottomNavigation.getSelectedItemId() != R.id.navigation_invite) {
             ListInviteFragment fragment = ListInviteFragment.build();
             FragmentTool.replaceFragment(this, fragment);
-        }
+//        }
     }
 
     private void onClickListPlayer() {
@@ -379,9 +379,9 @@ public class ItemDetailActivity extends AppCompatActivity implements NavigationD
     }
 
     private boolean onNavigationItemSelected(MenuItem item) {
-        if (currentBottomNavigationItem == item.getItemId()) {
-            return false;
-        }
+//        if (currentBottomNavigationItem == item.getItemId()) {
+//            return false;
+//        }
         currentBottomNavigationItem = item.getItemId();
         switch (currentBottomNavigationItem) {
             case R.id.navigation_player:
