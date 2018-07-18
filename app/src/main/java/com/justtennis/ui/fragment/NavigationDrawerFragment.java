@@ -432,8 +432,10 @@ public class NavigationDrawerFragment extends Fragment {
 
     private boolean onNavigationItemSelected(MenuItem item) {
         Fragment fragment = null;
+        int deep = 0;
         int i = item.getItemId();
         if (i == R.id.nav_user) {
+            deep = 1;
             fragment = UserFragment.build();
         } else if (i == R.id.nav_list_club) {
             // Create List Club Fragment
@@ -442,7 +444,7 @@ public class NavigationDrawerFragment extends Fragment {
             fragment = PalmaresFastFragment.build();
         }
         if (fragment != null) {
-            FragmentTool.clearBackStackEntry(mActivity);
+            FragmentTool.clearBackStackEntry(mActivity, deep);
             FragmentTool.replaceFragment(mActivity, fragment);
             closeDrawer();
         }

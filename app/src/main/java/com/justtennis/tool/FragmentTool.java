@@ -49,13 +49,17 @@ public class FragmentTool {
     }
 
     public static void clearBackStackEntry(@NonNull FragmentActivity activity) {
+        clearBackStackEntry(activity, 0);
+    }
+
+    public static void clearBackStackEntry(@NonNull FragmentActivity activity, int deep) {
         FragmentManager fragmentManager = activity.getSupportFragmentManager();
 
-        int cntBack = fragmentManager.getBackStackEntryCount();
+        int cntBack = fragmentManager.getBackStackEntryCount() - 1;
         logMe("clearBackStackEntry BackStackEntry Count:"+ cntBack);
-        for(int i=0 ; i<cntBack ; i++) {
+        for(int i=cntBack ; i>=deep ; i--) {
             FragmentManager.BackStackEntry back = fragmentManager.getBackStackEntryAt(i);
-            logMe("clearBackStackEntry BackStackEntry Pop name:" + back.getName());
+            logMe("clearBackStackEntry BackStackEntry Pop " + i + " name:" + back.getName());
             fragmentManager.popBackStack(back.getId(), FragmentManager.POP_BACK_STACK_INCLUSIVE);
         }
     }
