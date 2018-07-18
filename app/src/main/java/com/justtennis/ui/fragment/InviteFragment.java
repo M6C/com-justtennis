@@ -102,7 +102,7 @@ public class InviteFragment extends Fragment {
 	private Switch swType;
 	private Spinner spRanking;
 	private Spinner spSaison;
-	private TextView tvLocation;
+//	private TextView tvLocation;
 	private TextView tvLocationEmpty;
 	private Button btnDetail;
 
@@ -150,7 +150,7 @@ public class InviteFragment extends Fragment {
 		edDate = rootView.findViewById(R.id.inviteDate);
 		edTime = rootView.findViewById(R.id.inviteTime);
 		swType = rootView.findViewById(R.id.sw_type);
-		tvLocation = rootView.findViewById(R.id.tv_location);
+//		tvLocation = rootView.findViewById(R.id.tv_location);
 		tvLocationEmpty = rootView.findViewById(R.id.et_location);
 		llLocation = rootView.findViewById(R.id.ll_location);
 		llLocationDetail = rootView.findViewById(R.id.ll_location_detail);
@@ -684,13 +684,13 @@ public class InviteFragment extends Fragment {
 	private void initializeDataLocation() {
 		Log.d(TAG, "initializeDataLocation");
 		String[] location = business.getLocationLine();
-//		if (business.getType() == TypeManager.TYPE.TRAINING) {
-			tvLocation.setText(getString(R.string.txt_club));
+		if (business.getType() == TypeManager.TYPE.TRAINING) {
+//			tvLocation.setText(getString(R.string.txt_club));
 			tvLocationEmpty.setText(getString(R.string.txt_club));
-//		} else {
+		} else {
 //			tvLocation.setText(getString(R.string.txt_tournament));
-//			tvLocationEmpty.setText(getString(R.string.txt_tournament));
-//		}
+			tvLocationEmpty.setText(getString(R.string.txt_tournament));
+		}
 		tvLocationEmpty.setTextColor(tvLocationEmpty.getCurrentHintTextColor());
 
 		if (location != null) {
@@ -702,12 +702,12 @@ public class InviteFragment extends Fragment {
 			tvLocationLine1.setVisibility(StringTool.getInstance().isEmpty(location[1]) ? View.GONE : View.VISIBLE);
 			tvLocationLine2.setVisibility(StringTool.getInstance().isEmpty(location[2]) ? View.GONE : View.VISIBLE);
 
-			tvLocation.setVisibility(View.VISIBLE);
+//			tvLocation.setVisibility(View.VISIBLE);
 			llLocationDetail.setVisibility(View.VISIBLE);
 			tvLocationEmpty.setText("");
 			tvLocationEmpty.setTextSize(2);
 		} else {
-			tvLocation.setVisibility(View.GONE);
+//			tvLocation.setVisibility(View.GONE);
 			llLocationDetail.setVisibility(View.GONE);
 			tvLocationEmpty.setVisibility(View.VISIBLE);
 			tvLocationEmpty.setTextSize(22);

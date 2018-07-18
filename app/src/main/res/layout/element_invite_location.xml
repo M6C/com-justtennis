@@ -1,67 +1,70 @@
-<LinearLayout
-	xmlns:android="http://schemas.android.com/apk/res/android"
-	android:id="@+id/ll_location"
-	android:layout_width="match_parent"
-	android:layout_height="wrap_content"
-	android:layout_marginBottom="@dimen/invite_layout_field_marging_bottom"
-	android:orientation="vertical"
-	android:padding="@dimen/invite_layout_field_padding" >
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/ll_location"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:gravity="center"
+    android:minHeight="@dimen/layout_card_view_height"
+    android:orientation="horizontal">
 
-	<TextView
-		android:id="@+id/tv_location"
-		android:layout_width="match_parent"
-		android:layout_height="wrap_content"
-		android:text="@string/txt_location"
-		android:textSize="@dimen/invite_text_size"
-		android:textColor="@color/invite_text_color"
-		android:textStyle="bold"
-		android:visibility="gone" />
+    <ImageView
+        android:id="@+id/iv_location_map"
+        android:layout_width="@dimen/icon_medium_horizontal_size"
+        android:layout_height="@dimen/icon_medium_horizontal_size"
+        android:layout_gravity="center_horizontal|center_vertical"
+        android:layout_marginBottom="@dimen/icon_vertical_margin"
+        android:layout_marginEnd="@dimen/icon_horizontal_margin"
+        android:layout_marginStart="@dimen/icon_horizontal_margin"
+        android:layout_marginTop="@dimen/icon_vertical_margin"
+        android:src="@drawable/ic_marker_location" />
 
-	<LinearLayout
-		android:id="@+id/ll_location_detail"
-		android:layout_width="match_parent"
-		android:layout_height="wrap_content"
-		android:layout_marginLeft="@dimen/invite_field_margin_left"
-		android:orientation="vertical"
-		android:visibility="gone"
-	>
-		<LinearLayout
-			android:layout_width="fill_parent"
-			android:layout_height="wrap_content"
-			android:orientation="horizontal">
-			<TextView
-				android:id="@+id/tv_location_name"
-				android:layout_width="0dp"
-				android:layout_height="wrap_content"
-				android:layout_weight="1"
-				android:textSize="@dimen/invite_field_size_small_1"
-				android:textStyle="bold" />
-			<ImageView
-				android:id="@+id/iv_location_map"
-				android:layout_width="32dp"
-				android:layout_height="32dp"
-				android:src="@drawable/location_marker_01"
-			/>
-		</LinearLayout>
-		<TextView
-			android:id="@+id/tv_location_line1"
-			android:layout_width="match_parent"
-			android:layout_height="wrap_content"
-			android:textSize="@dimen/invite_field_size_small_2" />
-		<TextView
-			android:id="@+id/tv_location_line2"
-			android:layout_width="match_parent"
-			android:layout_height="wrap_content"
-			android:textSize="@dimen/invite_field_size_small_2" />
-	</LinearLayout>
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/list_item_vertical_margin"
+        android:layout_weight="1"
+        android:paddingBottom="2dp"
+        android:orientation="vertical">
 
-	<EditText
-		android:id="@+id/et_location"
-		android:layout_width="match_parent"
-		android:layout_height="wrap_content"
-		android:gravity="center_horizontal"
-		android:inputType="none"
-		android:focusable="false"
-		android:textSize="@dimen/player_field_size"
-		android:textColor="@android:color/primary_text_light" />
+        <LinearLayout
+            android:id="@+id/ll_location_detail"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/tv_location_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Name"
+                android:textSize="@dimen/invite_field_size_small_1"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/tv_location_line1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Line 1"
+                android:textSize="@dimen/invite_field_size_small_2" />
+
+            <TextView
+                android:id="@+id/tv_location_line2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Line 2"
+                android:textSize="@dimen/invite_field_size_small_2" />
+        </LinearLayout>
+
+        <EditText
+            android:id="@+id/et_location"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:focusable="false"
+            android:gravity="center_horizontal"
+            android:inputType="none"
+            android:textColor="@android:color/primary_text_light"
+            android:textSize="@dimen/player_field_size"
+            android:visibility="gone" />
+
+    </LinearLayout>
 </LinearLayout>

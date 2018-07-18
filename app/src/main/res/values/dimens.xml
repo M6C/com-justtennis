@@ -8,9 +8,19 @@
     <dimen name="list_item_margin">8dp</dimen>
     <dimen name="separator_horizontal_margin">2dp</dimen>
 
+    <dimen name="hint_text_size">12sp</dimen>
     <dimen name="fab_margin">16dp</dimen>
     <dimen name="app_bar_height">150dp</dimen>
     <dimen name="text_margin">16dp</dimen>
     <dimen name="item_width">200dp</dimen>
+
+    <dimen name="layout_card_view_height">50sp</dimen>
+
+    <dimen name="icon_horizontal_margin">4dp</dimen>
+    <dimen name="icon_vertical_margin">4dp</dimen>
+    <dimen name="icon_large_horizontal_size">70sp</dimen>
+    <dimen name="icon_large_vertical_size">70sp</dimen>
+    <dimen name="icon_medium_horizontal_size">40sp</dimen>
+    <dimen name="icon_medium_vertical_size">40sp</dimen>
 
 </resources>

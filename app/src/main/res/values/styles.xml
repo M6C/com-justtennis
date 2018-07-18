@@ -47,6 +47,7 @@
         <!-- <item name="customLayoutBackgroundColor">@color/bleu_transparent_6</item> -->
         <item name="customLayoutBackgroundColor">@color/bleu_2_transparent_6</item>
         <item name="customHeaderTextColor">@color/blanc</item>
+        <item name="customTextViewHintTextAppearance">@style/AppTextViewHintTextAppearance</item>
 
         <!-- Component - NavBar -->
         <item name="styleNavBar">@style/AppComponentNavBar</item>
@@ -88,5 +89,13 @@
         <item name="android:textSize">24sp</item>
         <item name="android:textColor">@android:color/white</item>
         <item name="android:textAppearance">@style/AppTextAppearanceNavBar</item>
+    </style>
+
+    <style name="AppTextViewHintTextAppearance">
+        <!--android:textAppearance="@style/Widget.Design.TextInputLayout"-->
+        <!--android:textAppearance="@style/TextAppearance.Design.Hint"-->
+        <item name="android:textAppearance">@style/TextAppearance.Design.Counter</item>
+        <item name="android:textColor">@android:color/darker_gray</item>
+        <item name="android:gravity">center_horizontal</item>
     </style>
 </resources>

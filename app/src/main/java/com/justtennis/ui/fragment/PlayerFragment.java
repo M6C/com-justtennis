@@ -98,7 +98,6 @@ public class PlayerFragment extends Fragment implements IDrawerLayoutTypeNotifie
 	private LinearLayout llAddDemande;
 	private LinearLayout llMessage;
 
-	private TextView tvLocation;
 	private TextView tvLocationEmpty;
 	private LinearLayout llLocationDetail;
 	private TextView tvLocationName;
@@ -260,7 +259,6 @@ public class PlayerFragment extends Fragment implements IDrawerLayoutTypeNotifie
 		llModify = rootView.findViewById(R.id.ll_modify);
 		llAddDemande = rootView.findViewById(R.id.ll_add_demande);
 		llMessage = rootView.findViewById(R.id.ll_message);
-		tvLocation = rootView.findViewById(R.id.tv_location);
 		tvLocationEmpty = rootView.findViewById(R.id.et_location);
 		llLocationDetail = rootView.findViewById(R.id.ll_location_detail);
 		tvLocationName = rootView.findViewById(R.id.tv_location_name);
@@ -522,10 +520,8 @@ public class PlayerFragment extends Fragment implements IDrawerLayoutTypeNotifie
 
 		String[] location = business.getLocationLine();
 		if (getType() == TYPE.COMPETITION) {
-			tvLocation.setText(getString(R.string.txt_tournament));
 			tvLocationEmpty.setText(getString(R.string.txt_tournament));
 		} else {
-			tvLocation.setText(getString(R.string.txt_club));
 			tvLocationEmpty.setText(getString(R.string.txt_club));
 		}
 
@@ -533,11 +529,9 @@ public class PlayerFragment extends Fragment implements IDrawerLayoutTypeNotifie
 			tvLocationName.setText(location[0]);
 			tvLocationLine1.setText(location[1]);
 			tvLocationLine2.setText(location[2]);
-			tvLocation.setVisibility(View.VISIBLE);
 			llLocationDetail.setVisibility(View.VISIBLE);
 			tvLocationEmpty.setVisibility(View.GONE);
 		} else {
-			tvLocation.setVisibility(View.GONE);
 			llLocationDetail.setVisibility(View.GONE);
 			tvLocationEmpty.setVisibility(View.VISIBLE);
 		}

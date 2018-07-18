@@ -3,6 +3,7 @@
 
 	<attr name="customHeaderTextColor" format="reference|color" />
 	<attr name="customLayoutBackgroundColor" format="reference|color" />
+	<attr name="customTextViewHintTextAppearance" format="reference|color"></attr>
 
 	<attr name="buttonStyleAccent" format="reference|color" />
 </resources>

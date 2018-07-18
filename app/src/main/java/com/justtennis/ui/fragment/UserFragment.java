@@ -2,7 +2,6 @@
 package com.justtennis.ui.fragment;
 
 import android.app.Dialog;
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.view.Window;
@@ -15,9 +14,6 @@ import android.widget.TextView;
 
 import com.cameleon.common.android.factory.FactoryDialog;
 import com.justtennis.R;
-import com.justtennis.activity.GenericSpinnerFormActivity;
-import com.justtennis.activity.LocationActivity;
-import com.justtennis.activity.LocationAddressActivity;
 import com.justtennis.business.PlayerBusiness;
 import com.justtennis.business.UserBusiness;
 import com.justtennis.domain.Address;
@@ -33,8 +29,6 @@ import java.io.Serializable;
 public class UserFragment extends PlayerFragment {
 
 	public static final String TAG = UserFragment.class.getSimpleName();
-
-	private static final int RESULT_LOCATION_DETAIL = 3;
 
 	private TextView tvMessage;
 	private EditText etMessage;
@@ -58,19 +52,6 @@ public class UserFragment extends PlayerFragment {
 		super.onResume();
 		etMessage.setText(business.getMessage());
 		//RxFragment.publish(RxFragment.SUBJECT_ON_SHOW, TAG);
-	}
-
-	@Override
-	public void onActivityResult(int requestCode, int resultCode, Intent data) {
-		super.onActivityResult(requestCode, resultCode, data);
-		
-		if (requestCode==RESULT_LOCATION_DETAIL) {
-			if (data != null) {
-				addressFromResult = data.getSerializableExtra(LocationActivity.EXTRA_OUT_LOCATION);
-			}
-		} else {
-			super.onActivityResult(requestCode, resultCode, data);
-		}
 	}
 
 	@Override
@@ -122,16 +103,6 @@ public class UserFragment extends PlayerFragment {
 	public void onClickModify(View view) {
 		super.onClickModify(view);
 		business.saveMessage(etMessage.getText().toString());
-	}
-
-	@Override
-	public void onClickLocationDetail(View view) {
-		Intent intent = new Intent(context, LocationAddressActivity.class);
-		User user = (User) business.getPlayer();
-		if (user.getIdAddress() != null) {
-			intent.putExtra(GenericSpinnerFormActivity.EXTRA_DATA, new Address(user.getIdAddress()));
-		}
-		startActivityForResult(intent, RESULT_LOCATION_DETAIL);
 	}
 
 	public void onClickMenuAjoutChamp(View view) {

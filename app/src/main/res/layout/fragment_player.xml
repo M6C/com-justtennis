@@ -36,9 +36,7 @@
 				android:paddingTop="@dimen/player_layout_field_padding"
 				android:paddingLeft="@dimen/player_layout_field_padding"
 				android:text="@string/txt_message"
-				android:textSize="@dimen/player_text_size"
-				android:textStyle="bold"
-				android:textColor="@android:color/secondary_text_light_nodisable"
+				style="?attr/customTextViewHintTextAppearance"
 				android:visibility="gone" />
 
 			<LinearLayout
