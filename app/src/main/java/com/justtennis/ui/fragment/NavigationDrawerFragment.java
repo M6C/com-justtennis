@@ -442,6 +442,9 @@ public class NavigationDrawerFragment extends Fragment {
             fragment = ListClubFragment.build();
         } else if (i == R.id.nav_palmares_fast) {
             fragment = PalmaresFastFragment.build();
+        } else if (i == R.id.nav_sms_message) {
+            deep = 1;
+            fragment = SmsMessageFragment.build();
         }
         if (fragment != null) {
             FragmentTool.clearBackStackEntry(mActivity, deep);

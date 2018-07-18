@@ -96,7 +96,6 @@ public class PlayerFragment extends Fragment implements IDrawerLayoutTypeNotifie
 	private LinearLayout llCreate;
 	private LinearLayout llModify;
 	private LinearLayout llAddDemande;
-	private LinearLayout llMessage;
 
 	private TextView tvLocationEmpty;
 	private LinearLayout llLocationDetail;
@@ -258,7 +257,6 @@ public class PlayerFragment extends Fragment implements IDrawerLayoutTypeNotifie
 		llCreate = rootView.findViewById(R.id.ll_create);
 		llModify = rootView.findViewById(R.id.ll_modify);
 		llAddDemande = rootView.findViewById(R.id.ll_add_demande);
-		llMessage = rootView.findViewById(R.id.ll_message);
 		tvLocationEmpty = rootView.findViewById(R.id.et_location);
 		llLocationDetail = rootView.findViewById(R.id.ll_location_detail);
 		tvLocationName = rootView.findViewById(R.id.tv_location_name);
@@ -589,7 +587,6 @@ public class PlayerFragment extends Fragment implements IDrawerLayoutTypeNotifie
 		etLastname.setText(lastname);
 		etBirthday.setText(birthday);
 		etPhonenumber.setText(phonenumber);
-		llMessage.setVisibility(View.GONE);
 	}
 
 	private void initializeListType() {
