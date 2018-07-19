@@ -29,6 +29,10 @@
     <color name="orange_pumpkin_transparent_3">#88FF7518</color>
     <color name="orange_tangelo_transparent_1">#F7794D00</color>
 
+    <color name="jaune_transparent_6">#ddccb800</color>
+
+    <color name="rouge_transparent_6">#ddcc1b00</color>
+
     <color name="form_background_color">@color/blanc_transparent_3</color>
     <color name="form_field_background_color">@color/blanc_transparent_4</color>
     <color name="list_background_color">@color/blanc_transparent_5</color>

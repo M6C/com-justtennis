@@ -74,10 +74,14 @@ public class BonusListManager {
 				if (position == 0) {
 					tv.setText(context.getString(R.string.txt_bonus_point));
 					tv.setTextColor(context.getResources().getColor(R.color.spinner_color_hint));
-					tvBonus.setVisibility(View.GONE);
+					if (tvBonus != null) {
+						tvBonus.setVisibility(View.GONE);
+					}
 				} else {
 					tv.setTextColor(context.getResources().getColor(android.R.color.black));
-					tvBonus.setVisibility(View.VISIBLE);
+					if (tvBonus != null) {
+						tvBonus.setVisibility(View.VISIBLE);
+					}
 				}
 			}
 

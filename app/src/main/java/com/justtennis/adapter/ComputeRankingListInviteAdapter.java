@@ -112,7 +112,9 @@ public class ComputeRankingListInviteAdapter extends ArrayAdapter<Invite> {
 		tvPlayer.setText(v.getPlayer()==null ? "" : Html.fromHtml("<b>" + v.getPlayer().getFirstName() + "</b> " + v.getPlayer().getLastName()));
 		tvDate.setText(v.getDate()==null ? "" : sdf.format(v.getDate()));
 		tvPoint.setText(v.getPoint() > 0 ? ""+v.getPoint() : "");
-		tvBonusPoint.setText(v.getBonusPoint() > 0 ? ""+ v.getBonusPoint() : "");
+		if (tvBonusPoint != null) {
+			tvBonusPoint.setText(v.getBonusPoint() > 0 ? "" + v.getBonusPoint() : "");
+		}
 
 		if (ApplicationConfig.SHOW_ID) {
 			tvPlayer.setText(tvPlayer.getText() + " [id:" + v.getPlayer().getId() + "|idExt:" + v.getPlayer().getIdExternal() + "]");

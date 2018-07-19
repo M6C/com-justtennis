@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
+import android.support.v7.widget.CardView;
 import android.text.Html;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -44,14 +45,12 @@ import com.justtennis.domain.Player;
 import com.justtennis.domain.Ranking;
 import com.justtennis.domain.Saison;
 import com.justtennis.domain.ScoreSet;
-import com.justtennis.listener.action.TextWatcherFieldEnableView;
 import com.justtennis.manager.ContactManager;
 import com.justtennis.manager.TypeManager;
 import com.justtennis.notifier.NotifierMessageLogger;
 import com.justtennis.tool.FragmentTool;
 import com.justtennis.tool.ToolPermission;
 import com.justtennis.ui.common.CommonEnum;
-import com.justtennis.ui.rxjava.RxFragment;
 import com.justtennis.ui.viewmodel.ClubViewModel;
 import com.justtennis.ui.viewmodel.PlayerViewModel;
 import com.justtennis.ui.viewmodel.ScoreViewModel;
@@ -106,18 +105,17 @@ public class InviteFragment extends Fragment {
 	private TextView tvLocationEmpty;
 	private Button btnDetail;
 
-	private LinearLayout llLocation;
+	private CardView llLocation;
 	private LinearLayout llLocationDetail;
 	private TextView tvLocationName;
 	private TextView tvLocationLine1;
 	private TextView tvLocationLine2;
 	private ImageView ivLocationMap;
 	private LinearLayout llDetail;
-	private LinearLayout llBonusPoint;
+	private CardView llBonusPoint;
 
 	// SCORE
-	private LinearLayout llScore;
-	private TextView tvScore;
+	private CardView llScore;
 	private EditText etScore;
 	private BonusListManager bonusListManager;
 	private LinearLayout llPlayer;
@@ -152,21 +150,18 @@ public class InviteFragment extends Fragment {
 		swType = rootView.findViewById(R.id.sw_type);
 //		tvLocation = rootView.findViewById(R.id.tv_location);
 		tvLocationEmpty = rootView.findViewById(R.id.et_location);
-		llLocation = rootView.findViewById(R.id.ll_location);
+		llLocation = rootView.findViewById(R.id.ll_location_card);
 		llLocationDetail = rootView.findViewById(R.id.ll_location_detail);
 		tvLocationName = rootView.findViewById(R.id.tv_location_name);
 		tvLocationLine1 = rootView.findViewById(R.id.tv_location_line1);
 		tvLocationLine2 = rootView.findViewById(R.id.tv_location_line2);
 		ivLocationMap = rootView.findViewById(R.id.iv_location_map);
-		llScore = rootView.findViewById(R.id.ll_score);
-		tvScore = rootView.findViewById(R.id.tv_score);
+		llScore = rootView.findViewById(R.id.ll_score_card);
 		etScore = rootView.findViewById(R.id.et_score);
 		llDetail = rootView.findViewById(R.id.ll_detail);
-		llBonusPoint = rootView.findViewById(R.id.ll_bonus_point);
+		llBonusPoint = rootView.findViewById(R.id.ll_bonus_point_card);
 
 		bonusListManager = BonusListManager.getInstance(context, notifier);
-
-		etScore.addTextChangedListener(new TextWatcherFieldEnableView(tvScore, View.GONE));
 
 		initializeVisibility();
 		initializeListener();

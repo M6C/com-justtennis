@@ -64,7 +64,8 @@
             android:inputType="none"
             android:textColor="@android:color/primary_text_light"
             android:textSize="@dimen/player_field_size"
-            android:visibility="gone" />
+            android:visibility="gone"
+            android:background="@null"/>
 
     </LinearLayout>
 </LinearLayout>

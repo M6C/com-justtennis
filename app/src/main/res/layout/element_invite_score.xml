@@ -1,29 +1,42 @@
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/ll_score"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:layout_marginBottom="@dimen/invite_layout_field_marging_bottom"
-    android:orientation="vertical"
-    android:padding="@dimen/invite_layout_field_padding" >
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	android:id="@+id/ll_score"
+	android:layout_width="match_parent"
+	android:layout_height="wrap_content"
+	android:gravity="center"
+	android:minHeight="@dimen/layout_card_view_height"
+	android:orientation="horizontal">
 
-     <TextView
-         android:id="@+id/tv_score"
-         android:layout_width="match_parent"
-         android:layout_height="wrap_content"
-         android:text="@string/txt_score"
-         android:textSize="@dimen/invite_text_size"
-         android:textColor="@color/invite_text_color"
-         android:textStyle="bold"
-         android:visibility="gone" />
+	<ImageView
+		android:id="@+id/iv_score"
+		android:layout_width="@dimen/icon_medium_horizontal_size"
+		android:layout_height="@dimen/icon_medium_horizontal_size"
+		android:layout_gravity="center_horizontal|center_vertical"
+		android:layout_marginBottom="@dimen/icon_vertical_margin"
+		android:layout_marginEnd="@dimen/icon_horizontal_margin"
+		android:layout_marginStart="@dimen/icon_horizontal_margin"
+		android:layout_marginTop="@dimen/icon_vertical_margin"
+		android:src="@drawable/ic_score_10" />
 
-	<EditText
-		android:id="@+id/et_score"
-		android:layout_width="match_parent"
+	<LinearLayout
+		android:layout_width="0dp"
 		android:layout_height="wrap_content"
-		android:gravity="center_horizontal"
-		android:focusable="false"
-		android:inputType="none"
-		android:textSize="@dimen/player_field_size"
-		android:hint="@string/txt_score" />
+		android:layout_marginStart="@dimen/list_item_vertical_margin"
+		android:layout_weight="1"
+		android:paddingBottom="2dp"
+		android:orientation="vertical">
+
+
+		<EditText
+			android:id="@+id/et_score"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:gravity="center_horizontal"
+			android:focusable="false"
+			android:inputType="none"
+			android:textSize="@dimen/player_field_size"
+			android:hint="@string/txt_score"
+			android:background="@null" />
+
+	</LinearLayout>
 </LinearLayout>

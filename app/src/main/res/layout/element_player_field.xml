@@ -2,23 +2,24 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
->
+    android:orientation="vertical">
+
     <android.support.design.widget.TextInputLayout
         android:id="@+id/ll_firstname"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="@dimen/player_layout_field_marging_bottom"
         android:padding="@dimen/player_layout_field_padding">
+
         <EditText
             android:id="@+id/et_firstname"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center_horizontal"
-            android:textSize="@dimen/player_field_size"
             android:hint="@string/txt_firstname"
+            android:inputType="textCapWords"
             android:maxLines="1"
-            android:inputType="textCapWords" />
+            android:textSize="@dimen/player_field_size" />
     </android.support.design.widget.TextInputLayout>
 
     <android.support.design.widget.TextInputLayout
@@ -27,15 +28,16 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="@dimen/player_layout_field_marging_bottom"
         android:padding="@dimen/player_layout_field_padding">
+
         <EditText
             android:id="@+id/et_lastname"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center_horizontal"
-            android:textSize="@dimen/player_field_size"
             android:hint="@string/txt_lastname"
+            android:inputType="textCapWords"
             android:maxLines="1"
-            android:inputType="textCapWords" />
+            android:textSize="@dimen/player_field_size" />
     </android.support.design.widget.TextInputLayout>
 
     <android.support.design.widget.TextInputLayout
@@ -44,90 +46,94 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="@dimen/player_layout_field_marging_bottom"
         android:padding="@dimen/player_layout_field_padding">
+
         <EditText
             android:id="@+id/et_birthday"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="center_horizontal"
-            android:textSize="@dimen/player_field_size"
-            android:hint="@string/txt_birthday"
             android:focusable="false"
-            android:inputType="none" />
+            android:gravity="center_horizontal"
+            android:hint="@string/txt_birthday"
+            android:inputType="none"
+            android:textSize="@dimen/player_field_size" />
     </android.support.design.widget.TextInputLayout>
 
     <android.support.design.widget.TextInputLayout
         android:id="@+id/ll_phonenumber"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="@dimen/player_layout_field_marging_bottom"
         android:padding="@dimen/player_layout_field_padding">
+
         <EditText
             android:id="@+id/et_phonenumber"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center_horizontal"
-            android:textSize="@dimen/player_field_size"
             android:hint="@string/txt_phonenumber"
+            android:inputType="phone"
             android:maxLines="1"
-            android:inputType="phone" />
+            android:textSize="@dimen/player_field_size" />
     </android.support.design.widget.TextInputLayout>
 
-    <include layout="@layout/element_player_field_ranking_card"/>
+    <include
+        layout="@layout/element_player_field_ranking_card"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/activity_vertical_margin" />
 
-    <include layout="@layout/element_invite_location_card"
+    <include
+        layout="@layout/element_invite_location_card"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/activity_vertical_margin" />
+
+    <LinearLayout
+        android:id="@+id/ll_saison"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/activity_vertical_margin"
-        android:layout_marginBottom="@dimen/activity_vertical_margin"/>
+        android:background="@color/player_form_field_background_color"
+        android:orientation="vertical"
+        android:padding="@dimen/player_layout_field_padding"
+        android:visibility="gone">
 
-      <LinearLayout
-          android:id="@+id/ll_saison"
-          android:layout_width="match_parent"
-          android:layout_height="wrap_content"
-          android:layout_marginBottom="@dimen/player_layout_field_marging_bottom"
-          android:background="@color/player_form_field_background_color"
-          android:orientation="vertical"
-          android:padding="@dimen/player_layout_field_padding"
-          android:visibility="gone"
-      >
+        <TextView
+            style="?attr/customTextViewHintTextAppearance"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/txt_saison" />
 
-          <TextView
-              android:layout_width="match_parent"
-              android:layout_height="wrap_content"
-              android:text="@string/txt_saison"
-              style="?attr/customTextViewHintTextAppearance"/>
+        <Spinner
+            android:id="@+id/sp_saison"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:textSize="@dimen/player_field_size" />
+    </LinearLayout>
 
-          <Spinner
-              android:id="@+id/sp_saison"
-              android:layout_width="match_parent"
-              android:layout_height="wrap_content"
-              android:gravity="center_horizontal"
-              android:textSize="@dimen/player_field_size" />
-      </LinearLayout>
+    <LinearLayout
+        android:id="@+id/ll_type"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/activity_vertical_margin"
+        android:background="@color/player_form_field_background_color"
+        android:orientation="vertical"
+        android:padding="@dimen/player_layout_field_padding"
+        android:visibility="gone">
 
-      <LinearLayout
-          android:id="@+id/ll_type"
-          android:layout_width="match_parent"
-          android:layout_height="wrap_content"
-          android:layout_marginBottom="@dimen/player_layout_field_marging_bottom"
-          android:background="@color/player_form_field_background_color"
-          android:orientation="vertical"
-          android:padding="@dimen/player_layout_field_padding"
-          android:visibility="gone" >
+        <TextView
+            style="?attr/customTextViewHintTextAppearance"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/txt_type" />
 
-          <TextView
-              android:layout_width="match_parent"
-              android:layout_height="wrap_content"
-              android:text="@string/txt_type"
-              style="?attr/customTextViewHintTextAppearance"/>
-
-          <Spinner
-              android:id="@+id/sp_type"
-              android:layout_width="match_parent"
-              android:layout_height="wrap_content"
-              android:gravity="center_horizontal"
-              android:textSize="@dimen/player_field_size"
-              android:background="@null" />
-      </LinearLayout>
+        <Spinner
+            android:id="@+id/sp_type"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@null"
+            android:gravity="center_horizontal"
+            android:textSize="@dimen/player_field_size" />
+    </LinearLayout>
 
 </LinearLayout>

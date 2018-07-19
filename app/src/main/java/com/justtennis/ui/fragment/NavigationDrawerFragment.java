@@ -308,6 +308,7 @@ public class NavigationDrawerFragment extends Fragment {
                     android.R.layout.simple_list_item_activated_1,
                     android.R.id.text1,
                     saisonBusiness.getListTxtSaisons());
+            mAdapterSaison.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
             mSpSaison.setAdapter(mAdapterSaison);
             mSpSaison.setSelection(saisonBusiness.getSaisonActivePosition());
 
