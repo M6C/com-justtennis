@@ -200,7 +200,11 @@ public class InviteBusiness {
 	public boolean isUnknownPlayer() {
 		return getPlayer() != null && PlayerService.isUnknownPlayer(getPlayer());
 	}
-	
+
+	public int getUnknownPlayerRandomRes() {
+		return PlayerService.getUnknownPlayerRandomRes();
+	}
+
 	public void send(String text) {
 //		Date date = invite.getDate();
 //		Invite invite = new Invite(user, player, date, getType());

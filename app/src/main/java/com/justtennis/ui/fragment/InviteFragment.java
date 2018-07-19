@@ -556,6 +556,8 @@ public class InviteFragment extends Fragment {
 			tvLastname.setText(player.getLastName());
 			if (player.getIdGoogle()!=null && player.getIdGoogle() > 0L) {
 				ivPhoto.setImageBitmap(ContactManager.getInstance().getPhoto(activity, player.getIdGoogle()));
+			} else {
+				ivPhoto.setImageResource(business.getUnknownPlayerRandomRes());
 			}
 			if (StringTool.getInstance().isEmpty(player.getFirstName())) {
 				tvFirstname.setVisibility(View.GONE);
