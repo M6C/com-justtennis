@@ -29,7 +29,7 @@ public class SmsMessageFragment extends Fragment {
 
 	public static final String TAG = SmsMessageFragment.class.getSimpleName();
 
-	private TextView tvMessage;
+//	private TextView tvMessage;
 	private EditText etMessage;
 	private ImageView ivAjoutChamp;
 	private SmsMessageBusiness business;
@@ -74,13 +74,13 @@ public class SmsMessageFragment extends Fragment {
 	}
 
 	protected void initializeViewById() {
-		tvMessage = rootView.findViewById(R.id.tv_message);
+//		tvMessage = rootView.findViewById(R.id.tv_message);
 		etMessage = rootView.findViewById(R.id.et_message);
 		ivAjoutChamp = rootView.findViewById(R.id.iv_ajout_champ);
 	}
 
 	protected void initializeListener() {
-		etMessage.addTextChangedListener(new TextWatcherFieldEnableView(tvMessage, View.GONE));
+//		etMessage.addTextChangedListener(new TextWatcherFieldEnableView(tvMessage, View.GONE));
 		ivAjoutChamp.setOnClickListener(this::onClickMenuAjoutChamp);
 	}
 
@@ -88,6 +88,7 @@ public class SmsMessageFragment extends Fragment {
 		FragmentTool.initializeFabDrawable(activity, FragmentTool.INIT_FAB_IMAGE.VALIDATE);
 		FragmentTool.onClickFab(activity, (View view) -> {
 			business.saveMessage(etMessage.getText().toString());
+			FragmentTool.finish(activity);
 		});
 	}
 
