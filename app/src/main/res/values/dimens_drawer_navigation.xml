@@ -2,6 +2,7 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <dimen name="nav_header_vertical_spacing">8dp</dimen>
+    <dimen name="nav_header_vertical_small_spacing">4dp</dimen>
     <dimen name="nav_header_height">176dp</dimen>
     <dimen name="nav_header_image_width">@dimen/icon_large_horizontal_size</dimen>
     <dimen name="nav_header_image_height">@dimen/icon_large_vertical_size</dimen>

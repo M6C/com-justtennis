@@ -19,10 +19,11 @@
         android:contentDescription="@string/launcherImage" />
 
     <TextView
+        android:id="@+id/nav_header_user_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:paddingTop="@dimen/nav_header_vertical_spacing"
-        android:text="@string/user_postman_name"
+        android:text="@string/user_unknown_name"
         style="?attr/textAppearanceNavBarTitle" />
 
     <!--style="?attr/styleSpinnerSaison"-->
@@ -31,6 +32,8 @@
         android:id="@+id/sp_saison"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/nav_header_vertical_spacing"
+        android:layout_marginBottom="@dimen/nav_header_vertical_small_spacing"
         style="@style/SpinnerTheme"
         android:spinnerMode="dialog"
         android:background="@null"/>

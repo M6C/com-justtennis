@@ -26,14 +26,15 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.justtennis.R;
+import com.justtennis.domain.User;
 import com.justtennis.drawer.manager.business.DrawerSaisonBusiness;
 import com.justtennis.manager.TypeManager;
 import com.justtennis.notifier.NotifierMessageLogger;
 import com.justtennis.tool.FragmentTool;
-import com.justtennis.ui.rxjava.RxFragment;
 import com.justtennis.ui.rxjava.RxNavigationDrawer;
 
 import org.gdocument.gtracergps.launcher.log.Logger;
@@ -131,11 +132,24 @@ public class NavigationDrawerFragment extends Fragment {
 
         initializeMenu(rootView);
         initializeSaison(rootView);
+        initializeUser(rootView);
         initializeType(rootView);
         initializeSubscribeDbRestored();
 //        initializeSubscribeFragment();
 
         return rootView;
+    }
+
+    private void initializeUser(View rootView) {
+        NavigationView navView = rootView.findViewById(R.id.nav_view);
+
+        TextView tvUserName = navView.getHeaderView(0).findViewById(R.id.nav_header_user_name);
+        if (tvUserName != null) {
+            User user =  saisonBusiness.getCurrentUser();
+            if (user != null) {
+                tvUserName.setText(user.getFullName());
+            }
+        }
     }
 
     @Override
@@ -305,10 +319,10 @@ public class NavigationDrawerFragment extends Fragment {
         if (mSpSaison != null) {
             mAdapterSaison = new ArrayAdapter<>(
                     Objects.requireNonNull(getActivity()).getApplicationContext(),
-                    android.R.layout.simple_list_item_activated_1,
+                    R.layout.spinner_saison_item,
                     android.R.id.text1,
                     saisonBusiness.getListTxtSaisons());
-            mAdapterSaison.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+            mAdapterSaison.setDropDownViewResource(R.layout.spinner_saison_dropdown_item);
             mSpSaison.setAdapter(mAdapterSaison);
             mSpSaison.setSelection(saisonBusiness.getSaisonActivePosition());
 

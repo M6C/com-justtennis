@@ -158,8 +158,8 @@ public class PalmaresFastFragment extends Fragment {
 	}
 
 	private void intializeBonusList() {
-		ArrayAdapter<String> dataAdapter = new ArrayAdapter<>(activity, R.layout.spinner_item_bonus, LIST_BONUS);
-		dataAdapter.setDropDownViewResource(R.layout.spinner_item_bonus);
+		ArrayAdapter<String> dataAdapter = new ArrayAdapter<>(activity, R.layout.spinner_item, LIST_BONUS);
+		dataAdapter.setDropDownViewResource(R.layout.spinner_item);
 		spBonus.setAdapter(dataAdapter);
 
 		spBonus.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {

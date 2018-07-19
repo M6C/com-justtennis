@@ -12,9 +12,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.cameleon.common.android.inotifier.INotifierMessage;
 import com.justtennis.R;
+import com.justtennis.domain.User;
 import com.justtennis.drawer.adapter.notifier.NavigationDrawerSaisonNotifer;
 import com.justtennis.drawer.adapter.notifier.NavigationDrawerTypeNotifer;
 import com.justtennis.drawer.data.NavigationDrawerData;
@@ -79,7 +81,8 @@ public class DrawerManager {
 
 		NavigationView navView = rootView.findViewById(R.id.nav_view);
 
-		AppCompatSpinner spSaison = navView.getHeaderView(0).findViewById(R.id.sp_saison);
+		View headerView = navView.getHeaderView(0);
+		AppCompatSpinner spSaison = headerView.findViewById(R.id.sp_saison);
 		if (spSaison != null) {
 			spSaison.setAdapter(new ArrayAdapter<>(
 					Objects.requireNonNull(getActivity()).getApplicationContext(),
@@ -88,6 +91,13 @@ public class DrawerManager {
 					getBusiness().getListTxtSaisons()));
 		}
 
+		TextView tvUserName = headerView.findViewById(R.id.nav_header_user_name);
+		if (tvUserName != null) {
+			User user =  business.getCurrentUser();
+			if (user != null) {
+				tvUserName.setText(user.getFullName());
+			}
+		}
 //		initializeDrawer();
 
 		return rootView;

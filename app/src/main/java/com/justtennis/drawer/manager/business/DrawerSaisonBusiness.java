@@ -8,15 +8,18 @@ import android.content.Context;
 import com.cameleon.common.android.inotifier.INotifierMessage;
 import com.justtennis.db.service.InviteService;
 import com.justtennis.db.service.SaisonService;
+import com.justtennis.db.service.UserService;
 import com.justtennis.domain.Saison;
+import com.justtennis.domain.User;
 
 public class DrawerSaisonBusiness {
 
 	@SuppressWarnings("unused")
 	private static final String TAG = DrawerSaisonBusiness.class.getSimpleName();
 
-	private SaisonService saisonService;
-	private InviteService inviteService;
+	private final UserService userService;
+	private final SaisonService saisonService;
+	private final InviteService inviteService;
 
 	private Context context;
 
@@ -28,6 +31,7 @@ public class DrawerSaisonBusiness {
 
 	public DrawerSaisonBusiness(Context context, INotifierMessage notificationMessage) {
 		this.context = context;
+		userService = new UserService(context, notificationMessage);
 		saisonService = new SaisonService(context, notificationMessage);
 		inviteService = new InviteService(context, notificationMessage);
 	}
@@ -69,6 +73,10 @@ public class DrawerSaisonBusiness {
 
 	public boolean isExistInviteSaison(Saison saison) {
 		return inviteService.countByIdSaison(saison.getId()) > 0;
+	}
+
+	public User getCurrentUser() {
+		return userService.getByIdSaison(saisonActive.getId());
 	}
 
 	public Saison createSaison(int year, boolean active) {

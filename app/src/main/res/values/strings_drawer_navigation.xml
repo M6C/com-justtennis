@@ -2,7 +2,7 @@
 <resources>
 
     <string name="launcherImage">launcherImage</string>
-    <string name="user_postman_name">John Doe</string>
+    <string name="user_unknown_name">Unknown</string>
 
     <string name="menu_item_user">Utilisateur</string>
     <string name="menu_item_list_club">Clubs</string>

@@ -90,8 +90,8 @@ public class RankingListManager {
 
 //		ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(context, android.R.layout.simple_spinner_item, listTxtRankings);
 //		dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-		ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(context, R.layout.spinner_item_bonus, listTxtRankings);
-		dataAdapter.setDropDownViewResource(R.layout.spinner_item_bonus);
+		ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(context, R.layout.spinner_item, listTxtRankings);
+		dataAdapter.setDropDownViewResource(R.layout.spinner_item);
 		spRanking.setAdapter(dataAdapter);
 		spRanking.setEnabled(listener != null);
 
