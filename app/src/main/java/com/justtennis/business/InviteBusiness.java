@@ -1,15 +1,9 @@
 package com.justtennis.business;
 
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.GregorianCalendar;
-import java.util.List;
-import java.util.Objects;
-
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -46,6 +40,14 @@ import com.justtennis.manager.TypeManager;
 import com.justtennis.parser.LocationParser;
 import com.justtennis.parser.SmsParser;
 import com.justtennis.ui.common.CommonEnum;
+
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
+import java.util.List;
+import java.util.Objects;
 
 public class InviteBusiness {
 
@@ -211,8 +213,8 @@ public class InviteBusiness {
 		return getPlayer() != null && PlayerService.isUnknownPlayer(getPlayer());
 	}
 
-	public int getUnknownPlayerRandomRes() {
-		return PlayerService.getUnknownPlayerRandomRes();
+	public Drawable getUnknownPlayerRandomRes(Activity activity) {
+		return PlayerService.getUnknownPlayerRandomRes(activity);
 	}
 
 	public void send(String text) {

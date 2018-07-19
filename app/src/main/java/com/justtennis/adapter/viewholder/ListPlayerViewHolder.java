@@ -71,7 +71,7 @@ public class ListPlayerViewHolder extends CommonListViewHolder<Player> {
             imagePlayer.setImageBitmap(contactManager.getPhoto(activity, player.getIdGoogle()));
         }
         else {
-            imagePlayer.setImageResource(PlayerService.getUnknownPlayerRandomRes());
+            imagePlayer.setImageDrawable(PlayerService.getUnknownPlayerRandomRes(activity));
         }
 
         if (ApplicationConfig.SHOW_ID) {

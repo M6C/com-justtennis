@@ -49,6 +49,8 @@
         <item name="customHeaderTextColor">@color/blanc</item>
         <item name="customTextViewHintTextAppearance">@style/AppTextViewHintTextAppearance</item>
 
+        <item name="customListPlayerDrawable">@array/list_ic_tennis_player</item>
+
         <!-- Component - NavBar -->
         <item name="styleNavBar">@style/AppComponentNavBar</item>
         <item name="styleNavBarHeader">@style/AppComponentNavBarHeader</item>
