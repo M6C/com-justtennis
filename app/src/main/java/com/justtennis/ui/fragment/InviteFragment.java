@@ -39,6 +39,7 @@ import com.justtennis.activity.PlayerActivity;
 import com.justtennis.activity.ScoreActivity;
 import com.justtennis.adapter.CustomArrayAdapter;
 import com.justtennis.adapter.manager.BonusListManager;
+import com.justtennis.adapter.manager.RankingListManager;
 import com.justtennis.business.InviteBusiness;
 import com.justtennis.db.service.PlayerService;
 import com.justtennis.domain.Club;
@@ -101,6 +102,7 @@ public class InviteFragment extends Fragment {
 	private LinearLayout llPhoto;
 	private ImageView ivPhoto;
 	private Switch swType;
+	private CardView llRanking;
 	private Spinner spRanking;
 	private Spinner spSaison;
 //	private TextView tvLocation;
@@ -122,6 +124,7 @@ public class InviteFragment extends Fragment {
 	private BonusListManager bonusListManager;
 	private LinearLayout llPlayer;
 	private boolean displayDetail;
+	private RankingListManager rankingListManager;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -132,6 +135,7 @@ public class InviteFragment extends Fragment {
 
 		notifier = NotifierMessageLogger.getInstance();
 		business = new InviteBusiness(context, notifier);
+		rankingListManager = RankingListManager.getInstance(context, notifier);
 
 		if (savedInstanceState != null) {
 			business.initializeData(savedInstanceState);
@@ -162,6 +166,7 @@ public class InviteFragment extends Fragment {
 		llScore = rootView.findViewById(R.id.ll_score_card);
 		etScore = rootView.findViewById(R.id.et_score);
 		llDetail = rootView.findViewById(R.id.ll_detail);
+		llRanking = rootView.findViewById(R.id.ll_ranking_card);
 		llBonusPoint = rootView.findViewById(R.id.ll_bonus_point_card);
 
 		bonusListManager = BonusListManager.getInstance(context, notifier);
@@ -438,7 +443,8 @@ public class InviteFragment extends Fragment {
 
 		initializeDataPlayer();
 		initializeRankingList();
-		initializeRanking();
+		initializeRankingEstimateList();
+//		initializeRanking();
 		initializeSaisonList();
 		initializeSaison();
 	}
@@ -500,6 +506,7 @@ public class InviteFragment extends Fragment {
 				llLocation.setVisibility(View.GONE);
 				llScore.setVisibility(View.GONE);
 				llBonusPoint.setVisibility(View.GONE);
+				llRanking.setVisibility(View.GONE);
 				rootView.findViewById(R.id.sv_content).setLayoutParams(new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT, 0));
 				break;
 			case INVITE_DETAIL:
@@ -508,6 +515,7 @@ public class InviteFragment extends Fragment {
 				llLocation.setVisibility(View.VISIBLE);
 				llScore.setVisibility(View.VISIBLE);
 				llBonusPoint.setVisibility(View.VISIBLE);
+				llRanking.setVisibility(View.VISIBLE);
 				rootView.findViewById(R.id.sv_content).setLayoutParams(new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 0, 1));
 		}
 
@@ -544,7 +552,7 @@ public class InviteFragment extends Fragment {
 	private void initializeData() {
 		initializeDataPlayer();
 		initializeRankingList();
-		initializeRanking();
+//		initializeRanking();
 		initializeSaisonList();
 		initializeSaison();
 		initializeDataType();
@@ -592,32 +600,32 @@ public class InviteFragment extends Fragment {
 		Log.d(TAG, "initializeDataType");
 		swType.setChecked(getTypePosition()==0);
 	}
-
-	private void initializeRankingList() {
-		Log.d(TAG, "initializeRankingList");
-		if (spRanking != null) {
-			spRanking.setVisibility(View.VISIBLE);
-			CustomArrayAdapter<String> dataAdapter = new CustomArrayAdapter<>(context, business.getListTxtRankings());
-			spRanking.setAdapter(dataAdapter);
-
-			spRanking.setOnItemSelectedListener(dataAdapter.new OnItemSelectedListener<Ranking>() {
-				@Override
-				public Ranking getItem(int position) {
-					return business.getListRanking().get(position);
-				}
-
-				@Override
-				public boolean isHintItemSelected(Ranking item) {
-					return business.isEmptyRanking(item);
-				}
-
-				@Override
-				public void onItemSelected(AdapterView<?> parent, View view, int position, long id, Ranking item) {
-					business.setIdRanking(item.getId());
-				}
-			});
-		}
-	}
+//
+//	private void initializeRankingList() {
+//		Log.d(TAG, "initializeRankingList");
+//		if (spRanking != null) {
+//			spRanking.setVisibility(View.VISIBLE);
+//			CustomArrayAdapter<String> dataAdapter = new CustomArrayAdapter<>(context, business.getListTxtRankings());
+//			spRanking.setAdapter(dataAdapter);
+//
+//			spRanking.setOnItemSelectedListener(dataAdapter.new OnItemSelectedListener<Ranking>() {
+//				@Override
+//				public Ranking getItem(int position) {
+//					return business.getListRanking().get(position);
+//				}
+//
+//				@Override
+//				public boolean isHintItemSelected(Ranking item) {
+//					return business.isEmptyRanking(item);
+//				}
+//
+//				@Override
+//				public void onItemSelected(AdapterView<?> parent, View view, int position, long id, Ranking item) {
+//					business.setIdRanking(item.getId());
+//				}
+//			});
+//		}
+//	}
 
 	private void initializeSaisonList() {
 		Log.d(TAG, "initializeSaisonList");
@@ -665,23 +673,23 @@ public class InviteFragment extends Fragment {
 		Log.d(TAG, "initializeBonus");
 		bonusListManager.manage(activity, business.getInvite());
 	}
-
-	private void initializeRanking() {
-		Log.d(TAG, "initializeRanking");
-		if (spRanking != null) {
-			Long id = business.getIdRanking();
-			int position = 0;
-			List<Ranking> listRanking = business.getListRanking();
-			for(Ranking ranking : listRanking) {
-				if (ranking.getId().equals(id)) {
-					spRanking.setSelection(position, true);
-					break;
-				} else {
-					position++;
-				}
-			}
-		}
-	}
+//
+//	private void initializeRanking() {
+//		Log.d(TAG, "initializeRanking");
+//		if (spRanking != null) {
+//			Long id = business.getIdRanking();
+//			int position = 0;
+//			List<Ranking> listRanking = business.getListRanking();
+//			for(Ranking ranking : listRanking) {
+//				if (ranking.getId().equals(id)) {
+//					spRanking.setSelection(position, true);
+//					break;
+//				} else {
+//					position++;
+//				}
+//			}
+//		}
+//	}
 
 	private void initializeDataScore() {
 		Log.d(TAG, "initializeDataScore");
@@ -740,6 +748,14 @@ public class InviteFragment extends Fragment {
         etScore.setOnClickListener(this::onClickInviteScore);
 		llPhoto.setOnClickListener(this::onClickPlayer);
 		ivPhoto.setOnClickListener(this::onClickPlayer);
+	}
+
+	private void initializeRankingList() {
+		rankingListManager.manageRanking(activity, business.getPlayer(), false);
+	}
+
+	private void initializeRankingEstimateList() {
+		rankingListManager.manageRanking(activity, business.getPlayer(), true);
 	}
 
 	private int getTypePosition() {

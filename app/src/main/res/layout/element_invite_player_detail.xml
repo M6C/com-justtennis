@@ -60,27 +60,13 @@
             </LinearLayout>
 
             <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="@dimen/invite_layout_field_marging_bottom"
-                android:gravity="end"
-                android:orientation="vertical" >
-                <Spinner
-                    android:id="@+id/sp_ranking"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="@dimen/invite_field_margin_left"
-                    android:gravity="center_horizontal"
-                    android:textSize="@dimen/invite_field_size" />
-            </LinearLayout>
-
-            <LinearLayout
                 android:id="@+id/ll_saison"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="@dimen/invite_layout_field_marging_bottom"
                 android:gravity="end"
-                android:orientation="vertical" >
+                android:orientation="vertical"
+                android:visibility="gone">
                 <Spinner
                     android:id="@+id/sp_saison"
                     android:layout_width="wrap_content"
