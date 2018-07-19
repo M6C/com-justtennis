@@ -12,6 +12,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -176,6 +177,15 @@ public class InviteBusiness {
 		outState.putSerializable(InviteActivity.EXTRA_MODE, mode);
 		outState.putSerializable(InviteActivity.EXTRA_INVITE, invite);
 		outState.putSerializable(InviteActivity.EXTRA_USER, user);
+	}
+
+
+	public void onViewStateRestored(@Nullable Bundle savedInstanceState) {
+		if (savedInstanceState != null) {
+			mode = (CommonEnum.INVITE_MODE) savedInstanceState.getSerializable(InviteActivity.EXTRA_MODE);
+			invite = (Invite) savedInstanceState.getSerializable(InviteActivity.EXTRA_INVITE);
+			user = (User) savedInstanceState.getSerializable(InviteActivity.EXTRA_USER);
+		}
 	}
 
 	private void initializeScores() {

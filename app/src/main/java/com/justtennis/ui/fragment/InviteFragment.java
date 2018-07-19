@@ -8,6 +8,7 @@ import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v7.widget.CardView;
@@ -80,6 +81,7 @@ public class InviteFragment extends Fragment {
 	private static final int RESULT_LOCATION = 2;
 	private static final int RESULT_LOCATION_DETAIL = 3;
 	private static final int RESULT_SCORE = 4;
+	private static final String KEY_DISPLAY_DETAIL = "KEY_DISPLAY_DETAIL";
 
 	private InviteBusiness business;
 	private NotifierMessageLogger notifier;
@@ -119,6 +121,7 @@ public class InviteFragment extends Fragment {
 	private EditText etScore;
 	private BonusListManager bonusListManager;
 	private LinearLayout llPlayer;
+	private boolean displayDetail;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -244,6 +247,12 @@ public class InviteFragment extends Fragment {
 		super.onSaveInstanceState(outState);
 	}
 
+	@Override
+	public void onViewStateRestored(@Nullable Bundle savedInstanceState) {
+		super.onViewStateRestored(savedInstanceState);
+		business.onViewStateRestored(savedInstanceState);
+	}
+
 	public void onClickOk(View view) {
 		business.modify();
 //		activity.finish();
@@ -294,6 +303,7 @@ public class InviteFragment extends Fragment {
 	}
 
 	public void onClickInviteScore(View view) {
+		saveInstanceState();
 		ScoreFragment fragment = ScoreFragment.build(business.getScores());
 
 		Bundle args = fragment.getArguments();
@@ -424,6 +434,7 @@ public class InviteFragment extends Fragment {
 		initializeContentPlayer();
 		initializeContentPlayerView();
 		initializeVisibility();
+		initializeListener();
 
 		initializeDataPlayer();
 		initializeRankingList();
@@ -682,13 +693,10 @@ public class InviteFragment extends Fragment {
 		Log.d(TAG, "initializeDataLocation");
 		String[] location = business.getLocationLine();
 		if (business.getType() == TypeManager.TYPE.TRAINING) {
-//			tvLocation.setText(getString(R.string.txt_club));
 			tvLocationEmpty.setText(getString(R.string.txt_club));
 		} else {
-//			tvLocation.setText(getString(R.string.txt_tournament));
 			tvLocationEmpty.setText(getString(R.string.txt_tournament));
 		}
-		tvLocationEmpty.setTextColor(tvLocationEmpty.getCurrentHintTextColor());
 
 		if (location != null) {
 			tvLocationName.setText(location[0]);
@@ -699,12 +707,10 @@ public class InviteFragment extends Fragment {
 			tvLocationLine1.setVisibility(StringTool.getInstance().isEmpty(location[1]) ? View.GONE : View.VISIBLE);
 			tvLocationLine2.setVisibility(StringTool.getInstance().isEmpty(location[2]) ? View.GONE : View.VISIBLE);
 
-//			tvLocation.setVisibility(View.VISIBLE);
 			llLocationDetail.setVisibility(View.VISIBLE);
 			tvLocationEmpty.setText("");
 			tvLocationEmpty.setTextSize(2);
 		} else {
-//			tvLocation.setVisibility(View.GONE);
 			llLocationDetail.setVisibility(View.GONE);
 			tvLocationEmpty.setVisibility(View.VISIBLE);
 			tvLocationEmpty.setTextSize(22);
@@ -732,7 +738,8 @@ public class InviteFragment extends Fragment {
         ivLocationMap.setOnClickListener(this::onClickLocationMap);
         tvLocationEmpty.setOnClickListener(this::onClickLocationDetail);
         etScore.setOnClickListener(this::onClickInviteScore);
-        llPhoto.setOnClickListener(this::onClickPlayer);
+		llPhoto.setOnClickListener(this::onClickPlayer);
+		ivPhoto.setOnClickListener(this::onClickPlayer);
 	}
 
 	private int getTypePosition() {

@@ -62,7 +62,7 @@
             android:focusable="false"
             android:gravity="center_horizontal"
             android:inputType="none"
-            android:textColor="@android:color/primary_text_light"
+            android:textColor="?android:textColorHint"
             android:textSize="@dimen/player_field_size"
             android:visibility="gone"
             android:background="@null"/>
