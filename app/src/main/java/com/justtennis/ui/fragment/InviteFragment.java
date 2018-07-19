@@ -44,7 +44,6 @@ import com.justtennis.business.InviteBusiness;
 import com.justtennis.db.service.PlayerService;
 import com.justtennis.domain.Club;
 import com.justtennis.domain.Player;
-import com.justtennis.domain.Ranking;
 import com.justtennis.domain.Saison;
 import com.justtennis.domain.ScoreSet;
 import com.justtennis.manager.ContactManager;
@@ -103,7 +102,6 @@ public class InviteFragment extends Fragment {
 	private ImageView ivPhoto;
 	private Switch swType;
 	private CardView llRanking;
-	private Spinner spRanking;
 	private Spinner spSaison;
 //	private TextView tvLocation;
 	private TextView tvLocationEmpty;
@@ -483,7 +481,6 @@ public class InviteFragment extends Fragment {
 		ivPhoto = llPlayer.findViewById(R.id.iv_photo);
 		tvFirstname = llPlayer.findViewById(R.id.tv_firstname);
 		tvLastname = llPlayer.findViewById(R.id.tv_lastname);
-		spRanking = llPlayer.findViewById(R.id.sp_ranking);
 		spSaison = llPlayer.findViewById(R.id.sp_saison);
 	}
 
@@ -552,6 +549,7 @@ public class InviteFragment extends Fragment {
 	private void initializeData() {
 		initializeDataPlayer();
 		initializeRankingList();
+		initializeRankingEstimateList();
 //		initializeRanking();
 		initializeSaisonList();
 		initializeSaison();
@@ -751,11 +749,11 @@ public class InviteFragment extends Fragment {
 	}
 
 	private void initializeRankingList() {
-		rankingListManager.manageRanking(activity, business.getPlayer(), false);
+		rankingListManager.manageRanking(activity, (RankingListManager.IRankingListListener) null, business.getPlayer(), false);
 	}
 
 	private void initializeRankingEstimateList() {
-		rankingListManager.manageRanking(activity, business.getPlayer(), true);
+		rankingListManager.manageRanking(activity, (RankingListManager.IRankingListListener) null, business.getPlayer(), true);
 	}
 
 	private int getTypePosition() {

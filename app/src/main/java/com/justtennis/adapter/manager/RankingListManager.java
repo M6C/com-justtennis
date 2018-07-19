@@ -50,6 +50,10 @@ public class RankingListManager {
 		manageRanking(context, context.getWindow().getDecorView(), player, estimate);
 	}
 
+	public void manageRanking(Activity context, IRankingListListener rankingListener, Player player, boolean estimate) {
+		manageRanking(context, context.getWindow().getDecorView(), rankingListener, player, estimate);
+	}
+
 	public void manageRanking(final ContextThemeWrapper context, View view, final Player player, final boolean estimate) {
 		IRankingListListener listener = new IRankingListListener() {
 			@Override
@@ -89,6 +93,7 @@ public class RankingListManager {
 		ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(context, R.layout.spinner_item_bonus, listTxtRankings);
 		dataAdapter.setDropDownViewResource(R.layout.spinner_item_bonus);
 		spRanking.setAdapter(dataAdapter);
+		spRanking.setEnabled(listener != null);
 
 		spRanking.setOnItemSelectedListener(new OnItemSelectedListener() {
 			@Override

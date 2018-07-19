@@ -16,19 +16,20 @@
         android:layout_marginEnd="@dimen/icon_horizontal_margin"
         android:layout_marginStart="@dimen/icon_horizontal_margin"
         android:layout_marginTop="@dimen/icon_vertical_margin"
-        android:src="@drawable/ic_marker_location" />
+        android:src="@drawable/ic_marker_location_08" />
 
     <LinearLayout
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/list_item_vertical_margin"
         android:layout_weight="1"
+        android:gravity="center_horizontal"
         android:paddingBottom="2dp"
         android:orientation="vertical">
 
         <LinearLayout
             android:id="@+id/ll_location_detail"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="vertical">
 

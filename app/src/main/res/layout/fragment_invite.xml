@@ -26,13 +26,19 @@
 			android:layout_width="match_parent"
 			android:layout_height="wrap_content"
 			android:orientation="vertical" >
-			<include layout="@layout/element_invite_date"/>
-			<include layout="@layout/element_invite_detail_button"/>
 			<include
 				layout="@layout/element_player_field_ranking_card"
 				android:layout_width="match_parent"
 				android:layout_height="wrap_content"
 				android:layout_marginTop="@dimen/activity_vertical_margin" />
+			<include layout="@layout/element_invite_date_card"
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:layout_marginTop="@dimen/activity_vertical_margin"/>
+			<include layout="@layout/element_invite_detail_button"
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:layout_marginTop="@dimen/activity_vertical_margin"/>
 			<include layout="@layout/element_invite_location_card"
 				android:layout_width="match_parent"
 				android:layout_height="wrap_content"

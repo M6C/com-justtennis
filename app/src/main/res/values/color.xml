@@ -32,6 +32,7 @@
     <color name="jaune_transparent_6">#ddccb800</color>
 
     <color name="rouge_transparent_6">#ddcc1b00</color>
+    <color name="rouge_2_transparent_6">#ddcc004e</color>
 
     <color name="form_background_color">@color/blanc_transparent_3</color>
     <color name="form_field_background_color">@color/blanc_transparent_4</color>
