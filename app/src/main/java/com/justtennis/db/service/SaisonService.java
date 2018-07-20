@@ -130,6 +130,10 @@ public class SaisonService extends GenericNamedService<Saison> {
 				ret = saisons.get(0);
 			}
 		}
+		if (ret == null) {
+			ret = build(Calendar.getInstance());
+			createOrUpdate(ret);
+		}
 		return ret;
 	}
 }
