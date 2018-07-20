@@ -23,5 +23,6 @@
     <dimen name="icon_medium_horizontal_size">40sp</dimen>
     <dimen name="icon_medium_vertical_size">40sp</dimen>
     <dimen name="app_card_elevation">1dp</dimen>
+    <dimen name="app_vertical_margin">8dp</dimen>
 
 </resources>
