@@ -44,9 +44,6 @@ public class DBUserHelper extends DBPersonHelper {
 		COLUMN_LOCALITY + " TEXT NULL " + 
 	");";
 
-	private Context context;
-	private INotifierMessage notificationMessage;
-
 	public DBUserHelper(Context context, INotifierMessage notificationMessage) {
 		super(context, notificationMessage, DATABASE_NAME, DATABASE_VERSION);
 		this.context = context;

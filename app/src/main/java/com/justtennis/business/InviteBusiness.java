@@ -69,9 +69,10 @@ public class InviteBusiness {
 	private CommonEnum.INVITE_MODE mode = CommonEnum.INVITE_MODE.INVITE_SIMPLE;
 	private List<Ranking> listRanking;
 	private List<String> listTxtRankings;
-	private List<Saison> listSaison = new ArrayList<Saison>();
-	private List<String> listTxtSaisons = new ArrayList<String>();
+	private List<Saison> listSaison = new ArrayList<>();
+	private List<String> listTxtSaisons = new ArrayList<>();
 	private String[][] scores;
+	private Ranking rankingNC;
 
 
 	public InviteBusiness(Context context, INotifierMessage notificationMessage) {
@@ -90,6 +91,7 @@ public class InviteBusiness {
 
 	public void initializeData(@NonNull Intent intent) {
 		user = userService.find();
+		rankingNC = rankingService.getNC();
 
 		initializeData(Objects.requireNonNull(intent.getExtras()));
 	}
@@ -109,8 +111,13 @@ public class InviteBusiness {
 		}
 		if (bundle.containsKey(InviteActivity.EXTRA_INVITE)) {
 			invite = (Invite) bundle.getSerializable(InviteActivity.EXTRA_INVITE);
-			if (getIdRanking()==null) {
-				setIdRanking(rankingService.getRanking(getPlayer(), true).getId());
+			if (!isUnknownPlayer()) {
+				if (getIdRanking(true) == null) {
+					setIdRanking(getPlayer(), true);
+				}
+				if (getIdRanking(false) == null) {
+					setIdRanking(getPlayer(), false);
+				}
 			}
 			initializeScores();
 		} else {
@@ -122,7 +129,7 @@ public class InviteBusiness {
 			long id = bundle.getLong(InviteActivity.EXTRA_PLAYER_ID, PlayerService.ID_EMPTY_PLAYER);
 			if (id != PlayerService.ID_EMPTY_PLAYER) {
 				invite.setPlayer(playerService.find(id));
-				setIdRanking(rankingService.getRanking(getPlayer(), true).getId());
+				setIdRanking(getPlayer());
 			}
 		}
 	}
@@ -251,6 +258,10 @@ public class InviteBusiness {
 			}
 		}
 
+		if (isEmptyPlayer()) {
+			setIdRanking((Long) null);
+		}
+
 		inviteService.createOrUpdate(invite);
 		
 		saveScoreSet();
@@ -258,7 +269,7 @@ public class InviteBusiness {
 		EVENT_STATUS status = gCalendarHelper.toEventStatus(invite.getStatus());
 		calendarAddEvent(invite, status);
 	}
-	
+
 	public void confirmYes() {
 		Invite invite = doConfirm(STATUS.ACCEPT);
 
@@ -281,6 +292,10 @@ public class InviteBusiness {
 		return SaisonService.isEmpty(saison);
 	}
 
+	private boolean isEmptyPlayer() {
+		return playerService.getEmptyPlayer().equals(getPlayer());
+	}
+
 	public User getUser() {
 		return user;
 	}
@@ -294,11 +309,33 @@ public class InviteBusiness {
 	}
 
 	public void setIdRanking(Long idRanking) {
-		invite.setIdRanking(idRanking);
+		setIdRanking(idRanking, true);
+		setIdRanking(idRanking, false);
 	}
 
-	public Long getIdRanking() {
-		return invite.getIdRanking();
+	public void setIdRanking(Long idRanking, boolean estimate) {
+		if (estimate) {
+			invite.setIdRankingEstimate(idRanking);
+		} else {
+			invite.setIdRanking(idRanking);
+		}
+	}
+
+	public void setIdRanking(Player player) {
+		setIdRanking(player, true);
+		setIdRanking(player, false);
+	}
+
+	public void setIdRanking(Player player, boolean estimate) {
+		setIdRanking(estimate ? player.getIdRankingEstimate(): player.getIdRanking(), estimate);
+	}
+
+	public Long getIdRanking(boolean estimate) {
+		if (isUnknownPlayer()) {
+			return null;//estimate ? invite.getIdRankingEstimate() : invite.getIdRanking();
+		} else {
+			return estimate ? getPlayer().getIdRankingEstimate() : getPlayer().getIdRanking();
+		}
 	}
 
 	public void setSaison(Saison saison) {
@@ -369,10 +406,10 @@ public class InviteBusiness {
 		this.invite.setPlayer(playerService.find(id));
 
 		if (isUnknownPlayer()) {
-			setIdRanking(getListRanking().get(0).getId());
+			setIdRanking(rankingNC.getId());
 			setType(TypeManager.TYPE.COMPETITION);
 		} else {
-			setIdRanking(rankingService.getRanking(getPlayer(), true).getId());
+			setIdRanking(getPlayer());
 			switch (getPlayer().getType()) {
 			default:
 			case TRAINING:
@@ -596,5 +633,9 @@ public class InviteBusiness {
 	
 	public void setTournament(Tournament tournament) {
 		invite.setTournament(tournament);
+	}
+
+	public Ranking getRankingNC() {
+		return rankingNC;
 	}
 }

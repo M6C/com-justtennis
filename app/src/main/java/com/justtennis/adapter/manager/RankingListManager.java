@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.content.Context;
 import android.view.ContextThemeWrapper;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
@@ -55,29 +54,26 @@ public class RankingListManager {
 	}
 
 	public void manageRanking(final ContextThemeWrapper context, View view, final Player player, final boolean estimate) {
-		IRankingListListener listener = new IRankingListListener() {
-			@Override
-			public void onRankingSelected(Ranking ranking) {
-				if (estimate) {
-					if (ranking.equals(rankingNC)) {
-						player.setIdRankingEstimate(null);
-					} else {
-						player.setIdRankingEstimate(ranking.getId());
-					}
-				} else {
-					if (ranking.equals(rankingNC)) {
-						player.setIdRanking(null);
-					} else {
-						player.setIdRanking(ranking.getId());
-					}
-				}
-			}
-		};
+		IRankingListListener listener = ranking -> {
+            if (estimate) {
+                if (ranking.equals(rankingNC)) {
+                    player.setIdRankingEstimate(null);
+                } else {
+                    player.setIdRankingEstimate(ranking.getId());
+                }
+            } else {
+                if (ranking.equals(rankingNC)) {
+                    player.setIdRanking(null);
+                } else {
+                    player.setIdRanking(ranking.getId());
+                }
+            }
+        };
 		manageRanking(context, view, listener, player, estimate);
 	}
 
 	public void manageRanking(final ContextThemeWrapper context, View view, IRankingListListener rankingListener, Player player, final boolean estimate) {
-		Long idRanking = (player==null) ? rankingNC.getId() : (estimate ? player.getIdRankingEstimate() : player.getIdRanking());
+		Long idRanking = getRankingId(player, estimate);
 		manageRanking(context, view, rankingListener, idRanking, estimate);
 	}
 
@@ -86,20 +82,31 @@ public class RankingListManager {
 	}
 
 	public void manageRanking(final ContextThemeWrapper context, View view, final IRankingListListener listener, Long idRanking, boolean estimate) {
-		final Spinner spRanking = (Spinner)view.findViewById(estimate ? R.id.sp_ranking_estimate : R.id.sp_ranking);
+		final Spinner spRanking = view.findViewById(estimate ? R.id.sp_ranking_estimate : R.id.sp_ranking);
 
-//		ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(context, android.R.layout.simple_spinner_item, listTxtRankings);
-//		dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-		ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(context, R.layout.spinner_item, listTxtRankings);
+		ArrayAdapter<String> dataAdapter = new ArrayAdapter<>(context, R.layout.spinner_item, listTxtRankings);
 		dataAdapter.setDropDownViewResource(R.layout.spinner_item);
 		spRanking.setAdapter(dataAdapter);
+		initializeRankingListener(context, listener, view, idRanking, estimate);
+	}
+
+	public void initializeRankingListener(final Activity context, final IRankingListListener listener, final Long idRanking, final boolean estimate) {
+		initializeRankingListener(context, listener, context.getWindow().getDecorView(), idRanking, estimate);
+	}
+
+	private void initializeRankingListener(final ContextThemeWrapper context, final IRankingListListener listener, final View view, final Long idRanking, final boolean estimate) {
+		final Spinner spRanking = view.findViewById(estimate ? R.id.sp_ranking_estimate : R.id.sp_ranking);
 		spRanking.setEnabled(listener != null);
 
 		spRanking.setOnItemSelectedListener(new OnItemSelectedListener() {
 			@Override
 			public void onItemSelected(AdapterView<?> parent, View v, int position, long id) {
-				TextView tv = (TextView)spRanking.findViewById(android.R.id.text1);
-				tv.setTextColor(context.getResources().getColor(position == 0 ? R.color.spinner_color_hint : android.R.color.black));
+				TextView tv = spRanking.findViewById(android.R.id.text1);
+				if (!spRanking.isEnabled()) {
+					tv.setTextColor(context.getResources().getColor(R.color.spinner_color_hint));
+				} else {
+					tv.setTextColor(context.getResources().getColor(position == 0 ? R.color.spinner_color_hint : android.R.color.black));
+				}
 
 				if (listener != null) {
 					Ranking ranking = listRanking.get(position);
@@ -109,46 +116,34 @@ public class RankingListManager {
 
 			@Override
 			public void onNothingSelected(AdapterView<?> arg0) {
+				// Nothing to do
 			}
 		});
 
-		if (idRanking == null) {
-			idRanking = rankingService.getNC().getId();
-		}
-		initializeRanking(spRanking, idRanking);
-	}
-
-	public void initializeRankingSpinner(View view, Player player, boolean estimate) {
-		Long idRanking = (player==null) ? rankingNC.getId() : (estimate ? player.getIdRankingEstimate() : player.getIdRanking());
-		initializeRankingSpinner(view, idRanking, estimate);
-	}
-
-	public void initializeRankingSpinner(View view, Long idRanking, boolean estimate) {
-		Spinner spRanking = (Spinner)view.findViewById(estimate ? R.id.sp_ranking_estimate : R.id.sp_ranking);
-		initializeRanking(spRanking, idRanking);
+		initializeRanking(spRanking, (idRanking == null) ? rankingService.getNC().getId() : idRanking);
 	}
 
 	public void manageRankingTextViewDialog(final Activity context, View view, final IRankingListListener listener, boolean estimate) {
 		View vwRanking = view.findViewById(estimate ? R.id.tv_ranking_estimate : R.id.tv_ranking);
-		vwRanking.setOnClickListener(new OnClickListener() {
-			
-			@Override
-			public void onClick(View v) {
-				AdapterView.OnItemClickListener onClickListener = new AdapterView.OnItemClickListener() {
-
-					@Override
-					public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-						Ranking ranking = listRanking.get(position);
-						listener.onRankingSelected(ranking);
-					}
-				};
-				FactoryDialog.getInstance().buildListView(context, 0, listTxtRankings, onClickListener).show();
-			}
-		});
+		vwRanking.setOnClickListener(v -> {
+            AdapterView.OnItemClickListener onClickListener = (parent, view1, position, id) -> {
+                Ranking ranking = listRanking.get(position);
+                listener.onRankingSelected(ranking);
+            };
+            FactoryDialog.getInstance().buildListView(context, 0, listTxtRankings, onClickListener).show();
+        });
 	}
 
 	private void initializeRanking(Spinner spRanking, Long idRanking) {
 		spRanking.setSelection(getRankingPosition(idRanking), true);
+	}
+
+	private Long getRankingId(Player player, boolean estimate) {
+		if (player==null) {
+			return rankingNC.getId();
+		} else {
+			return (estimate ? player.getIdRankingEstimate() : player.getIdRanking());
+		}
 	}
 
 	private int getRankingPosition(Long idRanking) {
@@ -167,11 +162,11 @@ public class RankingListManager {
 	 * BUSINESS
 	 */
 	private void initializeDataRanking() {
-		SortedSet<Ranking> setRanking = new TreeSet<Ranking>(new RankingComparatorByOrder());
+		SortedSet<Ranking> setRanking = new TreeSet<>(new RankingComparatorByOrder());
 
 		setRanking.addAll(rankingService.getList());
 		
-		listRanking = new ArrayList<Ranking>(setRanking);
+		listRanking = new ArrayList<>(setRanking);
 
 		int i=0;
 		listTxtRankings = new String[setRanking.size()];

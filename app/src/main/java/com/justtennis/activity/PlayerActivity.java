@@ -31,9 +31,10 @@ public class PlayerActivity extends AbsctractFragmentActivity {
 	public static final String EXTRA_MODE = "INVITE_MODE";
 	public static final String EXTRA_TYPE = "TYPE";
 	public static final String EXTRA_RANKING = "RANKING";
+	public static final String EXTRA_RANKING_ESTIMATE = "EXTRA_RANKING_ESTIMATE";
 	public static final String EXTRA_FIND = "EXTRA_FIND";
 
-	private PlayerFragment fragment;
+    private PlayerFragment fragment;
 	private DrawerManager drawerManager;
 	private List<NavigationDrawerData> navigationDrawer = new ArrayList<NavigationDrawerData>();
 	private PlayerBusiness business;

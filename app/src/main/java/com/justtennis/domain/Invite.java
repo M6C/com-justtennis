@@ -31,6 +31,7 @@ public class Invite extends GenericDBPojo<Long> implements Serializable {
 	private Long idCalendar;
 	private TypeManager.TYPE type = TypeManager.TYPE.TRAINING;
 	private Long idRanking;
+	private Long idRankingEstimate;
 	private SCORE_RESULT scoreResult = SCORE_RESULT.UNFINISHED;
 	private List<ScoreSet> listScoreSet = null;
 	private Address address;
@@ -126,6 +127,14 @@ public class Invite extends GenericDBPojo<Long> implements Serializable {
 
 	public void setIdRanking(Long idRanking) {
 		this.idRanking = idRanking;
+	}
+
+	public Long getIdRankingEstimate() {
+		return idRankingEstimate;
+	}
+
+	public void setIdRankingEstimate(Long idRankingEstimate) {
+		this.idRankingEstimate = idRankingEstimate;
 	}
 
 	public SCORE_RESULT getScoreResult() {

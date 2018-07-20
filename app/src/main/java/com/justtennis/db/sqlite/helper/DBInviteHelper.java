@@ -22,6 +22,7 @@ public class DBInviteHelper extends GenericJustTennisDBHelper {
 	public static final String COLUMN_ID_EXTERNAL = "ID_EXTERNAL";
 	public static final String COLUMN_ID_CALENDAR = "ID_CALENDAR";
 	public static final String COLUMN_ID_RANKING = "ID_RANKING";
+	public static final String COLUMN_ID_RANKING_ESTIMATE = "ID_RANKING_ESTIMATE";
 	public static final String COLUMN_SCORE_RESULT = "SCORE_RESULT";
 	public static final String COLUMN_ID_ADDRESS = "ID_ADDRESS";
 	public static final String COLUMN_ID_CLUB = "ID_CLUB";
@@ -29,13 +30,10 @@ public class DBInviteHelper extends GenericJustTennisDBHelper {
 	public static final String COLUMN_BONUS_POINT = "BONUS_POINT";
 
 	public static final String DATABASE_NAME = "Invite.db";
-	public static final int DATABASE_VERSION = 14;
+	public static final int DATABASE_VERSION = 15;
 
 	private static final Class<?> CLASS_TYPE = Invite.class;
 
-	private Context context;
-	private INotifierMessage notificationMessage;
-	
 	// Database creation sql statement
 	private static final String DATABASE_CREATE = "CREATE TABLE " + TABLE_NAME + "(" + 
 		COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " + 
@@ -45,9 +43,10 @@ public class DBInviteHelper extends GenericJustTennisDBHelper {
 		COLUMN_STATUS + " INTEGER NULL, " + 
 		COLUMN_TYPE + " INTEGER NULL, " + 
 		COLUMN_ID_EXTERNAL + " INTEGER NULL, " + 
-		COLUMN_ID_CALENDAR + " INTEGER NULL, " + 
-		COLUMN_ID_RANKING + " INTEGER NULL, " + 
-		COLUMN_SCORE_RESULT + " INTEGER NULL, " + 
+		COLUMN_ID_CALENDAR + " INTEGER NULL, " +
+		COLUMN_ID_RANKING + " INTEGER NULL, " +
+		COLUMN_ID_RANKING_ESTIMATE + " INTEGER NULL, " +
+		COLUMN_SCORE_RESULT + " INTEGER NULL, " +
 		COLUMN_ID_ADDRESS + " INTEGER NULL, " + 
 		COLUMN_ID_CLUB + " INTEGER NULL, " + 
 		COLUMN_ID_TOURNAMENT + " INTEGER NULL, " + 
@@ -93,6 +92,9 @@ public class DBInviteHelper extends GenericJustTennisDBHelper {
 			if (oldVersion <= 13) {
 				addColumn(database, COLUMN_ID_SAISON, "INTEGER NULL");
 				new InviteService(context, notificationMessage).updateInvite(database);
+			}
+			if (oldVersion <= 14) {
+				addColumn(database, COLUMN_ID_RANKING_ESTIMATE, "INTEGER NULL");
 			}
 		}
 		else {

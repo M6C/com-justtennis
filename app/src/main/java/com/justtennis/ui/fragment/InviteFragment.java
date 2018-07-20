@@ -44,6 +44,7 @@ import com.justtennis.business.InviteBusiness;
 import com.justtennis.db.service.PlayerService;
 import com.justtennis.domain.Club;
 import com.justtennis.domain.Player;
+import com.justtennis.domain.Ranking;
 import com.justtennis.domain.Saison;
 import com.justtennis.domain.ScoreSet;
 import com.justtennis.manager.ContactManager;
@@ -89,6 +90,8 @@ public class InviteFragment extends Fragment {
 	private Serializable locationFromResult;
 	private Serializable locationClubFromResult;
 	private PlayerViewModel modelPlayer;
+	private RankingListListener rankingListListener;
+	private RankingListListener rankingEstimateListListener;
 
 	private Context context;
 	private FragmentActivity activity;
@@ -144,6 +147,9 @@ public class InviteFragment extends Fragment {
 		else {
 			business.initializeData(activity.getIntent());
 		}
+
+		rankingListListener = new RankingListListener(false, business);
+		rankingEstimateListListener = new RankingListListener(true, business);
 
 		initializeContentPlayer();
 
@@ -341,13 +347,21 @@ public class InviteFragment extends Fragment {
 
         modelPlayer = new ViewModelProvider.NewInstanceFactory().create(PlayerViewModel.class);
 		modelPlayer.getSelected().observe(this, (Player player) -> {
-			business.getInvite().setPlayer(player);
+			business.setPlayer(player);
 			initializeDataPlayer();
+			initializeRankingListListener();
 		});
 
         args.putSerializable(ListPlayerFragment.EXTRA_VIEW_MODEL, modelPlayer);
         args.putSerializable(PlayerActivity.EXTRA_TYPE, business.getType());
-        args.putLong(PlayerActivity.EXTRA_RANKING, business.getIdRanking());
+		Long idRanking = business.getIdRanking(false);
+		if (idRanking != null) {
+			args.putLong(PlayerActivity.EXTRA_RANKING, idRanking);
+		}
+		Long idRankingEstimate = business.getIdRanking(true);
+		if (idRankingEstimate != null) {
+			args.putLong(PlayerActivity.EXTRA_RANKING_ESTIMATE, idRankingEstimate);
+		}
 
 		FragmentTool.replaceFragment(activity, fragment);
 	}
@@ -387,7 +401,7 @@ public class InviteFragment extends Fragment {
 		ClubViewModel modelClub = new ViewModelProvider.NewInstanceFactory().create(ClubViewModel.class);
 		modelClub.getSelected().observe(this, (Club club) -> {
 			business.getInvite().setClub(club);
-			initializeDataPlayer();
+			initializeDataLocation();
 		});
 
 		args.putSerializable(ListPlayerFragment.EXTRA_VIEW_MODEL, modelClub);
@@ -441,7 +455,6 @@ public class InviteFragment extends Fragment {
 
 		initializeDataPlayer();
 		initializeRankingList();
-		initializeRankingEstimateList();
 //		initializeRanking();
 		initializeSaisonList();
 		initializeSaison();
@@ -549,7 +562,6 @@ public class InviteFragment extends Fragment {
 	private void initializeData() {
 		initializeDataPlayer();
 		initializeRankingList();
-		initializeRankingEstimateList();
 //		initializeRanking();
 		initializeSaisonList();
 		initializeSaison();
@@ -748,12 +760,33 @@ public class InviteFragment extends Fragment {
 		ivPhoto.setOnClickListener(this::onClickPlayer);
 	}
 
-	private void initializeRankingList() {
-		rankingListManager.manageRanking(activity, (RankingListManager.IRankingListListener) null, business.getPlayer(), false);
+	private void initializeRankingListListener() {
+		initializeRankingListListener(true);
+		initializeRankingListListener(false);
 	}
 
-	private void initializeRankingEstimateList() {
-		rankingListManager.manageRanking(activity, (RankingListManager.IRankingListListener) null, business.getPlayer(), true);
+	private void initializeRankingListListener(boolean estimate) {
+		rankingListManager.initializeRankingListener(activity, getRankingListener(estimate), business.getIdRanking(estimate), estimate);
+	}
+
+	private void initializeRankingList() {
+		initializeRankingList(false);
+		initializeRankingList(true);
+	}
+
+	private void initializeRankingList(boolean estimate) {
+		RankingListListener listener = getRankingListener(estimate);
+		Long rankingId = business.getIdRanking(estimate);
+		rankingListManager.manageRanking(activity, listener, rankingId, estimate);
+	}
+
+	@Nullable
+	private RankingListListener getRankingListener(boolean estimate) {
+		if (business.isUnknownPlayer()) {
+			return estimate ? rankingEstimateListListener : rankingListListener;
+		} else {
+			return null;
+		}
 	}
 
 	private int getTypePosition() {
@@ -791,4 +824,24 @@ public class InviteFragment extends Fragment {
 	private static void logMe(String msg) {
 		Logger.logMe(TAG, msg);
 	}
+
+	private class RankingListListener implements RankingListManager.IRankingListListener {
+		private boolean estimate;
+		private InviteBusiness business;
+		private final Ranking rankingNC;
+
+		public RankingListListener(boolean estimate, InviteBusiness business) {
+			this.estimate = estimate;
+			this.business = business;
+			this.rankingNC = business.getRankingNC();
+		}
+		@Override
+		public void onRankingSelected(Ranking ranking) {
+			if (ranking.equals(rankingNC)) {
+				business.setIdRanking((Long) null, estimate);
+			} else {
+				business.setIdRanking(ranking.getId(), estimate);
+			}
+		}
+	};
 }

@@ -10,8 +10,6 @@ import com.justtennis.db.DBDictionary;
 public abstract class GenericJustTennisDBHelper extends GenericDBHelper {
 
 	private static final String PACKAGE_NAME = "com.justtennis";
-	private Context context;
-	private INotifierMessage notificationMessage;
 
 	public GenericJustTennisDBHelper(Context context, INotifierMessage notificationMessage, String databaseName, int databaseVersion) {
 		super(context, notificationMessage, databaseName, databaseVersion);

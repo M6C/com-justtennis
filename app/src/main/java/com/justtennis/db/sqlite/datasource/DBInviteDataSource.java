@@ -39,6 +39,7 @@ public class DBInviteDataSource extends GenericDBDataSourceByType<Invite> {
 		DBInviteHelper.COLUMN_ID_EXTERNAL,
 		DBInviteHelper.COLUMN_ID_CALENDAR,
 		DBInviteHelper.COLUMN_ID_RANKING,
+		DBInviteHelper.COLUMN_ID_RANKING_ESTIMATE,
 		DBInviteHelper.COLUMN_SCORE_RESULT,
 		DBInviteHelper.COLUMN_ID_ADDRESS,
 		DBInviteHelper.COLUMN_ID_CLUB,
@@ -180,6 +181,7 @@ public class DBInviteDataSource extends GenericDBDataSourceByType<Invite> {
 		values.put(DBInviteHelper.COLUMN_ID_EXTERNAL, invite.getIdExternal());
 		values.put(DBInviteHelper.COLUMN_ID_CALENDAR, invite.getIdCalendar());
 		values.put(DBInviteHelper.COLUMN_ID_RANKING, invite.getIdRanking());
+		values.put(DBInviteHelper.COLUMN_ID_RANKING_ESTIMATE, invite.getIdRankingEstimate());
 		values.put(DBInviteHelper.COLUMN_SCORE_RESULT, invite.getScoreResult().toString());
 		values.put(DBInviteHelper.COLUMN_ID_ADDRESS, invite.getIdAddress());
 		values.put(DBInviteHelper.COLUMN_ID_CLUB, invite.getIdClub());
@@ -200,6 +202,7 @@ public class DBInviteDataSource extends GenericDBDataSourceByType<Invite> {
 		invite.setIdExternal(DbTool.getInstance().toLong(cursor, col++));
 		invite.setIdCalendar(DbTool.getInstance().toLong(cursor, col++));
 		invite.setIdRanking(DbTool.getInstance().toLong(cursor, col++));
+		invite.setIdRankingEstimate(DbTool.getInstance().toLong(cursor, col++));
 		invite.setScoreResult(SCORE_RESULT.valueOf(DbTool.getInstance().toString(cursor, col++, SCORE_RESULT.UNFINISHED.toString())));
 		invite.setAddress(DbTool.getInstance().toPojo(cursor, col++, Address.class));
 		invite.setClub(DbTool.getInstance().toPojo(cursor, col++, Club.class));
