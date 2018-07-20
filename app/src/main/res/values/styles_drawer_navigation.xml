@@ -2,14 +2,14 @@
 
     <!-- Component - NavBar -->
     <style name="AppComponentNavBar">
-        <item name="android:background">@color/app_gris_fonce</item>
+        <item name="android:background">@color/app_bleu_fonce_3_transparent_3</item>
         <item name="itemIconTint">@color/app_gris_clair</item>
         <item name="itemBackground">@drawable/view_item_background_drawer_navigation</item>
         <item name="itemTextColor">@color/app_gris_clair</item>
         <item name="itemTextAppearance">@style/AppNavBarTextAppearance</item>
     </style>
     <style name="AppComponentNavBarHeader" parent="ThemeOverlay.AppCompat.Dark">
-        <item name="android:background">@color/app_gris_noir</item>
+        <item name="android:background">@color/app_bleu_noir_3</item>
     </style>
     <style name="AppTextAppearanceNavBar" parent="android:style/TextAppearance">
         <item name="android:textSize">20sp</item>

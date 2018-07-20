@@ -11,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -25,6 +26,7 @@ import com.justtennis.drawer.manager.business.DrawerSaisonBusiness;
 import com.justtennis.drawer.manager.notifier.IDrawerLayoutSaisonNotifier;
 import com.justtennis.drawer.manager.notifier.IDrawerLayoutTypeNotifier;
 import com.justtennis.manager.TypeManager;
+import com.justtennis.tool.ResourceTool;
 
 import java.util.List;
 import java.util.Objects;
@@ -97,6 +99,10 @@ public class DrawerManager {
 			if (user != null) {
 				tvUserName.setText(user.getFullName());
 			}
+		}
+		ImageView ivUser = headerView.findViewById(R.id.iv_user);
+		if (ivUser != null) {
+			ivUser.setImageResource(ResourceTool.getIdDrawableInIntArray(activity, R.array.list_ic_tennis_player));
 		}
 //		initializeDrawer();
 

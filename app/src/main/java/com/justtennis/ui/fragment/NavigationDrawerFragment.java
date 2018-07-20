@@ -26,6 +26,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -35,6 +36,7 @@ import com.justtennis.drawer.manager.business.DrawerSaisonBusiness;
 import com.justtennis.manager.TypeManager;
 import com.justtennis.notifier.NotifierMessageLogger;
 import com.justtennis.tool.FragmentTool;
+import com.justtennis.tool.ResourceTool;
 import com.justtennis.ui.rxjava.RxNavigationDrawer;
 
 import org.gdocument.gtracergps.launcher.log.Logger;
@@ -143,12 +145,17 @@ public class NavigationDrawerFragment extends Fragment {
     private void initializeUser(View rootView) {
         NavigationView navView = rootView.findViewById(R.id.nav_view);
 
-        TextView tvUserName = navView.getHeaderView(0).findViewById(R.id.nav_header_user_name);
+        View headerView = navView.getHeaderView(0);
+        TextView tvUserName = headerView.findViewById(R.id.nav_header_user_name);
         if (tvUserName != null) {
             User user =  saisonBusiness.getCurrentUser();
             if (user != null) {
                 tvUserName.setText(user.getFullName());
             }
+        }
+        ImageView ivUser = headerView.findViewById(R.id.iv_user);
+        if (ivUser != null) {
+            ivUser.setImageResource(ResourceTool.getIdDrawableInIntArray(mActivity, R.array.list_ic_tennis_player));
         }
     }
 
