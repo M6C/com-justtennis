@@ -57,13 +57,12 @@ public class ListPlayerBusiness implements INavigationDrawerRechercheBusiness {
 		extraIn = activity.getIntent().getExtras();
 	}
 
-	public void initialize() {
+	public void initialize(Bundle bundle) {
 
-		Intent intent = activity.getIntent();
 		mode = CommonEnum.LIST_FRAGMENT_MODE.EDIT;
 
-		if (intent.hasExtra(ListPlayerActivity.EXTRA_MODE)) {
-			mode = (CommonEnum.LIST_FRAGMENT_MODE) intent.getSerializableExtra(ListPlayerActivity.EXTRA_MODE);
+		if (bundle != null && bundle.containsKey(ListPlayerActivity.EXTRA_MODE)) {
+			mode = (CommonEnum.LIST_FRAGMENT_MODE) bundle.getSerializable(ListPlayerActivity.EXTRA_MODE);
 		}
 	}
 

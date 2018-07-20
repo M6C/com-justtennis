@@ -1,5 +1,6 @@
 package com.justtennis.ui.fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -61,7 +62,10 @@ public class ListPlayerFragment extends CommonListFragment<Player> {
 	public void onActivityCreated(@Nullable Bundle savedInstanceState) {
 		super.onActivityCreated(savedInstanceState);
 		business = new ListPlayerBusiness(getActivity(), NotifierMessageLogger.getInstance());
-		business.initialize();
+
+		Intent intent = activity.getIntent();
+		Bundle bundle = (getArguments() != null) ? getArguments() : intent.getExtras();
+		business.initialize(bundle);
 	}
 
 	@Override

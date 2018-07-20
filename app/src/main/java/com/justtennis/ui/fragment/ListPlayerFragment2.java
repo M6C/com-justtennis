@@ -178,7 +178,8 @@ public class ListPlayerFragment2 extends Fragment {
 	}
 
 	private void initialize() {
-		business.initialize();
+		Bundle bundle = (getArguments() != null) ? getArguments() : activity.getIntent().getExtras();
+		business.initialize(bundle);
 		business.refreshData();
 
 		refresh();
