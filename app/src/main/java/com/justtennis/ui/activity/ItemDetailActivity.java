@@ -14,6 +14,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.TextView;
 
 import com.cameleon.common.android.factory.FactoryDialog;
 import com.justtennis.R;
@@ -37,6 +38,9 @@ import com.justtennis.ui.fragment.ListInviteFragment;
 import com.justtennis.ui.fragment.ListPlayerFragment;
 import com.justtennis.ui.fragment.NavigationDrawerFragment;
 import com.justtennis.ui.fragment.PieChartFragment;
+import com.justtennis.ui.fragment.SmsMessageFragment;
+import com.justtennis.ui.fragment.UserFragment;
+import com.justtennis.ui.rxjava.RxFragment;
 import com.justtennis.ui.rxjava.RxNavigationDrawer;
 
 import org.gdocument.gtracergps.launcher.log.Logger;
@@ -73,41 +77,53 @@ public class ItemDetailActivity extends AppCompatActivity implements NavigationD
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_item_detail);
-
-        mNavigationDrawerFragment = (NavigationDrawerFragment)getSupportFragmentManager().findFragmentById(R.id.navigation_drawer);
-        mTitle = getTitle();
-
-        mToolbar = (Toolbar) findViewById(R.id.detail_toolbar);
-        mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
-
-        // Set up the drawer.
-        mNavigationDrawerFragment.setUp(R.id.navigation_drawer, mDrawerLayout);
-
-        DBFeedTool.feed(getApplicationContext());
 
         notifier = NotifierMessageLogger.getInstance();
         business = new MainBusiness(this, notifier);
-        mTypeManager = TypeManager.getInstance(this, notifier);
+        business.initializeData();
 
-        // savedInstanceState is non-null when there is fragment state
-        // saved from previous configurations of this activity
-        // (e.g. when rotating the screen from portrait to landscape).
-        // In this case, the fragment will automatically be re-added
-        // to its container so we don't need to manually add it.
-        // For more information, see the Fragments API guide at:
-        //
-        // http://developer.android.com/guide/components/fragments.html
-        //
-        if (savedInstanceState == null) {
-            // Create the detail fragment and add it to the activity
-            // using a fragment transaction.
-        }
+        initializeSubscribeRestart();
+        initializeSubscribeWizardNext();
 
-        initializeActionBar();
-        initializeBottomNavigation();
-        initializeSubscribeChangeType();
+        if (business.getUser()==null) {
+            setContentView(R.layout.activity_initialize);
+
+            RxFragment.publish(RxFragment.SUBJECT_WIZARD_NEXT, 0);
+        } else {
+            setContentView(R.layout.activity_item_detail);
+
+            mNavigationDrawerFragment = (NavigationDrawerFragment) getSupportFragmentManager().findFragmentById(R.id.navigation_drawer);
+            mTitle = getTitle();
+
+            mToolbar = (Toolbar) findViewById(R.id.detail_toolbar);
+            mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+
+            // Set up the drawer.
+            mNavigationDrawerFragment.setUp(R.id.navigation_drawer, mDrawerLayout);
+
+            DBFeedTool.feed(getApplicationContext());
+
+            mTypeManager = TypeManager.getInstance(this, notifier);
+
+            // savedInstanceState is non-null when there is fragment state
+            // saved from previous configurations of this activity
+            // (e.g. when rotating the screen from portrait to landscape).
+            // In this case, the fragment will automatically be re-added
+            // to its container so we don't need to manually add it.
+            // For more information, see the Fragments API guide at:
+            //
+            // http://developer.android.com/guide/components/fragments.html
+            //
+            if (savedInstanceState == null) {
+                // Create the detail fragment and add it to the activity
+                // using a fragment transaction.
+            }
+
+            initializeActionBar();
+            initializeBottomNavigation();
+            initializeSubscribeChangeType();
 //        initializeSubscribeFragment();
+        }
     }
 
     @Override
@@ -215,13 +231,42 @@ public class ItemDetailActivity extends AppCompatActivity implements NavigationD
             int id = TypeManager.getThemeResource(type);
             setTheme(id);
 
-            Intent intent = getIntent();
-            intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
-            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            finish();
-            startActivity(intent);
+            RxFragment.publish(RxFragment.SUBJECT_RESTART, null);
         });
+    }
+
+    private void initializeSubscribeRestart() {
+        RxFragment.subscribe(RxFragment.SUBJECT_RESTART, this, this::restart);
+    }
+
+    private void initializeSubscribeWizardNext() {
+        RxFragment.subscribe(RxFragment.SUBJECT_WIZARD_NEXT, this, this::wizardNext);
+    }
+
+    private void restart(Object o) {
+        Intent intent = getIntent();
+        intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        finish();
+        startActivity(intent);
+    }
+
+    private void wizardNext(Object o) {
+        Integer step = (Integer)o;
+        TextView textView = findViewById(R.id.tv_subtitle);
+        if (step == 0) {
+            textView.setText(R.string.app_initialize_subtitle_user);
+            UserFragment fragment = UserFragment.buildCreate();
+            FragmentTool.replaceFragment(this, fragment);
+        }
+        else if (step == 1) {
+            textView.setText(R.string.app_initialize_subtitle_sms_message);
+            SmsMessageFragment fragment = SmsMessageFragment.buildCreate();
+            FragmentTool.replaceFragment(this, fragment);
+        } else {
+            RxFragment.publish(RxFragment.SUBJECT_RESTART, null);
+        }
     }
 
 //    private void initializeSubscribeFragment() {

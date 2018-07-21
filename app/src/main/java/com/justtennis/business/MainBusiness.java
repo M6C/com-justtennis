@@ -5,11 +5,13 @@ import android.content.Context;
 import com.cameleon.common.android.inotifier.INotifierMessage;
 import com.justtennis.business.sub.ComputeRankSubService;
 import com.justtennis.db.DBDictionary;
+import com.justtennis.db.service.MessageService;
 import com.justtennis.db.service.PlayerService;
 import com.justtennis.db.service.RankingService;
 import com.justtennis.db.service.UserService;
 import com.justtennis.db.sqlite.helper.GenericJustTennisDBHelper;
 import com.justtennis.domain.ComputeDataRanking;
+import com.justtennis.domain.Message;
 import com.justtennis.domain.Ranking;
 import com.justtennis.domain.User;
 
@@ -22,12 +24,14 @@ public class MainBusiness {
 	private PlayerService playerService;
 	private ComputeRankSubService computeRankService;
 	private RankingService rankingService;
+	private MessageService messageService;
 	private DBDictionary dBDictionary;
 
 	private Context context;
 
 	private Ranking rankingNC;
 	private User user;
+	private Message message;
 
 	public MainBusiness(Context context, INotifierMessage notificationMessage) {
 		this.context = context;
@@ -35,6 +39,7 @@ public class MainBusiness {
 		playerService = new PlayerService(context, notificationMessage);
 		rankingService = new RankingService(context, notificationMessage);
 		computeRankService = new ComputeRankSubService(context, notificationMessage);
+		messageService = new MessageService(context, notificationMessage);
 		dBDictionary = DBDictionary.getInstance(context, notificationMessage);
 	}
 
@@ -71,6 +76,7 @@ public class MainBusiness {
 	public void initializeData() {
 		rankingNC = rankingService.getNC();
 		user = userService.find();
+		message = messageService.getCommon();
 	}
 
 	public GenericJustTennisDBHelper getDBHelper(String databaseName) {

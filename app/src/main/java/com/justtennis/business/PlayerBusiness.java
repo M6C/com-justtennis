@@ -393,4 +393,14 @@ public class PlayerBusiness implements INavigationDrawerRechercheBusiness {
 		return getPlayer() == null ? typeManager.getType() : getPlayer().getType();
 //		return TypeManager.TYPE.TRAINING;
 	}
+
+	public boolean isValide() {
+		boolean ret = false;
+		if (player != null) {
+			ret =
+				player.getFirstName() != null && !player.getFirstName().trim().isEmpty() &&
+				player.getLastName() != null && !player.getLastName().trim().isEmpty();
+		}
+		return ret;
+	}
 }

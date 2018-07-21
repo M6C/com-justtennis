@@ -2,6 +2,7 @@
 package com.justtennis.ui.fragment;
 
 import android.os.Bundle;
+import android.view.View;
 import android.widget.Spinner;
 
 import com.justtennis.R;
@@ -11,6 +12,7 @@ import com.justtennis.domain.Address;
 import com.justtennis.domain.User;
 import com.justtennis.notifier.NotifierMessageLogger;
 import com.justtennis.ui.common.CommonEnum;
+import com.justtennis.ui.rxjava.RxFragment;
 
 import java.io.Serializable;
 
@@ -28,6 +30,14 @@ public class UserFragment extends PlayerFragment {
 		UserFragment fragment = new UserFragment();
 		Bundle args = new Bundle();
 		args.putSerializable(PlayerFragment.EXTRA_MODE, CommonEnum.PLAYER_MODE.FOR_RESULT);
+		fragment.setArguments(args);
+		return fragment;
+	}
+
+	public static UserFragment buildCreate() {
+		UserFragment fragment = new UserFragment();
+		Bundle args = new Bundle();
+		args.putSerializable(PlayerFragment.EXTRA_MODE, CommonEnum.PLAYER_MODE.CREATE);
 		fragment.setArguments(args);
 		return fragment;
 	}
@@ -64,5 +74,18 @@ public class UserFragment extends PlayerFragment {
 	protected PlayerBusiness createBusiness() {
 		business = new UserBusiness(context, NotifierMessageLogger.getInstance());
 		return business;
+	}
+
+	@Override
+	protected void finish() {
+		switch (business.getMode()) {
+			case CREATE: {
+				RxFragment.publish(RxFragment.SUBJECT_WIZARD_NEXT, 1);
+				break;
+			}
+			default: {
+				super.finish();
+			}
+		}
 	}
 }

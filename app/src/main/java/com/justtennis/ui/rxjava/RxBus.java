@@ -6,6 +6,7 @@ import android.util.SparseArray;
 import java.util.HashMap;
 import java.util.Map;
 
+import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.annotations.NonNull;
 import io.reactivex.disposables.CompositeDisposable;
@@ -43,7 +44,7 @@ final class RxBus {
      */
     void publish(int subject, @NonNull Object message) {
         Log.i(this.getClass().getName(), "publish subject:" + subject + " message:" + message);
-        getSubject(subject).onNext(message);
+        getSubject(subject).onNext(message == null ? Observable.empty() : message);
     }
 
     /**

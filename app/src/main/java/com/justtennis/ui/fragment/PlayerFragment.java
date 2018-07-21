@@ -23,6 +23,7 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.cameleon.common.android.adapter.BaseViewAdapter;
 import com.cameleon.common.android.factory.FactoryDialog;
@@ -270,39 +271,34 @@ public class PlayerFragment extends Fragment implements IDrawerLayoutTypeNotifie
 		btnQrCode = rootView.findViewById(R.id.btn_qrcode);
 	}
 
-	public void onClickCreate(View view) {
+	public void onClickForResult(View view) {
 		updatePlayerData();
 
-		CommonEnum.PLAYER_MODE mode = business.getMode();
-		switch (mode) {
-			case FOR_RESULT:
-				business.create(false);
-				Intent intent = new Intent();
-				intent.putExtra(EXTRA_PLAYER_ID, business.getPlayer().getId());
-//				setResult(0, intent);
-				finish();
-				break;
-			default:
-				if (fromQrCode) {
-					business.create(true);
-					finish();
-				}
-				else {
-					if (business.sendMessageConfirmation()) {
-						OnClickPlayerCreateListenerOk listener = new OnClickPlayerCreateListenerOk(activity, business);
-						FactoryDialog.getInstance()
-							.buildYesNoDialog(activity, listener, R.string.dialog_player_create_confirmation_title, R.string.dialog_player_create_confirmation_message)
-							.show();
-					} else {
-						business.create(false);
-						finish();
-					}
-				}
-			}
+		if (business.isValide()) {
+			business.create(false);
+			finish();
+		} else {
+			Toast.makeText(activity, R.string.error_message, Toast.LENGTH_SHORT).show();
+		}
 	}
 
-	private void finish() {
-		FragmentTool.finish(activity);
+	public void onClickCreate(View view) {
+		updatePlayerData();
+		if (business.isValide()) {
+
+			if (fromQrCode || !business.sendMessageConfirmation()) {
+				business.create(true);
+				finish();
+			}
+			else {
+				OnClickPlayerCreateListenerOk listener = new OnClickPlayerCreateListenerOk(activity, business);
+				FactoryDialog.getInstance()
+					.buildYesNoDialog(activity, listener, R.string.dialog_player_create_confirmation_title, R.string.dialog_player_create_confirmation_message)
+					.show();
+			}
+		} else {
+			Toast.makeText(activity, R.string.error_message, Toast.LENGTH_SHORT).show();
+		}
 	}
 
 	public void onClickModify(View view) {
@@ -399,6 +395,10 @@ public class PlayerFragment extends Fragment implements IDrawerLayoutTypeNotifie
 		onClickLocation(view);
 	}
 
+	public PlayerBusiness getBusiness() {
+		return business;
+	}
+
 	protected PlayerBusiness createBusiness() {
 		return new PlayerBusiness(context, NotifierMessageLogger.getInstance());
 	}
@@ -426,7 +426,7 @@ public class PlayerFragment extends Fragment implements IDrawerLayoutTypeNotifie
 		startActivityForResult(intent, RESULT_CODE_GOOGLE);
 	}
 
-	private void updatePlayerData() {
+	protected void updatePlayerData() {
 		Player player = business.getPlayer();
 
 		player.setFirstName(etFirstname.getText().toString());
@@ -473,6 +473,8 @@ public class PlayerFragment extends Fragment implements IDrawerLayoutTypeNotifie
 		FragmentTool.initializeFabDrawable(activity, FragmentTool.INIT_FAB_IMAGE.VALIDATE);
 		switch (mode) {
 			case FOR_RESULT:
+				FragmentTool.onClickFab(activity, this::onClickForResult);
+				break;
 			case CREATE:
 				FragmentTool.onClickFab(activity, this::onClickCreate);
 				break;
@@ -666,12 +668,7 @@ public class PlayerFragment extends Fragment implements IDrawerLayoutTypeNotifie
 		}
 	}
 
-	public PlayerBusiness getBusiness() {
-    	return business;
-	}
-
 	private TYPE getType() {
-//		return business.getPlayer() != null ? business.getPlayer().getType() : null;
 		return business.getPlayerType();
 	}
 
@@ -683,5 +680,9 @@ public class PlayerFragment extends Fragment implements IDrawerLayoutTypeNotifie
 		default:
 			return TYPE.COMPETITION;
 		}
+	}
+
+	protected void finish() {
+		FragmentTool.finish(activity);
 	}
 }

@@ -3,6 +3,7 @@ package com.justtennis.ui.fragment;
 
 import android.app.Dialog;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
@@ -23,6 +24,7 @@ import com.justtennis.notifier.NotifierMessageLogger;
 import com.justtennis.parser.SmsParser;
 import com.justtennis.tool.FragmentTool;
 import com.justtennis.ui.common.CommonEnum;
+import com.justtennis.ui.rxjava.RxFragment;
 
 
 public class SmsMessageFragment extends Fragment {
@@ -46,6 +48,14 @@ public class SmsMessageFragment extends Fragment {
 		return fragment;
 	}
 
+	public static SmsMessageFragment buildCreate() {
+		SmsMessageFragment fragment = new SmsMessageFragment();
+		Bundle args = new Bundle();
+		args.putSerializable(PlayerFragment.EXTRA_MODE, CommonEnum.PLAYER_MODE.CREATE);
+		fragment.setArguments(args);
+		return fragment;
+	}
+
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		rootView = inflater.inflate(R.layout.fragment_sms_message, container, false);
@@ -58,7 +68,11 @@ public class SmsMessageFragment extends Fragment {
 
 		initializeViewById();
 
+		Intent intent = activity.getIntent();
+		Bundle bundle = (getArguments() != null) ? getArguments() : intent.getExtras();
+
 		business = new SmsMessageBusiness(context, NotifierMessageLogger.getInstance());
+		business.initialize(bundle);
 
 		initializeListener();
 
@@ -88,7 +102,11 @@ public class SmsMessageFragment extends Fragment {
 		FragmentTool.initializeFabDrawable(activity, FragmentTool.INIT_FAB_IMAGE.VALIDATE);
 		FragmentTool.onClickFab(activity, (View view) -> {
 			business.saveMessage(etMessage.getText().toString());
-			FragmentTool.finish(activity);
+			if (CommonEnum.PLAYER_MODE.CREATE == business.getMode()) {
+				RxFragment.publish(RxFragment.SUBJECT_WIZARD_NEXT, 2);
+			} else {
+				FragmentTool.finish(activity);
+			}
 		});
 	}
 

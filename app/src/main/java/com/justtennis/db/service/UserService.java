@@ -20,6 +20,11 @@ public class UserService extends PersonService<User> {
 		typeManager = TypeManager.getInstance(context, notificationMessage);
 	}
 
+	@Override
+	public void createOrUpdate(User pojo) {
+		super.createOrUpdate(pojo);
+	}
+
 	public User find() {
 		User ret = null;
 

@@ -167,4 +167,7 @@
     <string name="drawer_close">Close navigation drawer</string>
     <string name="list_player_item_name_with_id">%s [id:%d|idExt:%d]</string>
     <string name="list_club_item_name_with_id">%s [id:%d]</string>
+    <string name="app_initialize_title">JustTennis - Setup</string>
+    <string name="app_initialize_subtitle_user">My Informations</string>
+    <string name="app_initialize_subtitle_sms_message">Sms Message</string>
 </resources>

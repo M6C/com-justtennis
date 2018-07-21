@@ -16,9 +16,11 @@ import static java.lang.annotation.RetentionPolicy.SOURCE;
 public final class RxFragment {
 
     public static final int SUBJECT_ON_SHOW = 0;
+    public static final int SUBJECT_RESTART = 1;
+    public static final int SUBJECT_WIZARD_NEXT = 2;
 
     @Retention(SOURCE)
-    @IntDef({SUBJECT_ON_SHOW})
+    @IntDef({SUBJECT_ON_SHOW, SUBJECT_RESTART, SUBJECT_WIZARD_NEXT})
     @interface Subject {
     }
 
