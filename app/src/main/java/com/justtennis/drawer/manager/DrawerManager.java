@@ -6,13 +6,13 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.widget.DrawerLayout;
-import android.support.v7.widget.AppCompatSpinner;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.cameleon.common.android.inotifier.INotifierMessage;
@@ -84,7 +84,7 @@ public class DrawerManager {
 		NavigationView navView = rootView.findViewById(R.id.nav_view);
 
 		View headerView = navView.getHeaderView(0);
-		AppCompatSpinner spSaison = headerView.findViewById(R.id.sp_saison);
+		Spinner spSaison = headerView.findViewById(R.id.sp_saison);
 		if (spSaison != null) {
 			spSaison.setAdapter(new ArrayAdapter<>(
 					Objects.requireNonNull(getActivity()).getApplicationContext(),
