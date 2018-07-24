@@ -67,10 +67,12 @@ public class ResourceTool {
     }
 
     private static void logMe(String message) {
+        com.crashlytics.android.Crashlytics.log(message);
         Logger.logMe(TAG, message);
     }
 
     private static void logMe(Exception ex) {
+        com.crashlytics.android.Crashlytics.logException(ex);
         Logger.logMe(TAG, ex);
     }
 }

@@ -148,6 +148,7 @@ public class CommonListFragment <D extends GenericDBPojo<Long>> extends Fragment
     }
 
     private static void logMe(String msg) {
+        com.crashlytics.android.Crashlytics.log(msg);
         Logger.logMe(TAG, msg);
     }
 }

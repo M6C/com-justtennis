@@ -405,10 +405,12 @@ public class MainActivity extends GenericActivity implements INotifierMessage, I
 	}
 
 	protected void logMe(String msg, Date dateStart) {
-		logMe("ListPlayerActivity time:" + (new Date().getTime() - dateStart.getTime()) + " millisecond - " + msg);
+		String text = "ListPlayerActivity time:" + (new Date().getTime() - dateStart.getTime()) + " millisecond - " + msg;
+		logMe(text);
 	}
 
 	protected static void logMe(String msg) {
+		com.crashlytics.android.Crashlytics.log(msg);
 		Logger.logMe(TAG, msg);
 	}
 

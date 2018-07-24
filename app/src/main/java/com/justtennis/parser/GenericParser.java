@@ -16,6 +16,7 @@ public class GenericParser {
 	}
 
 	private void logMe(String message) {
+		com.crashlytics.android.Crashlytics.log(message);
 		System.out.println(message);
 	}
 

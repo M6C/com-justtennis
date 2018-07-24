@@ -84,6 +84,7 @@ public class SingletonNotifierSendSessionProgress implements INotifierSessionPro
      * @param msg
      */
     private void logMe(String msg) {
+		com.crashlytics.android.Crashlytics.log(msg);
 		Logger.logMe(TAG, msg);
     }
 }

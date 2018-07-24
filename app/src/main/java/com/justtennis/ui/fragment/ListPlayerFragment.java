@@ -177,6 +177,7 @@ public class ListPlayerFragment extends CommonListFragment<Player> {
     }
 
 	protected static void logMe(String msg) {
+		com.crashlytics.android.Crashlytics.log(msg);
 		Logger.logMe(TAG, msg);
     }
 }

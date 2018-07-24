@@ -151,10 +151,12 @@ public abstract class GenericCursorManager<T extends GenericDBPojo<Long>, M exte
 	}
 
 	protected void logMe(String message) {
+		com.crashlytics.android.Crashlytics.log(message);
 		Logger.logMe(tagLogTrace(), message);
 	}
 
 	protected void logMe(Exception ex) {
+		com.crashlytics.android.Crashlytics.logException(ex);
 		Logger.logMe(tagLogTrace(), ex);
     }
 }

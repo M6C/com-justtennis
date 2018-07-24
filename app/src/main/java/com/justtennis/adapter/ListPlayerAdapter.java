@@ -214,6 +214,8 @@ public class ListPlayerAdapter extends ArrayAdapter<Player> {
     }
 
 	protected void logMe(String msg) {
-		Logger.logMe(TAG, "ListPlayerAdapter time:" + (new Date().getTime() - dateStart.getTime()) + " millisecond - " + msg);
+		String text = "ListPlayerAdapter time:" + (new Date().getTime() - dateStart.getTime()) + " millisecond - " + msg;
+		Logger.logMe(TAG, text);
+		com.crashlytics.android.Crashlytics.log(text);
     }
 }

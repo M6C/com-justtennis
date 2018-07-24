@@ -33,10 +33,12 @@ public class FileUtil {
 	}
 
 	public static void logMe(String tag, String msg) {
+		com.crashlytics.android.Crashlytics.log(msg);
 		Logger.logMe(tag, msg);
     }
 
 	public static void logMe(String tag, Exception ex) {
+		com.crashlytics.android.Crashlytics.logException(ex);
 		Logger.logMe(tag, ex);
    }
 

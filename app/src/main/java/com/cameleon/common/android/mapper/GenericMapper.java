@@ -99,6 +99,7 @@ public abstract class GenericMapper<T extends GenericDBPojo<Long>> {
 	}
 
 	protected void logMe(String message) {
+		com.crashlytics.android.Crashlytics.log(message);
 		System.out.println(message);
 	}
 }

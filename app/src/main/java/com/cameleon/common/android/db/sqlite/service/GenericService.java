@@ -96,6 +96,7 @@ public class GenericService<POJO extends GenericDBPojo<Long>> {
 	}
 
 	protected static void logMe(String msg) {
+		com.crashlytics.android.Crashlytics.log(msg);
 		Logger.logMe(TAG, msg);
     }
 }
