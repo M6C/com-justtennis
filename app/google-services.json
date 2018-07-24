@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "555705293809",
+    "firebase_url": "https://com-justtennis.firebaseio.com",
+    "project_id": "com-justtennis",
+    "storage_bucket": "com-justtennis.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:555705293809:android:74b1414a36f45553",
+        "android_client_info": {
+          "package_name": "justtennis.com.justtennis"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "555705293809-58d6fhhr126pg5g0vmi9l7aisr06vpkc.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDch5kacXCjzNCEj2Uc_3h3LQF9mnp-70s"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
