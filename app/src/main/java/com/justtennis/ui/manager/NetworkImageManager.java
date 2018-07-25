@@ -8,6 +8,7 @@ import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Handler;
 import android.os.Looper;
+import android.support.annotation.NonNull;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
@@ -37,6 +38,8 @@ import okhttp3.Response;
 public class NetworkImageManager {
 
     private static final String TAG = NetworkImageManager.class.getName();
+    private static final String NB_RESULT_PER_PAGE = "20";
+    private static final String SEARCH_MODEL = "atp tennis";
 
     private static String baseURLString = "https://api.flickr.com/services/rest";
     private static String apiKey = "a6d819499131071f158fd740860a5a88";
@@ -45,6 +48,9 @@ public class NetworkImageManager {
     private static ObjectMapper mapper = new ObjectMapper();
     private static NetworkImageManager instance;
     private static List<String> resultURLs = new ArrayList<>();
+    private static CropTransformation.GravityHorizontal[] h = new CropTransformation.GravityHorizontal[] {CropTransformation.GravityHorizontal.LEFT, CropTransformation.GravityHorizontal.CENTER, CropTransformation.GravityHorizontal.RIGHT};
+    private static CropTransformation.GravityVertical[] v = new CropTransformation.GravityVertical[] {CropTransformation.GravityVertical.TOP, CropTransformation.GravityVertical.CENTER, CropTransformation.GravityVertical.BOTTOM};
+    private static int cropSize = 3;
     private static Random rnd = new Random(1);
 
     private NetworkImageManager() {
@@ -61,24 +67,28 @@ public class NetworkImageManager {
         getPhoto( imageView, null, model);
     }
 
-    public void getPhoto(final ImageView imageView, final ProgressBar progress, final String model) {
+    private void getPhoto(final ImageView imageView, final ProgressBar progress, final String model) {
         final LoaderImageTask task = new LoaderImageTask() {
             @Override
             public void run() {
                 Picasso.get()
                         .load(getImage())
-                        .transform(new CropTransformation(500, 150, CropTransformation.GravityHorizontal.CENTER, CropTransformation.GravityVertical.CENTER))
+                        .transform(new CropTransformation(500, 150, h[rnd.nextInt(cropSize)], v[rnd.nextInt(cropSize)]))
                         .into(imageView);
             }
         };
         getPhoto(task, progress, model);
     }
 
-    public void getPhotoInBackground(final Context context, final View view, final String model) {
+    public void getPhotoInBackground(final Context context, final View view) {
+        getPhotoInBackground(context, view, SEARCH_MODEL);
+    }
+
+    private void getPhotoInBackground(final Context context, final View view, final String model) {
         getPhotoInBackground(context, view, null, model);
     }
 
-    public void getPhotoInBackground(final Context context, final View view, final ProgressBar progress, final String model) {
+    private void getPhotoInBackground(final Context context, final View view, final ProgressBar progress, final String model) {
         Target target = new Target() {
             @Override
             public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
@@ -103,7 +113,7 @@ public class NetworkImageManager {
             public void run() {
                 Picasso.get()
                         .load(getImage())
-                        .transform(new CropTransformation(500, 150, CropTransformation.GravityHorizontal.CENTER, CropTransformation.GravityVertical.CENTER))
+                        .transform(new CropTransformation(500, 150, h[rnd.nextInt(cropSize)], v[rnd.nextInt(cropSize)]))
                         .into(target);
             }
         };
@@ -116,7 +126,7 @@ public class NetworkImageManager {
 
         HttpUrl route = Objects.requireNonNull(HttpUrl.parse(baseURLString))
                 .newBuilder()
-                .addQueryParameter("per_page", "10")
+                .addQueryParameter("per_page", NB_RESULT_PER_PAGE)
                 .addQueryParameter("text", model)
                 .addQueryParameter("media", "photos")
                 .addQueryParameter("content_type", "1") // 1 = Photo Only
@@ -127,13 +137,13 @@ public class NetworkImageManager {
                 .addQueryParameter("nojsoncallback", "1")
                 .addQueryParameter("api_key", apiKey)
                 .build();
-        Log.e(TAG, "route:" + route.toString());
+        Log.i(TAG, "route:" + route.toString());
         Request request = new Request.Builder().url(route).get().build();
 
         httpclient.newCall(request)
                 .enqueue(new Callback() {
                     @Override
-                    public void onFailure(Call call, IOException e) {
+                    public void onFailure(@NonNull Call call, IOException e) {
                         Log.e(TAG, e.getMessage());
                         if (progress != null) {
                             Handler handler = new Handler(Looper.getMainLooper());
@@ -142,7 +152,7 @@ public class NetworkImageManager {
                     }
 
                     @Override
-                    public void onResponse(Call call, Response response) throws IOException {
+                    public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
                         byte[] bytes = response.body().bytes();
                         JsonNode rootNode = mapper.readTree(bytes);
 
@@ -177,7 +187,7 @@ public class NetworkImageManager {
         if (!resultURLs.isEmpty()) {
             int index = rnd.nextInt(resultURLs.size());
             String url = resultURLs.get(index);
-            Log.e(TAG, "resultURLs size:" + resultURLs.size() + " index:" + index + " url:" + url);
+            Log.i(TAG, "resultURLs size:" + resultURLs.size() + " index:" + index + " url:" + url);
             return url;
         }
         return null;

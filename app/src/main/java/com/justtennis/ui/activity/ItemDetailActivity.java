@@ -126,10 +126,9 @@ public class ItemDetailActivity extends AppCompatActivity implements NavigationD
 //        initializeSubscribeFragment();
         }
 
-        String model = "atp tennis action";
         AppBarLayout toolbar = findViewById(R.id.app_bar);
-        NetworkImageManager.getInstance().getPhotoInBackground(getApplicationContext(), toolbar, model);
-        toolbar.setOnClickListener(v -> NetworkImageManager.getInstance().getPhotoInBackground(getApplicationContext(), toolbar, model));
+        NetworkImageManager.getInstance().getPhotoInBackground(getApplicationContext(), toolbar);
+        toolbar.setOnClickListener(v -> NetworkImageManager.getInstance().getPhotoInBackground(getApplicationContext(), toolbar));
     }
 
     @Override
