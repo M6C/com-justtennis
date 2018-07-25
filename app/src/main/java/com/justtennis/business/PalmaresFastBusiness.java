@@ -1,8 +1,8 @@
 package com.justtennis.business;
 
-import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
+import android.os.Bundle;
+import android.support.v4.app.Fragment;
 
 import com.cameleon.common.android.inotifier.INotifierMessage;
 import com.justtennis.R;
@@ -71,8 +71,8 @@ public class PalmaresFastBusiness {
 		}
 	}
 
-	public void onCreate(Activity activity) {
-		initializeData(activity);
+	public void onCreate(Fragment context) {
+		initializeData(context);
 		initializePalmaresFastValue();
 		refreshData();
 	}
@@ -95,10 +95,10 @@ Logger.logMe(TAG, "PALMARES FAST - PalmaresFastBusiness - refreshData");
 	}
 
 	@SuppressWarnings("unchecked")
-	private void initializeData(Activity activity) {
-		Intent intent = activity.getIntent();
-		if (intent.hasExtra(PalmaresFastFragment.EXTRA_PALMARES)) {
-			listInitialize = (List<PalmaresFastValue>) intent.getSerializableExtra(PalmaresFastFragment.EXTRA_PALMARES);
+	private void initializeData(Fragment activity) {
+		Bundle bundle = activity.getArguments();
+		if (bundle != null && bundle.containsKey(PalmaresFastFragment.EXTRA_PALMARES)) {
+			listInitialize = (List<PalmaresFastValue>) bundle.getSerializable(PalmaresFastFragment.EXTRA_PALMARES);
 		}
 		
 	}

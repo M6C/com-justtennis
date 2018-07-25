@@ -3,7 +3,6 @@ package com.justtennis.business;
 import android.content.Context;
 
 import com.cameleon.common.android.inotifier.INotifierMessage;
-import com.justtennis.activity.ComputeRankingActivity;
 import com.justtennis.business.sub.ComputeRankSubService;
 import com.justtennis.db.service.InviteService;
 import com.justtennis.db.service.PlayerService;
@@ -28,7 +27,7 @@ public class ComputeRankingBusiness {
 	@SuppressWarnings("unused")
 	private static final String TAG = ComputeRankingBusiness.class.getSimpleName();
 	
-	private ComputeRankingActivity context;
+	private Context context;
 
 	private ComputeRankSubService computeRankService;
 
@@ -42,7 +41,7 @@ public class ComputeRankingBusiness {
 	private List<Invite> list = new ArrayList<>();
 	private Long idRanking;
 
-	public ComputeRankingBusiness(ComputeRankingActivity context, INotifierMessage notificationMessage) {
+	public ComputeRankingBusiness(Context context, INotifierMessage notificationMessage) {
 		this.context = context;
 		computeRankService = new ComputeRankSubService(context, notificationMessage);
 

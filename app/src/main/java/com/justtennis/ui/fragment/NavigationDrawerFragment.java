@@ -31,6 +31,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.justtennis.R;
+import com.justtennis.business.ComputeRankingBusiness;
+import com.justtennis.domain.PalmaresFastValue;
 import com.justtennis.domain.User;
 import com.justtennis.drawer.manager.business.DrawerSaisonBusiness;
 import com.justtennis.manager.TypeManager;
@@ -41,6 +43,7 @@ import com.justtennis.ui.rxjava.RxNavigationDrawer;
 
 import org.gdocument.gtracergps.launcher.log.Logger;
 
+import java.util.List;
 import java.util.Objects;
 
 /**
@@ -463,6 +466,10 @@ public class NavigationDrawerFragment extends Fragment {
         } else if (i == R.id.nav_list_club) {
             // Create List Club Fragment
             fragment = ListClubFragment.build();
+        } else if (i == R.id.nav_my_palmares_fast) {
+            ComputeRankingBusiness computeRankingBusiness = new ComputeRankingBusiness(getContext(), NotifierMessageLogger.getInstance());
+            List<PalmaresFastValue> palmares = computeRankingBusiness.getPalmares();
+            fragment = PalmaresFastFragment.buildMyPalmares(palmares);
         } else if (i == R.id.nav_palmares_fast) {
             fragment = PalmaresFastFragment.build();
         } else if (i == R.id.nav_sms_message) {

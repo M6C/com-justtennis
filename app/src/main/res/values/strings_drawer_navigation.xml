@@ -6,6 +6,7 @@
 
     <string name="menu_item_user">Utilisateur</string>
     <string name="menu_item_list_club">Clubs</string>
+    <string name="menu_item_my_palmares">My Palmares</string>
     <string name="menu_item_palmares_fast">Fast Palmares</string>
     <string name="menu_item_sms_message">SMS Message</string>
 

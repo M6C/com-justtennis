@@ -21,13 +21,15 @@ import com.justtennis.adapter.PalmaresFastAdapter;
 import com.justtennis.adapter.manager.RankingListManager;
 import com.justtennis.adapter.manager.RankingListManager.IRankingListListener;
 import com.justtennis.business.PalmaresFastBusiness;
+import com.justtennis.domain.PalmaresFastValue;
 import com.justtennis.notifier.NotifierMessageLogger;
 import com.justtennis.tool.FragmentTool;
-import com.justtennis.ui.rxjava.RxFragment;
 
 import org.gdocument.gtracergps.launcher.log.Logger;
 
+import java.io.Serializable;
 import java.text.MessageFormat;
+import java.util.List;
 
 public class PalmaresFastFragment extends Fragment {
 
@@ -57,6 +59,14 @@ public class PalmaresFastFragment extends Fragment {
 		return new PalmaresFastFragment();
 	}
 
+	public static PalmaresFastFragment buildMyPalmares(List<PalmaresFastValue> palmaresValue) {
+		PalmaresFastFragment fragment = new PalmaresFastFragment();
+		Bundle bundle = new Bundle();
+		bundle.putSerializable(PalmaresFastFragment.EXTRA_PALMARES, (Serializable)palmaresValue);
+		fragment.setArguments(bundle);
+		return fragment;
+	}
+
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -70,7 +80,7 @@ public class PalmaresFastFragment extends Fragment {
 		NotifierMessageLogger notifier = NotifierMessageLogger.getInstance();
 		rankingListManager = RankingListManager.getInstance(context, notifier);
 		business = new PalmaresFastBusiness(context, notifier);
-		business.onCreate(activity);
+		business.onCreate(this);
 
 		adapter = new PalmaresFastAdapter(business.getList());
 	}
