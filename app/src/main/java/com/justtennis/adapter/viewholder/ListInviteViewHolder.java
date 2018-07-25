@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.text.Html;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -12,6 +13,7 @@ import com.justtennis.R;
 import com.justtennis.adapter.manager.RankingViewManager;
 import com.justtennis.db.service.ScoreSetService;
 import com.justtennis.domain.Invite;
+import com.justtennis.domain.ScoreSet;
 import com.justtennis.notifier.NotifierMessageLogger;
 import com.justtennis.parser.LocationParser;
 import com.justtennis.ui.rxjava.RxListInvite;
@@ -24,6 +26,7 @@ public class ListInviteViewHolder extends CommonListViewHolder<Invite> {
     private final static SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm");
 
     private Context context;
+    private ImageView ivStatus;
     private TextView tvPlayer;
     private TextView tvDate;
     private TextView tvScore;
@@ -36,6 +39,7 @@ public class ListInviteViewHolder extends CommonListViewHolder<Invite> {
         super(itemView);
 
         context = itemView.getContext().getApplicationContext();
+        ivStatus = itemView.findViewById(R.id.iv_invite_status);
         tvPlayer = itemView.findViewById(R.id.tv_player);
         tvDate = itemView.findViewById(R.id.tv_date);
         tvScore = itemView.findViewById(R.id.tv_score);
@@ -57,6 +61,20 @@ public class ListInviteViewHolder extends CommonListViewHolder<Invite> {
         ScoreSetService scoreSetService = new ScoreSetService(context, notifier);
         RankingViewManager rankingViewManager = RankingViewManager.getInstance(context, notifier);
 
+        if (Invite.SCORE_RESULT.DEFEAT.equals(invite.getScoreResult())) {
+            ivStatus.setImageResource(R.drawable.ic_demon_01);
+        } else if (Invite.SCORE_RESULT.VICTORY.equals(invite.getScoreResult())) {
+            ivStatus.setImageResource(R.drawable.ic_podium_01);
+        } else if (invite.getListScoreSet()!=null && !invite.getListScoreSet().isEmpty()) {
+            ScoreSet score = invite.getListScoreSet().get(invite.getListScoreSet().size() - 1);
+            if (score.getValue1().compareTo(score.getValue2()) > 0) {
+                ivStatus.setImageResource(R.drawable.ic_podium_01);
+            } else {
+                ivStatus.setImageResource(R.drawable.ic_demon_01);
+            }
+        } else {
+            ivStatus.setImageResource(R.drawable.ic_tennis_ball_03);
+        }
         tvPlayer.setText(invite.getPlayer() == null ? "" : Html.fromHtml("<b>" + invite.getPlayer().getFirstName() + "</b> " + invite.getPlayer().getLastName()));
         tvDate.setText(invite.getDate() == null ? "" : sdf.format(invite.getDate()));
         llDelete.setTag(invite);

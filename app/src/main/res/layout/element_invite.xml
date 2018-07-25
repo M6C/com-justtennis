@@ -10,36 +10,60 @@
         android:orientation="vertical"
 	    android:layout_marginLeft="2sp"
 	    android:layout_marginRight="2sp"
+		android:visibility="gone"
     >
-		<TextView
-		    android:id="@+id/tv_ranking"
-		    android:layout_width="wrap_content"
-		    android:layout_height="wrap_content"
-		    android:textSize="14sp"
-		/>
-		<TextView
-		    android:id="@+id/tv_ranking_estimate"
-		    android:layout_width="wrap_content"
-		    android:layout_height="wrap_content"
-		    android:visibility="gone"
-		    android:textSize="14sp"
-		    android:textStyle="bold"
-		/>
 	</LinearLayout>
+
+    <ImageView
+        android:id="@+id/iv_invite_status"
+        android:layout_width="@dimen/icon_medium_horizontal_size"
+        android:layout_height="@dimen/icon_medium_horizontal_size"
+        android:layout_gravity="center_horizontal|center_vertical"
+        android:layout_marginBottom="@dimen/icon_vertical_margin"
+        android:layout_marginEnd="@dimen/icon_horizontal_margin"
+        android:layout_marginStart="@dimen/icon_horizontal_margin"
+        android:layout_marginTop="@dimen/icon_vertical_margin"
+        android:src="@drawable/ic_tennis_ball_03" />
+
     <LinearLayout
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="1"
         android:orientation="vertical"
     >
-		<TextView
-		    android:id="@+id/tv_player"
-		    android:layout_width="match_parent"
-		    android:layout_height="wrap_content"
-		    android:textSize="16sp"
-	        android:orientation="vertical"
-		/>
-		
+		<LinearLayout
+			android:layout_width="30dp"
+			android:layout_height="match_parent"
+			android:orientation="vertical"
+			android:layout_marginLeft="2sp"
+			android:layout_marginRight="2sp"
+			>
+			<TextView
+				android:id="@+id/tv_player"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:textSize="16sp"
+				android:orientation="vertical"
+				/>
+
+			<TextView
+				android:id="@+id/tv_ranking"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:textSize="14sp"
+				android:layout_marginLeft="2sp"
+				android:layout_marginRight="2sp"
+				/>
+			<TextView
+				android:id="@+id/tv_ranking_estimate"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:visibility="gone"
+				android:textSize="14sp"
+				android:textStyle="bold"
+				/>
+		</LinearLayout>
+
         <TextView
             android:id="@+id/tv_club_name"
             android:layout_width="match_parent"
