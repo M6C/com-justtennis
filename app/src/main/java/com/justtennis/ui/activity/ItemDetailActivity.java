@@ -40,6 +40,7 @@ import com.justtennis.ui.fragment.NavigationDrawerFragment;
 import com.justtennis.ui.fragment.PieChartFragment;
 import com.justtennis.ui.fragment.SmsMessageFragment;
 import com.justtennis.ui.fragment.UserFragment;
+import com.justtennis.ui.manager.NetworkImageManager;
 import com.justtennis.ui.rxjava.RxFragment;
 import com.justtennis.ui.rxjava.RxNavigationDrawer;
 
@@ -124,6 +125,11 @@ public class ItemDetailActivity extends AppCompatActivity implements NavigationD
             initializeSubscribeChangeType();
 //        initializeSubscribeFragment();
         }
+
+        String model = "atp tennis action";
+        AppBarLayout toolbar = findViewById(R.id.app_bar);
+        NetworkImageManager.getInstance().getPhotoInBackground(getApplicationContext(), toolbar, model);
+        toolbar.setOnClickListener(v -> NetworkImageManager.getInstance().getPhotoInBackground(getApplicationContext(), toolbar, model));
     }
 
     @Override
