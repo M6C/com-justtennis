@@ -50,8 +50,8 @@ public class NetworkImageManager {
     private static List<String> resultURLs = new ArrayList<>();
     private static CropTransformation.GravityHorizontal[] h = new CropTransformation.GravityHorizontal[] {CropTransformation.GravityHorizontal.LEFT, CropTransformation.GravityHorizontal.CENTER, CropTransformation.GravityHorizontal.RIGHT};
     private static CropTransformation.GravityVertical[] v = new CropTransformation.GravityVertical[] {CropTransformation.GravityVertical.TOP, CropTransformation.GravityVertical.CENTER, CropTransformation.GravityVertical.BOTTOM};
-    private static int cropSize = 3;
     private static Random rnd = new Random(1);
+    private static int currentImageIdx = -1;
 
     private NetworkImageManager() {
     }
@@ -73,7 +73,7 @@ public class NetworkImageManager {
             public void run() {
                 Picasso.get()
                         .load(getImage())
-                        .transform(new CropTransformation(500, 150, h[rnd.nextInt(cropSize)], v[rnd.nextInt(cropSize)]))
+                        .transform(createTransformation())
                         .into(imageView);
             }
         };
@@ -113,7 +113,7 @@ public class NetworkImageManager {
             public void run() {
                 Picasso.get()
                         .load(getImage())
-                        .transform(new CropTransformation(500, 150, h[rnd.nextInt(cropSize)], v[rnd.nextInt(cropSize)]))
+                        .transform(createTransformation())
                         .into(target);
             }
         };
@@ -167,10 +167,12 @@ public class NetworkImageManager {
                         }
 
                         Handler handler = new Handler(Looper.getMainLooper());
-                        String url = find1stNotEmpty();
+                        String url = getUrl();
                         if (url != null) {
-                            handler.post(() -> task.setImage(url));
-                            handler.post(task);
+                            handler.post(() -> {
+                                task.setImage(url);
+                                handler.post(task);
+                            });
                         }
                         handler.post(() -> {
                             if (progress != null) {
@@ -183,14 +185,24 @@ public class NetworkImageManager {
         resultURLs.clear();
     }
 
-    private String find1stNotEmpty() {
+    private static String getUrl() {
         if (!resultURLs.isEmpty()) {
             int index = rnd.nextInt(resultURLs.size());
+            while(index == currentImageIdx) {
+                index = rnd.nextInt(resultURLs.size());
+            }
+            currentImageIdx = index;
             String url = resultURLs.get(index);
             Log.i(TAG, "resultURLs size:" + resultURLs.size() + " index:" + index + " url:" + url);
             return url;
         }
         return null;
+    }
+
+    @NonNull
+    private CropTransformation createTransformation() {
+        int cropSize = 3;
+        return new CropTransformation(500, 150, h[rnd.nextInt(cropSize)], v[rnd.nextInt(cropSize)]);
     }
 
     private abstract class LoaderImageTask implements Runnable {
