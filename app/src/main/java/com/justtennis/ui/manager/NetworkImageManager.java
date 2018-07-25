@@ -187,8 +187,9 @@ public class NetworkImageManager {
 
     private static String getUrl() {
         if (!resultURLs.isEmpty()) {
+            int i = 0;
             int index = rnd.nextInt(resultURLs.size());
-            while(index == currentImageIdx) {
+            while(index == currentImageIdx && i++ < 5) {
                 index = rnd.nextInt(resultURLs.size());
             }
             currentImageIdx = index;
