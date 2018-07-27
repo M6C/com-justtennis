@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:orientation="horizontal"
->
+	android:layout_width="match_parent"
+	android:layout_height="wrap_content"
+	xmlns:app="http://schemas.android.com/apk/res-auto"
+	android:orientation="horizontal">
 	<LinearLayout
 		android:layout_width="wrap_content"
 		android:layout_height="match_parent"
@@ -26,48 +26,47 @@
 		android:layout_marginEnd="8sp"
         android:orientation="vertical"
     >
-		<LinearLayout
+		<com.google.android.flexbox.FlexboxLayout
 			android:layout_width="match_parent"
 			android:layout_height="wrap_content"
 			android:orientation="horizontal"
-			android:layout_marginLeft="2sp"
-			android:layout_marginRight="2sp"
+			app:flexWrap="wrap"
+			app:flexDirection="row"
+			app:alignItems="stretch"
+			app:alignContent="stretch"
 			>
 			<TextView
 				android:id="@+id/tv_player"
 				android:layout_width="wrap_content"
 				android:layout_height="wrap_content"
-				android:textSize="22dp"
-				android:text="Name"
+				android:layout_marginEnd="10sp"
+				android:textSize="22sp"
 				android:orientation="vertical"
+				android:maxLines="1"
+				android:ellipsize="end"
 				/>
 
 			<LinearLayout
 				android:id="@+id/ll_ranking"
-				android:layout_width="0dp"
+				android:layout_width="wrap_content"
 				android:layout_height="wrap_content"
-				android:layout_weight="1"
-				android:layout_marginLeft="2sp"
-				android:layout_marginRight="2sp"
 				android:orientation="horizontal"
-				android:gravity="center_horizontal|center_vertical">
+				android:gravity="center_horizontal|center_vertical"
+				app:layout_alignSelf="stretch">
 
 				<ImageView
 					android:id="@+id/iv_ranking"
 					android:layout_width="@dimen/icon_small_horizontal_size"
 					android:layout_height="@dimen/icon_small_vertical_size"
 					android:layout_gravity="center_horizontal|center_vertical"
-					android:layout_marginBottom="@dimen/icon_vertical_margin"
-					android:layout_marginEnd="@dimen/icon_horizontal_margin"
-					android:layout_marginStart="@dimen/icon_horizontal_margin"
-					android:layout_marginTop="@dimen/icon_vertical_margin"
 					android:src="@drawable/ic_award" />
 
 				<TextView
 					android:id="@+id/tv_ranking"
 					android:layout_width="wrap_content"
 					android:layout_height="wrap_content"
-					android:layout_marginRight="8sp"
+					android:layout_marginStart="2sp"
+					android:layout_marginEnd="8sp"
 					android:textSize="18sp"
 					/>
 				<TextView
@@ -78,42 +77,13 @@
 					android:textSize="18sp"
 					/>
 			</LinearLayout>
-		</LinearLayout>
-
-		<LinearLayout
-			android:id="@+id/ll_club_name"
-			android:layout_width="match_parent"
-			android:layout_height="wrap_content"
-			android:layout_marginLeft="2sp"
-			android:layout_marginRight="2sp"
-			android:orientation="horizontal"
-			android:gravity="center_horizontal|center_vertical">
-			<ImageView
-				android:id="@+id/iv_location_map"
-				android:layout_width="@dimen/icon_small_horizontal_size"
-				android:layout_height="@dimen/icon_small_vertical_size"
-				android:layout_gravity="center_horizontal|center_vertical"
-				android:layout_marginBottom="@dimen/icon_vertical_margin"
-				android:layout_marginEnd="@dimen/icon_horizontal_margin"
-				android:layout_marginStart="@dimen/icon_horizontal_margin"
-				android:layout_marginTop="@dimen/icon_vertical_margin"
-				android:src="@drawable/ic_marker_location_08" />
-
-			<TextView
-				android:id="@+id/tv_club_name"
-				android:layout_width="0dp"
-				android:layout_height="wrap_content"
-				android:layout_weight="1"
-				android:textSize="16sp"
-				/>
-		</LinearLayout>
+		</com.google.android.flexbox.FlexboxLayout>
 
 		<LinearLayout
 			android:id="@+id/ll_date"
 			android:layout_width="match_parent"
 			android:layout_height="wrap_content"
-			android:layout_marginLeft="2sp"
-			android:layout_marginRight="2sp"
+			android:layout_marginTop="4dp"
 			android:orientation="horizontal"
 			android:gravity="center_horizontal|center_vertical" >
 			<ImageView
@@ -121,10 +91,6 @@
 				android:layout_width="@dimen/icon_small_horizontal_size"
 				android:layout_height="@dimen/icon_small_vertical_size"
 				android:layout_gravity="center_horizontal|center_vertical"
-				android:layout_marginBottom="@dimen/icon_vertical_margin"
-				android:layout_marginEnd="@dimen/icon_horizontal_margin"
-				android:layout_marginStart="@dimen/icon_horizontal_margin"
-				android:layout_marginTop="@dimen/icon_vertical_margin"
 				android:src="@drawable/ic_clock_06" />
 
 			<TextView
@@ -132,18 +98,41 @@
 				android:layout_width="0dp"
 				android:layout_height="wrap_content"
 				android:layout_weight="1"
+				android:layout_marginStart="2sp"
 				android:textColor="@color/gris_1"
-				android:textSize="16sp"
+				android:textSize="18sp"
 				/>
 		</LinearLayout>
 
+		<LinearLayout
+			android:id="@+id/ll_club_name"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:layout_marginTop="4dp"
+			android:orientation="horizontal"
+			android:gravity="center_horizontal|center_vertical">
+			<ImageView
+				android:id="@+id/iv_location_map"
+				android:layout_width="@dimen/icon_small_horizontal_size"
+				android:layout_height="@dimen/icon_small_vertical_size"
+				android:layout_gravity="center_horizontal|center_vertical"
+				android:src="@drawable/ic_marker_location_08" />
+
+			<TextView
+				android:id="@+id/tv_club_name"
+				android:layout_width="0dp"
+				android:layout_height="wrap_content"
+				android:layout_weight="1"
+				android:layout_marginStart="2sp"
+				android:textSize="16sp"
+				/>
+		</LinearLayout>
 
 		<LinearLayout
 			android:id="@+id/ll_score"
 			android:layout_width="match_parent"
 			android:layout_height="wrap_content"
-			android:layout_marginLeft="2sp"
-			android:layout_marginRight="2sp"
+			android:layout_marginTop="4dp"
 			android:orientation="horizontal"
 			android:gravity="center_horizontal|center_vertical">
 			<ImageView
@@ -151,10 +140,6 @@
 				android:layout_width="@dimen/icon_small_horizontal_size"
 				android:layout_height="@dimen/icon_small_vertical_size"
 				android:layout_gravity="center_horizontal|center_vertical"
-				android:layout_marginBottom="@dimen/icon_vertical_margin"
-				android:layout_marginEnd="@dimen/icon_horizontal_margin"
-				android:layout_marginStart="@dimen/icon_horizontal_margin"
-				android:layout_marginTop="@dimen/icon_vertical_margin"
 				android:src="@drawable/ic_score_10" />
 
 			<TextView
@@ -162,7 +147,9 @@
 				android:layout_width="0dp"
 				android:layout_height="wrap_content"
 				android:layout_weight="1"
+				android:layout_marginStart="2sp"
 				android:textColor="@color/gris_1"
+				android:textSize="18sp"
 				/>
 		</LinearLayout>
 	</LinearLayout>

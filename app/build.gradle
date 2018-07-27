@@ -58,6 +58,9 @@ dependencies {
     implementation 'com.fasterxml.jackson.core:jackson-core:2.9.6'
     implementation 'com.fasterxml.jackson.core:jackson-annotations:2.9.0'
     implementation 'com.fasterxml.jackson.core:jackson-databind:2.9.6'
+
+    // Google Flex Layout
+    compile 'com.google.android:flexbox:0.2.3'
 }
 
 // Firebase

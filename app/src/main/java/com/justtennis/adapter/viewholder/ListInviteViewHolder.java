@@ -76,7 +76,7 @@ public class ListInviteViewHolder extends CommonListViewHolder<Invite> {
         rankingViewManager.manageRanking(itemView, invite, true);
         rankingViewManager.manageRanking(itemView, invite, false);
 
-        int rankingVisibility = itemView.findViewById(R.id.tv_ranking).getVisibility() == View.VISIBLE &&
+        int rankingVisibility = itemView.findViewById(R.id.tv_ranking).getVisibility() == View.VISIBLE ||
                 itemView.findViewById(R.id.tv_ranking_estimate).getVisibility() == View.VISIBLE ?
                 View.VISIBLE : View.GONE;
 
