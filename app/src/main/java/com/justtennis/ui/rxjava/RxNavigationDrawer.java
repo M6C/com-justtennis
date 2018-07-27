@@ -4,6 +4,7 @@ import android.support.annotation.IntDef;
 
 import java.lang.annotation.Retention;
 
+import io.reactivex.Observable;
 import io.reactivex.annotations.NonNull;
 import io.reactivex.functions.Consumer;
 
@@ -36,6 +37,13 @@ public final class RxNavigationDrawer {
      */
     public static void subscribe(@Subject int subject, @NonNull Object lifecycle, @NonNull Consumer<Object> action) {
         bus.subscribe(subject, lifecycle, action);
+    }
+
+    /**
+     * Publish an object to the specified subject for all subscribers of that subject.
+     */
+    public static void publish(@RxComputeRanking.Subject int subject) {
+        bus.publish(subject, Observable.empty());
     }
 
     /**

@@ -467,11 +467,12 @@ public class NavigationDrawerFragment extends Fragment {
             // Create List Club Fragment
             fragment = ListClubFragment.build();
         } else if (i == R.id.nav_my_palmares_fast) {
+            fragment = ComputeRankingFragment.build();
+        } else if (i == R.id.nav_palmares_fast) {
+//            fragment = PalmaresFastFragment.build();
             ComputeRankingBusiness computeRankingBusiness = new ComputeRankingBusiness(getContext(), NotifierMessageLogger.getInstance());
             List<PalmaresFastValue> palmares = computeRankingBusiness.getPalmares();
             fragment = PalmaresFastFragment.buildMyPalmares(palmares);
-        } else if (i == R.id.nav_palmares_fast) {
-            fragment = PalmaresFastFragment.build();
         } else if (i == R.id.nav_sms_message) {
             deep = 1;
             fragment = SmsMessageFragment.build();

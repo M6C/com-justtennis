@@ -1,10 +1,7 @@
 package com.justtennis.adapter;
 
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.List;
-
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,7 +13,7 @@ import android.widget.TextView;
 
 import com.justtennis.ApplicationConfig;
 import com.justtennis.R;
-import com.justtennis.activity.ComputeRankingActivity;
+import com.justtennis.adapter.manager.InviteViewManager;
 import com.justtennis.adapter.manager.RankingListManager;
 import com.justtennis.adapter.manager.RankingListManager.IRankingListListener;
 import com.justtennis.adapter.manager.RankingViewManager;
@@ -28,12 +25,17 @@ import com.justtennis.domain.Ranking;
 import com.justtennis.filter.ListInviteByPlayerFilter;
 import com.justtennis.notifier.NotifierMessageLogger;
 import com.justtennis.parser.LocationParser;
+import com.justtennis.ui.rxjava.RxComputeRanking;
+
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.List;
 
 public class ComputeRankingListInviteAdapter extends ArrayAdapter<Invite> {
 
 	private List<Invite> value;
 	private ArrayList<Invite> valueOld;
-	private ComputeRankingActivity activity;
+	private Activity activity;
 	@SuppressLint("SimpleDateFormat")
 	private final static SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm");
 	private Filter filter = null;
@@ -41,29 +43,28 @@ public class ComputeRankingListInviteAdapter extends ArrayAdapter<Invite> {
 	private PlayerService playerService;
 	private RankingViewManager rankingViewManager;
 	private RankingListManager rankingListManager;
+	private InviteViewManager inviteViewManager;
 	private LocationParser locationParser;
 
-	public ComputeRankingListInviteAdapter(ComputeRankingActivity activity, List<Invite> value) {
+	public ComputeRankingListInviteAdapter(Activity activity, List<Invite> value) {
 		super(activity, R.layout.list_invite_row, android.R.id.text1, value);
 
 		this.activity = activity;
 		this.value = value;
 		this.valueOld = new ArrayList<Invite>(value);
 		
-		this.filter = new ListInviteByPlayerFilter(new ListInviteByPlayerFilter.IValueNotifier() {
-			@Override
-			public void setValue(List<Invite> value) {
-				ComputeRankingListInviteAdapter.this.value.clear();
-				ComputeRankingListInviteAdapter.this.value.addAll(value);
-				notifyDataSetChanged();
-			}
-		}, valueOld);
+		this.filter = new ListInviteByPlayerFilter(value1 -> {
+            ComputeRankingListInviteAdapter.this.value.clear();
+            ComputeRankingListInviteAdapter.this.value.addAll(value1);
+            notifyDataSetChanged();
+        }, valueOld);
 		NotifierMessageLogger notifier = NotifierMessageLogger.getInstance();
 		locationParser = LocationParser.getInstance(activity, notifier);
 		scoreSetService = new ScoreSetService(activity, notifier);
 		playerService = new PlayerService(activity, NotifierMessageLogger.getInstance());
 		rankingViewManager = RankingViewManager.getInstance(activity, notifier);
 		rankingListManager = RankingListManager.getInstance(activity, notifier);
+		inviteViewManager = InviteViewManager.getInstance(activity, notifier);
 	}
 
 	@Override
@@ -97,14 +98,15 @@ public class ComputeRankingListInviteAdapter extends ArrayAdapter<Invite> {
 		}
 		rowView.setTag(v);
 
+		ImageView ivStatus = rowView.findViewById(R.id.iv_status);
 		TextView tvPlayer = (TextView) rowView.findViewById(R.id.tv_player);
 		TextView tvDate = (TextView) rowView.findViewById(R.id.tv_date);
 		TextView tvScore = (TextView) rowView.findViewById(R.id.tv_score);
 		TextView tvClubName = (TextView) rowView.findViewById(R.id.tv_club_name);
-		View vTypeEntrainement = rowView.findViewById(R.id.tv_type_entrainement);
-		View vTypeMatch = rowView.findViewById(R.id.tv_type_match);
 		TextView tvPoint = (TextView) rowView.findViewById(R.id.tv_point);
 		TextView tvBonusPoint = (TextView) rowView.findViewById(R.id.tv_bonus_point);
+
+		inviteViewManager.manageStatusImage(ivStatus, v);
 
 		initializeRanking(v, rowView, false);
 		initializeRanking(v, rowView, true);
@@ -138,9 +140,6 @@ public class ComputeRankingListInviteAdapter extends ArrayAdapter<Invite> {
 				break;
 			default:
 		}
-
-		vTypeEntrainement.setVisibility(View.GONE);
-		vTypeMatch.setVisibility(View.VISIBLE);
 
 		return rowView;
 	}
@@ -188,7 +187,7 @@ public class ComputeRankingListInviteAdapter extends ArrayAdapter<Invite> {
 					}
 					playerService.createOrUpdate(player);
 
-					activity.refreshData();
+					RxComputeRanking.publish(RxComputeRanking.SUBJECT_REFRESH);
 				}
 			}
 		};

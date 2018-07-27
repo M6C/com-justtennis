@@ -13,7 +13,7 @@ public class ApplicationConfig {
 	public static final boolean CALENDAR_ADD_EVENT_CONFIRMED = true;
 	public static final boolean CALENDAR_ADD_EVENT_CANCELED = true;
 
-	public static final boolean FEED_DATABASE = false;
+	public static final boolean FEED_DATABASE = true;
 
 	@SuppressWarnings("unused")
 	public static final boolean CALENDAR_ADD_EVENT = CALENDAR_ADD_EVENT_CONFIRMED || CALENDAR_ADD_EVENT_CANCELED;

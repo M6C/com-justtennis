@@ -27,7 +27,7 @@
 				android:layout_height="35dip"
 				android:layout_gravity="center_vertical|center_horizontal"
 				android:contentDescription="@string/button_desctiption_player_unknow"
-				android:src="@drawable/player_unknow_2" />
+				android:src="@drawable/player_unknow" />
 		</LinearLayout>
 		<LinearLayout
 			android:layout_width="0dp"

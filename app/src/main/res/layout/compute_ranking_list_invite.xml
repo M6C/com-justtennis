@@ -1,6 +1,5 @@
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/layout_main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -8,9 +7,7 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    android:background="@drawable/background_03"
     android:orientation="vertical"
-    tools:context=".ListPlayerActivity"
 >
     <LinearLayout
         android:layout_width="match_parent"
@@ -41,7 +38,7 @@
               android:id="@+id/sp_ranking"
               android:layout_width="match_parent"
               android:layout_height="wrap_content"
-              android:layout_marginLeft="@dimen/player_field_margin_left"
+              android:layout_marginStart="@dimen/player_field_margin_left"
               android:gravity="center_horizontal"
               android:textSize="@dimen/player_field_size" />
       </LinearLayout>
@@ -65,7 +62,7 @@
 		      android:id="@+id/tv_sum_point"
               android:layout_width="match_parent"
               android:layout_height="wrap_content"
-              android:layout_marginLeft="@dimen/player_field_margin_left"
+              android:layout_marginStart="@dimen/player_field_margin_left"
               android:gravity="center_horizontal"
               android:textSize="@dimen/player_field_size" />
       </LinearLayout>
@@ -97,7 +94,7 @@
 	              android:textStyle="bold"
 	              android:gravity="center_vertical"
 	              android:textSize="@dimen/player_field_size"
-	              android:layout_marginRight="5dp"/>
+	              android:layout_marginEnd="5dp"/>
 			  <TextView
 			      android:id="@+id/tv_nb_victory_detail"
 	              android:layout_width="wrap_content"

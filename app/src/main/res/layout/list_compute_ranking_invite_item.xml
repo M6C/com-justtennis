@@ -8,13 +8,6 @@
     android:paddingTop="@dimen/list_item_vertical_margin"
     android:orientation="horizontal"
 >
-	<LinearLayout
-	    android:layout_width="wrap_content"
-	    android:layout_height="match_parent"
-	    android:gravity="center_vertical"
-	>
-		<include layout="@layout/element_invite_type"/>
-	</LinearLayout>
     <LinearLayout
         android:layout_width="0dp"
         android:layout_height="match_parent"

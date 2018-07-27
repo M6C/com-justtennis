@@ -10,10 +10,10 @@ import android.widget.TextView;
 
 import com.justtennis.ApplicationConfig;
 import com.justtennis.R;
+import com.justtennis.adapter.manager.InviteViewManager;
 import com.justtennis.adapter.manager.RankingViewManager;
 import com.justtennis.db.service.ScoreSetService;
 import com.justtennis.domain.Invite;
-import com.justtennis.domain.ScoreSet;
 import com.justtennis.notifier.NotifierMessageLogger;
 import com.justtennis.parser.LocationParser;
 import com.justtennis.ui.rxjava.RxListInvite;
@@ -39,7 +39,7 @@ public class ListInviteViewHolder extends CommonListViewHolder<Invite> {
         super(itemView);
 
         context = itemView.getContext().getApplicationContext();
-        ivStatus = itemView.findViewById(R.id.iv_invite_status);
+        ivStatus = itemView.findViewById(R.id.iv_status);
         tvPlayer = itemView.findViewById(R.id.tv_player);
         tvDate = itemView.findViewById(R.id.tv_date);
         tvScore = itemView.findViewById(R.id.tv_score);
@@ -60,21 +60,10 @@ public class ListInviteViewHolder extends CommonListViewHolder<Invite> {
         LocationParser locationParser = LocationParser.getInstance(context, notifier);
         ScoreSetService scoreSetService = new ScoreSetService(context, notifier);
         RankingViewManager rankingViewManager = RankingViewManager.getInstance(context, notifier);
+        InviteViewManager inviteViewManager = InviteViewManager.getInstance(context, notifier);
 
-        if (Invite.SCORE_RESULT.DEFEAT.equals(invite.getScoreResult())) {
-            ivStatus.setImageResource(R.drawable.ic_demon_01);
-        } else if (Invite.SCORE_RESULT.VICTORY.equals(invite.getScoreResult())) {
-            ivStatus.setImageResource(R.drawable.ic_podium_01);
-        } else if (invite.getListScoreSet()!=null && !invite.getListScoreSet().isEmpty()) {
-            ScoreSet score = invite.getListScoreSet().get(invite.getListScoreSet().size() - 1);
-            if (score.getValue1().compareTo(score.getValue2()) > 0) {
-                ivStatus.setImageResource(R.drawable.ic_podium_01);
-            } else {
-                ivStatus.setImageResource(R.drawable.ic_demon_01);
-            }
-        } else {
-            ivStatus.setImageResource(R.drawable.ic_tennis_ball_03);
-        }
+        inviteViewManager.manageStatusImage(ivStatus, invite);
+
         tvPlayer.setText(invite.getPlayer() == null ? "" : Html.fromHtml("<b>" + invite.getPlayer().getFirstName() + "</b> " + invite.getPlayer().getLastName()));
         tvDate.setText(invite.getDate() == null ? "" : sdf.format(invite.getDate()));
         llDelete.setTag(invite);
