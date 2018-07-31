@@ -23,8 +23,8 @@
 			>
 			<ImageView
 				android:id="@+id/iv_player"
-				android:layout_width="35dip"
-				android:layout_height="35dip"
+				android:layout_width="@dimen/icon_list_item_horizontal_size"
+				android:layout_height="@dimen/icon_list_item_status_vertical_size"
 				android:layout_gravity="center_vertical|center_horizontal"
 				android:contentDescription="@string/button_desctiption_player_unknow"
 				android:src="@drawable/player_unknow" />

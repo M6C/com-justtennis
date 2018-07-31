@@ -11,8 +11,8 @@
 		>
 		<ImageView
 			android:id="@+id/iv_status"
-			android:layout_width="35dip"
-			android:layout_height="35dip"
+			android:layout_width="@dimen/icon_list_item_horizontal_size"
+			android:layout_height="@dimen/icon_list_item_status_vertical_size"
 			android:layout_gravity="center_vertical|center_horizontal"
 			android:contentDescription="@string/button_desctiption_player_unknow"
 			android:src="@drawable/ic_tennis_ball_02" />
@@ -59,7 +59,7 @@
 					android:layout_width="@dimen/icon_small_horizontal_size"
 					android:layout_height="@dimen/icon_small_vertical_size"
 					android:layout_gravity="center_horizontal|center_vertical"
-					android:src="@drawable/ic_award" />
+					android:src="@drawable/ic_award_small" />
 
 				<TextView
 					android:id="@+id/tv_ranking"
@@ -91,7 +91,7 @@
 				android:layout_width="@dimen/icon_small_horizontal_size"
 				android:layout_height="@dimen/icon_small_vertical_size"
 				android:layout_gravity="center_horizontal|center_vertical"
-				android:src="@drawable/ic_clock_06" />
+				android:src="@drawable/ic_clock_06_small" />
 
 			<TextView
 				android:id="@+id/tv_date"
@@ -116,7 +116,7 @@
 				android:layout_width="@dimen/icon_small_horizontal_size"
 				android:layout_height="@dimen/icon_small_vertical_size"
 				android:layout_gravity="center_horizontal|center_vertical"
-				android:src="@drawable/ic_marker_location_08" />
+				android:src="@drawable/ic_marker_location_08_small" />
 
 			<TextView
 				android:id="@+id/tv_club_name"
@@ -140,7 +140,7 @@
 				android:layout_width="@dimen/icon_small_horizontal_size"
 				android:layout_height="@dimen/icon_small_vertical_size"
 				android:layout_gravity="center_horizontal|center_vertical"
-				android:src="@drawable/ic_score_10" />
+				android:src="@drawable/ic_score_10_small" />
 
 			<TextView
 				android:id="@+id/tv_score"

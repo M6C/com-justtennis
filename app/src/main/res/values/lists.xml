@@ -2,9 +2,9 @@
 <resources>
 
     <integer-array name="list_ic_tennis_player">
-        <item>@drawable/ic_tennis_player_03</item>
-        <item>@drawable/ic_tennis_player_04</item>
-        <item>@drawable/ic_tennis_player_05</item>
+        <item>@drawable/ic_tennis_player_03_small</item>
+        <item>@drawable/ic_tennis_player_04_small</item>
+        <item>@drawable/ic_tennis_player_05_small</item>
     </integer-array>
 
 </resources>

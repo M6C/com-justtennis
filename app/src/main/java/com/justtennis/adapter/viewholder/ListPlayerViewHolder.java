@@ -2,6 +2,7 @@ package com.justtennis.adapter.viewholder;
 
 import android.app.Activity;
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.text.Html;
 import android.view.View;
 import android.widget.ImageView;
@@ -67,10 +68,15 @@ public class ListPlayerViewHolder extends CommonListViewHolder<Player> {
 
         initializeLocation(player, clubName);
 
+        boolean unknown = true;
         if (player.getIdGoogle()!=null && player.getIdGoogle() > 0L) {
-            imagePlayer.setImageBitmap(contactManager.getPhoto(activity, player.getIdGoogle()));
+            Bitmap bmp = contactManager.getPhoto(activity, player.getIdGoogle());
+            if (bmp != null) {
+                imagePlayer.setImageBitmap(bmp);
+                unknown = false;
+            }
         }
-        else {
+        if (unknown) {
             imagePlayer.setImageDrawable(PlayerService.getUnknownPlayerRandomRes(activity));
         }
 
