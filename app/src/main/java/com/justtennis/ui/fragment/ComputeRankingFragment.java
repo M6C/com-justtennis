@@ -1,5 +1,6 @@
 package com.justtennis.ui.fragment;
 
+import android.arch.lifecycle.ViewModelProvider;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -12,17 +13,20 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.justtennis.R;
+import com.justtennis.activity.InviteActivity;
 import com.justtennis.adapter.ComputeRankingListInviteAdapter;
 import com.justtennis.adapter.manager.RankingListManager;
 import com.justtennis.adapter.manager.RankingListManager.IRankingListListener;
 import com.justtennis.business.ComputeRankingBusiness;
-import com.justtennis.listener.itemclick.OnItemClickListInvite;
+import com.justtennis.domain.Invite;
 import com.justtennis.notifier.NotifierMessageLogger;
 import com.justtennis.tool.FragmentTool;
+import com.justtennis.ui.common.CommonEnum;
 import com.justtennis.ui.rxjava.RxComputeRanking;
-import com.justtennis.ui.rxjava.RxListInvite;
+import com.justtennis.ui.viewmodel.InviteViewModel;
 
 import java.text.MessageFormat;
+import java.util.Objects;
 
 public class ComputeRankingFragment extends Fragment {
 
@@ -40,6 +44,8 @@ public class ComputeRankingFragment extends Fragment {
 
 	private RankingListManager rankingListManager;
 	private FragmentActivity activity;
+
+	private InviteViewModel modelInvite;
 
 	public static ComputeRankingFragment build() {
 		return new ComputeRankingFragment();
@@ -72,7 +78,7 @@ public class ComputeRankingFragment extends Fragment {
 		adapter.setValue(business.getList());
 
 		ListView list = rootView.findViewById(R.id.list);
-		list.setOnItemClickListener(new OnItemClickListInvite(activity, RESULT_ITEM_CLICK));
+		list.setOnItemClickListener((parent, view, position, id) -> onClickItem(view));
 		list.setAdapter(adapter);
 
 		business.onCreate();
@@ -122,7 +128,7 @@ public class ComputeRankingFragment extends Fragment {
 	}
 
 	private void initializeSubscribeComputeRanking() {
-		RxComputeRanking.subscribe(RxListInvite.SUBJECT_REFRESH, this, o -> refresh());
+		RxComputeRanking.subscribe(RxComputeRanking.SUBJECT_REFRESH, this, o -> refreshData());
 	}
 
 	private void initializeRankingList(View rootView) {
@@ -148,5 +154,20 @@ public class ComputeRankingFragment extends Fragment {
 		tvNbVictory.setVisibility(View.VISIBLE);
 		tvNbVictoryDetail.setText(MessageFormat.format("({0}) [V-E-2I-5G:{1}]", business.getNbVictoryAdditional(), business.getVE2I5G()));
 		tvNbVictoryDetail.setVisibility(View.VISIBLE);
+	}
+
+	private void onClickItem(View view) {
+		Invite item = (Invite)view.getTag();
+		InviteFragment fragment = new InviteFragment();
+		Bundle args = new Bundle();
+		args.putSerializable(InviteActivity.EXTRA_INVITE, item);
+		args.putSerializable(InviteActivity.EXTRA_MODE, CommonEnum.INVITE_MODE.INVITE_DETAIL);
+
+		modelInvite = new ViewModelProvider.NewInstanceFactory().create(InviteViewModel.class);
+		modelInvite.getSelected().observe(this, (Invite invite) -> refreshData());
+		args.putSerializable(ListPlayerFragment.EXTRA_VIEW_MODEL, modelInvite);
+
+		fragment.setArguments(args);
+		FragmentTool.replaceFragment(Objects.requireNonNull(getActivity()), fragment);
 	}
 }

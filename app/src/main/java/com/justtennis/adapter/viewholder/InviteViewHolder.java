@@ -9,7 +9,6 @@ import com.justtennis.R;
 import com.justtennis.domain.Invite;
 
 public class InviteViewHolder extends RecyclerView.ViewHolder {
-    public Invite invite;
     public TextView tvPlayer;
     public TextView tvDate;
     public TextView tvScore;

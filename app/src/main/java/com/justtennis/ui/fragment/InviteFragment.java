@@ -264,9 +264,7 @@ public class InviteFragment extends Fragment {
 
 	public void onClickOk(View view) {
 		business.modify();
-//		activity.finish();
 		activity.getSupportFragmentManager().popBackStackImmediate();
-
 	}
 
     public void onClickInviteConfirmeYes(View view) {

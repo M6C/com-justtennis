@@ -62,18 +62,15 @@ public class ListInviteAdapter extends ArrayAdapter<Invite> {
 	@NonNull
 	@Override
 	public View getView(int position, View convertView, @NonNull ViewGroup parent) {
-		Invite v = value.get(position);
+		Invite invite = value.get(position);
 		View rowView = convertView;
 		if (rowView == null) {
 			LayoutInflater inflater = activity.getLayoutInflater();
 			rowView = inflater.inflate(R.layout.list_invite_row, parent);
 		}
+		rowView.setTag(invite);
 
-		InviteViewHolder viewHolder = new InviteViewHolder(rowView);
-		viewHolder.invite = v;
-		rowView.setTag(viewHolder);
-
-		InviteViewHelper.initializeView(activity, viewHolder, mode);
+		InviteViewHelper.initializeView(activity, new InviteViewHolder(rowView), invite, mode);
 	    return rowView;
 	}
 

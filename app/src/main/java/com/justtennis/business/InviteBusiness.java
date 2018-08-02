@@ -40,6 +40,7 @@ import com.justtennis.manager.TypeManager;
 import com.justtennis.parser.LocationParser;
 import com.justtennis.parser.SmsParser;
 import com.justtennis.ui.common.CommonEnum;
+import com.justtennis.ui.viewmodel.InviteViewModel;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -73,6 +74,7 @@ public class InviteBusiness {
 	private List<String> listTxtSaisons = new ArrayList<>();
 	private String[][] scores;
 	private Ranking rankingNC;
+	private InviteViewModel model;
 
 
 	public InviteBusiness(Context context, INotifierMessage notificationMessage) {
@@ -132,6 +134,7 @@ public class InviteBusiness {
 				setIdRanking(getPlayer());
 			}
 		}
+		model = (InviteViewModel)bundle.getSerializable(InviteActivity.EXTRA_VIEW_MODEL);
 	}
 
 	public void updateData() {
@@ -268,6 +271,10 @@ public class InviteBusiness {
 
 		EVENT_STATUS status = gCalendarHelper.toEventStatus(invite.getStatus());
 		calendarAddEvent(invite, status);
+
+		if (model != null) {
+			model.select(invite);
+		}
 	}
 
 	public void confirmYes() {

@@ -18,7 +18,6 @@ import com.justtennis.tool.FragmentTool;
 import com.justtennis.ui.common.CommonEnum;
 import com.justtennis.ui.fragment.InviteFragment;
 
-import java.io.Serializable;
 import java.util.List;
 
 public class SimpleInviteRecyclerViewAdapter extends RecyclerView.Adapter<InviteViewHolder> {
@@ -37,10 +36,10 @@ public class SimpleInviteRecyclerViewAdapter extends RecyclerView.Adapter<Invite
     private final View.OnClickListener mOnClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
-            InviteViewHolder item = (InviteViewHolder) view.getTag();
+            Invite item = (Invite) view.getTag();
             if (mTwoPane) {
                 Bundle arguments = new Bundle();
-                arguments.putSerializable(InviteActivity.EXTRA_INVITE, (Serializable)item.invite);
+                arguments.putSerializable(InviteActivity.EXTRA_INVITE, item);
                 arguments.putSerializable(InviteActivity.EXTRA_MODE, CommonEnum.INVITE_MODE.INVITE_DETAIL);
                 InviteFragment fragment = new InviteFragment();
                 fragment.setArguments(arguments);
@@ -48,7 +47,7 @@ public class SimpleInviteRecyclerViewAdapter extends RecyclerView.Adapter<Invite
             } else {
                 InviteFragment fragment = new InviteFragment();
                 Bundle args = new Bundle();
-                args.putSerializable(InviteActivity.EXTRA_INVITE, (Serializable)item.invite);
+                args.putSerializable(InviteActivity.EXTRA_INVITE, item);
                 args.putSerializable(InviteActivity.EXTRA_MODE, CommonEnum.INVITE_MODE.INVITE_DETAIL);
                 fragment.setArguments(args);
                 FragmentTool.replaceFragment(mParentActivity, fragment);
@@ -59,8 +58,7 @@ public class SimpleInviteRecyclerViewAdapter extends RecyclerView.Adapter<Invite
     @NonNull
     @Override
     public InviteViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.list_invite_row, parent, false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_invite_row, parent, false);
         view.setOnClickListener(mOnClickListener);
         InviteViewHolder holder = new InviteViewHolder(view);
         view.setTag(holder);
@@ -69,9 +67,7 @@ public class SimpleInviteRecyclerViewAdapter extends RecyclerView.Adapter<Invite
 
     @Override
     public void onBindViewHolder(final InviteViewHolder holder, int position) {
-        holder.invite = mValues.get(position);
-
-        InviteViewHelper.initializeView(mParentActivity, holder, CommonEnum.LIST_VIEW_MODE.MODIFY);
+        InviteViewHelper.initializeView(mParentActivity, holder, mValues.get(position), CommonEnum.LIST_VIEW_MODE.MODIFY);
     }
 
     @Override

@@ -173,24 +173,20 @@ public class ComputeRankingListInviteAdapter extends ArrayAdapter<Invite> {
 
 	private void initializeRanking(Invite v, final View rowView, final boolean estimate) {
 		rankingViewManager.manageRanking(rowView, v, estimate);
-		IRankingListListener listenerRanking = new IRankingListListener() {
+		IRankingListListener listenerRanking = ranking -> {
+            Invite invite = (Invite) rowView.getTag();
+            Player player = playerService.find(invite.getPlayer().getId());
+            if (player != null) {
+                if (estimate) {
+                    player.setIdRankingEstimate(ranking.getId());
+                } else {
+                    player.setIdRanking(ranking.getId());
+                }
+                playerService.createOrUpdate(player);
 
-			@Override
-			public void onRankingSelected(Ranking ranking) {
-				Invite invite = (Invite) rowView.getTag();
-				Player player = playerService.find(invite.getPlayer().getId());
-				if (player != null) {
-					if (estimate) {
-						player.setIdRankingEstimate(ranking.getId());
-					} else {
-						player.setIdRanking(ranking.getId());
-					}
-					playerService.createOrUpdate(player);
-
-					RxComputeRanking.publish(RxComputeRanking.SUBJECT_REFRESH);
-				}
-			}
-		};
+                RxComputeRanking.publish(RxComputeRanking.SUBJECT_REFRESH);
+            }
+        };
 		rankingListManager.manageRankingTextViewDialog(activity, rowView, listenerRanking, estimate);
 	}
 }

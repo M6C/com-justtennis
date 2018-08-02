@@ -11,6 +11,7 @@ public class InviteActivity extends AbsctractFragmentActivity {
 	public static final String EXTRA_INVITE = "INVITE";
 	public static final String EXTRA_USER = "USER";
 	public static final String EXTRA_PLAYER_ID = "PLAYER_ID";
+	public static final String EXTRA_VIEW_MODEL = "EXTRA_VIEW_MODEL";
 
 	@Override
 	protected Fragment createFragment() {

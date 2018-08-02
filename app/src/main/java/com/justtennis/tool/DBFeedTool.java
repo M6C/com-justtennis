@@ -175,7 +175,7 @@ public class DBFeedTool {
                 // Win or Loose Score Randomly
                 int[] val = (iScore % 2 == 0) ? new int[]{6, rnd.nextInt(5)} : new int[]{rnd.nextInt(5), 6};
 
-                ScoreSet scoreSet = new ScoreSet(invite, nb, val[0], val[1]);
+                ScoreSet scoreSet = new ScoreSet(invite, nb+1, val[0], val[1]);
                 scoreSetService.createOrUpdate(scoreSet);
                 score.add(scoreSet);
             }
