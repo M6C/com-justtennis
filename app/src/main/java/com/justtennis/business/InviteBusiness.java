@@ -577,24 +577,7 @@ public class InviteBusiness {
 	}
 
 	public SCORE_RESULT computeScoreResult(List<ScoreSet> listScoreSet) {
-		Invite.SCORE_RESULT ret = Invite.SCORE_RESULT.UNFINISHED;
-		int size = listScoreSet.size();
-		if (size > 0) {
-			ScoreSet scoreLast = listScoreSet.get(size-1);
-
-			int iCol0 = (scoreLast.getValue1() == null  ? 0 : scoreLast.getValue1().intValue());
-			int iCol1 = (scoreLast.getValue2() == null  ? 0 : scoreLast.getValue2().intValue());
-			if (iCol0 == -1) {
-				ret = Invite.SCORE_RESULT.WO_VICTORY;
-			} else if (iCol1 == -1) {
-				ret = Invite.SCORE_RESULT.WO_DEFEAT;
-			} else if (iCol0 > iCol1) {
-				ret = Invite.SCORE_RESULT.VICTORY;
-			} else if (iCol0 < iCol1) {
-				ret = Invite.SCORE_RESULT.DEFEAT;
-			}
-		}
-		return ret;
+		return ScoreSetService.getInviteScoreResult(listScoreSet);
 	}
 
 	private void saveScoreSet() {

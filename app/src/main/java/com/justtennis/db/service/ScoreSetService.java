@@ -78,6 +78,27 @@ public class ScoreSetService extends GenericService<ScoreSet> {
 		return ret;
 	}
 
+	public static SCORE_RESULT getInviteScoreResult(List<ScoreSet> listScoreSet) {
+		Invite.SCORE_RESULT ret = Invite.SCORE_RESULT.UNFINISHED;
+		int size = listScoreSet.size();
+		if (size > 0) {
+			ScoreSet scoreLast = listScoreSet.get(size-1);
+
+			int iCol0 = (scoreLast.getValue1() == null  ? 0 : scoreLast.getValue1().intValue());
+			int iCol1 = (scoreLast.getValue2() == null  ? 0 : scoreLast.getValue2().intValue());
+			if (iCol0 == -1) {
+				ret = Invite.SCORE_RESULT.WO_VICTORY;
+			} else if (iCol1 == -1) {
+				ret = Invite.SCORE_RESULT.WO_DEFEAT;
+			} else if (iCol0 > iCol1) {
+				ret = Invite.SCORE_RESULT.VICTORY;
+			} else if (iCol0 < iCol1) {
+				ret = Invite.SCORE_RESULT.DEFEAT;
+			}
+		}
+		return ret;
+	}
+
 	private String getTextScore(Invite invite) {
 		StringBuilder ret = null;
 		for(ScoreSet score : invite.getListScoreSet()) {
