@@ -1,8 +1,6 @@
 package com.justtennis.tool;
 
-import android.content.ContentValues;
 import android.content.Context;
-import android.database.sqlite.SQLiteDatabase;
 
 import com.justtennis.ApplicationConfig;
 import com.justtennis.db.service.AddressService;
@@ -10,14 +8,15 @@ import com.justtennis.db.service.ClubService;
 import com.justtennis.db.service.InviteService;
 import com.justtennis.db.service.PlayerService;
 import com.justtennis.db.service.SaisonService;
+import com.justtennis.db.service.ScoreSetService;
 import com.justtennis.db.service.TournamentService;
 import com.justtennis.db.service.UserService;
-import com.justtennis.db.sqlite.helper.DBSaisonHelper;
 import com.justtennis.domain.Address;
 import com.justtennis.domain.Club;
 import com.justtennis.domain.Invite;
 import com.justtennis.domain.Player;
 import com.justtennis.domain.Saison;
+import com.justtennis.domain.ScoreSet;
 import com.justtennis.domain.Tournament;
 import com.justtennis.domain.User;
 import com.justtennis.manager.TypeManager;
@@ -41,80 +40,155 @@ public class DBFeedTool {
 
     public static void feed(Context context) {
 
+        logMe("Feed database:" + ApplicationConfig.FEED_DATABASE);
         if (!ApplicationConfig.FEED_DATABASE) {
             return;
         }
 
-        NotifierMessageLogger notifier = NotifierMessageLogger.getInstance();
-        SaisonService saisonService = new SaisonService(context, notifier);
-        UserService userService = new UserService(context, notifier);
-        PlayerService playerService = new PlayerService(context, notifier);
-        InviteService inviteService = new InviteService(context, notifier);
-        TournamentService tournamentService = new TournamentService(context, notifier);
-        ClubService clubService = new ClubService(context, notifier);
-        AddressService addressService = new AddressService(context, notifier);
+        Random rnd = new Random(1);
 
-        Saison saison = saisonService.getSaisonActiveOrFirst();
-        if (saison == null) {
-            saison = SaisonService.build(Calendar.getInstance());
-            saisonService.createOrUpdate(saison);
+        Saison saison = feedSaison(context);
+        User user = feedUser(context, saison);
+
+        List<Tournament> listTournament = new ArrayList<>();
+        List<Club> listClub = new ArrayList<>();
+        List<Address> listAddress = new ArrayList<>();
+
+        feedAddress(context, listAddress);
+        feedClub(context, rnd, listClub, listAddress);
+        feedTournament(context, rnd, saison, listTournament, listClub);
+
+        List<Player> listPlayer = new ArrayList<>();
+        for (TypeManager.TYPE type : TypeManager.TYPE.values()) {
+            TypeManager.getInstance().setType(type);
+
+            feedPlayer(context, rnd, listClub, listPlayer, type);
+            feedInvite(context, rnd, saison, user, listTournament, listClub, listPlayer);
         }
+    }
+
+    private static User feedUser(Context context, Saison saison) {
+        NotifierMessageLogger notifier = NotifierMessageLogger.getInstance();
+        UserService userService = new UserService(context, notifier);
         User user = userService.findFirst();
         if (user == null) {
             user = createUser(saison);
             userService.createOrUpdate(user);
         }
-        List<Player> listPlayer;
+        return user;
+    }
+
+    private static Saison feedSaison(Context context) {
+        NotifierMessageLogger notifier = NotifierMessageLogger.getInstance();
+        SaisonService saisonService = new SaisonService(context, notifier);
+        Saison saison = saisonService.getSaisonActiveOrFirst();
+        if (saison == null) {
+            saison = SaisonService.build(Calendar.getInstance());
+            saisonService.createOrUpdate(saison);
+        }
+        return saison;
+    }
+
+    private static void feedInvite(Context context, Random rnd, Saison saison, User user, List<Tournament> listTournament, List<Club> listClub, List<Player> listPlayer) {
+        NotifierMessageLogger notifier = NotifierMessageLogger.getInstance();
+        InviteService inviteService = new InviteService(context, notifier);
+        if (inviteService.getCount() <= 0) {
+            TypeManager.TYPE type = TypeManager.getInstance().getType();
+            int nbPlayer = listPlayer.size();
+            int nbClub = listClub.size();
+            int nbTournament = listTournament.size();
+            for (int i = 0; i < 10; i++) {
+                int idxClub = rnd.nextInt(nbClub);
+                int idxTournament = rnd.nextInt(nbTournament);
+                int index = rnd.nextInt(nbPlayer);
+                Player player = listPlayer.get(index > 0 ? index - 1 : index);
+                Invite invite = createInvite(saison, user, player, type);
+                switch (type) {
+                    case COMPETITION:
+                        invite.setClub(listClub.get(idxClub));
+                        break;
+                    case TRAINING:
+                    default:
+                        invite.setTournament(listTournament.get(idxTournament));
+                }
+
+                // Add Score on Not Randomly
+                initInviteScoreSet(context, rnd, invite);
+
+                inviteService.createOrUpdate(invite);
+            }
+        }
+    }
+
+    private static void initInviteScoreSet(Context context, Random rnd, Invite invite) {
+        if (rnd.nextInt(100) % 3 != 0) {
+            NotifierMessageLogger notifier = NotifierMessageLogger.getInstance();
+            ScoreSetService scoreSetService = new ScoreSetService(context, notifier);
+            List<ScoreSet> score = new ArrayList<>();
+            for (int nb = 0; nb < rnd.nextInt(3); nb++) {
+                int iScore = rnd.nextInt(100);
+                // Win or Loose Score Randomly
+                int[] val = (iScore % 2 == 0) ? new int[]{6, rnd.nextInt(5)} : new int[]{rnd.nextInt(5), 6};
+
+                ScoreSet scoreSet = new ScoreSet(invite, nb, val[0], val[1]);
+                scoreSetService.createOrUpdate(scoreSet);
+                score.add(scoreSet);
+            }
+            invite.setListScoreSet(score);
+        }
+    }
+
+    private static void feedPlayer(Context context, Random rnd, List<Club> listClub, List<Player> listPlayer, TypeManager.TYPE type) {
+        NotifierMessageLogger notifier = NotifierMessageLogger.getInstance();
+        PlayerService playerService = new PlayerService(context, notifier);
+
+        listPlayer.clear();
         if (playerService.getCount() <= 0) {
-            listPlayer = new ArrayList<>();
+            int nbClub = listClub.size();
             listPlayer.add(playerService.getUnknownPlayer());
-            for (int i=0 ; i<10 ; i++) {
+            for (int i = 0; i < 10; i++) {
+                int idxClub = rnd.nextInt(nbClub);
+
                 Player player = new Player();
                 player.setFirstName("Player " + i);
                 player.setLastName("Name" + i);
-                player.setType(TypeManager.getInstance().getType());
+                player.setType(type);
+                player.setIdClub(listClub.get(idxClub).getId());
                 playerService.createOrUpdate(player);
                 listPlayer.add(player);
             }
         } else {
-            listPlayer = playerService.getList();
+            listPlayer.addAll(playerService.getList());
         }
-        int nbPlayer = listPlayer.size();
-        Random rnd = new Random(1);
-        if (inviteService.getCount() <= 0) {
-            for(int i=0 ; i<10 ; i++) {
-                int index = rnd.nextInt(nbPlayer);
-                Player player = listPlayer.get(index > 0 ? index - 1 : index);
-                Invite invite = createInvite(saison, user, player);
-                inviteService.createOrUpdate(invite);
-            }
-/*
-        } else {
-            for(Invite invite : inviteService.getList()) {
-                inviteService.delete(invite);
-            }
-*/
-        }
+    }
 
-        List<Tournament> listTournament = tournamentService.getList();
-        List<Club> listClub = clubService.getList();
-        List<Address> listAddress = addressService.getList();
-
-        if (listAddress.isEmpty()) {
-            for(int i=0 ; i<10 ; i++) {
-                Address address = new Address();
-                address.setName("Address " + i);
-                address.setLine1( i + " street of stars");
-                address.setPostalCode(Integer.toString(i));
-                address.setCity("Sky City " + i);
-                addressService.createOrUpdate(address);
-                listAddress.add(address);
+    private static void feedTournament(Context context, Random rnd, Saison saison, List<Tournament> listTournament, List<Club> listClub) {
+        NotifierMessageLogger notifier = NotifierMessageLogger.getInstance();
+        TournamentService tournamentService = new TournamentService(context, notifier);
+        listTournament.clear();
+        listTournament.addAll(tournamentService.getList());
+        if (listTournament.isEmpty()) {
+            int nbClub = listClub.size();
+            for (int i = 0; i < 10; i++) {
+                int index = rnd.nextInt(nbClub);
+                Tournament tournament = new Tournament();
+                tournament.setName("Tournament " + i);
+                tournament.setSaison(saison);
+                tournament.setSubId(listClub.get(index > 0 ? index - 1 : index).getId());
+                tournamentService.createOrUpdate(tournament);
+                listTournament.add(tournament);
             }
         }
-        int nbAddress = listAddress.size();
+    }
 
+    private static void feedClub(Context context, Random rnd, List<Club> listClub, List<Address> listAddress) {
+        NotifierMessageLogger notifier = NotifierMessageLogger.getInstance();
+        ClubService clubService = new ClubService(context, notifier);
+        listClub.clear();
+        listClub.addAll(clubService.getList());
         if (listClub.isEmpty()) {
-            for(int i=0 ; i<10 ; i++) {
+            int nbAddress = listAddress.size();
+            for (int i = 0; i < 10; i++) {
                 int index = rnd.nextInt(nbAddress);
                 Club club = new Club();
                 club.setName("Club " + i);
@@ -123,17 +197,22 @@ public class DBFeedTool {
                 listClub.add(club);
             }
         }
-        int nbClub = listClub.size();
+    }
 
-        if (listTournament.isEmpty()) {
-            for(int i=0 ; i<10 ; i++) {
-                int index = rnd.nextInt(nbClub);
-                Tournament tournament = new Tournament();
-                tournament.setName("Tournament " + i);
-                tournament.setSaison(saison);
-                tournament.setSubId(listClub.get(index > 0 ? index - 1 : index).getId());
-                tournamentService.createOrUpdate(tournament);
-                listTournament.add(tournament);
+    private static void feedAddress(Context context, List<Address> listAddress) {
+        NotifierMessageLogger notifier = NotifierMessageLogger.getInstance();
+        AddressService addressService = new AddressService(context, notifier);
+        listAddress.clear();
+        listAddress.addAll(addressService.getList());
+        if (listAddress.isEmpty()) {
+            for (int i = 0; i < 10; i++) {
+                Address address = new Address();
+                address.setName("Address " + i);
+                address.setLine1(i + " street of stars");
+                address.setPostalCode(Integer.toString(i));
+                address.setCity("Sky City " + i);
+                addressService.createOrUpdate(address);
+                listAddress.add(address);
             }
         }
     }
@@ -151,11 +230,11 @@ public class DBFeedTool {
         return ret;
     }
 
-    private static Invite createInvite(Saison saison, User user, Player player) {
+    private static Invite createInvite(Saison saison, User user, Player player, TypeManager.TYPE type) {
         Invite invite = new Invite();
         invite.setSaison(saison);
         invite.setUser(user);
-        invite.setType(TypeManager.getInstance().getType());
+        invite.setType(type);
         invite.setPlayer(player);
 
         Calendar calendar = GregorianCalendar.getInstance(ApplicationConfig.getLocal());
@@ -166,35 +245,6 @@ public class DBFeedTool {
         invite.setDate(calendar.getTime());
 
         return invite;
-    }
-    public static void feedold(SQLiteDatabase database) {
-        Saison[] rows = new Saison[]{
-                feedBuild()
-        };
-
-        try {
-            database.beginTransaction();
-            database.delete(DBSaisonHelper.TABLE_NAME, null, null);
-            for (int row = 0; row < rows.length; row++) {
-                Saison saison = rows[row];
-                logMe("insert row:" + saison);
-                ContentValues values = new ContentValues();
-                values.put(DBSaisonHelper.COLUMN_NAME, saison.getName());
-                values.put(DBSaisonHelper.COLUMN_BEGIN, saison.getBegin().getTime());
-                values.put(DBSaisonHelper.COLUMN_END, saison.getEnd().getTime());
-                values.put(DBSaisonHelper.COLUMN_ACTIVE, saison.isActive() ? 1 : 0);
-
-                long id = database.insert(DBSaisonHelper.TABLE_NAME, null, values);
-                saison.setId(id);
-            }
-            database.setTransactionSuccessful();
-        } finally {
-            database.endTransaction();
-        }
-    }
-
-    public static Saison feedBuild() {
-        return SaisonService.build(Calendar.getInstance());
     }
 
     private static void logMe(String msg) {
