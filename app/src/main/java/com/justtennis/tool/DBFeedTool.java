@@ -85,7 +85,11 @@ public class DBFeedTool {
         initRanking();
 
         feedSaison();
-        feedUser();
+
+        if (!feedUser()) {
+            logMe("Feed database:user already exist. Stop process.");
+            return;
+        }
 
         feedAddress();
         feedClub();
@@ -121,12 +125,14 @@ public class DBFeedTool {
         addressService = new AddressService(context, notifier);
     }
 
-    private void feedUser() {
+    private boolean feedUser() {
         user = userService.findFirst();
         if (user == null) {
             user = createUser();
             userService.createOrUpdate(user);
+            return true;
         }
+        return false;
     }
 
     private void feedSaison() {
@@ -282,6 +288,10 @@ public class DBFeedTool {
         calendar.add(Calendar.HOUR_OF_DAY, 1);
         invite.setDate(calendar.getTime());
 
+        if (playerService.getUnknownPlayer().equals(player)) {
+            invite.setIdRanking(listRanking.get(rnd.nextInt(nbRanking)).getId());
+            invite.setIdRankingEstimate(listRanking.get(rnd.nextInt(nbRanking)).getId());
+        }
         return invite;
     }
 
