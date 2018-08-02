@@ -79,7 +79,7 @@ public class ItemDetailActivity extends AppCompatActivity implements NavigationD
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        DBFeedTool.feed(getApplicationContext());
+        DBFeedTool.getInstance(getApplicationContext()).feed();
 
         notifier = NotifierMessageLogger.getInstance();
         business = new MainBusiness(this, notifier);
