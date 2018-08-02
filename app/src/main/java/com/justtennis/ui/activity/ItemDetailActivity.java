@@ -79,6 +79,8 @@ public class ItemDetailActivity extends AppCompatActivity implements NavigationD
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        DBFeedTool.feed(getApplicationContext());
+
         notifier = NotifierMessageLogger.getInstance();
         business = new MainBusiness(this, notifier);
         business.initializeData();
@@ -101,8 +103,6 @@ public class ItemDetailActivity extends AppCompatActivity implements NavigationD
 
             // Set up the drawer.
             mNavigationDrawerFragment.setUp(R.id.navigation_drawer, mDrawerLayout);
-
-            DBFeedTool.feed(getApplicationContext());
 
             mTypeManager = TypeManager.getInstance(this, notifier);
 
@@ -134,6 +134,7 @@ public class ItemDetailActivity extends AppCompatActivity implements NavigationD
     @Override
     protected void onDestroy() {
         RxNavigationDrawer.unregister(this);
+        RxFragment.unregister(this);
         super.onDestroy();
     }
 

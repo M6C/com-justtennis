@@ -111,16 +111,15 @@ public class DBFeedTool {
                     default:
                         invite.setTournament(listTournament.get(idxTournament));
                 }
-
-                // Add Score on Not Randomly
-                initInviteScoreSet(context, rnd, invite);
-
                 inviteService.createOrUpdate(invite);
+
+                initInviteScoreSet(context, rnd, invite);
             }
         }
     }
 
     private static void initInviteScoreSet(Context context, Random rnd, Invite invite) {
+        // Add Score on Not Randomly
         if (rnd.nextInt(100) % 3 != 0) {
             NotifierMessageLogger notifier = NotifierMessageLogger.getInstance();
             ScoreSetService scoreSetService = new ScoreSetService(context, notifier);
