@@ -6,7 +6,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.justtennis.R;
-import com.justtennis.domain.Invite;
 
 public class InviteViewHolder extends RecyclerView.ViewHolder {
     public TextView tvPlayer;

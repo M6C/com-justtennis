@@ -2,7 +2,6 @@ package com.justtennis.adapter.viewholder;
 
 import android.content.Context;
 import android.view.View;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -31,7 +30,7 @@ public class ListClubViewHolder extends CommonListViewHolder<Club> {
         locationParser = LocationParser.getInstance(context, notifier);
 
         llDelete = itemView.findViewById(R.id.ll_delete);
-        name = itemView.findViewById(R.id.tv_name);
+        name = itemView.findViewById(R.id.tv_player);
         clubName = itemView.findViewById(R.id.tv_club_name);
     }
 

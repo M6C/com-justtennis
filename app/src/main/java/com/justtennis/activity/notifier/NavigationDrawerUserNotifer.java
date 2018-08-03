@@ -23,7 +23,7 @@ public final class NavigationDrawerUserNotifer implements INavigationDrawerNotif
     @Override
     public void onCreateView(View view) {
         rankingListManager = RankingListManager.getInstance(mainActivity, mainActivity);
-        tvName = (TextView) view.findViewById(R.id.tv_name);
+        tvName = (TextView) view.findViewById(R.id.tv_player);
 
         User user = mainActivity.getBusiness().getUser();
         if (user != null) {
