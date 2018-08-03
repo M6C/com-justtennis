@@ -19,7 +19,6 @@ import com.justtennis.tool.FragmentTool;
 import com.justtennis.ui.business.ListClubBusiness;
 import com.justtennis.ui.common.CommonEnum;
 import com.justtennis.ui.rxjava.RxCommonList;
-import com.justtennis.ui.rxjava.RxFragment;
 import com.justtennis.ui.rxjava.RxListPlayer;
 
 import org.gdocument.gtracergps.launcher.log.Logger;

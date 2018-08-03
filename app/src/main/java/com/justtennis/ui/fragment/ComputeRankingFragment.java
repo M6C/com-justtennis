@@ -6,22 +6,26 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ListView;
 import android.widget.TextView;
 
 import com.justtennis.R;
 import com.justtennis.activity.InviteActivity;
-import com.justtennis.adapter.ComputeRankingListInviteAdapter;
 import com.justtennis.adapter.manager.RankingListManager;
 import com.justtennis.adapter.manager.RankingListManager.IRankingListListener;
+import com.justtennis.adapter.viewholder.ComputeListInviteViewHolder;
+import com.justtennis.adapter.viewholder.ListInviteViewHolder;
 import com.justtennis.business.ComputeRankingBusiness;
 import com.justtennis.domain.Invite;
 import com.justtennis.notifier.NotifierMessageLogger;
 import com.justtennis.tool.FragmentTool;
+import com.justtennis.ui.adapter.CommonListRecyclerViewAdapter;
 import com.justtennis.ui.common.CommonEnum;
+import com.justtennis.ui.rxjava.RxCommonList;
 import com.justtennis.ui.rxjava.RxComputeRanking;
 import com.justtennis.ui.viewmodel.InviteViewModel;
 
@@ -37,7 +41,7 @@ public class ComputeRankingFragment extends Fragment {
 
 	private ComputeRankingBusiness business;
 
-	private ComputeRankingListInviteAdapter adapter;
+	protected CommonListRecyclerViewAdapter<Invite> adapter;
 	private TextView tvSumPoint;
 	private TextView tvNbVictory;
 	private TextView tvNbVictoryDetail;
@@ -63,7 +67,7 @@ public class ComputeRankingFragment extends Fragment {
 
 		NotifierMessageLogger notifier = NotifierMessageLogger.getInstance();
 		business = new ComputeRankingBusiness(context, notifier);
-		adapter = new ComputeRankingListInviteAdapter(activity, business.getList());
+		business.onCreate();
 		rankingListManager = RankingListManager.getInstance(context, notifier);
 	}
 
@@ -75,13 +79,12 @@ public class ComputeRankingFragment extends Fragment {
 		tvNbVictory = rootView.findViewById(R.id.tv_nb_victory);
 		tvNbVictoryDetail = rootView.findViewById(R.id.tv_nb_victory_detail);
 
-		adapter.setValue(business.getList());
+		adapter = new CommonListRecyclerViewAdapter<>(business.getList(), R.layout.list_compute_ranking_invite_item);
+		adapter.setFactoryViewHolder(ComputeListInviteViewHolder::build);
 
-		ListView list = rootView.findViewById(R.id.list);
-		list.setOnItemClickListener((parent, view, position, id) -> onClickItem(view));
-		list.setAdapter(adapter);
-
-		business.onCreate();
+        RecyclerView mRecyclerView = rootView.findViewById(R.id.item_list);
+		mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
+        mRecyclerView.setAdapter(adapter);
 
 		initializeFab();
 		initializeRankingList(rootView);
@@ -94,12 +97,14 @@ public class ComputeRankingFragment extends Fragment {
 		super.onResume();
 		business.onResume();
 		initializeSubscribeComputeRanking();
-		refresh();
+		initializeSubscribeCommonList();
+		refreshData();
 	}
 
 	@Override
 	public void onPause() {
 		RxComputeRanking.unregister(this);
+		RxCommonList.unregister(this);
 		super.onPause();
 	}
 
@@ -156,8 +161,13 @@ public class ComputeRankingFragment extends Fragment {
 		tvNbVictoryDetail.setVisibility(View.VISIBLE);
 	}
 
+	private void initializeSubscribeCommonList() {
+		RxCommonList.subscribe(RxCommonList.SUBJECT_ON_CLICK_ITEM, this, o -> onClickItem((View) o));
+	}
+
 	private void onClickItem(View view) {
-		Invite item = (Invite)view.getTag();
+//		Invite item = (Invite)view.getTag();
+		Invite item = ((ListInviteViewHolder)view.getTag()).data;
 		InviteFragment fragment = new InviteFragment();
 		Bundle args = new Bundle();
 		args.putSerializable(InviteActivity.EXTRA_INVITE, item);

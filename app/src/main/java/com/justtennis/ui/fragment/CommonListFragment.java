@@ -31,7 +31,7 @@ public class CommonListFragment <D extends GenericDBPojo<Long>> extends Fragment
     public static final String EXTRA_MODE = "INVITE_MODE";
     public static final String EXTRA_LIST = "LIST";
     protected static final String EXTRA_ITEM_LAYOUT = "ITEM_LAYOUT";
-    protected static final String EXTRA_VIEW_MODEL = "EXTRA_VIEW_MODEL";
+    public static final String EXTRA_VIEW_MODEL = "EXTRA_VIEW_MODEL";
 
     protected CommonListRecyclerViewAdapter<D> adapter;
     protected List<D> list = null;

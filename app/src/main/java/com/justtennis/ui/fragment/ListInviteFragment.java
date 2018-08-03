@@ -14,14 +14,12 @@ import com.justtennis.adapter.viewholder.CommonListViewHolder;
 import com.justtennis.adapter.viewholder.ListInviteViewHolder;
 import com.justtennis.business.ListInviteBusiness;
 import com.justtennis.domain.Invite;
-import com.justtennis.domain.Player;
 import com.justtennis.domain.Saison;
 import com.justtennis.listener.ok.OnClickInviteDeleteListenerOk;
 import com.justtennis.notifier.NotifierMessageLogger;
 import com.justtennis.tool.FragmentTool;
 import com.justtennis.ui.common.CommonEnum;
 import com.justtennis.ui.rxjava.RxCommonList;
-import com.justtennis.ui.rxjava.RxFragment;
 import com.justtennis.ui.rxjava.RxListInvite;
 import com.justtennis.ui.rxjava.RxNavigationDrawer;
 
@@ -33,7 +31,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 
-public class ListInviteFragment extends CommonListFragment<Player> {
+public class ListInviteFragment extends CommonListFragment<Invite> {
 
     public static final String TAG = ListInviteFragment.class.getSimpleName();
 
