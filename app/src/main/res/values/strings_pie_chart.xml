@@ -8,7 +8,7 @@
     <string name="new_series">New series</string>
 
 	<string name="chart_type_all">Select Type</string>
-	<string name="chart_type_entrainement">Entrainement</string>
+	<string name="chart_type_entrainement">Training</string>
 	<string name="chart_type_match">Match</string>
 
 	<string name="chart_result_score_all">Select Result</string>

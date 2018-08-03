@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="txt_firstname">Prénom</string>
+    <string name="txt_lastname">nom</string>
+    <string name="txt_birthday">Jour de naissance</string>
+    <string name="txt_phonenumber">Téléphone</string>
+    <string name="txt_ranking">Classement</string>
+    <string name="txt_ranking_real">Réél</string>
+    <string name="txt_ranking_estimate">Estimé</string>
+    <string name="txt_saison">Saison</string>
+    <string name="txt_type">Type</string>
+    <string name="message_field_ranking">Champ</string>
+ 
+</resources>

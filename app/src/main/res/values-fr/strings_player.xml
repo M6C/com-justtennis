@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="dialog_player_delete_title">Supprimer un joueur</string>
+    <string name="dialog_player_delete_message">Supprimer ?</string>
+    <string name="dialog_player_create_confirmation_title">Envoi de confirmation</string>
+    <string name="dialog_player_create_confirmation_message">Demander une confirmation au joueur ?</string>
+    <string name="dialog_player_send_title">Envoi d\'un joueur</string>
+    <string name="dialog_player_send_message">Envoyer ?</string>
+
+    <string name="dialog_player_error_delete_have_invite">Suppression impossible. Le joueur a des matchs.</string>
+    
+    <string name="txt_import">Importer</string>
+    <string name="txt_google">Google</string>
+    <string name="txt_ranking_value">Classement\n%1$s</string>
+    <string name="error_message">Le prénom et nom est obligatoire.</string>
+
+</resources>

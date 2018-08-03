@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="dialog_location_delete_title">Suppression</string>
+    <string name="dialog_location_delete_message">Suppression ?</string>
+
+    <string name="dialog_location_address_delete_title">Suppression d\'une adresse</string>
+    <string name="dialog_location_address_delete_message">Suppression ?</string>
+    <string name="dialog_location_club_delete_title">Suppression d\'un Club</string>
+    <string name="dialog_location_club_delete_message">Suppression ?</string>
+    <string name="dialog_location_tournament_delete_title">Suppression d\'un tournoi</string>
+    <string name="dialog_location_tournament_delete_message">Suppression ?</string>
+    
+</resources>

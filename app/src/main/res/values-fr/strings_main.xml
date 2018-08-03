@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="button_text_message">Message</string>
+    <string name="button_text_rotating">Rotation</string>
+    <string name="button_text_share_apk">Partager l\'application</string>
+    <string name="button_text_share_db">Partager les données</string>
+    <string name="button_text_statistic">Statistiques</string>
+    <string name="button_text_db_backup">Sauvegarde la BDD</string>
+    <string name="button_text_db_restore">Restorer la BDD</string>
+    <string name="dialog_backup_title">Savegarder la BDD</string>
+    <string name="dialog_backup_message">Sauvegarder ?</string>
+    <string name="dialog_restore_title">Restorer la BDD</string>
+    <string name="dialog_restore_message">Restorer ?</string>
+    <string name="dialog_send_apk_title">Partager l\'APK</string>
+    <string name="dialog_send_apk_message">Partager l\'APK ?</string>
+    <string name="dialog_send_db_title">Partager la BDD</string>
+    <string name="dialog_send_db_message">Partager la BDD ?</string>
+    <string name="button_competition">Competition</string>
+    <string name="button_training">Entrainement</string>
+    <string name="dialog_saison_add_title">Ajout une Saison</string>
+    <string name="dialog_saison_del_title">Supprimer une saison</string>
+    <string name="dialog_saison_del_message">Supprimer une Saison ?</string>
+    <string name="error_message_saison_already_exist">La saison existe déjà.</string>
+    <string name="error_message_invite_exist_saison">Des matchs existent pour cette saison.</string>
+    <string name="checkbox_saison_active">Active</string>
+    <string name="press_again_to_exit">Appyez 2 fois pour sortir.</string>
+    <string name="drawer_element_match_victory_match">Victoire/Match</string>
+    <string name="drawer_element_match_point_objectif">Point/Objectif</string>
+
+</resources>

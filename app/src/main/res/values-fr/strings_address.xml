@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="hint_name">Nom</string>
+
+    <string name="hint_address_name">Nom</string>
+    <string name="hint_address_line_1">Adresse</string>
+    <string name="hint_address_postal_code">CP</string>
+    <string name="hint_address_city">Ville</string>
+    <string name="hint_club_name">Club</string>
+    <string name="hint_tournament_name">Tournament</string>
+
+    <string name="dialog_club_delete_title">Supprimer le club</string>
+    <string name="dialog_club_delete_message">Supprimer ?</string>
+    <string name="dialog_club_error_delete_have_invite">Suppression impossible. Le Club est lié a des matchs</string>
+</resources>

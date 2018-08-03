@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="add_values">Ajout d\'une valeur dans le graphique.</string>
+    <string name="x">X</string>
+    <string name="y">Y</string>
+    <string name="add">Ajout</string>
+    <string name="new_series">Nouvelle série</string>
+
+	<string name="chart_type_all">Selectionner le type</string>
+	<string name="chart_type_entrainement">Entrainement</string>
+	<string name="chart_type_match">Match</string>
+
+	<string name="chart_result_score_all">Sélectionner le résultat</string>
+	<string name="chart_result_score_victory">Victoire</string>
+	<string name="chart_result_score_defeat">Défaite</string>
+	<string name="chart_result_score_unfinish">Non fini</string>
+</resources>

@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="application_label">Just Tennis</string>
+    <string name="action_old_ihm">Old Ihm</string>
+    <string name="action_settings">Settings</string>
+    <string name="action_palmares_fast">Fast Palmares</string>
+    <string name="img_desc_qr_code">QR Code</string>
+    <string name="button_text_user">User</string>
+    <string name="button_text_qrcode">QRCode</string>
+    <string name="button_text_qrcode_scan">QRCode Scan</string>
+    <string name="button_text_list_player">List Player</string>
+    <string name="button_text_list_invite">List Invite</string>
+    <string name="button_text_ok">Ok</string>
+    <string name="button_text_submit">Submit</string>
+    <string name="button_text_scan">Scan</string>
+    <string name="button_text_import">Import</string>
+    <string name="button_text_modify">Modify</string>
+    <string name="button_text_send">Send</string>
+    <string name="button_text_invite">Invite</string>
+    <string name="button_text_cancel">Cancel</string>
+    <string name="txt_message">Message</string>
+    <string name="txt_invite_type">Type</string>
+    <string name="button_text_close">Close</string>
+    <string name="button_text_add">Add</string>
+    <string name="button_desctiption_delete">Delete</string>
+    <string name="button_desctiption_status">Status</string>
+    <string name="button_desctiption_player_unknow">Unknow</string>
+    <string name="button_desctiption_play">Play</string>
+    <string name="button_desctiption_send">Send</string>
+    <string name="dialog_exit_title">Confirm</string>
+    <string name="dialog_exit_message">Exit ?</string>
+    <string name="button_text_person">Person</string>
+    <string name="txt_notification_invite">Just Tennis Invit</string>
+    <string name="dialog_date_time_title">Play</string>
+    <string name="dialog_date_time_message">Date time selection</string>
+    <string name="button_text_yes">Yes</string>
+    <string name="button_text_no">No</string>
+    <string name="msg_demande_add">Player %1$s %2$s want add you as a player</string>
+    <string name="msg_demande_add_yes">Player %1$s %2$s confirm and add you as a player</string>
+    <string name="msg_demande_add_no">Player %1$s %2$s refuse adding you as a player</string>
+    <string name="msg_invite">Player %1$s %2$s send you an invitation to play</string>
+    <string name="msg_invite_confirm_yes">Player %1$s %2$s confirm your play invitation</string>
+    <string name="msg_invite_confirm_no">Player %1$s %2$s refuse your play invitation</string>
+    <string name="msg_no_message_to_send">No Message to send</string>
+    <string name="msg_common_format_date">EEEE d MMMM yyyy</string>
+    <string name="msg_common_format_time">H:mm</string>
+    <string name="invite_type_text_entrainement">Training</string>
+    <string name="invite_type_text_entrainement_small">T</string>
+    <string name="invite_type_text_match">Match</string>
+    <string name="invite_type_text_match_small">M</string>
+    <string name="fr_msg_invite_message_default">Salut [FIRSTNAME], veux-tu jouer [DATE] à [HOUR] ? [USER_FIRSTNAME]</string>
+    <string name="fr_msg_invite_date_relative_today">aujourd\'hui</string>
+    <string name="fr_msg_invite_date_relative_tomorrow">demain</string>
+
+    <string name="title_section1">Section 1</string>
+    <string name="title_section2">Section 2</string>
+    <string name="title_section3">Section 3</string>
+
+
+    <!-- Score -->
+    <!--<string name="txt_score">SCORE</string>-->
+    <string name="txt_score_local">%1$s</string>
+    <string name="txt_score_visiteur">%1$s</string>
+    <string name="title_activity_ui_main">UiMainActivity</string>
+
+    <string name="action_example">Example action</string>
+    <string name="title_activity_scrolling">ScrollingActivity</string>
+    <string name="large_text">
+        "Material is the metaphor.\n\n"
+
+        "A material metaphor is the unifying theory of a rationalized space and a system of motion."
+        "The material is grounded in tactile reality, inspired by the study of paper and ink, yet "
+        "technologically advanced and open to imagination and magic.\n"
+        "Surfaces and edges of the material provide visual cues that are grounded in reality. The "
+        "use of familiar tactile attributes helps users quickly understand affordances. Yet the "
+        "flexibility of the material creates new affordances that supercede those in the physical "
+        "world, without breaking the rules of physics.\n"
+        "The fundamentals of light, surface, and movement are key to conveying how objects move, "
+        "interact, and exist in space and in relation to each other. Realistic lighting shows "
+        "seams, divides space, and indicates moving parts.\n\n"
+
+        "Bold, graphic, intentional.\n\n"
+
+        "The foundational elements of print based design typography, grids, space, scale, color, "
+        "and use of imagery guide visual treatments. These elements do far more than please the "
+        "eye. They create hierarchy, meaning, and focus. Deliberate color choices, edge to edge "
+        "imagery, large scale typography, and intentional white space create a bold and graphic "
+        "interface that immerse the user in the experience.\n"
+        "An emphasis on user actions makes core functionality immediately apparent and provides "
+        "waypoints for the user.\n\n"
+
+        "Motion provides meaning.\n\n"
+
+        "Motion respects and reinforces the user as the prime mover. Primary user actions are "
+        "inflection points that initiate motion, transforming the whole design.\n"
+        "All action takes place in a single environment. Objects are presented to the user without "
+        "breaking the continuity of experience even as they transform and reorganize.\n"
+        "Motion is meaningful and appropriate, serving to focus attention and maintain continuity. "
+        "Feedback is subtle yet clear. Transitions are efﬁcient yet coherent.\n\n"
+
+        "3D world.\n\n"
+
+        "The material environment is a 3D space, which means all objects have x, y, and z "
+        "dimensions. The z-axis is perpendicularly aligned to the plane of the display, with the "
+        "positive z-axis extending towards the viewer. Every sheet of material occupies a single "
+        "position along the z-axis and has a standard 1dp thickness.\n"
+        "On the web, the z-axis is used for layering and not for perspective. The 3D world is "
+        "emulated by manipulating the y-axis.\n\n"
+
+        "Light and shadow.\n\n"
+
+        "Within the material environment, virtual lights illuminate the scene. Key lights create "
+        "directional shadows, while ambient light creates soft shadows from all angles.\n"
+        "Shadows in the material environment are cast by these two light sources. In Android "
+        "development, shadows occur when light sources are blocked by sheets of material at "
+        "various positions along the z-axis. On the web, shadows are depicted by manipulating the "
+        "y-axis only. The following example shows the card with a height of 6dp.\n\n"
+
+        "Resting elevation.\n\n"
+
+        "All material objects, regardless of size, have a resting elevation, or default elevation "
+        "that does not change. If an object changes elevation, it should return to its resting "
+        "elevation as soon as possible.\n\n"
+
+        "Component elevations.\n\n"
+
+        "The resting elevation for a component type is consistent across apps (e.g., FAB elevation "
+        "does not vary from 6dp in one app to 16dp in another app).\n"
+        "Components may have different resting elevations across platforms, depending on the depth "
+        "of the environment (e.g., TV has a greater depth than mobile or desktop).\n\n"
+
+        "Responsive elevation and dynamic elevation offsets.\n\n"
+
+        "Some component types have responsive elevation, meaning they change elevation in response "
+        "to user input (e.g., normal, focused, and pressed) or system events. These elevation "
+        "changes are consistently implemented using dynamic elevation offsets.\n"
+        "Dynamic elevation offsets are the goal elevation that a component moves towards, relative "
+        "to the component’s resting state. They ensure that elevation changes are consistent "
+        "across actions and component types. For example, all components that lift on press have "
+        "the same elevation change relative to their resting elevation.\n"
+        "Once the input event is completed or cancelled, the component will return to its resting "
+        "elevation.\n\n"
+
+        "Avoiding elevation interference.\n\n"
+
+        "Components with responsive elevations may encounter other components as they move between "
+        "their resting elevations and dynamic elevation offsets. Because material cannot pass "
+        "through other material, components avoid interfering with one another any number of ways, "
+        "whether on a per component basis or using the entire app layout.\n"
+        "On a component level, components can move or be removed before they cause interference. "
+        "For example, a floating action button (FAB) can disappear or move off screen before a "
+        "user picks up a card, or it can move if a snackbar appears.\n"
+        "On the layout level, design your app layout to minimize opportunities for interference. "
+        "For example, position the FAB to one side of stream of a cards so the FAB won’t interfere "
+        "when a user tries to pick up one of cards.\n\n"
+    </string>
+    <string name="title_item_list">Entrée</string>
+    <string name="title_item_detail">Detail de l\'entrée</string>
+    <string name="empty_list">Rien à afficher pour l\'instant.</string>
+    <string name="navigation_player">Joueurs</string>
+    <string name="navigation_statistique">Statistiques</string>
+    <string name="navigation_invite">Matchs</string>
+    <string name="navigation_type_practice">Entrainement</string>
+    <string name="navigation_type_match">Match</string>
+    <string name="drawer_open">Ouvrir</string>
+    <string name="drawer_close">Fermer</string>
+    <string name="list_player_item_name_with_id">%s [id:%d|idExt:%d]</string>
+    <string name="list_club_item_name_with_id">%s [id:%d]</string>
+    <string name="app_initialize_title">JustTennis - Initialisation</string>
+    <string name="app_initialize_subtitle_user">Mes Informations</string>
+    <string name="app_initialize_subtitle_sms_message">Message Sms</string>
+</resources>

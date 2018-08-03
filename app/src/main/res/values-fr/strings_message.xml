@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="message_field_title">Champ</string>
+    <string name="message_field_date">Date</string>
+    <string name="message_field_date_relative">Date relative</string>
+    <string name="message_field_time">Heure</string>
+    <string name="message_field_player_firstname">Prénom</string>
+    <string name="message_field_player_lastname">Nom</string>
+    <string name="message_field_user_firstname">Prénom</string>
+    <string name="message_field_user_lastname">Nom</string>
+
+</resources>

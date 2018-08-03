@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="launcherImage">Image de lancement</string>
+    <string name="user_unknown_name">Inconnu</string>
+
+    <string name="menu_item_user">Utilisateur</string>
+    <string name="menu_item_list_club">Clubs</string>
+    <string name="menu_item_my_palmares">Mon Palmares</string>
+    <string name="menu_item_palmares_fast">Palmares rapide</string>
+    <string name="menu_item_sms_message">Message SMS</string>
+
+</resources>
