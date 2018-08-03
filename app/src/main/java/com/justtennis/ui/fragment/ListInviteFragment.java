@@ -85,6 +85,7 @@ public class ListInviteFragment extends CommonListFragment<Invite> {
     public void onPause() {
         RxListInvite.unregister(this);
         RxCommonList.unregister(this);
+        RxNavigationDrawer.unregister(this);
         super.onPause();
     }
 

@@ -16,6 +16,7 @@ import com.justtennis.R;
 import com.justtennis.adapter.viewholder.ListPlayerViewHolder;
 import com.justtennis.business.ListPlayerBusiness;
 import com.justtennis.domain.Player;
+import com.justtennis.domain.Saison;
 import com.justtennis.listener.itemclick.OnItemClickListPlayer;
 import com.justtennis.listener.itemclick.OnItemClickListPlayerForResult;
 import com.justtennis.listener.itemclick.OnItemClickListPlayerInvite;
@@ -25,6 +26,7 @@ import com.justtennis.tool.FragmentTool;
 import com.justtennis.ui.common.CommonEnum;
 import com.justtennis.ui.rxjava.RxCommonList;
 import com.justtennis.ui.rxjava.RxListPlayer;
+import com.justtennis.ui.rxjava.RxNavigationDrawer;
 
 import org.gdocument.gtracergps.launcher.log.Logger;
 
@@ -84,6 +86,7 @@ public class ListPlayerFragment extends CommonListFragment<Player> {
 		refresh();
 		initializeSubscribeListPlayer();
 		initializeSubscribeCommonList();
+		initializeSubscribeSelectSaison();
 		//RxFragment.publish(RxFragment.SUBJECT_ON_SHOW, TAG);
 	}
 
@@ -91,6 +94,7 @@ public class ListPlayerFragment extends CommonListFragment<Player> {
 	public void onPause() {
 		RxListPlayer.unregister(this);
 		RxCommonList.unregister(this);
+		RxNavigationDrawer.unregister(this);
 		super.onPause();
 	}
 
@@ -132,6 +136,13 @@ public class ListPlayerFragment extends CommonListFragment<Player> {
 
 	private void initializeSubscribeCommonList() {
 		RxCommonList.subscribe(RxCommonList.SUBJECT_ON_CLICK_ITEM, this, o -> onItemClick.onItemClick(null, (View) o, 0, 0));
+	}
+
+	private void initializeSubscribeSelectSaison() {
+		RxNavigationDrawer.subscribe(RxNavigationDrawer.SUBJECT_SELECT_SAISON, this, o -> {
+			business.setSaison((Saison) o);
+			refresh();
+		});
 	}
 
 	@Override

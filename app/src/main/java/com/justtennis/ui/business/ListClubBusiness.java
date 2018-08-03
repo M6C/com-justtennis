@@ -8,8 +8,10 @@ import com.justtennis.db.service.ClubService;
 import com.justtennis.db.service.InviteService;
 import com.justtennis.domain.Club;
 import com.justtennis.domain.RechercheResult;
+import com.justtennis.domain.Saison;
 import com.justtennis.domain.comparator.ClubComparatorByName;
 import com.justtennis.drawer.business.INavigationDrawerRechercheBusiness;
+import com.justtennis.manager.TypeManager;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -18,10 +20,12 @@ import java.util.List;
 
 public class ListClubBusiness implements INavigationDrawerRechercheBusiness {
 
+	@SuppressWarnings("unused")
 	private static final String TAG = ListClubBusiness.class.getSimpleName();
 
 	private ClubService clubService;
 	private InviteService inviteService;
+	private TypeManager typeManager;
 	private List<Club> list = new ArrayList<>();
 	private Activity activity;
 
@@ -31,6 +35,7 @@ public class ListClubBusiness implements INavigationDrawerRechercheBusiness {
 		this.activity = activity;
 		clubService = new ClubService(activity, notificationMessage);
 		inviteService = new InviteService(activity, notificationMessage);
+		typeManager = TypeManager.getInstance(activity, notificationMessage);
 	}
 
 	public void initialize() {
@@ -77,5 +82,9 @@ public class ListClubBusiness implements INavigationDrawerRechercheBusiness {
 
 	public void delete(Club club) {
 		clubService.delete(club);
+	}
+
+    public void setSaison(Saison saison) {
+		typeManager.setSaison(saison);
 	}
 }

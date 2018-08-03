@@ -1,11 +1,5 @@
 package com.justtennis.business;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-
-import org.gdocument.gtracergps.launcher.log.Logger;
-
 import android.content.Context;
 
 import com.cameleon.common.android.inotifier.INotifierMessage;
@@ -19,6 +13,12 @@ import com.justtennis.domain.Saison;
 import com.justtennis.domain.comparator.PlayerComparatorByName;
 import com.justtennis.helper.GCalendarHelper;
 import com.justtennis.manager.TypeManager;
+
+import org.gdocument.gtracergps.launcher.log.Logger;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 public class ListInviteBusiness {
 
@@ -34,8 +34,8 @@ public class ListInviteBusiness {
 
 	private GCalendarHelper calendarHelper;
 
-	private List<Invite> list = new ArrayList<Invite>();
-	private List<Player> listPlayer = new ArrayList<Player>();
+	private List<Invite> list = new ArrayList<>();
+	private List<Player> listPlayer = new ArrayList<>();
 	private String[] listPlayerName;
 
 	public ListInviteBusiness(Context context, ICommonListActivity iActivity, INotifierMessage notificationMessage) {
@@ -112,6 +112,7 @@ public class ListInviteBusiness {
 		return Arrays.asList(arrayPlayer);
 	}
 
+	@SuppressWarnings("unused")
 	public Player getPlayerNotEmpty(int position) {
 		Player player = listPlayer.get(position);
 		if (PlayerService.isEmptyPlayer(player)) {
@@ -124,14 +125,17 @@ public class ListInviteBusiness {
 		return playerService.getUnknownPlayer().getId();
 	}
 
+	@SuppressWarnings("unused")
 	public List<Player> getListPlayer() {
 		return listPlayer;
 	}
 
+	@SuppressWarnings("unused")
 	public void setListPlayer(List<Player> listPlayer) {
 		this.listPlayer = listPlayer;
 	}
 
+	@SuppressWarnings("unused")
 	public String[] getListPlayerName() {
 		return listPlayerName;
 	}

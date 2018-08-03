@@ -2,7 +2,6 @@ package com.justtennis.business;
 
 import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 
 import com.cameleon.common.android.inotifier.INotifierMessage;
@@ -13,10 +12,12 @@ import com.justtennis.db.service.UserService;
 import com.justtennis.domain.Invite;
 import com.justtennis.domain.Player;
 import com.justtennis.domain.RechercheResult;
+import com.justtennis.domain.Saison;
 import com.justtennis.domain.User;
 import com.justtennis.domain.comparator.PlayerComparatorByName;
 import com.justtennis.drawer.business.INavigationDrawerRechercheBusiness;
 import com.justtennis.manager.SmsManager;
+import com.justtennis.manager.TypeManager;
 import com.justtennis.notifier.NotifierMessageLogger;
 import com.justtennis.parser.SmsParser;
 import com.justtennis.ui.common.CommonEnum;
@@ -37,12 +38,12 @@ public class ListPlayerBusiness implements INavigationDrawerRechercheBusiness {
 	private static final String TAG = ListPlayerBusiness.class.getSimpleName();
 
 	private PlayerService playerService;
-	private UserService userService;
 	private InviteService inviteService;
-	private List<Player> list = new ArrayList<Player>();
+	private TypeManager typeManager;
+	private List<Player> list = new ArrayList<>();
 	private Activity activity;
 	private User user;
-	private Bundle extraIn = null;
+	private Bundle extraIn;
 
 	private CommonEnum.LIST_FRAGMENT_MODE mode;
 
@@ -51,8 +52,9 @@ public class ListPlayerBusiness implements INavigationDrawerRechercheBusiness {
 	public ListPlayerBusiness(Activity activity, INotifierMessage notificationMessage) {
 		this.activity = activity;
 		playerService = new PlayerService(activity, notificationMessage);
-		userService = new UserService(activity, NotifierMessageLogger.getInstance());
 		inviteService = new InviteService(activity, NotifierMessageLogger.getInstance());
+		typeManager = TypeManager.getInstance(activity, notificationMessage);
+		UserService userService = new UserService(activity, NotifierMessageLogger.getInstance());
 		user = userService.find();
 		extraIn = activity.getIntent().getExtras();
 	}
@@ -131,5 +133,9 @@ public class ListPlayerBusiness implements INavigationDrawerRechercheBusiness {
 		Player[] arrayPlayer = listPlayer.toArray(new Player[0]);
 		Arrays.sort(arrayPlayer, new PlayerComparatorByName(true));
 		return Arrays.asList(arrayPlayer);
+	}
+
+	public void setSaison(Saison saison) {
+		typeManager.setSaison(saison);
 	}
 }

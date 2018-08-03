@@ -14,12 +14,14 @@ import com.cameleon.common.android.factory.FactoryDialog;
 import com.justtennis.R;
 import com.justtennis.adapter.viewholder.ListClubViewHolder;
 import com.justtennis.domain.Club;
+import com.justtennis.domain.Saison;
 import com.justtennis.notifier.NotifierMessageLogger;
 import com.justtennis.tool.FragmentTool;
 import com.justtennis.ui.business.ListClubBusiness;
 import com.justtennis.ui.common.CommonEnum;
 import com.justtennis.ui.rxjava.RxCommonList;
 import com.justtennis.ui.rxjava.RxListPlayer;
+import com.justtennis.ui.rxjava.RxNavigationDrawer;
 
 import org.gdocument.gtracergps.launcher.log.Logger;
 
@@ -80,6 +82,7 @@ public class ListClubFragment extends CommonListFragment<Club> {
 		refresh();
 		initializeSubscribeListPlayer();
 		initializeSubscribeCommonList();
+		initializeSubscribeSelectSaison();
 		//RxFragment.publish(RxFragment.SUBJECT_ON_SHOW, TAG);
 	}
 
@@ -87,6 +90,7 @@ public class ListClubFragment extends CommonListFragment<Club> {
 	public void onPause() {
 		RxListPlayer.unregister(this);
 		RxCommonList.unregister(this);
+		RxNavigationDrawer.unregister(this);
 		super.onPause();
 	}
 
@@ -123,6 +127,13 @@ public class ListClubFragment extends CommonListFragment<Club> {
 
 	private void initializeSubscribeCommonList() {
 		RxCommonList.subscribe(RxCommonList.SUBJECT_ON_CLICK_ITEM, this, o -> onItemClick.onItemClick(null, (View) o, 0, 0));
+	}
+
+	private void initializeSubscribeSelectSaison() {
+		RxNavigationDrawer.subscribe(RxNavigationDrawer.SUBJECT_SELECT_SAISON, this, o -> {
+			business.setSaison((Saison) o);
+			refresh();
+		});
 	}
 
 	@Override
