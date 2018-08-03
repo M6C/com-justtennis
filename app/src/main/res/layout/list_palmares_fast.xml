@@ -26,7 +26,7 @@
 	              android:layout_width="match_parent"
 	              android:layout_height="wrap_content"
 	              android:text="@string/txt_ranking"
-	              android:textSize="@dimen/player_text_size"
+	              android:textAppearance="?attr/customTextAppearanceDefault"
 	              android:textColor="@android:color/secondary_text_light_nodisable"
 	              android:textStyle="bold" />
 	
@@ -36,7 +36,7 @@
 	              android:layout_height="wrap_content"
 	              android:layout_marginLeft="@dimen/player_field_margin_left"
 	              android:gravity="center_horizontal"
-	              android:textSize="@dimen/player_field_size" />
+	              android:textAppearance="?attr/customTextAppearanceField" />
 	      </LinearLayout>
 	      <LinearLayout
 	          android:id="@+id/ll_nb_victory"
@@ -51,7 +51,7 @@
 	              android:layout_width="match_parent"
 	              android:layout_height="wrap_content"
 	              android:text="@string/txt_nb_victory"
-	              android:textSize="@dimen/player_text_size"
+	              android:textAppearance="?attr/customTextAppearanceDefault"
 	              android:textColor="@android:color/secondary_text_light_nodisable"
 	              android:textStyle="bold" />
 				<LinearLayout
@@ -65,14 +65,14 @@
 						android:layout_height="match_parent"
 						android:textStyle="bold"
 						android:gravity="center_vertical"
-						android:textSize="@dimen/player_field_size"
+						android:textAppearance="?attr/customTextAppearanceTitle"
 						android:layout_marginRight="5dp"/>
 				  	<TextView
 						android:id="@+id/tv_nb_victory_detail"
 						android:layout_width="wrap_content"
 						android:layout_height="match_parent"
 						android:gravity="center_vertical"
-						android:textSize="@dimen/player_text_size"/>
+						android:textAppearance="?attr/customTextAppearanceDefault"/>
 				</LinearLayout>
 			</LinearLayout>
 	      <LinearLayout
@@ -88,7 +88,7 @@
 	              android:layout_width="match_parent"
 	              android:layout_height="wrap_content"
 	              android:text="@string/txt_sum_point"
-	              android:textSize="@dimen/player_text_size"
+	              android:textAppearance="?attr/customTextAppearanceDefault"
 	              android:textColor="@android:color/secondary_text_light_nodisable"
 	              android:textStyle="bold" />
 			  <TextView
@@ -97,7 +97,7 @@
 	              android:layout_height="wrap_content"
 	              android:layout_marginLeft="@dimen/player_field_margin_left"
 	              android:gravity="center_horizontal"
-	              android:textSize="@dimen/player_field_size" />
+	              android:textAppearance="?attr/customTextAppearanceTitle" />
 	      </LinearLayout>
 	      <LinearLayout
 	          android:id="@+id/ll_bonus"
@@ -112,7 +112,7 @@
 	              android:layout_width="match_parent"
 	              android:layout_height="wrap_content"
 	              android:text="@string/txt_bonus_point"
-	              android:textSize="@dimen/player_text_size"
+	              android:textAppearance="?attr/customTextAppearanceDefault"
 	              android:textColor="@android:color/secondary_text_light_nodisable"
 	              android:textStyle="bold" />
 	
@@ -122,7 +122,7 @@
 	              android:layout_height="wrap_content"
 	              android:layout_marginLeft="@dimen/player_field_margin_left"
 	              android:gravity="center_horizontal"
-	              android:textSize="@dimen/player_field_size" />
+	              android:textAppearance="?attr/customTextAppearanceField" />
 	      </LinearLayout>
 			<LinearLayout
 				android:id="@+id/ll_ve2i5g"
@@ -136,7 +136,7 @@
 					android:layout_width="match_parent"
 					android:layout_height="wrap_content"
 					android:text="@string/txt_ve2i5g"
-					android:textSize="@dimen/player_text_size"
+					android:textAppearance="?attr/customTextAppearanceDefault"
 					android:textColor="@android:color/secondary_text_light_nodisable"
 					android:textStyle="bold" />
 				<TextView
@@ -145,7 +145,7 @@
 					android:layout_height="wrap_content"
 					android:layout_marginLeft="@dimen/player_field_margin_left"
 					android:gravity="center_horizontal"
-					android:textSize="@dimen/player_field_size" />
+					android:textAppearance="?attr/customTextAppearanceTitle" />
 	      </LinearLayout>
  	</LinearLayout>
 

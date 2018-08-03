@@ -23,7 +23,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="@string/txt_message"
-            android:textSize="@dimen/player_field_size"
+            android:textAppearance="?attr/customTextAppearanceField"
             android:inputType="textAutoCorrect|textMultiLine" />
     </android.support.design.widget.TextInputLayout>
 </LinearLayout>

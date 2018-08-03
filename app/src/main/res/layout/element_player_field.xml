@@ -19,7 +19,7 @@
             android:hint="@string/txt_firstname"
             android:inputType="textCapWords"
             android:maxLines="1"
-            android:textSize="@dimen/player_field_size" />
+            android:textAppearance="?attr/customTextAppearanceField" />
     </android.support.design.widget.TextInputLayout>
 
     <android.support.design.widget.TextInputLayout
@@ -37,7 +37,7 @@
             android:hint="@string/txt_lastname"
             android:inputType="textCapWords"
             android:maxLines="1"
-            android:textSize="@dimen/player_field_size" />
+            android:textAppearance="?attr/customTextAppearanceField" />
     </android.support.design.widget.TextInputLayout>
 
     <android.support.design.widget.TextInputLayout
@@ -55,7 +55,7 @@
             android:gravity="center_horizontal"
             android:hint="@string/txt_birthday"
             android:inputType="none"
-            android:textSize="@dimen/player_field_size" />
+            android:textAppearance="?attr/customTextAppearanceField" />
     </android.support.design.widget.TextInputLayout>
 
     <android.support.design.widget.TextInputLayout
@@ -72,7 +72,7 @@
             android:hint="@string/txt_phonenumber"
             android:inputType="phone"
             android:maxLines="1"
-            android:textSize="@dimen/player_field_size" />
+            android:textAppearance="?attr/customTextAppearanceField" />
     </android.support.design.widget.TextInputLayout>
 
     <include
@@ -110,7 +110,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center_horizontal"
-            android:textSize="@dimen/player_field_size" />
+            android:textAppearance="?attr/customTextAppearanceField" />
     </LinearLayout>
 
     <LinearLayout
@@ -135,7 +135,7 @@
             android:layout_height="wrap_content"
             android:background="@null"
             android:gravity="center_horizontal"
-            android:textSize="@dimen/player_field_size" />
+            android:textAppearance="?attr/customTextAppearanceField" />
     </LinearLayout>
 
 </LinearLayout>

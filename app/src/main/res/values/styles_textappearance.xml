@@ -1,0 +1,20 @@
+<resources xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Application Text Appearance -->
+
+    <style name="AppTextAppearanceDefaultMedium" parent="android:style/TextAppearance">
+        <item name="android:textSize">@dimen/text_size_small</item>
+    </style>
+
+    <style name="AppTextAppearanceTitleMedium" parent="android:style/TextAppearance">
+        <item name="android:textSize">@dimen/text_size_large</item>
+    </style>
+
+    <style name="AppTextAppearanceListItemMedium" parent="android:style/TextAppearance">
+        <item name="android:textSize">@dimen/text_size_medium</item>
+    </style>
+
+    <style name="AppTextAppearanceFieldMedium" parent="android:style/TextAppearance">
+        <item name="android:textSize">@dimen/text_size_large</item>
+    </style>
+
+</resources>

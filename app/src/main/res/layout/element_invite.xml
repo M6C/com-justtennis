@@ -67,14 +67,14 @@
 					android:layout_height="wrap_content"
 					android:layout_marginStart="2sp"
 					android:layout_marginEnd="8sp"
-					android:textSize="18sp"
+					android:textAppearance="?attr/customTextAppearanceListItem"
 					/>
 				<TextView
 					android:id="@+id/tv_ranking_estimate"
 					android:layout_width="wrap_content"
 					android:layout_height="wrap_content"
 					android:textStyle="bold"
-					android:textSize="18sp"
+					android:textAppearance="?attr/customTextAppearanceListItem"
 					/>
 			</LinearLayout>
 		</com.google.android.flexbox.FlexboxLayout>
@@ -100,7 +100,7 @@
 				android:layout_weight="1"
 				android:layout_marginStart="2sp"
 				android:textColor="@color/gris_1"
-				android:textSize="18sp"
+				android:textAppearance="?attr/customTextAppearanceListItem"
 				/>
 		</LinearLayout>
 
@@ -149,7 +149,7 @@
 				android:layout_weight="1"
 				android:layout_marginStart="2sp"
 				android:textColor="@color/gris_1"
-				android:textSize="18sp"
+				android:textAppearance="?attr/customTextAppearanceListItem"
 				/>
 		</LinearLayout>
 	</LinearLayout>

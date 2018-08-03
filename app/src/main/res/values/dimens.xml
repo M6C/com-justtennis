@@ -31,4 +31,7 @@
     <dimen name="app_initialize_title_text_size">28sp</dimen>
     <dimen name="app_initialize_subtitle_text_size">22sp</dimen>
 
+    <dimen name="text_size_small">16sp</dimen>
+    <dimen name="text_size_medium">18sp</dimen>
+    <dimen name="text_size_large">22sp</dimen>
 </resources>

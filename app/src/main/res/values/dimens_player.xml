@@ -2,9 +2,9 @@
 
     <dimen name="player_vertical_margin">@dimen/activity_vertical_margin</dimen>
     <dimen name="player_horizontal_margin">@dimen/activity_horizontal_margin</dimen>
-    
-    <dimen name="player_text_size">16sp</dimen>
-    <dimen name="player_field_size">22sp</dimen>
+
+    <dimen name="player_text_size">@dimen/text_size_small</dimen>
+    <dimen name="player_field_size">@dimen/text_size_large</dimen>
 
     <dimen name="player_layout_field_marging_bottom">5sp</dimen>
     <dimen name="player_layout_field_padding">3sp</dimen>
