@@ -30,7 +30,7 @@ public class ListClubViewHolder extends CommonListViewHolder<Club> {
         locationParser = LocationParser.getInstance(context, notifier);
 
         llDelete = itemView.findViewById(R.id.ll_delete);
-        name = itemView.findViewById(R.id.tv_player);
+        name = itemView.findViewById(R.id.tv_title);
         clubName = itemView.findViewById(R.id.tv_club_name);
     }
 

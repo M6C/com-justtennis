@@ -111,7 +111,7 @@ public class ListPlayerAdapter extends ArrayAdapter<Player> {
 			ImageView imagePlayer = (ImageView) rowView.findViewById(R.id.iv_player);
 	//		ImageView imageSend = (ImageView) rowView.findViewById(R.id.iv_send);
 			ImageView imageDelete = (ImageView) rowView.findViewById(R.id.iv_delete);
-			TextView name = (TextView) rowView.findViewById(R.id.tv_player);
+			TextView name = (TextView) rowView.findViewById(R.id.tv_title);
 			TextView clubName = (TextView) rowView.findViewById(R.id.tv_club_name);
 	
 			imageDelete.setVisibility(iVisibility);

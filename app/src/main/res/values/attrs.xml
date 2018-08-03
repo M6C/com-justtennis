@@ -11,5 +11,6 @@
 	<attr name="customTextAppearanceDefault" format="reference|color" />
 	<attr name="customTextAppearanceTitle" format="reference|color" />
 	<attr name="customTextAppearanceListItem" format="reference|color" />
+	<attr name="customTextAppearanceListItemTitle" format="reference|color" />
 	<attr name="customTextAppearanceField" format="reference|color" />
 </resources>

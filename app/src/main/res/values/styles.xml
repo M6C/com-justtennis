@@ -57,10 +57,11 @@
         <item name="textAppearanceNavBarTitle">@style/AppTextAppearanceNavBar</item>
         <item name="styleSpinnerSaison">@style/AppNavBarSpinnerSaison</item>
 
-        <item name="customTextAppearanceDefault">@style/AppTextAppearanceDefaultMedium</item>
-        <item name="customTextAppearanceTitle">@style/AppTextAppearanceTitleMedium</item>
-        <item name="customTextAppearanceListItem">@style/AppTextAppearanceListItemMedium</item>
-        <item name="customTextAppearanceField">@style/AppTextAppearanceFieldMedium</item>
+        <item name="customTextAppearanceDefault">@style/AppTextAppearanceDefault</item>
+        <item name="customTextAppearanceTitle">@style/AppTextAppearanceTitle</item>
+        <item name="customTextAppearanceListItem">@style/AppTextAppearanceListItem</item>
+        <item name="customTextAppearanceListItemTitle">@style/AppTextAppearanceListItemTitle</item>
+        <item name="customTextAppearanceField">@style/AppTextAppearanceField</item>
     </style>
 
     <style name="AppDialog" parent="Theme.AppCompat.Dialog">

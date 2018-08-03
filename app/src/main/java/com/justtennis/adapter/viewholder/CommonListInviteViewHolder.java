@@ -40,7 +40,7 @@ public class CommonListInviteViewHolder extends CommonListViewHolder<Invite> {
 
         context = itemView.getContext().getApplicationContext();
         ivStatus = itemView.findViewById(R.id.iv_status);
-        tvPlayer = itemView.findViewById(R.id.tv_player);
+        tvPlayer = itemView.findViewById(R.id.tv_title);
         tvDate = itemView.findViewById(R.id.tv_date);
         llScore = itemView.findViewById(R.id.ll_score);
         tvScore = itemView.findViewById(R.id.tv_score);

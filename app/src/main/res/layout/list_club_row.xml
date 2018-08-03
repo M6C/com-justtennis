@@ -20,10 +20,10 @@
 		android:layout_gravity="center_vertical"
 		>
 		<TextView
-			android:id="@+id/tv_player"
+			android:id="@+id/tv_title"
 			android:layout_width="match_parent"
 			android:layout_height="wrap_content"
-			android:textAppearance="?attr/customTextAppearanceTitle"
+			android:textAppearance="?attr/customTextAppearanceListItemTitle"
 			android:orientation="vertical"
 			android:maxLines="1"
 			android:ellipsize="end"

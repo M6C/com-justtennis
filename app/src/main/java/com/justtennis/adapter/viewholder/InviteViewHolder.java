@@ -18,7 +18,7 @@ public class InviteViewHolder extends RecyclerView.ViewHolder {
 
     public InviteViewHolder(View itemView) {
         super(itemView);
-        tvPlayer = itemView.findViewById(R.id.tv_player);
+        tvPlayer = itemView.findViewById(R.id.tv_title);
         tvDate = itemView.findViewById(R.id.tv_date);
         tvScore = itemView.findViewById(R.id.tv_score);
         tvClubName = itemView.findViewById(R.id.tv_club_name);

@@ -36,12 +36,11 @@
 			app:alignContent="stretch"
 			>
 			<TextView
-				android:id="@+id/tv_player"
+				android:id="@+id/tv_title"
 				android:layout_width="wrap_content"
 				android:layout_height="wrap_content"
 				android:layout_marginEnd="10sp"
-				android:textSize="22sp"
-				android:orientation="vertical"
+				android:textAppearance="?attr/customTextAppearanceListItemTitle"
 				android:maxLines="1"
 				android:ellipsize="end"
 				/>

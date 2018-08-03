@@ -43,7 +43,7 @@ public class ListPlayerViewHolder extends CommonListViewHolder<Player> {
 
         llDelete = itemView.findViewById(R.id.ll_delete);
         imagePlayer = itemView.findViewById(R.id.iv_player);
-        name = itemView.findViewById(R.id.tv_player);
+        name = itemView.findViewById(R.id.tv_title);
         clubName = itemView.findViewById(R.id.tv_club_name);
     }
 

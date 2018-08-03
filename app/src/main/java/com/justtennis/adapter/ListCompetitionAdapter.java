@@ -67,7 +67,7 @@ public class ListCompetitionAdapter extends BaseExpandableListAdapter {
 		convertView.setTag(invite);
 
 
-		TextView tvPlayer = (TextView) convertView.findViewById(R.id.tv_player);
+		TextView tvPlayer = (TextView) convertView.findViewById(R.id.tv_title);
 		TextView tvDate = (TextView) convertView.findViewById(R.id.tv_date);
 		TextView tvScore = (TextView) convertView.findViewById(R.id.tv_score);
 		TextView tvPoint = (TextView) convertView.findViewById(R.id.tv_point);

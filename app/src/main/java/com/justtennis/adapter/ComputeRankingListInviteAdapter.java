@@ -98,7 +98,7 @@ public class ComputeRankingListInviteAdapter extends ArrayAdapter<Invite> {
 		rowView.setTag(v);
 
 		ImageView ivStatus = rowView.findViewById(R.id.iv_status);
-		TextView tvPlayer = (TextView) rowView.findViewById(R.id.tv_player);
+		TextView tvPlayer = (TextView) rowView.findViewById(R.id.tv_title);
 		TextView tvDate = (TextView) rowView.findViewById(R.id.tv_date);
 		TextView tvScore = (TextView) rowView.findViewById(R.id.tv_score);
 		TextView tvClubName = (TextView) rowView.findViewById(R.id.tv_club_name);
