@@ -8,10 +8,13 @@
     <string name="button_text_statistic">Statistiques</string>
     <string name="button_text_db_backup">Sauvegarde la BDD</string>
     <string name="button_text_db_restore">Restorer la BDD</string>
+    <string name="button_text_db_recreate">Recreer la BDD</string>
     <string name="dialog_backup_title">Savegarder la BDD</string>
     <string name="dialog_backup_message">Sauvegarder ?</string>
     <string name="dialog_restore_title">Restorer la BDD</string>
     <string name="dialog_restore_message">Restorer ?</string>
+    <string name="dialog_recreate_title">Recréer la BDD</string>
+    <string name="dialog_recreate_message">Recréer ?</string>
     <string name="dialog_send_apk_title">Partager l\'APK</string>
     <string name="dialog_send_apk_message">Partager l\'APK ?</string>
     <string name="dialog_send_db_title">Partager la BDD</string>

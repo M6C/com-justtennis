@@ -15,11 +15,11 @@ public abstract class GenericDBHelper extends DBAbstractHelper {
 
 	@Override
 	public void onCreate(SQLiteDatabase database) {
+		String sql = getDatabaseCreate();
 		if (notificationMessage != null) {
-			notificationMessage.notifyMessage("create database:" + database.getPath());
+			notificationMessage.notifyMessage("create database:" + database.getPath() + " sql:" + sql);
 		}
-
-        database.execSQL(getDatabaseCreate());
+		database.execSQL(sql);
 	}
 	
 //	@Override

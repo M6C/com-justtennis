@@ -24,6 +24,7 @@ import com.justtennis.activity.MessageActivity;
 import com.justtennis.activity.PalmaresFastActivity;
 import com.justtennis.business.MainBusiness;
 import com.justtennis.listener.ok.OnClickDBBackupListenerOk;
+import com.justtennis.listener.ok.OnClickDBRecreateListenerOk;
 import com.justtennis.listener.ok.OnClickDBRestoreListenerOk;
 import com.justtennis.listener.ok.OnClickSendApkListenerOk;
 import com.justtennis.listener.ok.OnClickSendDBListenerOk;
@@ -206,6 +207,9 @@ public class ItemDetailActivity extends AppCompatActivity implements NavigationD
             case R.id.action_db_restore:
                 onClickDBRestore(null);
                 break;
+            case R.id.action_db_recreate:
+                onClickDBRecreate(null);
+                break;
             default:
                 ret = super.onOptionsItemSelected(item);
         }
@@ -377,6 +381,10 @@ public class ItemDetailActivity extends AppCompatActivity implements NavigationD
         }
     }
 
+    public void onClickDBRecreate(View view) {
+        doDBRecreate();
+    }
+
     private void initializeActionBar() {
         setSupportActionBar(mToolbar);
 
@@ -425,6 +433,14 @@ public class ItemDetailActivity extends AppCompatActivity implements NavigationD
         });
     }
 
+    private void doDBRecreate() {
+        post(() -> {
+            OnClickDBRecreateListenerOk listener = new OnClickDBRecreateListenerOk(this);
+            FactoryDialog.getInstance()
+                    .buildOkCancelDialog(this, listener, R.string.dialog_recreate_title, R.string.dialog_recreate_message)
+                    .show();
+        });
+    }
     private void post(Runnable o) {
         findViewById(R.id.container).postDelayed(o, 1000);
     }

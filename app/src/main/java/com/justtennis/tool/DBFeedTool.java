@@ -82,6 +82,11 @@ public class DBFeedTool {
             return;
         }
 
+        doFeed();
+    }
+
+    public void doFeed() {
+
         initRanking();
 
         feedSaison();

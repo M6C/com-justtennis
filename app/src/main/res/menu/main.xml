@@ -47,7 +47,12 @@
         app:showAsAction="never" />
     <item
         android:id="@+id/action_db_restore"
-	    android:orderInCategory="100"
+        android:orderInCategory="100"
         android:title="@string/button_text_db_restore"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/action_db_recreate"
+        android:orderInCategory="100"
+        android:title="@string/button_text_db_recreate"
         app:showAsAction="never" />
 </menu>

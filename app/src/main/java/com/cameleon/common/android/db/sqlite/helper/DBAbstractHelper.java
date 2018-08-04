@@ -162,10 +162,11 @@ public abstract class DBAbstractHelper extends SQLiteOpenHelper {
 		return ret;
 	}
 
-	protected void dropTable(SQLiteDatabase database) {
-        notificationMessage.notifyMessage("drop database:" + database.getPath());
+	public void dropTable(SQLiteDatabase database) {
+		String sql = "DROP TABLE IF EXISTS " + getTableName();
+        notificationMessage.notifyMessage("drop database:" + database.getPath() + " sql:" + sql);
 
-        database.execSQL("DROP TABLE IF EXISTS " + getTableName());
+		database.execSQL(sql);
 	}
 	
 	protected String getPackagename() {
