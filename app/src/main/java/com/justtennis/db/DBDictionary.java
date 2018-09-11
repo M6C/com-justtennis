@@ -66,6 +66,10 @@ public class DBDictionary {
 		return mapHelperByDatabaseName.values();
 	}
 
+	public GenericJustTennisDBHelper getDBHelperByClassType(Class<?> classType) {
+		return mapHelperByClassType.get(classType);
+	}
+
 	private void computeMapHelper() {
 		for(GenericJustTennisDBHelper helper : listHelper) {
 			mapHelperByClassType.put(helper.getClassType(), helper);

@@ -17,8 +17,8 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
     <!-- Calendar -->
-    <uses-permission android:name="android.permission.READ_CALENDAR"/>
-    <uses-permission android:name="android.permission.WRITE_CALENDAR"/>
+    <uses-permission android:name="android.permission.READ_CALENDAR" />
+    <uses-permission android:name="android.permission.WRITE_CALENDAR" />
 
     <!-- Zxing -->
     <uses-permission android:name="android.permission.CAMERA" />
@@ -30,7 +30,7 @@
         android:label="@string/application_label"
         android:theme="@style/AppTheme">
 
-        <!--android:name=".ui.activity.UiMainActivity"-->
+        <!-- android:name=".ui.activity.UiMainActivity" -->
         <activity
             android:name=".ui.activity.ItemDetailActivity"
             android:label="@string/application_label"
@@ -42,7 +42,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
         <activity
             android:name=".activity.MainActivity"
             android:label="@string/application_label"
@@ -155,12 +154,12 @@
 	      </intent-filter>
 	   </receiver>    
         -->
-<!--
+        <!--
         <activity
             android:name=".ui.activity.ItemListActivity"
             android:label="@string/title_item_list"></activity>
--->
-<!--
+        -->
+        <!--
         <activity
             android:name=".ui.activity.ItemDetailActivity"
             android:label="@string/title_item_detail"
@@ -169,8 +168,13 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.justtennis.ui.activity.ItemListActivity" />
         </activity>
--->
+        -->
 
+        <provider
+            android:name=".db.provider.InviteProvider"
+            android:authorities="com.justtennis.provider.invite"
+            android:enabled="true"
+            android:exported="true"></provider>
     </application>
 
 </manifest>
