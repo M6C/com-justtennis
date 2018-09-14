@@ -6,6 +6,7 @@ import android.content.ContentValues;
 import android.database.Cursor;
 import android.net.Uri;
 
+import com.justtennis.BuildConfig;
 import com.justtennis.db.DBDictionary;
 import com.justtennis.db.sqlite.helper.DBInviteHelper;
 import com.justtennis.db.sqlite.helper.GenericJustTennisDBHelper;
@@ -14,7 +15,10 @@ import com.justtennis.notifier.NotifierMessageLogger;
 
 public class InviteProvider extends ContentProvider {
 
-    public static final String CONTENT_PROVIDER_MIME = "vnd.android.cursor.item/com.justtennis.provider.invite";
+    public static final String CONTENT_AUTHORITY = BuildConfig.APPLICATION_ID + ".provider.invite";
+    public static final String CONTENT_PROVIDER_MIME = "vnd.android.cursor.item/" + CONTENT_AUTHORITY;
+    public static final Uri CONTENT_URI = Uri.parse("content://" + CONTENT_AUTHORITY);
+
     private GenericJustTennisDBHelper dbHelper;
 
     public InviteProvider() {

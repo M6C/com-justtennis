@@ -171,10 +171,10 @@
         -->
 
         <provider
-            android:name=".db.provider.InviteProvider"
-            android:authorities="com.justtennis.provider.invite"
+            android:name="com.justtennis.db.provider.InviteProvider"
+            android:authorities="${applicationId}.provider.invite"
             android:enabled="true"
-            android:exported="true"></provider>
+            android:exported="true"/>
     </application>
 
 </manifest>
