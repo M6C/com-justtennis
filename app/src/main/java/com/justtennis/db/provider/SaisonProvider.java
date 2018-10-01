@@ -8,6 +8,7 @@ import android.net.Uri;
 
 import com.justtennis.BuildConfig;
 import com.justtennis.db.DBDictionary;
+import com.justtennis.db.service.SaisonService;
 import com.justtennis.db.sqlite.helper.DBSaisonHelper;
 import com.justtennis.db.sqlite.helper.GenericJustTennisDBHelper;
 import com.justtennis.domain.Saison;
@@ -42,7 +43,25 @@ public class SaisonProvider extends ContentProvider {
 
     @Override
     public Uri insert(Uri uri, ContentValues values) {
-        long id = dbHelper.getWritableDatabase().insert(DBSaisonHelper.TABLE_NAME, null, values);
+        long id = -1;
+        if (values.size() == 1 && values.containsKey(DBSaisonHelper.COLUMN_NAME)) {
+            String name = values.getAsString(DBSaisonHelper.COLUMN_NAME);
+            if (name != null && name.length() == 4) {
+                int millesime = Integer.parseInt(name);
+                NotifierMessageLogger notifier = NotifierMessageLogger.getInstance();
+                SaisonService saisonService = new SaisonService(getContext(), notifier);
+                Saison saison = saisonService.getSaison(millesime);
+                if (saison == null) {
+                    // Create saison from millesime
+                    id = saisonService.create(millesime, false).getId();
+                } else {
+                    id = saison.getId();
+                }
+            }
+        }
+        if (id == -1) {
+            id = dbHelper.getWritableDatabase().insert(DBSaisonHelper.TABLE_NAME, null, values);
+        }
         return ContentUris.withAppendedId(uri, id);
     }
 

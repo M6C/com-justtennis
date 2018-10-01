@@ -1,15 +1,15 @@
 package com.justtennis.db.service;
 
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
-
 import android.content.Context;
 
 import com.cameleon.common.android.inotifier.INotifierMessage;
 import com.cameleon.common.tool.ToolDatetime;
 import com.justtennis.db.sqlite.datasource.DBSaisonDataSource;
 import com.justtennis.domain.Saison;
+
+import java.util.Calendar;
+import java.util.Date;
+import java.util.List;
 
 public class SaisonService extends GenericNamedService<Saison> {
 
@@ -80,7 +80,7 @@ public class SaisonService extends GenericNamedService<Saison> {
 		if (saisons != null && saisons.size() > 0) {
 			for(Saison saison : saisons) {
 				Calendar cal = Calendar.getInstance();
-				cal.setTime(saison.getBegin());
+				cal.setTime(saison.getEnd());
 				if (cal.get(Calendar.YEAR) == year) {
 					ret = true;
 					break;
@@ -88,6 +88,20 @@ public class SaisonService extends GenericNamedService<Saison> {
 			}
 		}
 		return ret;
+	}
+
+	public Saison getSaison(int year) {
+		List<Saison> saisons = getList();
+		if (saisons != null && saisons.size() > 0) {
+			for(Saison saison : saisons) {
+				Calendar cal = Calendar.getInstance();
+				cal.setTime(saison.getEnd());
+				if (cal.get(Calendar.YEAR) == year) {
+					return saison;
+				}
+			}
+		}
+		return null;
 	}
 
 	public Saison create(int year, boolean active) {
