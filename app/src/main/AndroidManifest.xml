@@ -175,6 +175,24 @@
             android:authorities="${applicationId}.provider.invite"
             android:enabled="true"
             android:exported="true"/>
+
+        <provider
+            android:name="com.justtennis.db.provider.SaisonProvider"
+            android:authorities="${applicationId}.provider.saison"
+            android:enabled="true"
+            android:exported="true"/>
+
+        <provider
+            android:name="com.justtennis.db.provider.ClubProvider"
+            android:authorities="${applicationId}.provider.club"
+            android:enabled="true"
+            android:exported="true"/>
+
+        <provider
+            android:name="com.justtennis.db.provider.PlayerProvider"
+            android:authorities="${applicationId}.provider.player"
+            android:enabled="true"
+            android:exported="true"/>
     </application>
 
 </manifest>
