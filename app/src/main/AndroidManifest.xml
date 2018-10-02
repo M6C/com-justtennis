@@ -193,6 +193,18 @@
             android:authorities="${applicationId}.provider.player"
             android:enabled="true"
             android:exported="true"/>
+
+        <provider
+            android:name="com.justtennis.db.provider.RankingProvider"
+            android:authorities="${applicationId}.provider.ranking"
+            android:enabled="true"
+            android:exported="true"/>
+
+        <provider
+            android:name="com.justtennis.db.provider.ScoreSetProvider"
+            android:authorities="${applicationId}.provider.scoreset"
+            android:enabled="true"
+            android:exported="true"/>
     </application>
 
 </manifest>
