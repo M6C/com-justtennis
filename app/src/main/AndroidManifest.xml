@@ -205,6 +205,12 @@
             android:authorities="${applicationId}.provider.scoreset"
             android:enabled="true"
             android:exported="true"/>
+
+        <provider
+            android:name="com.justtennis.db.provider.UserProvider"
+            android:authorities="${applicationId}.provider.user"
+            android:enabled="true"
+            android:exported="true"/>
     </application>
 
 </manifest>
