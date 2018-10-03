@@ -266,12 +266,20 @@ public class ItemDetailActivity extends AppCompatActivity implements NavigationD
         Integer step = (Integer)o;
         TextView textView = findViewById(R.id.tv_subtitle);
         if (step == 0) {
-            textView.setText(R.string.app_initialize_subtitle_user);
+            if (textView == null) {
+                logMe("Wizard subtitle is null step:0 !");
+            } else {
+                textView.setText(R.string.app_initialize_subtitle_user);
+            }
             UserFragment fragment = UserFragment.buildCreate();
             FragmentTool.replaceFragment(this, fragment);
         }
         else if (step == 1) {
-            textView.setText(R.string.app_initialize_subtitle_sms_message);
+            if (textView == null) {
+                logMe("Wizard subtitle is null step:1 !");
+            } else {
+                textView.setText(R.string.app_initialize_subtitle_sms_message);
+            }
             SmsMessageFragment fragment = SmsMessageFragment.buildCreate();
             FragmentTool.replaceFragment(this, fragment);
         } else {

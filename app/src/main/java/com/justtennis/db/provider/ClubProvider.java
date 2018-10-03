@@ -5,14 +5,13 @@ import android.content.ContentUris;
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.net.Uri;
+import android.support.annotation.NonNull;
 
 import com.justtennis.BuildConfig;
 import com.justtennis.db.DBDictionary;
 import com.justtennis.db.sqlite.helper.DBClubHelper;
-import com.justtennis.db.sqlite.helper.DBSaisonHelper;
 import com.justtennis.db.sqlite.helper.GenericJustTennisDBHelper;
 import com.justtennis.domain.Club;
-import com.justtennis.domain.Saison;
 import com.justtennis.notifier.NotifierMessageLogger;
 
 public class ClubProvider extends ContentProvider {
@@ -24,10 +23,11 @@ public class ClubProvider extends ContentProvider {
     private GenericJustTennisDBHelper dbHelper;
 
     public ClubProvider() {
+        // Nothing to do
     }
 
     @Override
-    public String getType(Uri uri) {
+    public String getType(@NonNull Uri uri) {
         return CONTENT_PROVIDER_MIME;
     }
 
@@ -38,25 +38,23 @@ public class ClubProvider extends ContentProvider {
     }
 
     @Override
-    public Cursor query(Uri uri, String[] projection, String selection, String[] selectionArgs, String sortOrder) {
+    public Cursor query(@NonNull Uri uri, String[] projection, String selection, String[] selectionArgs, String sortOrder) {
         return dbHelper.getReadableDatabase().query(DBClubHelper.TABLE_NAME, projection, selection, selectionArgs, null, null, sortOrder);
     }
 
     @Override
-    public Uri insert(Uri uri, ContentValues values) {
+    public Uri insert(@NonNull Uri uri, ContentValues values) {
         long id = dbHelper.getWritableDatabase().insert(DBClubHelper.TABLE_NAME, null, values);
         return ContentUris.withAppendedId(uri, id);
     }
 
     @Override
-    public int delete(Uri uri, String selection, String[] selectionArgs) {
-        // Implement this to handle requests to delete one or more rows.
+    public int delete(@NonNull Uri uri, String selection, String[] selectionArgs) {
         throw new UnsupportedOperationException("Not yet implemented");
     }
 
     @Override
-    public int update(Uri uri, ContentValues values, String selection, String[] selectionArgs) {
-        // TODO: Implement this to handle requests to update one or more rows.
+    public int update(@NonNull Uri uri, ContentValues values, String selection, String[] selectionArgs) {
         throw new UnsupportedOperationException("Not yet implemented");
     }
 }

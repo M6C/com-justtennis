@@ -13,8 +13,8 @@ import java.util.List;
 
 public class SaisonService extends GenericNamedService<Saison> {
 
-	public static final long ID_EMPTY = -1l;
-	public static final String NAME_EMPTY = "";
+	private static final long ID_EMPTY = -1L;
+	private static final String NAME_EMPTY = "";
 
 	public SaisonService(Context context, INotifierMessage notificationMessage) {
 		super(context, new DBSaisonDataSource(context, notificationMessage), notificationMessage);
@@ -36,7 +36,7 @@ public class SaisonService extends GenericNamedService<Saison> {
 	}
 
 	public static Saison build(int year) {
-		return build(year, 10);
+		return build(year, 9);
 	}
 
 	public static Saison build(int year, int month) {
@@ -77,7 +77,7 @@ public class SaisonService extends GenericNamedService<Saison> {
 		boolean ret = false;
 
 		List<Saison> saisons = getList();
-		if (saisons != null && saisons.size() > 0) {
+		if (saisons != null && !saisons.isEmpty()) {
 			for(Saison saison : saisons) {
 				Calendar cal = Calendar.getInstance();
 				cal.setTime(saison.getEnd());
@@ -92,7 +92,7 @@ public class SaisonService extends GenericNamedService<Saison> {
 
 	public Saison getSaison(int year) {
 		List<Saison> saisons = getList();
-		if (saisons != null && saisons.size() > 0) {
+		if (saisons != null && !saisons.isEmpty()) {
 			for(Saison saison : saisons) {
 				Calendar cal = Calendar.getInstance();
 				cal.setTime(saison.getEnd());
@@ -105,7 +105,7 @@ public class SaisonService extends GenericNamedService<Saison> {
 	}
 
 	public Saison create(int year, boolean active) {
-		Saison saison = build(year, 10);
+		Saison saison = build(year);
 		saison.setActive(active);
 		createOrUpdate(saison);
 		return saison;
@@ -120,20 +120,10 @@ public class SaisonService extends GenericNamedService<Saison> {
 		}
 	}
 
-	public void desactiveExcept(Saison pojo) {
-		try {
-			dbDataSource.open();
-			((DBSaisonDataSource)dbDataSource).desactiveExcept(pojo);
-		}
-		finally {
-			dbDataSource.close();
-		}
-	}
-
 	public Saison getSaisonActiveOrFirst() {
 		Saison ret = null;
 		List<Saison> saisons = getList();
-		if (saisons != null && saisons.size() > 0) {
+		if (saisons != null && !saisons.isEmpty()) {
 			for(Saison saison : saisons) {
 				if (saison.isActive()) {
 					ret = saison;
@@ -149,5 +139,27 @@ public class SaisonService extends GenericNamedService<Saison> {
 			createOrUpdate(ret);
 		}
 		return ret;
+	}
+
+	public Saison getSaisonActive() {
+		List<Saison> saisons = getList();
+		if (saisons != null && !saisons.isEmpty()) {
+			for(Saison saison : saisons) {
+				if (saison.isActive()) {
+					return saison;
+				}
+			}
+		}
+		return null;
+	}
+
+	private void desactiveExcept(Saison pojo) {
+		try {
+			dbDataSource.open();
+			((DBSaisonDataSource)dbDataSource).desactiveExcept(pojo);
+		}
+		finally {
+			dbDataSource.close();
+		}
 	}
 }

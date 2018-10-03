@@ -5,6 +5,7 @@ import android.content.ContentUris;
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.net.Uri;
+import android.support.annotation.NonNull;
 
 import com.justtennis.BuildConfig;
 import com.justtennis.db.DBDictionary;
@@ -23,10 +24,11 @@ public class SaisonProvider extends ContentProvider {
     private GenericJustTennisDBHelper dbHelper;
 
     public SaisonProvider() {
+        // Nothing to do
     }
 
     @Override
-    public String getType(Uri uri) {
+    public String getType(@NonNull Uri uri) {
         return CONTENT_PROVIDER_MIME;
     }
 
@@ -37,12 +39,12 @@ public class SaisonProvider extends ContentProvider {
     }
 
     @Override
-    public Cursor query(Uri uri, String[] projection, String selection, String[] selectionArgs, String sortOrder) {
+    public Cursor query(@NonNull Uri uri, String[] projection, String selection, String[] selectionArgs, String sortOrder) {
         return dbHelper.getReadableDatabase().query(DBSaisonHelper.TABLE_NAME, projection, selection, selectionArgs, null, null, sortOrder);
     }
 
     @Override
-    public Uri insert(Uri uri, ContentValues values) {
+    public Uri insert(@NonNull Uri uri, ContentValues values) {
         long id = -1;
         if (values.size() == 1 && values.containsKey(DBSaisonHelper.COLUMN_NAME)) {
             String name = values.getAsString(DBSaisonHelper.COLUMN_NAME);
@@ -52,8 +54,9 @@ public class SaisonProvider extends ContentProvider {
                 SaisonService saisonService = new SaisonService(getContext(), notifier);
                 Saison saison = saisonService.getSaison(millesime);
                 if (saison == null) {
+                    boolean active = saisonService.getSaisonActive() == null;
                     // Create saison from millesime
-                    id = saisonService.create(millesime, false).getId();
+                    id = saisonService.create(millesime, active).getId();
                 } else {
                     id = saison.getId();
                 }
@@ -66,14 +69,12 @@ public class SaisonProvider extends ContentProvider {
     }
 
     @Override
-    public int delete(Uri uri, String selection, String[] selectionArgs) {
-        // Implement this to handle requests to delete one or more rows.
+    public int delete(@NonNull Uri uri, String selection, String[] selectionArgs) {
         throw new UnsupportedOperationException("Not yet implemented");
     }
 
     @Override
-    public int update(Uri uri, ContentValues values, String selection, String[] selectionArgs) {
-        // TODO: Implement this to handle requests to update one or more rows.
+    public int update(@NonNull Uri uri, ContentValues values, String selection, String[] selectionArgs) {
         throw new UnsupportedOperationException("Not yet implemented");
     }
 }
