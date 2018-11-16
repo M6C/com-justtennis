@@ -1,0 +1,12 @@
+{
+  "type": "service_account",
+  "project_id": "api-7867629274599820040-906183",
+  "private_key_id": "97d8b56a531bdcac9ffec499b08382b451d1a0dd",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvgIBADANBgkqhkiG9w0BAQEFAASCBKgwggSkAgEAAoIBAQDgOHqaI/vxZ61l\n+ZWaGbAMwWOpCYJ+9G/Nj77UqFCOdBzkbev6sjQRHvS4JACVfN7Bu6nhPNQCNnyN\nNOI/sTyoreIhl2SQM8Sacw9axq3IGepKOKDtCOBLhZ5a/abgyr5COX3XpmQRZpZ+\nfedSfofKr1nYhZey97YZSefpTVZeJxblQm3M/07rGQw+17YrRRosPP0gRcS4HCw0\n8og+KU2kNXTNGrl91KrGksYNZwl2Luebu4uZYWhy0hVUFfeW4itVrJ0sdXXSG9qj\nefiNH0fbOFT7KEq5op6JrWUFCrPtRNaIwg0fUDHEZLQde6bw7HbPtLlVmLMOgkgp\nJhrJ9Ac5AgMBAAECggEADXttPnt6GL09MJaIp6gdF9yWW4Gri8AIQPoAZX/BaES/\nFVUut/ejKIG4q/cuOc7frhJ/V9XKgbTjrwdGW2y9famxoTId5TXXqoR59eFgba8b\n5rPvqTu8EOPLQ862DBTkynfz2IBeyqplKNyf3iv8NPRvmJS1LG5h+rSg8eb+kdFM\nX3uuUUhpv8WEoKawXQRX6lgqB59VdMUi+4aWdDkCWdqhXz1Rs6BSX3Nc+98jHgIb\nh2OR17so6Yuu8h1Nlvkp+K5+m37whtkVcQw4vRLXikJoYc3IlsJnx7ZeZ3g2EZMw\npOAtsh1BfTEOT1Kq/e75nI0INHkdR0yZRP+fiYKjqQKBgQD9D073nF5ij8cMB8LY\noN8SmAdqF2raSbPgYQ3Y64h5ghAHIv46kPAAeg69iFVDX37guRNC37oHjppHFh8R\nqrxqZE4RSI6HxmgHJOKBeVtB0QfMYLCPP4qFfsHQN9qRsqAXmB94RoxwI8TCCl4+\n+vDCanrwjNTn3FK6hkXnkPdcmwKBgQDi02RsurGd6XcMKFBvpCoz1uZsoh/AHI7b\ne/XhP7GYZbsyurJ1E3rnjX8ccsj+W/0713+1x5PY/CwquFb6FibRfzg4hVgugOD6\njP3924jS0fpP8P0ONI/P+PsI94wyDQAoOFhE7CYM6bHzhcbw0mKi+P9w8Tdm3YZD\nsMNodmNGuwKBgQDsXwM0t8NVrtSOgSVXsRQMSyMJzqvJD3TLzfvgNUi5rmoIMIBk\n9gKnf1sLYC+8CZP6lgTOvykFbAbhBWGp39+0RNLCxBIV8pYyrhpAM7mwxW3SUjI4\n63IY9WhVdAZddwqgX0Bt2P/OsypS0NptW3nNLyZ8UB+CH0LK5SaggMD8pwKBgQCO\nKJK+GlwLbjDwa6vN7IOOrdcIqqtfigZ2xMAbhgHWU5v5dU03VxgmW2YY/E/AKwMR\nKESgNw8QZSuBMrtATfXSQvuHYPsdWiSmowrkuVyNVJCe3Zib+JFRdOhQfGVfUQqS\nKo4X1DEc0rJ2v5cpg5HSNmBR9rwUOi5V6kjuBZS+1QKBgFpvUjyCBIx68D5A9aYl\n0WbihD+YSzCizVTy9gYDxSkAdB315seiA3Zvthy7ujOLB6R8UIvjb9y5JMpl5pNK\nriz5gimV/Z9BGfO/xp9Tc1FWKmkth1u10gRCEticA3EYGG1uk66ZSqxVCboKWnW2\nNgHLMcgweBzhPr05VmdFTQSZ\n-----END PRIVATE KEY-----\n",
+  "client_email": "com-justtennis-309@api-7867629274599820040-906183.iam.gserviceaccount.com",
+  "client_id": "111203355746236138682",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/com-justtennis-309%40api-7867629274599820040-906183.iam.gserviceaccount.com"
+}
