@@ -1,0 +1,1 @@
+Fix NotSerializableException: android.arch.lifecycle.MutableLiveData

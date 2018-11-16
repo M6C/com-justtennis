@@ -1,0 +1,4 @@
+Feature :
+ - Send message to request Friends playing Tennis
+ - Manage your Competition Match and Training Session
+ - Ranking calculation
