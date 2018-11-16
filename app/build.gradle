@@ -1,6 +1,14 @@
 apply plugin: 'com.android.application'
 // Crashlytics
 apply plugin: 'io.fabric'
+// Google Play Store Publish
+apply plugin: 'com.github.triplet.play'
+
+def getSigningKey(key) {
+    def props = new Properties()
+    file(signingConfigsFile).withInputStream { props.load(it) }
+    return "\"" + props.getProperty(key) + "\""
+}
 
 android {
     compileSdkVersion 27
@@ -13,10 +21,23 @@ android {
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         multiDexEnabled true
     }
+
+    // Google Play Store Publish
+    signingConfigs {
+        release {
+            storeFile file(getSigningKey("storeFile"))
+            storePassword getSigningKey("storePassword")
+            keyAlias getSigningKey("keyAlias")
+            keyPassword getSigningKey("keyPassword")
+        }
+    }
+
     buildTypes {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            // Google Play Store Publish
+            signingConfig signingConfigs.release
         }
     }
     compileOptions {
@@ -38,6 +59,14 @@ android {
 //    defaultConfig {
 //        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
 //    }
+
+
+    // Google Play Store Publish
+    play {
+        // Can be one of the production, beta, alpha or rollout
+        track = 'alpha'
+        serviceAccountCredentials = file("store/Google Play Android Developer-97d8b56a531b.json")
+    }
 }
 
 dependencies {

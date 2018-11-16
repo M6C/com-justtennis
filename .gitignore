@@ -17,3 +17,4 @@ gradle.properties
 **/.classpath
 **/.project
 **/.settings
+/app/store
