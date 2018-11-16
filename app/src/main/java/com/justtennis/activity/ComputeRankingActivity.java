@@ -55,7 +55,7 @@ public class ComputeRankingActivity extends GenericActivity {
 
 		adapter.setValue(business.getList());
 
-		list = findViewById(R.id.list);
+		list = findViewById(R.id.item_list);
 		list.setOnItemClickListener(new OnItemClickListInvite(this, RESULT_ITEM_CLICK));
 		list.setAdapter(adapter);
 

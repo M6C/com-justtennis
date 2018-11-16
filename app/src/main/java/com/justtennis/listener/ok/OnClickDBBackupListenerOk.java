@@ -1,11 +1,10 @@
 package com.justtennis.listener.ok;
 
-import java.io.IOException;
-
 import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
 
+import com.cameleon.common.android.db.sqlite.helper.GenericDBHelper;
 import com.justtennis.db.sqlite.helper.DBAddressHelper;
 import com.justtennis.db.sqlite.helper.DBBonusHelper;
 import com.justtennis.db.sqlite.helper.DBClubHelper;
@@ -16,7 +15,6 @@ import com.justtennis.db.sqlite.helper.DBRankingHelper;
 import com.justtennis.db.sqlite.helper.DBSaisonHelper;
 import com.justtennis.db.sqlite.helper.DBTournamentHelper;
 import com.justtennis.db.sqlite.helper.DBUserHelper;
-import com.cameleon.common.android.db.sqlite.helper.GenericDBHelper;
 import com.justtennis.notifier.NotifierMessageLogger;
 
 public class OnClickDBBackupListenerOk implements OnClickListener {
@@ -47,7 +45,7 @@ public class OnClickDBBackupListenerOk implements OnClickListener {
 			for(GenericDBHelper helper : listHelper) {
 				try {
 					helper.backupDbToSdcard();
-				} catch (IOException e) {
+				} catch (Exception e) {
 					notifier.notifyError(e);
 				}
 			}

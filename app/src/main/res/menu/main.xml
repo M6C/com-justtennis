@@ -5,13 +5,15 @@
         android:id="@+id/action_old_ihm"
         android:orderInCategory="100"
         android:title="@string/action_old_ihm"
-        app:showAsAction="never" />
+        app:showAsAction="never"
+        android:visible="false" />
 
     <item
         android:id="@+id/action_settings"
         android:orderInCategory="100"
         android:title="@string/action_settings"
-        app:showAsAction="never" />
+        app:showAsAction="never"
+        android:visible="false" />
 
     <item
         android:id="@+id/action_palmares_fast"
@@ -23,28 +25,33 @@
         android:id="@+id/action_message"
 	    android:orderInCategory="100"
         android:title="@string/button_text_message"
-        app:showAsAction="never" />
+        app:showAsAction="never"
+        android:visible="false"/>
     <item
         android:id="@+id/action_list_person"
 	    android:orderInCategory="100"
         android:title="@string/button_text_person"
-        app:showAsAction="never" />
+        app:showAsAction="never"
+        android:visible="false" />
 
     <item
         android:id="@+id/action_send_apk"
 	    android:orderInCategory="100"
         android:title="@string/button_text_share_apk"
-        app:showAsAction="never" />
+        app:showAsAction="never"
+        android:visible="false" />
     <item
         android:id="@+id/action_send_db"
 	    android:orderInCategory="100"
         android:title="@string/button_text_share_db"
-        app:showAsAction="never" />
+        app:showAsAction="never"
+        android:visible="false" />
     <item
         android:id="@+id/action_db_backup"
 	    android:orderInCategory="100"
         android:title="@string/button_text_db_backup"
-        app:showAsAction="never" />
+        app:showAsAction="never"
+        />
     <item
         android:id="@+id/action_db_restore"
         android:orderInCategory="100"

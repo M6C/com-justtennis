@@ -156,13 +156,17 @@ public class NetworkImageManager {
                         byte[] bytes = response.body().bytes();
                         JsonNode rootNode = mapper.readTree(bytes);
 
-                        JsonNode photosNode = rootNode.path("photos").path("photo");
-                        Iterator<JsonNode> elements = photosNode.elements();
-                        while (elements.hasNext()) {
-                            JsonNode photoNode = elements.next();
-                            String url = photoNode.path("url_h").asText();
-                            if (url != null && !url.trim().isEmpty() && !resultURLs.contains(url)) {
-                                resultURLs.add(url);
+                        if (rootNode != null && rootNode.path("photos") != null) {
+                            JsonNode photosNode = rootNode.path("photos").path("photo");
+                            Iterator<JsonNode> elements = (photosNode == null ? null : photosNode.elements());
+                            while (elements != null && elements.hasNext()) {
+                                JsonNode photoNode = elements.next();
+                                if (photoNode != null && photoNode.path("url_h") != null) {
+                                    String url = photoNode.path("url_h").asText();
+                                    if (url != null && !url.trim().isEmpty() && !resultURLs.contains(url)) {
+                                        resultURLs.add(url);
+                                    }
+                                }
                             }
                         }
 
