@@ -9,7 +9,7 @@ import com.cameleon.common.android.model.GenericDBPojo;
 import java.io.Serializable;
 
 public class GenericPojoViewModel <D extends GenericDBPojo> extends ViewModel implements Serializable {
-    private final MutableLiveData<D> selected = new MutableLiveData<>();
+    private final transient MutableLiveData<D> selected = new MutableLiveData<>();
 
     public void select(D item) {
         selected.setValue(item);
