@@ -6,7 +6,7 @@ apply plugin: 'com.github.triplet.play'
 
 def getSigningKey(key) {
     def props = new Properties()
-    file(signingConfigsFile).withInputStream { props.load(it) }
+    file("store/Google Play SigningConfigs.properties").withInputStream { props.load(it) }
     return "\"" + props.getProperty(key) + "\""
 }
 
