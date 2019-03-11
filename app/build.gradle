@@ -16,8 +16,8 @@ android {
         applicationId "justtennis.com.justtennis"
         minSdkVersion 19
         targetSdkVersion 27
-        versionCode 8
-        versionName "2.2.4.8"
+        versionCode 10
+        versionName "2.2.5.10"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         multiDexEnabled true
     }
@@ -103,7 +103,7 @@ dependencies {
     implementation 'com.fasterxml.jackson.core:jackson-databind:2.9.6'
 
     // Google Flex Layout
-    compile 'com.google.android:flexbox:0.2.3'
+    implementation 'com.google.android:flexbox:0.2.3'
 }
 
 // Firebase

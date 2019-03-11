@@ -40,32 +40,32 @@ public class SaisonProvider extends ContentProvider {
 
     @Override
     public Cursor query(@NonNull Uri uri, String[] projection, String selection, String[] selectionArgs, String sortOrder) {
-        return dbHelper.getReadableDatabase().query(DBSaisonHelper.TABLE_NAME, projection, selection, selectionArgs, null, null, sortOrder);
+        return null;//return dbHelper.getReadableDatabase().query(DBSaisonHelper.TABLE_NAME, projection, selection, selectionArgs, null, null, sortOrder);
     }
 
     @Override
     public Uri insert(@NonNull Uri uri, ContentValues values) {
-        long id = -1;
-        if (values.size() == 1 && values.containsKey(DBSaisonHelper.COLUMN_NAME)) {
-            String name = values.getAsString(DBSaisonHelper.COLUMN_NAME);
-            if (name != null && name.length() == 4) {
-                int millesime = Integer.parseInt(name);
-                NotifierMessageLogger notifier = NotifierMessageLogger.getInstance();
-                SaisonService saisonService = new SaisonService(getContext(), notifier);
-                Saison saison = saisonService.getSaison(millesime);
-                if (saison == null) {
-                    boolean active = saisonService.getSaisonActive() == null;
-                    // Create saison from millesime
-                    id = saisonService.create(millesime, active).getId();
-                } else {
-                    id = saison.getId();
-                }
-            }
-        }
-        if (id == -1) {
-            id = dbHelper.getWritableDatabase().insert(DBSaisonHelper.TABLE_NAME, null, values);
-        }
-        return ContentUris.withAppendedId(uri, id);
+//        long id = -1;
+//        if (values.size() == 1 && values.containsKey(DBSaisonHelper.COLUMN_NAME)) {
+//            String name = values.getAsString(DBSaisonHelper.COLUMN_NAME);
+//            if (name != null && name.length() == 4) {
+//                int millesime = Integer.parseInt(name);
+//                NotifierMessageLogger notifier = NotifierMessageLogger.getInstance();
+//                SaisonService saisonService = new SaisonService(getContext(), notifier);
+//                Saison saison = saisonService.getSaison(millesime);
+//                if (saison == null) {
+//                    boolean active = saisonService.getSaisonActive() == null;
+//                    // Create saison from millesime
+//                    id = saisonService.create(millesime, active).getId();
+//                } else {
+//                    id = saison.getId();
+//                }
+//            }
+//        }
+//        if (id == -1) {
+//            id = dbHelper.getWritableDatabase().insert(DBSaisonHelper.TABLE_NAME, null, values);
+//        }
+        return null;//return ContentUris.withAppendedId(uri, id);
     }
 
     @Override

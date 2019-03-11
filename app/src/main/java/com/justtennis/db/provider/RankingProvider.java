@@ -39,13 +39,13 @@ public class RankingProvider extends ContentProvider {
 
     @Override
     public Cursor query(@NonNull Uri uri, String[] projection, String selection, String[] selectionArgs, String sortOrder) {
-        return dbHelper.getReadableDatabase().query(DBRankingHelper.TABLE_NAME, projection, selection, selectionArgs, null, null, sortOrder);
+        return null;//return dbHelper.getReadableDatabase().query(DBRankingHelper.TABLE_NAME, projection, selection, selectionArgs, null, null, sortOrder);
     }
 
     @Override
     public Uri insert(@NonNull Uri uri, ContentValues values) {
-        long id = dbHelper.getWritableDatabase().insert(DBRankingHelper.TABLE_NAME, null, values);
-        return ContentUris.withAppendedId(uri, id);
+        //long id = dbHelper.getWritableDatabase().insert(DBRankingHelper.TABLE_NAME, null, values);
+        return null;//return ContentUris.withAppendedId(uri, id);
     }
 
     @Override
