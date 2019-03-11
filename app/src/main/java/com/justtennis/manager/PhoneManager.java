@@ -24,7 +24,7 @@ public class PhoneManager extends GenericCursorManager<Phone, PhoneMapper> {
 	}
 
 	public List<Phone> getListPhone(Activity context, long idContact) {
-	    String where = CommonDataKinds.Phone.CONTACT_ID + " = ?"; 
+	    String where = String.format("%s = ?", CommonDataKinds.Phone.CONTACT_ID);
 	    String[] whereParameters = new String[]{Long.toString(idContact)};
 		return getList(context, where, whereParameters);
 	}

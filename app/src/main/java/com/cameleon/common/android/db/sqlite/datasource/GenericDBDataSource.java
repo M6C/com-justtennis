@@ -1,10 +1,5 @@
 package com.cameleon.common.android.db.sqlite.datasource;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.SQLException;
@@ -14,6 +9,11 @@ import com.cameleon.common.android.db.sqlite.helper.GenericDBHelper;
 import com.cameleon.common.android.inotifier.INotifierMessage;
 import com.cameleon.common.android.model.GenericDBPojo;
 import com.cameleon.common.tool.DbTool;
+
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
 
 public abstract class GenericDBDataSource<POJO extends GenericDBPojo<Long>> {
 
@@ -74,7 +74,7 @@ public abstract class GenericDBDataSource<POJO extends GenericDBPojo<Long>> {
 
 		putContentValue(values, pojo);
 
-		db.update(dbHelper.getTableName(), values, GenericDBHelper.COLUMN_ID+"=?", new String[]{pojo.getId().toString()});
+		db.update(dbHelper.getTableName(), values, String.format("%s = ?", GenericDBHelper.COLUMN_ID), new String[]{pojo.getId().toString()});
 
 		logMe("update(pojo.id:" + pojo.getId() + ")", dateStart);
 	}
@@ -82,7 +82,7 @@ public abstract class GenericDBDataSource<POJO extends GenericDBPojo<Long>> {
 	public void delete(POJO pojo) {
 		String id = pojo.getId().toString();
 		logMe("Localisation deleted with id: " + id);
-		delete(GenericDBHelper.COLUMN_ID + " = " + id);
+		delete(String.format("%s = %s", GenericDBHelper.COLUMN_ID, id));
 	}
 
 	public void delete(String sqlWhere) {
@@ -96,14 +96,14 @@ public abstract class GenericDBDataSource<POJO extends GenericDBPojo<Long>> {
 		Date dateStart = new Date();
 		POJO ret = null;
 		Cursor cursor = db.query(dbHelper.getTableName(),
-				getAllColumns(), GenericDBHelper.COLUMN_ID + " = " + id, null,
+				getAllColumns(), String.format("%s = ?", GenericDBHelper.COLUMN_ID), new String[]{Long.toString(id)},
 				null, null, null);
 		cursor.moveToFirst();
 		if (!cursor.isAfterLast()) {
 			ret = cursorToPojo(cursor);
 		}
 		cursor.close();
-		logMe("getById(id:" + id + ")", dateStart);
+		logMe(String.format("getById(id:%d)", id), dateStart);
 		return ret;
 	}
 
@@ -155,7 +155,7 @@ public abstract class GenericDBDataSource<POJO extends GenericDBPojo<Long>> {
 	 */
 	public long count() {
 		String where = customizeWhere(null);
-		Cursor mCount= db.rawQuery("select count(*) from "+dbHelper.getTableName() + " WHERE " + where, null);
+		Cursor mCount= db.rawQuery(String.format("select count(*) from %s WHERE %s", dbHelper.getTableName(), where), null);
 		mCount.moveToFirst();
 		long ret = mCount.getLong(0);
 		mCount.close();
@@ -215,7 +215,7 @@ public abstract class GenericDBDataSource<POJO extends GenericDBPojo<Long>> {
 		// Make sure to close the cursor
 		cursor.close();
 		
-		logMe("query(where:" + sqlWhere + ", params:" + params + ")", dateStart);
+		logMe(String.format("query(where:%s, params:%s)", sqlWhere, params), dateStart);
 		return ret;
 	}
 
@@ -261,7 +261,7 @@ public abstract class GenericDBDataSource<POJO extends GenericDBPojo<Long>> {
 	}
 
 	protected void logMe(String msg, Date dateStart) {
-		logMe("DB Execution time:" + (new Date().getTime() - dateStart.getTime()) + "millisecond - " + msg);
+		logMe(String.format("DB Execution time:%dmillisecond - %s", new Date().getTime() - dateStart.getTime(), msg));
     }
 
 	protected void logMe(String msg) {

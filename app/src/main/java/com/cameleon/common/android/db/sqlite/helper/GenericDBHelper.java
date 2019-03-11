@@ -17,7 +17,7 @@ public abstract class GenericDBHelper extends DBAbstractHelper {
 	public void onCreate(SQLiteDatabase database) {
 		String sql = getDatabaseCreate();
 		if (notificationMessage != null) {
-			notificationMessage.notifyMessage("create database:" + database.getPath() + " sql:" + sql);
+			notificationMessage.notifyMessage(String.format("create database:%s sql:%s", database.getPath(), sql));
 		}
 		database.execSQL(sql);
 	}
@@ -36,28 +36,28 @@ public abstract class GenericDBHelper extends DBAbstractHelper {
 		addColumn(database, column, type, null);
 	}
 	protected void addColumn(SQLiteDatabase database, String column, String type, String defaultValue) {
-		logMe("UPGRADE DATABASE TABLE " + getTableName() + " ADD COLUMN:" + column + " BEFORE");
-		execSQL(database, "ALTER TABLE " + getTableName() + " ADD COLUMN " + column + " " + type);
+		logMe(String.format("UPGRADE DATABASE TABLE %s ADD COLUMN:%s BEFORE", getTableName(), column));
+		execSQL(database, String.format("ALTER TABLE %s ADD COLUMN %s %s", getTableName(), column, type));
 
 		if (defaultValue != null) {
 			updateColumn(database, column, defaultValue, null);
 		}
-		logMe("UPGRADE DATABASE TABLE " + getTableName() + " ADD COLUMN:" + column + " AFTER");
+		logMe(String.format("UPGRADE DATABASE TABLE %s ADD COLUMN:%s AFTER", getTableName(), column));
 	}
 
 	protected void updateColumn(SQLiteDatabase database, String column, String value, String where) {
-		logMe("UPDATE TABLE " + getTableName() + " COLUMN:" + column + " WITH VALUE:" + value + " WHERE:" + where);
-		String sql = "UPDATE " + getTableName() + " SET " + column + " = '" + value + "'";
+		logMe(String.format("UPDATE TABLE %s COLUMN:%s WITH VALUE:%s WHERE:%s", getTableName(), column, value, where));
+		String sql = String.format("UPDATE %s SET %s = '%s'", getTableName(), column, value);
 		if (where != null) {
-			sql += " WHERE " + where;
+			sql += String.format(" WHERE %s", where);
 		}
 		execSQL(database, sql);
 	}
 
 	protected void execSQL(SQLiteDatabase database, String sql) {
-		logMe("execSQL: '" + sql + "' BEFORE");
+		logMe(String.format("execSQL: '%s' BEFORE", sql));
 		database.execSQL(sql);
-		logMe("execSQL: '" + sql + "' AFTER");
+		logMe(String.format("execSQL: '%s' AFTER", sql));
 	}
 
 	/**

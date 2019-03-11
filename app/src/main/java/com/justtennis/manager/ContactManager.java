@@ -34,7 +34,7 @@ public class ContactManager extends GenericCursorManager<Contact, ContactMapper>
 	}
 
 	public List<Contact> getListContact(Context context) {
-	    String where = ContactsContract.Contacts.IN_VISIBLE_GROUP + " = ?";
+	    String where = String.format("%s = ?", Contacts.IN_VISIBLE_GROUP);
 	    String[] whereParameters = new String[]{"1"};
 		return getList(context, where, whereParameters);
 	}

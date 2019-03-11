@@ -25,7 +25,7 @@ public class ContactStructuredManager extends GenericCursorManager<Contact, Cont
 
 	public List<Contact> getListContact(Activity context) {
 //		String selection = ContactsContract.Contacts.IN_VISIBLE_GROUP + " = '" + ("1") + "'";
-	    String where = ContactsContract.CommonDataKinds.StructuredName.IN_VISIBLE_GROUP + " = ? AND " + ContactsContract.CommonDataKinds.StructuredName.MIMETYPE + " = ?"; 
+	    String where = String.format("%s = ? AND %s = ?", ContactsContract.CommonDataKinds.StructuredName.IN_VISIBLE_GROUP, ContactsContract.CommonDataKinds.StructuredName.MIMETYPE);
 	    String[] whereParameters = new String[]{"1", ContactsContract.CommonDataKinds.StructuredName.CONTENT_ITEM_TYPE};
 		return getList(context, where, whereParameters);
 	}
@@ -33,7 +33,7 @@ public class ContactStructuredManager extends GenericCursorManager<Contact, Cont
 	public Contact getContact(Activity context, long idContact) {
 		Contact ret = null;
 //	    String where = ContactsContract.Data.RAW_CONTACT_ID + " = ? AND " + ContactsContract.Data.MIMETYPE + " = ?"; 
-	    String where = ContactsContract.CommonDataKinds.StructuredName.CONTACT_ID + " = ? AND " + ContactsContract.CommonDataKinds.StructuredName.MIMETYPE + " = ?"; 
+	    String where = String.format("%s = ? AND %s = ?", ContactsContract.CommonDataKinds.StructuredName.CONTACT_ID, ContactsContract.CommonDataKinds.StructuredName.MIMETYPE);
 	    String[] whereParameters = new String[]{Long.toString(idContact), ContactsContract.CommonDataKinds.StructuredName.CONTENT_ITEM_TYPE};//new String[]{ContactsContract.CommonDataKinds.StructuredName.CONTENT_ITEM_TYPE};
 		List<Contact> list = getList(context, where, whereParameters);
 		if (list!=null && list.size()>0) {

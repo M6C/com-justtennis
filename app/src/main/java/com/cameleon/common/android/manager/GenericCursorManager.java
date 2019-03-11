@@ -34,7 +34,7 @@ public abstract class GenericCursorManager<T extends GenericDBPojo<Long>, M exte
 
 	protected T get(Context context, String columnNameId, String columnNameMimeType, long id, String mimeType) {
 		T ret = null;
-	    String where = columnNameId + " = ? AND " + columnNameMimeType + " = ?"; 
+	    String where = String.format("%s = ? AND %s = ?", columnNameId, columnNameMimeType);
 	    String[] whereParameters = new String[]{Long.toString(id), mimeType};
 		List<T> list = getList(context, where, whereParameters);
 		if (list!=null && list.size()>0) {

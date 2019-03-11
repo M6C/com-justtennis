@@ -45,7 +45,7 @@ public class DBRankingDataSource extends GenericDBDataSource<Ranking> {
 	 * @return Ranking
 	 */
 	public Ranking getNC() {
-		List<Ranking> list = query(DBRankingHelper.COLUMN_RANKING + " = ?", new String[]{DBRankingHelper.RANKING_NC});
+		List<Ranking> list = query(String.format("%s = ?", DBRankingHelper.COLUMN_RANKING), new String[]{DBRankingHelper.RANKING_NC});
 		return (list!=null && list.size()>0 ? list.get(0) : null);
 	}
 
@@ -55,7 +55,7 @@ public class DBRankingDataSource extends GenericDBDataSource<Ranking> {
 	 */
 	public List<Ranking> getWithPostionEqualUpper(int position) {
 //		return query(DBRankingHelper.COLUMN_POSITION + " >= ?", new String[]{DBRankingHelper.RANKING_NC});
-		return query(DBRankingHelper.COLUMN_POSITION + " >= ?", new String[]{Integer.toString(position)});
+		return query(String.format("%s >= ?", DBRankingHelper.COLUMN_POSITION), new String[]{Integer.toString(position)});
 	}
 
 	/**
@@ -64,7 +64,7 @@ public class DBRankingDataSource extends GenericDBDataSource<Ranking> {
 	 */
 	public List<Ranking> getWithPostionEqualLess(int position) {
 //		return query(DBRankingHelper.COLUMN_POSITION + " >= ?", new String[]{DBRankingHelper.RANKING_NC});
-		return query(DBRankingHelper.COLUMN_POSITION + " <= ?", new String[]{Integer.toString(position)});
+		return query(String.format("%s <= ?", DBRankingHelper.COLUMN_POSITION), new String[]{Integer.toString(position)});
 	}
 
 	@Override
