@@ -4,6 +4,7 @@ import android.content.ContentProvider;
 import android.content.ContentUris;
 import android.content.ContentValues;
 import android.database.Cursor;
+import android.database.sqlite.SQLiteQueryBuilder;
 import android.net.Uri;
 import android.support.annotation.NonNull;
 
@@ -39,7 +40,9 @@ public class ClubProvider extends ContentProvider {
 
     @Override
     public Cursor query(@NonNull Uri uri, String[] projection, String selection, String[] selectionArgs, String sortOrder) {
-        return null;//return dbHelper.getReadableDatabase().query(DBClubHelper.TABLE_NAME, projection, selection, selectionArgs, null, null, sortOrder);
+        SQLiteQueryBuilder builder = new SQLiteQueryBuilder();
+        builder.setStrict(true);
+        return builder.query(dbHelper.getReadableDatabase(), projection, selection, selectionArgs, null, null, sortOrder);
     }
 
     @Override
