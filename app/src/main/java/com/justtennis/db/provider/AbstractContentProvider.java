@@ -24,22 +24,15 @@ public abstract class AbstractContentProvider<P extends GenericDBPojo<Long>> ext
     protected abstract GenericDBDataSource<P> getDbDataSource();
     private Map<String, String> map;
 
-    public AbstractContentProvider() {
-        String[] columns = getDbDataSource().getAllColumns();
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            this.map = Arrays.stream(columns).collect(Collectors.toMap(col -> col, col -> col));
-        } else {
-            this.map = new ArrayMap<>();
-            for (String c : columns) {
-                this.map.put(c, c);
-            }
-        }
+    @Override
+    public boolean onCreate() {
+        return false;
     }
 
     @Override
     public Cursor query(@NonNull Uri uri, String[] projection, String selection, String[] selectionArgs, String sortOrder) {
         SQLiteQueryBuilder builder = new SQLiteQueryBuilder();
-        builder.setProjectionMap(map);
+        builder.setProjectionMap(getProjectionMap());
         builder.setStrict(true);
         return builder.query(getDbHelper().getReadableDatabase(), projection, selection, selectionArgs, null, null, sortOrder);
     }
@@ -58,5 +51,20 @@ public abstract class AbstractContentProvider<P extends GenericDBPojo<Long>> ext
     @Override
     public int update(@NonNull Uri uri, ContentValues values, String selection, String[] selectionArgs) {
         throw new UnsupportedOperationException("Not yet implemented");
+    }
+
+    private Map<String, String> getProjectionMap() {
+        if (map == null) {
+            String[] columns = getDbDataSource().getAllColumns();
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                this.map = Arrays.stream(columns).collect(Collectors.toMap(col -> col, col -> col));
+            } else {
+                this.map = new ArrayMap<>();
+                for (String c : columns) {
+                    this.map.put(c, c);
+                }
+            }
+        }
+        return map;
     }
 }
