@@ -1,11 +1,11 @@
 package com.justtennis.db.provider;
 
 import android.content.ContentValues;
-import android.database.sqlite.SQLiteOpenHelper;
 import android.net.Uri;
 import android.support.annotation.NonNull;
 
 import com.cameleon.common.android.db.sqlite.datasource.GenericDBDataSource;
+import com.cameleon.common.android.db.sqlite.helper.GenericDBHelper;
 import com.justtennis.BuildConfig;
 import com.justtennis.db.DBDictionary;
 import com.justtennis.db.sqlite.datasource.DBSaisonDataSource;
@@ -39,7 +39,7 @@ public class SaisonProvider extends AbstractContentProvider {
     }
 
     @Override
-    protected SQLiteOpenHelper getDbHelper() {
+    protected GenericDBHelper getDbHelper() {
         return dbHelper;
     }
 
