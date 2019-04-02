@@ -31,7 +31,7 @@ public class DBSaisonDataSource extends GenericDBDataSource<Saison> {
 	}
 
 	@Override
-	protected String[] getAllColumns() {
+	public String[] getAllColumns() {
 		return allColumns;
 	}
 

@@ -37,7 +37,7 @@ public class DBClubDataSource extends GenericDBDataSource<Club> {
 	}
 
 	@Override
-	protected String[] getAllColumns() {
+	public String[] getAllColumns() {
 		return allColumns;
 	}
 

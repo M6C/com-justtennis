@@ -1,26 +1,25 @@
 package com.justtennis.db.provider;
 
-import android.content.ContentProvider;
-import android.content.ContentUris;
-import android.content.ContentValues;
-import android.database.Cursor;
+import android.database.sqlite.SQLiteOpenHelper;
 import android.net.Uri;
 import android.support.annotation.NonNull;
 
+import com.cameleon.common.android.db.sqlite.datasource.GenericDBDataSource;
 import com.justtennis.BuildConfig;
 import com.justtennis.db.DBDictionary;
-import com.justtennis.db.sqlite.helper.DBRankingHelper;
+import com.justtennis.db.sqlite.datasource.DBRankingDataSource;
 import com.justtennis.db.sqlite.helper.GenericJustTennisDBHelper;
 import com.justtennis.domain.Ranking;
 import com.justtennis.notifier.NotifierMessageLogger;
 
-public class RankingProvider extends ContentProvider {
+public class RankingProvider extends AbstractContentProvider {
 
     public static final String CONTENT_AUTHORITY = BuildConfig.APPLICATION_ID + ".provider.ranking";
     public static final String CONTENT_PROVIDER_MIME = "vnd.android.cursor.item/" + CONTENT_AUTHORITY;
     public static final Uri CONTENT_URI = Uri.parse("content://" + CONTENT_AUTHORITY);
 
     private GenericJustTennisDBHelper dbHelper;
+    private GenericDBDataSource dbDataSource;
 
     public RankingProvider() {
         // Nothing to do
@@ -34,27 +33,17 @@ public class RankingProvider extends ContentProvider {
     @Override
     public boolean onCreate() {
         dbHelper = DBDictionary.getInstance(getContext(), NotifierMessageLogger.getInstance()).getDBHelperByClassType(Ranking.class);
+        dbDataSource = new DBRankingDataSource(getContext(), NotifierMessageLogger.getInstance());
         return true;
     }
 
     @Override
-    public Cursor query(@NonNull Uri uri, String[] projection, String selection, String[] selectionArgs, String sortOrder) {
-        return null;//return dbHelper.getReadableDatabase().query(DBRankingHelper.TABLE_NAME, projection, selection, selectionArgs, null, null, sortOrder);
+    protected SQLiteOpenHelper getDbHelper() {
+        return dbHelper;
     }
 
     @Override
-    public Uri insert(@NonNull Uri uri, ContentValues values) {
-        //long id = dbHelper.getWritableDatabase().insert(DBRankingHelper.TABLE_NAME, null, values);
-        return null;//return ContentUris.withAppendedId(uri, id);
-    }
-
-    @Override
-    public int delete(@NonNull Uri uri, String selection, String[] selectionArgs) {
-        throw new UnsupportedOperationException("Not yet implemented");
-    }
-
-    @Override
-    public int update(@NonNull Uri uri, ContentValues values, String selection, String[] selectionArgs) {
-        throw new UnsupportedOperationException("Not yet implemented");
+    protected GenericDBDataSource getDbDataSource() {
+        return dbDataSource;
     }
 }

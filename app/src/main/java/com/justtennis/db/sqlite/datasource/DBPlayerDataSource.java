@@ -42,7 +42,7 @@ public class DBPlayerDataSource extends DBPersonDataSource<Player> {
 	}
 
 	@Override
-	protected String[] getAllColumns() {
+	public String[] getAllColumns() {
 		return allColumns;
 	}
 

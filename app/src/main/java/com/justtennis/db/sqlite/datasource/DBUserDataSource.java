@@ -56,7 +56,7 @@ public class DBUserDataSource extends DBPersonDataSource<User> {
 	}
 
 	@Override
-	protected String[] getAllColumns() {
+	public String[] getAllColumns() {
 		return allColumns;
 	}
 

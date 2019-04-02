@@ -28,7 +28,7 @@ public class DBMessageDataSource extends GenericDBDataSource<Message> {
 	}
 
 	@Override
-	protected String[] getAllColumns() {
+	public String[] getAllColumns() {
 		return allColumns;
 	}
 

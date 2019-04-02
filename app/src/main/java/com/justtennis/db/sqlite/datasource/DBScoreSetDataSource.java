@@ -50,7 +50,7 @@ public class DBScoreSetDataSource extends GenericDBDataSource<ScoreSet> {
 	}
 
 	@Override
-	protected String[] getAllColumns() {
+	public String[] getAllColumns() {
 		return allColumns;
 	}
 

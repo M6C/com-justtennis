@@ -35,7 +35,7 @@ public class DBBonusDataSource extends GenericDBDataSource<Bonus> {
 	}
 
 	@Override
-	protected String[] getAllColumns() {
+	public String[] getAllColumns() {
 		return allColumns;
 	}
 

@@ -44,7 +44,7 @@ public class DBAddressDataSource extends GenericDBDataSource<Address> {
 	}
 
 	@Override
-	protected String[] getAllColumns() {
+	public String[] getAllColumns() {
 		return allColumns;
 	}
 

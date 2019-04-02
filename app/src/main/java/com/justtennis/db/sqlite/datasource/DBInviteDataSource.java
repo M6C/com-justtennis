@@ -167,7 +167,7 @@ public class DBInviteDataSource extends GenericDBDataSourceByType<Invite> {
 	}
 
 	@Override
-	protected String[] getAllColumns() {
+	public String[] getAllColumns() {
 		return allColumns;
 	}
 

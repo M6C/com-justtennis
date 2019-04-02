@@ -16,8 +16,8 @@ android {
         applicationId "justtennis.com.justtennis"
         minSdkVersion 19
         targetSdkVersion 27
-        versionCode 11
-        versionName "2.2.6.11"
+        versionCode 12
+        versionName "2.2.7.12"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         multiDexEnabled true
     }

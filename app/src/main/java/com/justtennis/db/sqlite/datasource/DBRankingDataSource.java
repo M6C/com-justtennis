@@ -68,7 +68,7 @@ public class DBRankingDataSource extends GenericDBDataSource<Ranking> {
 	}
 
 	@Override
-	protected String[] getAllColumns() {
+	public String[] getAllColumns() {
 		return allColumns;
 	}
 

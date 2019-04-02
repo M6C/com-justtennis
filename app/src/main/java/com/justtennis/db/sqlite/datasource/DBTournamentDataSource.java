@@ -39,7 +39,7 @@ public class DBTournamentDataSource extends GenericDBDataSource<Tournament> {
 	}
 
 	@Override
-	protected String[] getAllColumns() {
+	public String[] getAllColumns() {
 		return allColumns;
 	}
 

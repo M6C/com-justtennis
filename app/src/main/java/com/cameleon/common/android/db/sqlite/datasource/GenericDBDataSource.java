@@ -27,7 +27,7 @@ public abstract class GenericDBDataSource<POJO extends GenericDBPojo<Long>> {
 		this.dbHelper = dbHelper;
 	}
 
-	protected abstract String[] getAllColumns();
+	public abstract String[] getAllColumns();
 	protected abstract void putContentValue(ContentValues contentValue, POJO pojo);
 	protected abstract POJO cursorToPojo(Cursor cursor);
 	protected abstract String getTag();
