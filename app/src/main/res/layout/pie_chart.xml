@@ -30,8 +30,7 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="0dip"
-        android:layout_weight="1"
+        android:layout_height="400dp"
         android:background="@color/form_background_color"
         android:orientation="horizontal" >
 

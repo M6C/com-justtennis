@@ -66,7 +66,7 @@ public class ListInviteAdapter extends ArrayAdapter<Invite> {
 		View rowView = convertView;
 		if (rowView == null) {
 			LayoutInflater inflater = activity.getLayoutInflater();
-			rowView = inflater.inflate(R.layout.list_invite_row, parent);
+			rowView = inflater.inflate(R.layout.list_invite_row, parent, false);
 		}
 		rowView.setTag(invite);
 

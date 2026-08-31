@@ -42,7 +42,7 @@ public class ComputeRankingActivity extends GenericActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
-		setContentView(R.layout.compute_ranking_list_invite);
+		setContentView(R.layout.compute_ranking_list_invite_legacy);
 
 		NotifierMessageLogger notifier = NotifierMessageLogger.getInstance();
 		business = new ComputeRankingBusiness(this, notifier);

@@ -23,7 +23,9 @@ public abstract class AbsctractFragmentActivity extends AppCompatActivity {
 		typeManager.initializeActivity(findViewById(R.id.layout_main), false);
 
 		Fragment fragment = createFragment();
-		FragmentTool.replaceFragment(this, fragment, R.id.main_container);
+		if (fragment != null) {
+			FragmentTool.replaceFragment(this, fragment, R.id.main_container);
+		}
 	}
 
 	protected abstract Fragment createFragment();
