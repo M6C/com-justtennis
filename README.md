@@ -5,6 +5,19 @@ Ce projet est fige sur une stack ancienne (AGP 3.2.1 / Gradle 4.6, compileSdk 27
 qui ne fonctionne plus telle quelle sur un poste de dev moderne sans quelques
 ajustements. Voir aussi CLAUDE.md pour le contexte fonctionnel complet.
 
+Documentation (reecriture) - `docs/legacy/`
+--------------------------------------------
+- `docs/legacy/prompts/` - les 3 prompts de reecriture a copier/coller dans une
+  nouvelle session Claude Code : `PROMPT_FONCTIONNEL.md` (cahier des charges
+  fonctionnel/UX), `PROMPT_TECHNIQUE.md` (conception technique/implementation)
+  et `PROMPT_DESIGN.md` (design visuel), a executer dans cet ordre.
+- `docs/legacy/screenshots/` - galerie de captures d'ecran de l'app legacy
+  (`gallery.html`, a ouvrir directement dans un navigateur), avec un
+  selecteur Entrainement/Competition qui bascule entre les sous-dossiers
+  `training/` et `match/` (memes noms de fichiers dans les deux, pour
+  comparer visuellement les 2 themes). `PROMPT_FONCTIONNEL.md` renvoie vers
+  ces captures pour illustrer chaque Epic du backlog.
+
 Pourquoi Gradle 4.6 ne compile plus "out of the box"
 -----------------------------------------------------
 - Gradle 4.6 ne supporte que Java 8. Sur une machine avec Java 11/17 par

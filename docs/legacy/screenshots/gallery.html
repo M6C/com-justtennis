@@ -1,0 +1,513 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<title>JustTennis - Galerie des ecrans</title>
+<style>
+  body { font-family: system-ui, sans-serif; background:#f4f4f4; margin:0; padding:24px; color:#222; }
+  h1 { margin-top:0; }
+  .note { background:#fff3cd; border:1px solid #e0c46c; padding:12px 16px; border-radius:6px; margin-bottom:24px; }
+  .flow { background:#fff; border:1px solid #ddd; border-radius:6px; padding:16px 20px; margin-bottom:32px; }
+  .flow code { background:#eee; padding:1px 5px; border-radius:3px; }
+  .grid { display:grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap:24px; }
+  .card { background:#fff; border:1px solid #ddd; border-radius:8px; overflow:hidden; }
+  .card.missing { background:#fdecea; border-color:#e0a5a0; }
+  .card img { width:100%; display:block; border-bottom:1px solid #ddd; }
+  .card .body { padding:12px 14px; }
+  .card h3 { margin:0 0 6px 0; font-size:15px; }
+  .card p { margin:0 0 6px 0; font-size:13px; line-height:1.4; color:#444; }
+  .card .path { font-size:12px; color:#888; }
+  .badge { display:inline-block; font-size:11px; padding:1px 6px; border-radius:10px; background:#eee; margin-left:6px; }
+  .badge.legacy { background:#dbe7ff; }
+  .badge.modern { background:#d9f2d9; }
+  .epic { display:block; margin-top:8px; font-size:12px; }
+  .epic .badge.epic-tag { background:#fce4ec; color:#9c2760; font-weight:600; }
+
+  .mode-toggle { position: sticky; top: 0; z-index: 10; background:#fff; border:1px solid #ddd;
+    border-radius:8px; padding:10px 14px; margin-bottom:20px; display:flex; align-items:center;
+    gap:10px; box-shadow:0 1px 4px rgba(0,0,0,0.08); }
+  .mode-toggle b { font-size:13px; }
+  .mode-toggle button { font-size:13px; padding:6px 14px; border-radius:20px; border:1px solid #ccc;
+    background:#f4f4f4; cursor:pointer; }
+  .mode-toggle button.active.training { background:#1a56cc; color:#fff; border-color:#1a56cc; }
+  .mode-toggle button.active.match { background:#e6007e; color:#fff; border-color:#e6007e; }
+  .mode-badge { display:inline-block; font-size:10px; padding:1px 6px; border-radius:8px;
+    background:#eee; color:#666; margin-left:6px; }
+</style>
+</head>
+<body>
+<h1>JustTennis - Galerie des 20 ecrans (Activity)</h1>
+
+<div class="note" style="background:#e7f0ff; border-color:#a8c6ee;">
+  <b>Correspondance avec le backlog</b> : chaque ecran est annote avec le ou les Epics de
+  <a href="../prompts/PROMPT_FONCTIONNEL.md"><code>PROMPT_FONCTIONNEL.md</code></a> (§3, Epics A a K)
+  qu'il couvre fonctionnellement, pour faciliter le lien entre l'existant legacy et les user
+  stories deja definies pour la reecriture.
+</div>
+
+<div class="note">
+  <b>Contexte de capture</b> : capture via un test instrumente
+  (<code>ScreenshotAllActivitiesTest</code>) qui lance chaque Activity directement, sans passer
+  par la navigation normale, avec un jeu de donnees de demonstration seede via
+  <code>DBFeedTool</code> (profil + 9 partenaires + invitations) pour le mode Entrainement, et
+  reconstitue manuellement (memes methodes de generation) pour le mode Competition - voir la note
+  rose ci-dessous sur les 2 bugs de seed decouverts a cette occasion. Les toutes premieres captures
+  (avant seed) montraient <code>MainActivity</code>/<code>UserActivity</code>/<code>PlayerActivity</code>
+  affichant la meme fiche de saisie vide (onboarding "creer mon profil") faute de <code>User</code>
+  en base - comportement normal au tout premier lancement (cf. CLAUDE.md §3), plus representatif
+  de l'usage courant sur les captures actuelles.
+  3 ecrans n'ont pas pu etre captures (crash au lancement direct, sans les extras qu'ils attendent
+  normalement d'un ecran precedent) - details en bas de page.
+</div>
+
+<div class="flow">
+<h2>Cheminement normal des ecrans</h2>
+<p><b>Entree app (moderne)</b> : <code>ItemDetailActivity</code> (LAUNCHER) -&gt; onboarding si 1er
+lancement (creation <code>User</code>) -&gt; BottomNavigation <b>Joueurs / Invitations / Statistiques</b>
++ drawer (saison / type Entrainement-Competition).</p>
+<p><b>Entree app (legacy)</b> : menu "Ancienne IHM" depuis ItemDetailActivity -&gt; <code>MainActivity</code>
+(menu complet : scan QR, fiche user, listes, palmares rapide, stats, messages, import contacts,
+backup/restore DB).</p>
+<ul>
+<li><code>MainActivity</code> -&gt; <code>UserActivity</code> (fiche du joueur = utilisateur courant)</li>
+<li><code>MainActivity</code> -&gt; <code>ListPlayerActivity</code> -&gt; <code>PlayerActivity</code>
+    (creation/edition d'un adversaire, import via QR ou <code>ListPersonActivity</code> = contacts Android)</li>
+<li><code>MainActivity</code> -&gt; <code>ListInviteActivity</code> -&gt; <code>InviteActivity</code>
+    (detail d'un match/entrainement) -&gt; <code>ScoreActivity</code> (saisie du score, retourne le
+    resultat a InviteActivity)</li>
+<li><code>MainActivity</code>/<code>ListInviteActivity</code> -&gt; <code>ListCompetitionActivity</code>
+    (competitions groupees par tournoi) -&gt; <code>ComputeRankingActivity</code> (calcul du classement)</li>
+<li><code>MainActivity</code> -&gt; <code>PalmaresFastActivity</code> (simulateur de classement,
+    saisie manuelle victoires/defaites, independant des vraies donnees)</li>
+<li><code>MainActivity</code> -&gt; <code>MessageActivity</code> (edition du modele de SMS commun)</li>
+<li><code>PlayerActivity</code>/<code>UserActivity</code> -&gt; <code>QRCodeActivity</code> (QR code
+    de la fiche courante, pour echange P2P avec un autre telephone)</li>
+<li><code>PlayerActivity</code>/<code>InviteActivity</code> -&gt; <code>LocationTournamentActivity</code>
+    -&gt; <code>LocationClubActivity</code> (sous-formulaire) -&gt; <code>LocationAddressActivity</code>
+    (sous-sous-formulaire) - cascade Tournoi -&gt; Club -&gt; Adresse</li>
+<li><code>MainActivity</code> -&gt; <code>PieChartActivity</code> (camembert des invites par classement)</li>
+<li><code>MatchActivity</code> : ecran quasi vestige (drawer saison seul, pas de donnees affichees)</li>
+<li><code>RotatingButtons</code> : demo technique isolee (SeekBars pilotant un bouton), sans lien
+    avec le reste de l'app</li>
+</ul>
+</div>
+
+
+<div class="mode-toggle">
+  <b>Mode :</b>
+  <button id="btn-mode-training" class="active training" onclick="setGalleryMode('training')">Entrainement</button>
+  <button id="btn-mode-match" class="match" onclick="setGalleryMode('match')">Competition</button>
+  <span style="font-size:12px;color:#888;">bascule les captures qui different reellement entre les 2 modes (donnees et/ou theme) ; les autres restent inchangees.</span>
+</div>
+
+<div class="note" style="background:#fff0f6; border-color:#f3b6d3;">
+  <b>2 bugs de seed trouves en preparant la repasse "mode Competition"</b> :
+  <ol style="margin:6px 0 0 18px; padding:0;">
+    <li><code>DBFeedTool.feedPlayer()</code>/<code>feedInvite()</code> utilisent une garde
+    <code>if (xxxService.getCount() &lt;= 0)</code> qui est un compteur GLOBAL (filtre implicitement
+    par le TYPE courant de <code>TypeManager</code>), jamais bascule entre les 2 passes
+    <code>TRAINING</code>/<code>COMPETITION</code> de la boucle de seed - resultat, seul le premier
+    type traite cree reellement des donnees ; le second voit "count &gt; 0" et ne cree jamais rien.
+    La base ne contenait donc aucun joueur/invite Competition avant qu'on ne le reconstitue
+    manuellement pour cette galerie (memes joueurs "PlayerC 0-9" generes avec la meme methode que
+    le seed d'origine).</li>
+    <li><code>DBInviteDataSource.customizeWhereSaison()</code> filtre par
+    <code>ID_SAISON = &lt;saison courante&gt;</code> en correspondance EXACTE (contrairement au
+    filtre Player/Person qui accepte <code>OR ID_SAISON IS NULL</code>) - une invite creee sans
+    saison explicite est donc invisible dans toutes les listes, silencieusement.</li>
+  </ol>
+</div>
+
+<div class="grid">
+
+  <div class="card">
+    <img data-training="training/ItemDetailActivity_Tab_Invite.jpg" data-match="match/ItemDetailActivity_Tab_Invite.jpg" src="training/ItemDetailActivity_Tab_Invite.jpg">
+    <div class="body">
+      <h3>ItemDetailActivity - onglet Invitations <span class="badge modern">moderne</span></h3>
+      <p>Apres seed de donnees de demonstration via DBFeedTool.doFeed() (profil + 9 partenaires +
+      invitations). Drawer ferme programmatiquement (ouvert par defaut au 1er affichage sinon).</p>
+      <span class="epic"><span class="badge epic-tag">UX §4</span> - "3 grands poles : Joueurs /
+      Invitations / Classement &amp; Statistiques"</span>
+    </div>
+  </div>
+
+  <div class="card">
+    <img data-training="training/ItemDetailActivity_Tab_Player.jpg" data-match="match/ItemDetailActivity_Tab_Player.jpg" src="training/ItemDetailActivity_Tab_Player.jpg">
+    <div class="body">
+      <h3>ItemDetailActivity - onglet Joueurs <span class="badge modern">moderne</span></h3>
+      <p>Liste des 9 partenaires generes (nom, classement, club). Fonctionne correctement (a
+      l'inverse de ListPlayerActivity legacy, qui plante).</p>
+      <span class="epic"><span class="badge epic-tag">UX §4</span> + <span class="badge epic-tag">Epic B</span></span>
+    </div>
+  </div>
+
+  <div class="card">
+    <img data-training="training/ItemDetailActivity_Tab_Statistic_Rich.jpg" data-match="match/ItemDetailActivity_Tab_Statistic_Rich.jpg" src="training/ItemDetailActivity_Tab_Statistic_Rich.jpg">
+    <div class="body">
+      <h3>Onglet Statistiques (variete)</h3>
+      <p>5 classements differents (30/4, 30/3, 30/1, 30, 15/5). Obtenue en corrigeant une lacune
+      du seed (idRanking jamais renseigne sur les invites avec adversaire connu - backfill fait
+      manuellement, comme le ferait InviteActivity normalement).</p>
+      <p><b>Anomalie visuelle</b> : chaque tranche semble dessinee 2x en miroir a 180deg (invisible
+      avec 1 seule categorie a 100%) - reproduite a l'identique sur PieChartActivity (legacy) via
+      exactement la meme boucle que le vrai listener onItemSelected en production, donc
+      probablement un vrai bug achartengine (lib de 2013, deja a remplacer) plutot qu'un artefact
+      de capture - a confirmer par un test manuel avant de le traiter comme definitivement avere.</p>
+    </div>
+  </div>
+
+  <div class="card">
+    <img data-training="training/ItemDetailActivity_Drawer_Open.jpg" data-match="match/ItemDetailActivity_Drawer_Open.jpg" src="training/ItemDetailActivity_Drawer_Open.jpg">
+    <div class="body">
+      <h3>Drawer moderne ouvert</h3>
+      <p>Capturees en conditions reelles sur le device (pas via test instrumente). Mode Training :
+      drawer ouvert, selecteur de saison ("2025/2026") en en-tete, menu (Utilisateur/SMS
+      Message/Clubs/My Palmares/Fast Palmares), boutons TRAINING/MATCH en pied de page - superpose
+      a l'onglet Invitations.</p>
+      <p><b>Mode Competition</b> : apres bascule manuelle sur "MATCH", theme rose/magenta (palette
+      differente de la version legacy orange), nouvelle photo d'en-tete. Etat vide non traduit
+      visible ("... this time.", probablement une chaine anglaise du type "No invitation to show
+      at this time" cote liste Invitations - a verifier).</p>
+      <span class="epic"><span class="badge epic-tag">Epic I</span> + <span class="badge epic-tag" style="background:#fce4ec;color:#ad1457;">UX §4</span></span>
+    </div>
+  </div>
+
+  <div class="card">
+    <img src="training/ItemDetailActivity.jpg">
+    <div class="body">
+      <h3>ItemDetailActivity <span class="badge modern">moderne / LAUNCHER</span></h3>
+      <p>Ecran d'accueil reel de l'app. Ici : onboarding "JustTennis - Setup / My Informations"
+      (creation du User au 1er lancement) car base vide.</p>
+      <span class="epic"><span class="badge epic-tag">Epic A</span> - "je cree mon profil ...
+      lors du premier lancement de l'app (onboarding obligatoire)"</span>
+    </div>
+  </div>
+
+  <div class="card">
+    <img data-training="training/MainActivity.jpg" data-match="match/MainActivity.jpg" src="training/MainActivity.jpg">
+    <div class="body">
+      <h3>MainActivity <span class="badge legacy">legacy</span></h3>
+      <p>Accueil legacy (menu complet). Ici : redirige vers la meme fiche de creation (voir note
+      en haut) au lieu du menu, base vide.</p>
+      <p><b>Mode Competition</b> : meme ecran avec TypeManager.TYPE=COMPETITION (theme orange au
+      lieu du bleu par defaut Entrainement) - bascule accessible depuis le drawer, cf. §4 du
+      cahier des charges ("identite visuelle contextuelle").</p>
+      <span class="epic"><span class="badge epic-tag">Epic A</span> (redirection onboarding) +
+      point d'entree vers la plupart des autres Epics (menu) + <span class="badge epic-tag" style="background:#ffe0b2;color:#8a4b00;">UX §4</span></span>
+    </div>
+  </div>
+
+  <div class="card">
+    <img data-training="training/UserActivity.jpg" data-match="match/UserActivity.jpg" src="training/UserActivity.jpg">
+    <div class="body">
+      <h3>UserActivity <span class="badge legacy">legacy</span></h3>
+      <p>Fiche de l'utilisateur courant (= PlayerActivity + UserFragment). Identique visuellement
+      a MainActivity/PlayerActivity ici (base vide).</p>
+      <span class="epic"><span class="badge epic-tag">Epic A</span> - "je renseigne mon classement
+      actuel", "je peux modifier mon profil a tout moment"</span>
+    </div>
+  </div>
+
+  <div class="card">
+    <img data-training="training/PlayerActivity.jpg" data-match="match/PlayerActivity.jpg" src="training/PlayerActivity.jpg">
+    <div class="body">
+      <h3>PlayerActivity <span class="badge legacy">legacy</span></h3>
+      <p>Mode CREATE (par defaut). Meme layout que UserActivity (formulaire partage).</p>
+      <span class="epic"><span class="badge epic-tag">Epic B</span> - "je cree une fiche joueur
+      pour chaque partenaire potentiel : identite, telephone, classement, club/localisation"</span>
+    </div>
+  </div>
+
+  <div class="card">
+    <img data-training="training/PlayerActivity_Modify.jpg" data-match="match/PlayerActivity_Modify.jpg" src="training/PlayerActivity_Modify.jpg">
+    <div class="body">
+      <h3>PlayerActivity (modifier) <span class="badge legacy">legacy</span></h3>
+      <p>Mode MODIFY : bouton "QRCODE" affiche a la place de "Create"/"Import". 3e mode
+      DEMANDE_ADD (confirmation Oui/Non) non capturable : code mort, uniquement declenche par
+      SmsReceiver (recepteur SMS desactive en production).</p>
+      <span class="epic"><span class="badge epic-tag">Epic B</span> - "je peux modifier mon
+      profil a tout moment"</span>
+    </div>
+  </div>
+
+  <div class="card">
+    <img data-training="training/ListPlayerActivity.jpg" data-match="match/ListPlayerActivity.jpg" src="training/ListPlayerActivity.jpg">
+    <div class="body">
+      <h3>ListPlayerActivity <span class="badge legacy">legacy</span> - BUG CORRIGE avec des donnees</h3>
+      <p><b>Bug 1 corrige</b> : plantait systematiquement (<code>IllegalArgumentException: No view
+      found for id ... main_container</code>) - le fragment liste (jamais utilise) etait attache
+      au container de <code>AbsctractFragmentActivity</code> puis ce layout etait immediatement
+      remplace par <code>drawerManager.setContentView(R.layout.list_player)</code>. Fix :
+      <code>createFragment()</code> retourne <code>null</code>, <code>AbsctractFragmentActivity</code>
+      ignore desormais un fragment nul.</p>
+      <p><b>Bug 2 corrige</b> : meme apres le fix ci-dessus, la liste restait vide malgre 9 joueurs
+      en base - <code>onCreate()</code> ne cablait en realite jamais le <code>ListView</code> a un
+      adapter (ni <code>business.initialize()</code>/<code>refreshData()</code> jamais appeles). Un
+      adapter pret a l'emploi (<code>ListPlayerAdapter</code>) existait deja mais n'etait utilise
+      que par <code>ListPlayerFragment2</code> (code mort). Fix : cablage complet. Les 9 joueurs du
+      seed s'affichent desormais correctement.</p>
+      <p><b>Mode Competition</b> : joueurs "PlayerC 0-9" (voir la note sur les 2 bugs de seed en
+      haut de page - <code>DBFeedTool</code> ne seedait jamais reellement le type Competition).</p>
+      <span class="epic"><span class="badge epic-tag">Epic B</span> - "je peux lister, rechercher
+      ... et supprimer un partenaire" (suppression bloquee si match existant)</span>
+    </div>
+  </div>
+
+  <div class="card">
+    <img src="training/ListPersonActivity.jpg">
+    <div class="body">
+      <h3>ListPersonActivity <span class="badge legacy">legacy</span></h3>
+      <p>Liste des contacts Android (import pour creer un Player). Ici : liste vide/permission
+      READ_CONTACTS accordee mais pas de contact affiche capture.</p>
+      <span class="epic"><span class="badge epic-tag">Epic B</span> - "je peux importer une fiche
+      directement depuis mes contacts telephone"</span>
+    </div>
+  </div>
+
+  <div class="card">
+    <img data-training="training/ListInviteActivity.jpg" data-match="match/ListInviteActivity.jpg" src="training/ListInviteActivity.jpg">
+    <div class="body">
+      <h3>ListInviteActivity <span class="badge legacy">legacy</span></h3>
+      <p>Liste des invites (matchs/entrainements), triee par date desc. Peuplee (donnees de seed).
+      Bug corrige au passage : <code>ListInviteAdapter.getView()</code> utilisait
+      <code>inflater.inflate(layout, parent)</code> (2 arguments = attachToRoot true) au lieu de
+      <code>inflate(layout, parent, false)</code>, provoquant un crash
+      <code>AdapterView.addView() not supported</code> des qu'au moins un item existait (invisible
+      avant, liste vide au 1er passage).</p>
+      <p><b>Mode Competition</b> : invites reconstituees contre les joueurs "PlayerC 0-9" (theme
+      orange). A egalement fallu explicitement rattacher ces invites a la saison active
+      (<code>invite.setSaison(...)</code>) - <code>DBInviteDataSource.customizeWhereSaison()</code>
+      filtre en correspondance exacte (pas de fallback <code>OR ID_SAISON IS NULL</code>
+      contrairement au filtre Player), une invite sans saison est donc invisible ici.</p>
+      <span class="epic"><span class="badge epic-tag">Epic C</span> - "je consulte la liste de
+      toutes mes invitations ... avec filtres : par partenaire, par type, par saison"</span>
+    </div>
+  </div>
+
+  <div class="card">
+    <img data-training="training/ListCompetitionActivity.jpg" data-match="match/ListCompetitionActivity.jpg" src="training/ListCompetitionActivity.jpg">
+    <div class="body">
+      <h3>ListCompetitionActivity <span class="badge legacy">legacy</span></h3>
+      <p>Competitions groupees par Tournoi (ExpandableListView), lien vers Calcul Classement.
+      Peuplee (donnees de seed, plusieurs tournois avec matchs).</p>
+      <span class="epic"><span class="badge epic-tag">Epic C</span> - "les competitions peuvent en
+      plus etre regroupees et consultees par tournoi dans une vue dediee"</span>
+    </div>
+  </div>
+
+  <div class="card">
+    <img data-training="training/ComputeRankingActivity.jpg" data-match="match/ComputeRankingActivity.jpg" src="training/ComputeRankingActivity.jpg">
+    <div class="body">
+      <h3>ComputeRankingActivity <span class="badge legacy">legacy</span> - BUG CORRIGE</h3>
+      <p><b>Bug corrige</b> : plantait systematiquement (<code>ClassCastException: RecyclerView
+      cannot be cast to ListView</code>) - le layout partage <code>compute_ranking_list_invite.xml</code>
+      avait ete migre vers RecyclerView pour l'ecran moderne <code>ComputeRankingFragment</code>
+      (atteignable via le drawer moderne, "My Palmares"), cassant l'ecran legacy qui attend un
+      <code>ListView</code>/<code>ArrayAdapter</code>. Fix : layout dedie
+      <code>compute_ranking_list_invite_legacy.xml</code> pour l'ecran legacy uniquement. Capture
+      apres fix : 170/210 points, 3/7 victoires, detail par match.</p>
+      <span class="epic"><span class="badge epic-tag">Epic G</span> - "un ecran dedie me permet de
+      simuler mon classement a partir de mon historique reel"</span>
+    </div>
+  </div>
+
+  <div class="card">
+    <img data-training="training/PalmaresFastActivity.jpg" data-match="match/PalmaresFastActivity.jpg" src="training/PalmaresFastActivity.jpg">
+    <div class="body">
+      <h3>PalmaresFastActivity <span class="badge legacy">legacy</span></h3>
+      <p>Simulateur "palmarès rapide" : saisie manuelle de victoires/defaites par classement,
+      independant des vraies donnees. Ecran vierge (aucune saisie).</p>
+      <span class="epic"><span class="badge epic-tag">Epic G</span> - "un mode 'palmares rapide' me
+      permet de saisir directement un nombre hypothetique de victoires/defaites par niveau"</span>
+    </div>
+  </div>
+
+  <div class="card">
+    <img data-training="training/PalmaresFastActivity_WithData.jpg" data-match="match/PalmaresFastActivity_WithData.jpg" src="training/PalmaresFastActivity_WithData.jpg">
+    <div class="body">
+      <h3>PalmaresFastActivity (simulation) <span class="badge legacy">legacy</span></h3>
+      <p>Resultat calcule apres saisie de victoires/defaites factices sur les 4 premiers
+      classements (via reflexion sur le champ prive "business", equivalent d'une saisie
+      utilisateur) : 720/210 points, 6/6 victoires, V-E-2I-5G:18.</p>
+      <span class="epic"><span class="badge epic-tag">Epic G</span></span>
+    </div>
+  </div>
+
+  <div class="card">
+    <img data-training="training/MessageActivity.jpg" data-match="match/MessageActivity.jpg" src="training/MessageActivity.jpg">
+    <div class="body">
+      <h3>MessageActivity <span class="badge legacy">legacy</span></h3>
+      <p>Edition du modele de message SMS commun (tags [FIRSTNAME], [DATE], etc.).</p>
+      <span class="epic"><span class="badge epic-tag">Epic H</span> - "un modele de message
+      personnalisable ... sert de base a l'envoi d'invitations et de demandes d'ajout"</span>
+    </div>
+  </div>
+
+  <div class="card">
+    <img data-training="training/QRCodeActivity.jpg" data-match="match/QRCodeActivity.jpg" src="training/QRCodeActivity.jpg">
+    <div class="body">
+      <h3>QRCodeActivity <span class="badge legacy">legacy</span></h3>
+      <p>QR code de la fiche joueur courante, pour echange P2P entre 2 telephones.</p>
+      <span class="epic"><span class="badge epic-tag">Epic B</span> - "je peux echanger une fiche
+      joueur avec un autre telephone via QR code"</span>
+    </div>
+  </div>
+
+  <div class="card">
+    <img data-training="training/InviteActivity_Create.jpg" data-match="match/InviteActivity_Create.jpg" src="training/InviteActivity_Create.jpg">
+    <div class="body">
+      <h3>InviteActivity (creation) <span class="badge legacy">legacy</span></h3>
+      <p>Creation d'une nouvelle invite, adversaire "Unknown Player" (aucun partenaire choisi),
+      date/heure par defaut, bouton "DETAIL". Necessitait de fournir un Bundle d'extras non vide
+      (sinon NPE sur <code>intent.getExtras()</code>) + l'ID sentinelle "Unknown Player" (-1,
+      sinon NPE sur <code>player.getIdRanking()</code> dans <code>initializeRankingList()</code>).</p>
+      <span class="epic"><span class="badge epic-tag">Epic C</span> +
+      <span class="badge epic-tag">Epic J</span> - "je cree une invitation ... statut d'acceptation"
+      + sync calendrier associee</span>
+    </div>
+  </div>
+
+  <div class="card">
+    <img data-training="training/ScoreActivity.jpg" data-match="match/ScoreActivity.jpg" src="training/ScoreActivity.jpg">
+    <div class="body">
+      <h3>ScoreActivity <span class="badge legacy">legacy</span></h3>
+      <p>Saisie pure du score (5 sets), retourne le resultat a InviteActivity.</p>
+      <span class="epic"><span class="badge epic-tag">Epic D</span> - "je saisis le score set par
+      set (jusqu'a 5 sets), avec possibilite d'indiquer un forfait"</span>
+    </div>
+  </div>
+
+  <div class="card">
+    <img src="training/LocationTournamentActivity.jpg">
+    <div class="body">
+      <h3>LocationTournamentActivity <span class="badge legacy">legacy</span></h3>
+      <p>Etat selecteur (spinner + bouton "+"), avant saisie.</p>
+      <span class="epic"><span class="badge epic-tag">Epic E</span> - "je gere un referentiel
+      d'adresses, de clubs ... et de tournois"</span>
+    </div>
+  </div>
+
+  <div class="card">
+    <img src="training/LocationTournamentActivity_Add.jpg">
+    <div class="body">
+      <h3>LocationTournamentActivity (saisie) <span class="badge legacy">legacy</span></h3>
+      <p>Formulaire de creation d'un Tournoi (nom, saison, club en cascade). Capture obtenue en
+      lancant l'ecran en mode ADD (equivalent du clic sur "+").</p>
+      <span class="epic"><span class="badge epic-tag">Epic E</span></span>
+    </div>
+  </div>
+
+  <div class="card">
+    <img src="training/LocationClubActivity.jpg">
+    <div class="body">
+      <h3>LocationClubActivity <span class="badge legacy">legacy</span></h3>
+      <p>Etat selecteur, avant saisie.</p>
+      <span class="epic"><span class="badge epic-tag">Epic E</span> - "je peux creer un club a la
+      volee depuis le formulaire de tournoi" (pattern cascade)</span>
+    </div>
+  </div>
+
+  <div class="card">
+    <img src="training/LocationClubActivity_Add.jpg">
+    <div class="body">
+      <h3>LocationClubActivity (saisie) <span class="badge legacy">legacy</span></h3>
+      <p>Formulaire de creation d'un Club (nom, adresse en cascade).</p>
+      <span class="epic"><span class="badge epic-tag">Epic E</span></span>
+    </div>
+  </div>
+
+  <div class="card">
+    <img src="training/LocationAddressActivity.jpg">
+    <div class="body">
+      <h3>LocationAddressActivity <span class="badge legacy">legacy</span></h3>
+      <p>Etat selecteur, avant saisie.</p>
+      <span class="epic"><span class="badge epic-tag">Epic E</span> - "une adresse a la volee
+      depuis le formulaire de club"</span>
+    </div>
+  </div>
+
+  <div class="card">
+    <img src="training/LocationAddressActivity_Add.jpg">
+    <div class="body">
+      <h3>LocationAddressActivity (saisie) <span class="badge legacy">legacy</span></h3>
+      <p>Formulaire de creation d'une Adresse (ligne, code postal, ville). Capture recadree pour
+      exclure le clavier (une suggestion Gboard affichait une adresse personnelle reelle sur la
+      capture d'origine).</p>
+      <span class="epic"><span class="badge epic-tag">Epic E</span></span>
+    </div>
+  </div>
+
+  <div class="card">
+    <img src="training/RotatingButtons.jpg">
+    <div class="body">
+      <h3>RotatingButtons <span class="badge legacy">legacy</span></h3>
+      <p>Demo technique (SeekBars pilotant rotation/scale d'un bouton), sans lien avec le metier
+      de l'app - code mort fonctionnellement.</p>
+      <span class="epic"><span class="badge epic-tag" style="background:#eee;color:#666;">Aucun
+      epic</span> - hors perimetre, a ne pas reprendre dans la reecriture</span>
+    </div>
+  </div>
+
+  <div class="card">
+    <img data-training="training/PieChartActivity_WithData.jpg" data-match="match/PieChartActivity_WithData.jpg" src="training/PieChartActivity_WithData.jpg">
+    <div class="body">
+      <h3>PieChartActivity (avec donnees) <span class="badge legacy">legacy</span> - BUG CORRIGE</h3>
+      <p><b>Bug corrige</b> : restait vide meme avec des donnees reelles injectees (contrairement
+      au meme graphique sur l'onglet Statistiques moderne). Root cause : le conteneur du graphique
+      (<code>LinearLayout</code> avec <code>layout_height="0dip"</code> + <code>layout_weight="1"</code>,
+      dans <code>pie_chart.xml</code>) est heberge dans un <code>NestedScrollView</code>
+      (<code>abstract_fragment.xml</code>) qui mesure ses enfants avec une hauteur "illimitee" -
+      un <code>layout_weight</code> n'a alors aucun effet, le conteneur se retrouvait a 0px de
+      haut. Fix : hauteur fixe (400dp) au lieu du poids. Legende et controles de zoom desormais
+      visibles en prime. Aucun effet de bord constate sur l'onglet moderne (meme layout partage).</p>
+      <p><b>Anomalie distincte (non corrigee)</b> : chaque tranche semble dessinee 2x en miroir a
+      180deg - reproduite ici via la MEME boucle <code>addValue()</code> que le vrai listener
+      <code>onItemSelected</code> en production, donc probablement un vrai bug <code>achartengine</code>
+      plutot qu'un artefact de capture (a confirmer par un test manuel).</p>
+      <span class="epic"><span class="badge epic-tag">Epic G</span></span>
+    </div>
+  </div>
+
+  <div class="card missing">
+    <h3>MatchActivity <span class="badge legacy">legacy</span></h3>
+    <p>Ecran quasi vestige : template Android Studio "Navigation Drawer Activity" jamais termine
+    (le code peuplant son conteneur de contenu est en commentaire dans le source). N'affiche
+    litteralement rien - pas de capture (screenshot vide retire, n'apportait aucune information).</p>
+    <span class="epic"><span class="badge epic-tag" style="background:#eee;color:#666;">Aucun
+    epic clair</span> - vestige, fonctionnalite deja couverte par ListInviteActivity/InviteActivity</span>
+  </div>
+
+</div>
+
+<div class="flow" style="margin-top:32px;">
+<h2>Epics sans ecran dedie dans cette capture</h2>
+<ul>
+<li><b>Epic I (Saisons)</b> - pas une Activity a part : selecteur de saison present en header du
+    drawer sur la plupart des ecrans legacy (non visible ici car composant transverse, pas une
+    destination de navigation propre).</li>
+<li><b>Epic J (Synchronisation calendrier)</b> - effet de bord declenche depuis InviteActivity
+    (creation/modification/suppression d'evenement), pas un ecran en soi.</li>
+<li><b>Epic K (Sauvegarde/restauration/export)</b> - actions du menu overflow de MainActivity
+    (backup/restore/partage DB), pas une Activity distincte capturable individuellement.</li>
+</ul>
+</div>
+
+
+<script>
+function setGalleryMode(mode) {
+  document.querySelectorAll('img[data-match]').forEach(function(img) {
+    img.src = (mode === 'match') ? img.dataset.match : img.dataset.training;
+  });
+  document.getElementById('btn-mode-training').classList.toggle('active', mode === 'training');
+  document.getElementById('btn-mode-match').classList.toggle('active', mode === 'match');
+  try { localStorage.setItem('justtennis-gallery-mode', mode); } catch (e) {}
+}
+(function() {
+  var saved = 'training';
+  try { saved = localStorage.getItem('justtennis-gallery-mode') || 'training'; } catch (e) {}
+  setGalleryMode(saved);
+})();
+</script>
+</body>
+
+</html>
