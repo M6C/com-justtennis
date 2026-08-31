@@ -388,12 +388,10 @@ public class SmsParser {
 //	}
 	
 	private void logMe(String message) {
-		com.crashlytics.android.Crashlytics.log(message);
 		Logger.logMe(TAG, message);
 	}
 	
 	private void logMe(Exception e) {
-		com.crashlytics.android.Crashlytics.logException(e);
 		Logger.logMe(TAG, e);
 	}
 

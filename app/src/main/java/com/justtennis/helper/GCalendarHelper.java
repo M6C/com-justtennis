@@ -390,7 +390,6 @@ public class GCalendarHelper {
 //		}
 
 	private void logMe(String message) {
-		com.crashlytics.android.Crashlytics.log(message);
 		Logger.logMe(TAG, message);
 	}
 }

@@ -159,7 +159,6 @@ public class Localisation implements Parcelable {
 	}
 
 	private void logMe(String msg) {
-		com.crashlytics.android.Crashlytics.log(msg);
 		Logger.logMe(TAG, msg);
     }
 
@@ -359,7 +358,6 @@ public class Localisation implements Parcelable {
         }
 
     	private void logMe(String msg) {
-			com.crashlytics.android.Crashlytics.log(msg);
     		Logger.logMe(TAG, msg);
         }
     };

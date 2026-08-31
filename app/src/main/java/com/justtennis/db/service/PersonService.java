@@ -46,6 +46,5 @@ public class PersonService<P extends Person> extends GenericService<P> {
 	protected void logMe(String msg, Date dateStart) {
 		String text = "DB Execution time:" + (new Date().getTime() - dateStart.getTime()) + "millisecond - " + msg;
 		logMe(text);
-		com.crashlytics.android.Crashlytics.log(text);
     }
 }

@@ -1,13 +1,85 @@
+Build / Environnement de developpement
+=======================================
+
+Ce projet est fige sur une stack ancienne (AGP 3.2.1 / Gradle 4.6, compileSdk 27)
+qui ne fonctionne plus telle quelle sur un poste de dev moderne sans quelques
+ajustements. Voir aussi CLAUDE.md pour le contexte fonctionnel complet.
+
+Pourquoi Gradle 4.6 ne compile plus "out of the box"
+-----------------------------------------------------
+- Gradle 4.6 ne supporte que Java 8. Sur une machine avec Java 11/17 par
+  defaut (ou un JBR fourni par Android Studio), il plante immediatement avec
+  `Could not determine java version from '...'`.
+- JCenter (jcenter.bintray.com) et Fabric (maven.fabric.io) ont ete fermes
+  respectivement en 2021 et 2020. Les plugins/dependances suivants ont ete
+  retires du projet car definitivement introuvables :
+  - `io.fabric.tools:gradle` / `com.crashlytics.sdk.android:crashlytics`
+    (Crashlytics) - 42 appels `Crashlytics.log(...)` supprimes du code source,
+    le logging applicatif interne (`Logger.logMe`) reste actif.
+  - `com.github.triplet.gradle:play-publisher:2.0.0-SNAPSHOT` (auto-publish
+    Play Store).
+  - `com.google.android:flexbox:0.2.3` - remplace par un `LinearLayout`
+    classique dans les 2 layouts qui l'utilisaient (list_player_row.xml,
+    element_invite.xml), usage XML pur sans code Java associe.
+- Import residuel `androidx.databinding.DataBindingUtil` dans 2 fichiers
+  (ClubFragment.java, ScoreFragment.java) alors que le reste du projet est
+  reste sur `android.databinding.*` (migration AndroidX jamais terminee,
+  voir CLAUDE.md Â§10.3) - corrige en `android.databinding.DataBindingUtil`.
+
+Compiler / installer en ligne de commande
+-------------------------------------------
+Utiliser `./gradlew-local` (et non `./gradlew` directement) : il force un JDK 8
+et un `GRADLE_USER_HOME` dedie (`~/.gradle-justtennis`), car la config Gradle
+globale de la machine (`~/.gradle/gradle.properties`, partagee avec d'autres
+projets) pointe `org.gradle.java.home` vers le JBR (Java 17) d'Android Studio,
+incompatible avec Gradle 4.6.
+
+    ./gradlew-local assembleDebug     # build seul
+    ./gradlew-local installDebug      # build + installe sur le device/emulateur branche
+    ./gradlew-local clean             # etc. - tous les tasks Gradle habituels
+    adb shell am start -n com.justtennis/.ui.activity.ItemDetailActivity
+
+`gradlew-local` n'est pas portable tel quel (chemin JDK code en dur pour cette
+machine) - a adapter si utilise sur un autre poste.
+
+Signing config
+--------------
+`app/build.gradle` lit un fichier local (non versionne) via la propriete
+`signingConfigsFile` (definie dans le `gradle.properties` du projet, lui aussi
+non versionne) pour signer le build release. En l'absence du vrai keystore de
+prod, un `app/signing.properties` + `app/placeholder-release.keystore`
+factices ont ete generes pour permettre au moins la compilation/le sync.
+**Un `assembleRelease`/`bundleRelease` avec ce placeholder ne produit pas un
+APK/AAB publiable sur le Play Store.**
+
+Sync Android Studio
+--------------------
+Le sync Gradle des IDE recents (ex: Android Studio 2026.1.x) echoue avec
+`Could not determine the class-path for class com.android.Version` /
+`java.lang.IllegalArgumentException` dans `org.objectweb.asm.ClassReader`.
+Cause : l'ASM embarque dans Gradle 4.6 (2018) ne sait pas parser ce dont a
+besoin le protocole Tooling API d'un IDE aussi recent lors de l'extraction du
+modele de projet - un build en ligne de commande (`gradlew`) n'utilise pas ce
+mecanisme et fonctionne normalement. A ce jour, pas de fix trouve cote
+config projet ; options possibles si le sync IDE est necessaire :
+- ouvrir le projet avec une version plus ancienne d'Android Studio
+  (`~/bin/android-studio_giraffe`, 2022.3.1, non testee) ;
+- ou upgrader AGP/Gradle par paliers (3.2.1 -> 4.x -> 7.x -> 8.x en lockstep
+  avec Gradle, migration AndroidX, remontee compileSdk/targetSdk) - chantier
+  separe, plus consequent.
+En attendant, editer dans l'IDE (sans autocompletion/bouton Run) et
+compiler/installer via `./gradlew-local` fonctionne sans probleme.
+
 To Do
 
-* Fix - Tournement voir le problème avec la selection de saison
+* Fix - Tournement voir le problï¿½me avec la selection de saison
 Fix - Revoir la police des combo Ranking (Invite/Player)
 Evol- Ajouter un champ de rechche au lieu de la combo pour filtrer la liste de Player
-Evol- Pouvoir créé un Player par duplication d'un ancien en changeant la saison
-Evol- Pouvoir changer des proprietes à plusieurs Player/Invite. Trouver un moyen de faire une dialog generic.
-Evol- Créer un ecran pour gerer les Tournement/Club/Address (Menu Overflow de MainActivity ?)
+Evol- Pouvoir crï¿½ï¿½ un Player par duplication d'un ancien en changeant la saison
+Evol- Pouvoir changer des proprietes ï¿½ plusieurs Player/Invite. Trouver un moyen de faire une dialog generic.
+Evol- Crï¿½er un ecran pour gerer les Tournement/Club/Address (Menu Overflow de MainActivity ?)
 
- - Faire un fichier strings.xml par écran
+ - Faire un fichier strings.xml par ï¿½cran
  
 Ecran Accueil
 
@@ -33,27 +105,27 @@ Saisie de Message
 
 ********************* DONE *****************************
 Invite
-[20141124] - Revoir quel classement est utilisé pour la création d'une invite
+[20141124] - Revoir quel classement est utilisï¿½ pour la crï¿½ation d'une invite
 [20141003] - Ajout notion de Saison
 [20140508] - Affichage de l'itineraire via GoogleMap
-[20140302] - Début ajout de la notion d'adresse, club et tournoi
+[20140302] - Dï¿½but ajout de la notion d'adresse, club et tournoi
 [20140301] - Ajout des champs de saisie pour l'adresse
 [20140301] - Suppression de la saisie du status et clean de code
 [20140226] - Utilisation d'un switch pour le type d'invite
-[20140223] - Recréé l'évenement calendar de l'Invite quelque soit la donnée modifiée
+[20140223] - Recrï¿½ï¿½ l'ï¿½venement calendar de l'Invite quelque soit la donnï¿½e modifiï¿½e
 [20140221] - Fix - NPE lors du changement du Player
 [20140220] - Fix - UnkownPlayer sans classement
 [20140217] - Revu du Design
 [20140216] - Fix Modifier
 [20140216] - Fix Adapter
 [20140216] - Ajout de la notion de victoire, defaite ou indefini
-[20140212] - Ajout d'un TextWatcher sur les champs du score pour mettre en Bold les champs avec une valeur superieur à la valeur de l'autre champ du même set
+[20140212] - Ajout d'un TextWatcher sur les champs du score pour mettre en Bold les champs avec une valeur superieur ï¿½ la valeur de l'autre champ du mï¿½me set
 [20140211] - Pouvoir saisir une Score
 [20140209] - Modifier l'event GCalendar quand on modifi une invite
 [20140209] - Supprimer l'invite GCalendar quand on supprime une invite
-[20140122] - Pouvoir modifier la coche qui indique si la réponse et ok (vert) ou non (rouge)
+[20140122] - Pouvoir modifier la coche qui indique si la rï¿½ponse et ok (vert) ou non (rouge)
 [20131226] - Pouvoir modifier le joueur
-[20131224] - Donner la possibilité de ne pas envoyer demande de confirmation pour les joueurs qui n'ont pas l'appli. Mais créé quant même l'évènement GCalendar.
+[20131224] - Donner la possibilitï¿½ de ne pas envoyer demande de confirmation pour les joueurs qui n'ont pas l'appli. Mais crï¿½ï¿½ quant mï¿½me l'ï¿½vï¿½nement GCalendar.
 [20131224] - Ne pas selectionner d'adversaire pour les matchs
 [20131224] - Ne pas envoyer de sms pour les matchs ou entrainements sans adversaire
 [20131221] - Gerer une date relative pour aujourd'hui et demain
@@ -64,7 +136,7 @@ List Player
 [20141124] - Cacher 'Unknow Player'
 [20141004] - Ajout notion de Saison
 [20140507] - Affichage de la location de chaque player
-[20140222] - Empèche la suppression d'un joueur si il a au moins une invite
+[20140222] - Empï¿½che la suppression d'un joueur si il a au moins une invite
 [20140216] - Sort Player List
 [20140212] - Ajout d'un bouton Close
 
@@ -74,7 +146,7 @@ Ecran Utilisateur
 [20140513] - Recupertion du code pour pouvoir selectionner une adresse differente du club
 [20140511] - Pouvoir selectionner une adresse differente du club
 [20140413] - Saisie de la localisation
-[20140214] - Integration de la gestion du Message dans l'écran User
+[20140214] - Integration de la gestion du Message dans l'ï¿½cran User
 [20140206] - Revu du design
 [20140105] - Ajout du classement
 
@@ -91,12 +163,12 @@ Ecran Player
 [20140109] - Afficher la liste des invites en mode modification
 [20140108] - Ajout du classement
 [20131229] - Passer par un startActivityForResult pour importer un contact google (comme le scan QrCode)
-[20131228] - Recuperer les infos 'Prenom' et 'Nom' découpé
+[20131228] - Recuperer les infos 'Prenom' et 'Nom' dï¿½coupï¿½
 
 List Invite
 [20141004] - Ajout notion de Saison
 [20140508] - Affichage de la location et classement de chaque invite
-[20140223] - Possibilité de filtre les Invite par le type
+[20140223] - Possibilitï¿½ de filtre les Invite par le type
 [20140216] - Revu du Design
 [20140216] - Fixe Affichage du score
 [20140216] - Affichage du score
@@ -107,17 +179,17 @@ List Invite
 [20131221] - Gerer l'affichage du type d'invite
 
 Ecran Calcul Classement
-[20140914] - Modification du classement estimé d'une invite et recalcul du classement
-[20140812] - Classement de simulation paramètrable + divers fix
-[20140622] - Creation de l'écran
+[20140914] - Modification du classement estimï¿½ d'une invite et recalcul du classement
+[20140812] - Classement de simulation paramï¿½trable + divers fix
+[20140622] - Creation de l'ï¿½cran
 
 Ecran List Competition
 * [20140907] - Affichage des competitions sans Tournament
-[20140605] - Creation de l'écran
+[20140605] - Creation de l'ï¿½cran
 
 Ecran Calcul Classement
-[20140812] - Classement de simulation paramètrable + divers fix
-[20140622] - Creation de l'écran
+[20140812] - Classement de simulation paramï¿½trable + divers fix
+[20140622] - Creation de l'ï¿½cran
 
 Common
 [20140616] - Calcul des points par match par rapport au classement estimer
@@ -126,9 +198,9 @@ Common
 [20140529] - Remplace le type 'MATCH' par 'COMPETITION' Fix
 [20140529] - Remplace le type 'ENTRAINEMENT' par 'TRAINING'
 [20140529] - Remplace le type 'MATCH' par 'COMPETITION'
-[20140528] - Changement du style dynamiquement en fonction du type selectionné.
-[20140526] - Initialise le fond des activity en fonction du type de match selectionné.
-[20140525] - Rend parametrable les requêtes en fonction du type de match selectionné sur l'accueil
+[20140528] - Changement du style dynamiquement en fonction du type selectionnï¿½.
+[20140526] - Initialise le fond des activity en fonction du type de match selectionnï¿½.
+[20140525] - Rend parametrable les requï¿½tes en fonction du type de match selectionnï¿½ sur l'accueil
 [20140309] - Creation d'un custom spinner pour armoniser le design avec les champs de saisie
 
 Ecran Accueil
@@ -138,7 +210,7 @@ Ecran Accueil
 [20140226] - Ajout d'une confirmation pour le partage de l'application
 [20140226] - Backup & Restore. Ajout des DBHelper manquant
 [20140225] - Partage l'application sans faire de copie sur la sd
-[20140223] - Ajout la possibilité de partager l'application
+[20140223] - Ajout la possibilitï¿½ de partager l'application
 [20140216] - Ajout Menu Statistique
 [20140214] - Clean le menu overflow
 [20140109] - Ajouter un menu pour sauvegarder la base 
@@ -148,7 +220,7 @@ Ecran Utilisateur
 [20140513] - Recupertion du code pour pouvoir selectionner une adresse differente du club
 [20140511] - Pouvoir selectionner une adresse differente du club
 [20140413] - Saisie de la localisation
-[20140214] - Integration de la gestion du Message dans l'écran User
+[20140214] - Integration de la gestion du Message dans l'ï¿½cran User
 [20140206] - Revu du design
 [20140105] - Ajout du classement
 
@@ -162,12 +234,12 @@ Invite Location
 [20140502] - Fix sur l'affichage de la liste des sous elements
 [20140410] - Adapte l'affichage quant le clavier s'affiche
 [20140409] - Fix Grise l'item empty des spinners
-[20140409] - Fix Selection des sous element après création ou suppression
+[20140409] - Fix Selection des sous element aprï¿½s crï¿½ation ou suppression
 [20140406] - Refactor Ecran location
 [20140325] - Affichage de l'ecran location en mode ajout si on clique sur add du formulaire
 [20140324] - Ajout d'ecrans generic
-[20140313] - Utilisation dans l'écran d'invite (Reste encore des bug)
-[20140306] - Création de l'écran
+[20140313] - Utilisation dans l'ï¿½cran d'invite (Reste encore des bug)
+[20140306] - Crï¿½ation de l'ï¿½cran
 
 Invite Demande
 [20140413] - Initialisation de la localisation pour les Matchs
@@ -175,20 +247,20 @@ Invite Demande
 [20140303] - Modification design de la notion d'adresse, club et tournoi
 [20140302] - Clean
 [20140226] - Utilisation d'un switch pour le type d'invite
-[20140223] - Ne créé pas d'évenement calendar pour les Invites passées
-[20140222] - Possibilité de créé un nouveau Player si on a selectionné "Unknow Player"
-[20140222] - Possibilité de saisir le classement
+[20140223] - Ne crï¿½ï¿½ pas d'ï¿½venement calendar pour les Invites passï¿½es
+[20140222] - Possibilitï¿½ de crï¿½ï¿½ un nouveau Player si on a selectionnï¿½ "Unknow Player"
+[20140222] - Possibilitï¿½ de saisir le classement
 [20140211] - Creation d'une nouvelle activity pour faire seulement des invites
 
 Statistique
-[20140223] - Ne prend en compte que les matchs passés
+[20140223] - Ne prend en compte que les matchs passï¿½s
 [20140216] - Refactor
 [20140213] - Revu du Design
 [20140213] - Invite by Ranking ordred
 [20140212] - Ajout Activity Chart
 
 Saisie de Message
-[20131229] - Pouvoir inserer le champ à la position courante du curseur
+[20131229] - Pouvoir inserer le champ ï¿½ la position courante du curseur
 
 List Person
 [20131226] - Ajout d'un champ de recherche pour l'iport Google

@@ -177,13 +177,11 @@ public class Session implements Parcelable {
         }
 
     	private void logMe(String msg) {
-			com.crashlytics.android.Crashlytics.log(msg);
     		Logger.logMe(TAG, msg);
         }
     };
 
 	private void logMe(String msg) {
-		com.crashlytics.android.Crashlytics.log(msg);
 		Logger.logMe(TAG, "id: " + idGenereted + "|" + msg);
     }
 

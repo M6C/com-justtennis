@@ -195,7 +195,6 @@ public abstract class DBAbstractHelper extends SQLiteOpenHelper {
 	}
 
 	protected void logMe(String msg) {
-		com.crashlytics.android.Crashlytics.log(msg);
 		Logger.logMe(getTag(), msg);
     }
 }

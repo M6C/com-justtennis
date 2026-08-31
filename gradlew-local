@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+# Wrapper autour de ./gradlew qui force Java 8 et un GRADLE_USER_HOME dédié,
+# nécessaire car ce projet (AGP 3.2.1 / Gradle 4.6) ne fonctionne pas avec le
+# JBR (Java 17) ni la config Gradle globale (~/.gradle/gradle.properties)
+# utilisée par les autres projets de cette machine.
+set -euo pipefail
+cd "$(dirname "$0")"
+export JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64
+export PATH="$JAVA_HOME/bin:$PATH"
+export GRADLE_USER_HOME="$HOME/.gradle-justtennis"
+exec ./gradlew "$@"

@@ -301,7 +301,6 @@ public class DBFeedTool {
     }
 
     private static void logMe(String msg) {
-        com.crashlytics.android.Crashlytics.log(msg);
         Logger.logMe(TAG, msg);
     }
 }

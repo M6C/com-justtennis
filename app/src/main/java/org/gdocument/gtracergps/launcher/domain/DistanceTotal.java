@@ -177,7 +177,6 @@ public class DistanceTotal implements Parcelable {
 	}
 
 	private void logMe(String msg) {
-		com.crashlytics.android.Crashlytics.log(msg);
 		Logger.logMe(TAG, "id: " + id + "|" + msg);
     }
 
@@ -271,7 +270,6 @@ public class DistanceTotal implements Parcelable {
         }
 
     	private void logMe(String msg) {
-			com.crashlytics.android.Crashlytics.log(msg);
     		Logger.logMe(TAG, msg);
         }
     };

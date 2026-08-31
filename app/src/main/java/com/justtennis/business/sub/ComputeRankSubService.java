@@ -388,6 +388,5 @@ public class ComputeRankSubService {
 		if (ApplicationConfig.SHOW_LOG_COMPUTER_RANK) {
 			Logger.logMe(TAG, "COMPUTE RANKING - " + msg);
 		}
-		com.crashlytics.android.Crashlytics.log(msg);
     }
 }

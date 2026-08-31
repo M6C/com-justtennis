@@ -1,8 +1,4 @@
 apply plugin: 'com.android.application'
-// Crashlytics
-apply plugin: 'io.fabric'
-// Google Play Store Publish
-apply plugin: 'com.github.triplet.play'
 
 def getSigningKey(key) {
     def props = new Properties()
@@ -59,14 +55,6 @@ android {
 //    defaultConfig {
 //        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
 //    }
-
-
-    // Google Play Store Publish
-    play {
-        // Can be one of the production, beta, alpha or rollout
-        track = 'alpha'
-        serviceAccountCredentials = file("store/Google Play Android Developer-97d8b56a531b.json")
-    }
 }
 
 dependencies {
@@ -88,8 +76,6 @@ dependencies {
 
     // Firebase
     implementation 'com.google.firebase:firebase-core:16.0.4'
-    // Crashlytics
-    implementation 'com.crashlytics.sdk.android:crashlytics:2.9.5'
 
     // Network
     implementation 'com.squareup.okhttp3:okhttp:3.10.0'
@@ -101,9 +87,6 @@ dependencies {
     implementation 'com.fasterxml.jackson.core:jackson-core:2.9.6'
     implementation 'com.fasterxml.jackson.core:jackson-annotations:2.9.0'
     implementation 'com.fasterxml.jackson.core:jackson-databind:2.9.6'
-
-    // Google Flex Layout
-    implementation 'com.google.android:flexbox:0.2.3'
 }
 
 // Firebase

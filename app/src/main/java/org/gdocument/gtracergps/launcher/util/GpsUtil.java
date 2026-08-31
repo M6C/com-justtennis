@@ -182,7 +182,6 @@ public class GpsUtil {
 	}
 
 	private static void logMe(String msg) {
-		com.crashlytics.android.Crashlytics.log(msg);
 			Logger.logMe(TAG, msg);
     }
 

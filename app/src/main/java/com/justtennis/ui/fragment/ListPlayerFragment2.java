@@ -319,7 +319,6 @@ public class ListPlayerFragment2 extends Fragment {
     }
 
 	protected static void logMe(String msg) {
-		com.crashlytics.android.Crashlytics.log(msg);
 		Logger.logMe(TAG, msg);
     }
 }

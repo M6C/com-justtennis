@@ -11,7 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 
-import androidx.databinding.DataBindingUtil;
+import android.databinding.DataBindingUtil;
 
 import com.justtennis.R;
 import com.justtennis.databinding.FragmentScoreBinding;
