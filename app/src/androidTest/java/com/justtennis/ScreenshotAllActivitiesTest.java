@@ -182,10 +182,155 @@ public class ScreenshotAllActivitiesTest {
     // clic sur "+"). GenericSpinnerFormActivity accepte cet etat directement via un extra d'Intent.
     @Test public void screen15b_LocationTournamentActivity_Add() { shootAdd(LocationTournamentActivity.class); }
     @Test public void screen16b_LocationClubActivity_Add() { shootAdd(LocationClubActivity.class); }
+
+    // Pas de MODE.MODIFY distinct sur GenericSpinnerFormActivity (seulement SELECTION/ADD, cf.
+    // §3 CLAUDE.md) : le meme formulaire "ADD" sert de saisie ET d'edition, reutilise depuis la
+    // navigation normale en selectionnant un club existant dans le spinner (SELECTION) avant de
+    // cliquer sur "+" - business.getData() garde alors le club selectionne au lieu d'un Club vide.
+    // On reproduit ce cheminement via l'extra EXTRA_DATA (club existant, seede par DBFeedTool)
+    // combine a EXTRA_MODE=ADD, exactement ce que GenericSpinnerFormBusiness.initializeData()
+    // attend pour precharger un pojo existant plutot que getNewData().
+    @Test public void screen16c_LocationClubActivity_Modify() {
+        Context targetContext = InstrumentationRegistry.getTargetContext();
+        com.justtennis.notifier.NotifierMessageLogger notifier = com.justtennis.notifier.NotifierMessageLogger.getInstance();
+        com.justtennis.db.service.ClubService clubService = new com.justtennis.db.service.ClubService(targetContext, notifier);
+        List<com.justtennis.domain.Club> listClub = clubService.getList();
+        if (listClub.isEmpty()) {
+            return;
+        }
+        com.justtennis.domain.Club club = listClub.get(0);
+        shoot(LocationClubActivity.class, "LocationClubActivity_Modify", intent -> {
+            intent.putExtra(GenericSpinnerFormActivity.EXTRA_MODE, GenericSpinnerFormActivity.MODE.ADD);
+            intent.putExtra(GenericSpinnerFormActivity.EXTRA_DATA, club);
+        });
+    }
+
     @Test public void screen17b_LocationAddressActivity_Add() { shootAdd(LocationAddressActivity.class); }
     @Test public void screen18_RotatingButtons() { shoot(RotatingButtons.class); }
     @Test public void screen19_PieChartActivity() { shoot(PieChartActivity.class); }
     @Test public void screen20_MatchActivity() { shoot(MatchActivity.class); }
+
+    // Entree "Clubs" du drawer hamburger moderne (menu_drawer_navigation.xml -> R.id.nav_list_club),
+    // geree par NavigationDrawerFragment.onNavigationItemSelected() : un flow COMPLETEMENT
+    // INDEPENDANT du cheminement PlayerActivity/InviteActivity -> LocationTournamentActivity ->
+    // LocationClubActivity -> LocationAddressActivity deja capture plus haut (screen15-17). Ici,
+    // "Clubs" ouvre ListClubFragment (liste plate, adapter ListClubViewHolder) hebergee dans le
+    // meme conteneur R.id.item_detail_container que les onglets BottomNavigation ; un clic sur une
+    // ligne (mode EDIT, par defaut) ou sur le FAB ouvre ClubFragment - UN SEUL formulaire avec les
+    // champs Club (nom) ET Address (ville/ligne/code postal) directement dessus, sans cascade de
+    // sous-ecran comme LocationAddressActivity. On reproduit le remplacement de fragment exactement
+    // comme le fait NavigationDrawerFragment (FragmentTool.replaceFragment), sans clic reel sur le
+    // menu - identique en esprit a shootAdd() plus haut pour le cheminement legacy.
+    @Test public void screen21_ItemDetailActivity_Drawer_Club() throws Throwable {
+        shootClubFragment("ItemDetailActivity_Drawer_Club", activity -> com.justtennis.ui.fragment.ListClubFragment.build());
+    }
+
+    @Test public void screen21b_ItemDetailActivity_Drawer_Club_Add() throws Throwable {
+        shootClubFragment("ItemDetailActivity_Drawer_Club_Add", activity -> com.justtennis.ui.fragment.ClubFragment.build());
+    }
+
+    // Meme constat que pour LocationClubActivity_Modify (screen16c) : ClubFragment n'a pas de mode
+    // dedie, c'est le meme formulaire pre-rempli avec un Club existant (ClubBusiness.onCreate()
+    // resout l'Address associee via club.getSubId()).
+    @Test public void screen21c_ItemDetailActivity_Drawer_Club_Modify() throws Throwable {
+        shootClubFragment("ItemDetailActivity_Drawer_Club_Modify", activity -> {
+            com.justtennis.notifier.NotifierMessageLogger notifier = com.justtennis.notifier.NotifierMessageLogger.getInstance();
+            com.justtennis.db.service.ClubService clubService = new com.justtennis.db.service.ClubService(activity.getApplicationContext(), notifier);
+            List<com.justtennis.domain.Club> listClub = clubService.getList();
+            return listClub.isEmpty() ? com.justtennis.ui.fragment.ClubFragment.build() : com.justtennis.ui.fragment.ClubFragment.build(listClub.get(0));
+        });
+    }
+
+    // Creation d'une invite dans le VRAI parcours du nouveau design : onglet "Invitations" du
+    // bottom nav d'ItemDetailActivity (R.id.navigation_invite, onglet par defaut au lancement) ->
+    // FAB "+" (ListInviteFragment.onClickMatch(), cree un InviteFragment contre le joueur "Unknown"
+    // en mode INVITE_SIMPLE) -> bouton "DETAIL" (InviteFragment.onClickDetail(), R.id.btn_detail)
+    // pour basculer en INVITE_DETAIL. Contrairement a screen13b/13c (Activity legacy InviteActivity,
+    // chrome different - pas de photo d'en-tete ni de bottom nav), on simule ici de VRAIS clics
+    // (performClick()) sur le FAB et le bouton "DETAIL" dans le chrome ItemDetailActivity, pour une
+    // capture fidele au parcours utilisateur reel du nouveau design demande explicitement.
+    @Test public void screen22_ItemDetailActivity_Tab_Invite_Create() throws Throwable {
+        shootInviteCreate("ItemDetailActivity_Tab_Invite_Create", false);
+    }
+
+    @Test public void screen22b_ItemDetailActivity_Tab_Invite_Create_Detail() throws Throwable {
+        shootInviteCreate("ItemDetailActivity_Tab_Invite_Create_Detail", true);
+    }
+
+    private void shootInviteCreate(String screenshotName, boolean detail) throws Throwable {
+        Instrumentation instrumentation = InstrumentationRegistry.getInstrumentation();
+        Context targetContext = InstrumentationRegistry.getTargetContext();
+        DBFeedTool.getInstance(targetContext).doFeed();
+
+        Intent intent = new Intent(targetContext, ItemDetailActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        android.app.Activity activity = instrumentation.startActivitySync(intent);
+        instrumentation.waitForIdleSync();
+        Thread.sleep(1500);
+        closeDrawer(instrumentation, activity);
+
+        instrumentation.runOnMainSync(() -> {
+            android.support.design.widget.BottomNavigationView nav =
+                    activity.findViewById(com.justtennis.R.id.navigationView);
+            if (nav != null) {
+                nav.setSelectedItemId(com.justtennis.R.id.navigation_invite);
+            }
+        });
+        instrumentation.waitForIdleSync();
+        Thread.sleep(1000);
+        closeDrawer(instrumentation, activity);
+
+        instrumentation.runOnMainSync(() -> {
+            View fab = activity.findViewById(com.justtennis.R.id.fab);
+            if (fab != null) {
+                fab.performClick();
+            }
+        });
+        instrumentation.waitForIdleSync();
+        Thread.sleep(1000);
+
+        if (detail) {
+            instrumentation.runOnMainSync(() -> {
+                View btnDetail = activity.findViewById(com.justtennis.R.id.btn_detail);
+                if (btnDetail != null) {
+                    btnDetail.performClick();
+                }
+            });
+            instrumentation.waitForIdleSync();
+            Thread.sleep(1000);
+        }
+
+        hideKeyboard(instrumentation, activity);
+        takeScreenshot(instrumentation, screenshotName);
+        activity.finish();
+    }
+
+    private interface FragmentSupplier {
+        android.support.v4.app.Fragment build(android.app.Activity activity);
+    }
+
+    private void shootClubFragment(String screenshotName, FragmentSupplier supplier) throws Throwable {
+        Instrumentation instrumentation = InstrumentationRegistry.getInstrumentation();
+        Context targetContext = InstrumentationRegistry.getTargetContext();
+        DBFeedTool.getInstance(targetContext).doFeed();
+
+        Intent intent = new Intent(targetContext, ItemDetailActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        android.app.Activity activity = instrumentation.startActivitySync(intent);
+        instrumentation.waitForIdleSync();
+        Thread.sleep(1500);
+        closeDrawer(instrumentation, activity);
+
+        instrumentation.runOnMainSync(() -> {
+            android.support.v4.app.Fragment fragment = supplier.build(activity);
+            com.justtennis.tool.FragmentTool.replaceFragment((android.support.v4.app.FragmentActivity) activity, fragment);
+        });
+        instrumentation.waitForIdleSync();
+        Thread.sleep(1000);
+        hideKeyboard(instrumentation, activity);
+        takeScreenshot(instrumentation, screenshotName);
+        activity.finish();
+    }
 
     // PlayerActivity a 3 barres de boutons differentes selon le mode (CommonEnum.PLAYER_MODE) :
     // CREATE (deja capture en screen10), MODIFY (boutons Modifier/QRCode/Supprimer) et
@@ -205,6 +350,18 @@ public class ScreenshotAllActivitiesTest {
     @Test public void screen13b_InviteActivity_Create() {
         shoot(InviteActivity.class, "InviteActivity_Create", intent -> {
             intent.putExtra(InviteActivity.EXTRA_MODE, CommonEnum.INVITE_MODE.INVITE_SIMPLE);
+            intent.putExtra(InviteActivity.EXTRA_PLAYER_ID, -1L);
+        });
+    }
+
+    // CommonEnum.INVITE_MODE a 3 valeurs (INVITE_SIMPLE/INVITE_DETAIL/INVITE_CONFIRM) - le bouton
+    // "DETAIL" visible sur screen13b bascule entre INVITE_SIMPLE (element_invite_player.xml, ligne
+    // compacte) et INVITE_DETAIL (element_invite_player_detail.xml, carte verticale plus grande
+    // avec spinner saison). InviteBusiness lit EXTRA_MODE des l'ouverture (pas besoin de simuler le
+    // clic), donc capture identique en esprit a screen13b mais avec INVITE_DETAIL des le depart.
+    @Test public void screen13c_InviteActivity_Create_Detail() {
+        shoot(InviteActivity.class, "InviteActivity_Create_Detail", intent -> {
+            intent.putExtra(InviteActivity.EXTRA_MODE, CommonEnum.INVITE_MODE.INVITE_DETAIL);
             intent.putExtra(InviteActivity.EXTRA_PLAYER_ID, -1L);
         });
     }

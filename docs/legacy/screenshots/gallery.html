@@ -132,6 +132,32 @@ backup/restore DB).</p>
   </div>
 
   <div class="card">
+    <img data-training="training/ItemDetailActivity_Tab_Invite_Create.jpg" data-match="match/ItemDetailActivity_Tab_Invite_Create.jpg" src="training/ItemDetailActivity_Tab_Invite_Create.jpg">
+    <div class="body">
+      <h3>Invitations - creation (nouveau design) <span class="badge modern">moderne</span></h3>
+      <p>Vrai parcours de creation dans le nouveau design (pas le shell legacy <code>InviteActivity</code>
+      capture plus bas) : onglet "Invites" du bottom nav (par defaut au lancement) -&gt; clic sur le
+      FAB "+" (<code>ListInviteFragment.onClickMatch()</code>, cree une invite contre "Unknown
+      Player" en mode simple). Capturee via un vrai <code>performClick()</code> sur le FAB, pas une
+      construction directe du fragment.</p>
+      <span class="epic"><span class="badge epic-tag">UX §4</span> + <span class="badge epic-tag">Epic C</span></span>
+    </div>
+  </div>
+
+  <div class="card">
+    <img data-training="training/ItemDetailActivity_Tab_Invite_Create_Detail.jpg" data-match="match/ItemDetailActivity_Tab_Invite_Create_Detail.jpg" src="training/ItemDetailActivity_Tab_Invite_Create_Detail.jpg">
+    <div class="body">
+      <h3>Invitations - creation, detaillee (nouveau design) <span class="badge modern">moderne</span></h3>
+      <p>Suite de la carte precedente : clic sur le bouton "DETAIL" (<code>InviteFragment.
+      onClickDetail()</code>, <code>R.id.btn_detail</code>, vrai <code>performClick()</code>) ->
+      carte adversaire agrandie (classement Real/Estimate, club/tournoi, score, bonus), le
+      bottom nav reste visible. Mode Competition : le champ de lieu passe de "Club" a "Tournament",
+      theme rose/magenta (identique au reste du nouveau design, different de l'orange legacy).</p>
+      <span class="epic"><span class="badge epic-tag">UX §4</span> + <span class="badge epic-tag">Epic C</span></span>
+    </div>
+  </div>
+
+  <div class="card">
     <img data-training="training/ItemDetailActivity_Tab_Player.jpg" data-match="match/ItemDetailActivity_Tab_Player.jpg" src="training/ItemDetailActivity_Tab_Player.jpg">
     <div class="body">
       <h3>ItemDetailActivity - onglet Joueurs <span class="badge modern">moderne</span></h3>
@@ -169,6 +195,46 @@ backup/restore DB).</p>
       visible ("... this time.", probablement une chaine anglaise du type "No invitation to show
       at this time" cote liste Invitations - a verifier).</p>
       <span class="epic"><span class="badge epic-tag">Epic I</span> + <span class="badge epic-tag" style="background:#fce4ec;color:#ad1457;">UX §4</span></span>
+    </div>
+  </div>
+
+  <div class="card">
+    <img src="training/ItemDetailActivity_Drawer_Club.jpg">
+    <div class="body">
+      <h3>Drawer moderne - "Clubs" <span class="badge modern">moderne</span></h3>
+      <p>Cible de l'entree "Clubs" du drawer ci-dessus (<code>R.id.nav_list_club</code>,
+      <code>NavigationDrawerFragment</code>) : un flow <b>independant</b> du cheminement
+      <code>LocationTournamentActivity -&gt; LocationClubActivity -&gt; LocationAddressActivity</code>
+      documente plus haut (ecrans legacy en cascade). Ici, <code>ListClubFragment</code> - liste
+      plate des clubs (nom + adresse), FAB "+" pour en creer un, icone poubelle par ligne (bloquee
+      si le club a des invites, meme regle que la version legacy).</p>
+      <span class="epic"><span class="badge epic-tag">Epic E</span> + <span class="badge epic-tag" style="background:#fce4ec;color:#ad1457;">UX §4</span></span>
+    </div>
+  </div>
+
+  <div class="card">
+    <img src="training/ItemDetailActivity_Drawer_Club_Add.jpg">
+    <div class="body">
+      <h3>Drawer moderne - "Clubs" (creation) <span class="badge modern">moderne</span></h3>
+      <p><code>ClubFragment</code>, ouvert par le FAB de l'ecran precedent. Contrairement au
+      cheminement legacy (Club puis Adresse dans 2 ecrans separes), ce formulaire regroupe le nom
+      du Club ET les champs d'Adresse (ligne, code postal, ville) directement sur le meme ecran -
+      pas de sous-formulaire. FAB coche = valider (<code>ClubBusiness.validate()</code>, cree
+      l'Address puis le Club avec son <code>subId</code>).</p>
+      <span class="epic"><span class="badge epic-tag">Epic E</span></span>
+    </div>
+  </div>
+
+  <div class="card">
+    <img src="training/ItemDetailActivity_Drawer_Club_Modify.jpg">
+    <div class="body">
+      <h3>Drawer moderne - "Clubs" (modification) <span class="badge modern">moderne</span></h3>
+      <p>Meme <code>ClubFragment</code> que ci-dessus, ouvert cette fois via un clic sur une ligne
+      de la liste (<code>ClubFragment.build(club)</code>) : formulaire pre-rempli avec le Club et
+      son Adresse existants (<code>ClubBusiness.onCreate()</code> resout l'Address via
+      <code>club.getSubId()</code>). Aucun mode dedie non plus ici, meme constat que pour
+      <code>LocationClubActivity</code> (cf. carte "LocationClubActivity (modification)" plus bas).</p>
+      <span class="epic"><span class="badge epic-tag">Epic E</span></span>
     </div>
   </div>
 
@@ -368,6 +434,23 @@ backup/restore DB).</p>
   </div>
 
   <div class="card">
+    <img data-training="training/InviteActivity_Create_Detail.jpg" data-match="match/InviteActivity_Create_Detail.jpg" src="training/InviteActivity_Create_Detail.jpg">
+    <div class="body">
+      <h3>InviteActivity (creation, detaillee) <span class="badge legacy">legacy</span></h3>
+      <p>Meme creation que ci-dessus, mais en mode <code>CommonEnum.INVITE_MODE.INVITE_DETAIL</code>
+      (le bouton "DETAIL" de la carte precedente bascule vers cet etat) : carte adversaire plus
+      grande (<code>element_invite_player_detail.xml</code> au lieu de
+      <code>element_invite_player.xml</code>), photo pleine hauteur, spinner saison. Capturee ici
+      directement en mode detail des l'ouverture via l'extra <code>EXTRA_MODE</code> (pas besoin de
+      simuler le clic sur "DETAIL", <code>InviteBusiness</code> le lit des <code>onCreate</code>).</p>
+      <p><b>Mode Competition</b> : le champ de lieu passe de "Club" a "Tournament" (theme visuel
+      identique aux autres ecrans - orange).</p>
+      <span class="epic"><span class="badge epic-tag">Epic C</span> +
+      <span class="badge epic-tag">Epic J</span></span>
+    </div>
+  </div>
+
+  <div class="card">
     <img data-training="training/ScoreActivity.jpg" data-match="match/ScoreActivity.jpg" src="training/ScoreActivity.jpg">
     <div class="body">
       <h3>ScoreActivity <span class="badge legacy">legacy</span></h3>
@@ -412,6 +495,21 @@ backup/restore DB).</p>
     <div class="body">
       <h3>LocationClubActivity (saisie) <span class="badge legacy">legacy</span></h3>
       <p>Formulaire de creation d'un Club (nom, adresse en cascade).</p>
+      <span class="epic"><span class="badge epic-tag">Epic E</span></span>
+    </div>
+  </div>
+
+  <div class="card">
+    <img src="training/LocationClubActivity_Modify.jpg">
+    <div class="body">
+      <h3>LocationClubActivity (modification) <span class="badge legacy">legacy</span></h3>
+      <p>Meme formulaire "saisie" pre-rempli avec un Club existant (nom + adresse deja
+      selectionnee) - il n'existe pas de MODE.MODIFY distinct sur
+      <code>GenericSpinnerFormActivity</code> (seulement <code>SELECTION</code>/<code>ADD</code>) :
+      en navigation normale, on obtient cet etat en selectionnant un club dans le spinner de
+      l'ecran selecteur puis en cliquant sur "+", qui bascule en mode ADD sans reinitialiser les
+      donnees deja chargees. Capture obtenue en passant ce meme club existant via l'extra
+      <code>EXTRA_DATA</code> combine a <code>EXTRA_MODE=ADD</code>.</p>
       <span class="epic"><span class="badge epic-tag">Epic E</span></span>
     </div>
   </div>

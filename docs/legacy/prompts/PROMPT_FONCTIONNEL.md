@@ -156,20 +156,43 @@ L'application doit fonctionner **hors-ligne en priorité** (les données du club
 
 ### Epic E — Lieux : clubs, adresses, tournois
 - Je gère un référentiel d'**adresses** (nom, ligne d'adresse, code postal, ville, coordonnées GPS), de **clubs** (rattachés à une adresse) et de **tournois** (rattachés à un club et à une saison).
-- Ces trois référentiels sont imbriqués en cascade dans les formulaires : je peux créer un club à la volée depuis le formulaire de tournoi, une adresse à la volée depuis le formulaire de club.
 - Je peux associer un lieu (adresse libre, club, ou tournoi) à chaque invitation, avec affichage de l'itinéraire via une application de cartographie.
 - Une fonction de **recherche transverse** (club / tournoi / adresse) est disponible pour retrouver rapidement un lieu existant plutôt que d'en recréer un doublon.
 
-> **Capture app legacy** — état sélecteur (spinner + bouton "+", avant saisie) :
+- **Décision produit tranchée** (résout le point 6 du §7) : deux chemins d'écran coexistaient dans
+  l'app legacy pour gérer un club — un formulaire en cascade (Tournoi → Club → Adresse imbriqués,
+  spinner + bouton "+") et une liste plate + formulaire combiné accessible depuis le menu drawer
+  (☰ → "Clubs"). **Le pattern retenu pour la réécriture est la liste plate + formulaire combiné**
+  (`ListClubFragment`/`ClubFragment` dans l'app legacy) : c'est déjà le pattern utilisé pour les
+  Joueurs (`ListPlayerFragment`/`PlayerFragment`, Epic B) et les Invitations
+  (`ListInviteFragment`/`InviteFragment`, Epic C) dans l'app legacy — le généraliser aux Adresses
+  et Tournois donne une UX cohérente sur les 5 référentiels de l'app (Joueur, Invitation, Club,
+  Adresse, Tournoi), au lieu de deux logiques différentes selon l'écran. **Le formulaire en
+  cascade (`GenericSpinnerFormActivity` et ses 3 usages `LocationTournamentActivity`/
+  `LocationClubActivity`/`LocationAddressActivity`) ne doit pas être redéveloppé** : il n'a de
+  valeur que comme référence comportementale ci-dessous (champs, règles de suppression bloquée par
+  invite associée) — y compris son bonus de création "à la volée" d'une entité liée depuis le
+  formulaire parent, qui n'a pas d'équivalent à reproduire tel quel dans le nouveau pattern.
+  Aucun équivalent moderne n'existe aujourd'hui dans le code pour Adresse et Tournoi (seul Club en
+  a un) : ces deux écrans sont donc **à concevoir en réécriture** sur le même pattern liste
+  plate + formulaire combiné que Club/Joueur/Invitation, pas juste à "porter" depuis un code
+  existant.
+
+> **Capture app legacy** — cascade Tournoi → Club → Adresse (référence comportementale
+> uniquement, pattern à ne pas reproduire) :
 > [LocationTournamentActivity](../screenshots/training/LocationTournamentActivity.jpg) ·
 > [LocationClubActivity](../screenshots/training/LocationClubActivity.jpg) ·
-> [LocationAddressActivity](../screenshots/training/LocationAddressActivity.jpg)
->
-> **Capture app legacy** — formulaire de saisie (après clic sur "+", cascade Tournoi → Club →
-> Adresse) :
+> [LocationAddressActivity](../screenshots/training/LocationAddressActivity.jpg) ·
 > [LocationTournamentActivity (saisie)](../screenshots/training/LocationTournamentActivity_Add.jpg) ·
 > [LocationClubActivity (saisie)](../screenshots/training/LocationClubActivity_Add.jpg) ·
-> [LocationAddressActivity (saisie)](../screenshots/training/LocationAddressActivity_Add.jpg)
+> [LocationAddressActivity (saisie)](../screenshots/training/LocationAddressActivity_Add.jpg) ·
+> [LocationClubActivity (modification)](../screenshots/training/LocationClubActivity_Modify.jpg)
+
+> **Capture app legacy** — pattern retenu (liste plate + formulaire combiné), déjà en place pour
+> les clubs via ☰ → "Clubs", à généraliser à Adresse et Tournoi :
+> [ListClubFragment (liste)](../screenshots/training/ItemDetailActivity_Drawer_Club.jpg) ·
+> [ClubFragment (création)](../screenshots/training/ItemDetailActivity_Drawer_Club_Add.jpg) ·
+> [ClubFragment (modification)](../screenshots/training/ItemDetailActivity_Drawer_Club_Modify.jpg)
 
 ### Epic F — Système de classement du club (fonctionnalité cœur)
 
@@ -359,6 +382,7 @@ Le club utilise une échelle de classement interne à 19 niveaux, allant de **NC
 3. **Barème « femme » séparé** : le référentiel de niveaux prévoit historiquement un objectif de points et un nombre de victoires différenciés par genre, mais le calcul n'exploite aujourd'hui qu'un seul barème. Faut-il introduire un vrai mode différencié, ou assumer un barème unique ?
 4. **Rigueur de la validation du score** : saisie libre pilotée par le seul dernier set renseigné (comportement actuel du barème existant), ou véritable moteur de règles du tennis (sets, jeux, tie-break, cohérence globale) ?
 5. **Partage/synchronisation de la base entre plusieurs appareils** (ex. entre deux joueurs du club) : fonctionnalité à concevoir proprement (avec un vrai mécanisme sécurisé) ou à abandonner au profit d'exports simples ?
+6. ~~**Double gestion des clubs (Epic E)**~~ — **Tranché** : on conserve le pattern liste plate + formulaire combiné (déjà utilisé pour Joueurs/Invitations et pour Clubs via ☰ → "Clubs" dans l'app legacy), généralisé à Adresse et Tournoi. Le formulaire en cascade (`LocationTournamentActivity`/`LocationClubActivity`/`LocationAddressActivity`) n'est pas redéveloppé — voir Epic E pour le détail et les captures de référence.
 
 ---
 
